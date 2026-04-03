@@ -6,12 +6,17 @@ use App\Core\Model;
 class Usuario extends Model {
     
     public function getAllWithDetails() {
-        $sql = "SELECT u.*, c.nombre as nombre_cede, c.id as cede_id, n.nombre as nombre_nivel 
-                FROM usuarios u 
-                LEFT JOIN usuario_sede us ON u.id = us.usuario_id
-                LEFT JOIN cedes c ON us.sede_id = c.id 
-                LEFT JOIN niveles n ON u.nivel_id = n.id 
-                ORDER BY u.rol_id ASC, u.nombre ASC";
+        $sql = "SELECT m.id_miembro as id, m.id_rol as rol_id, m.id_grado as nivel_id, 
+                       m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento, 
+                       m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo, 
+                       u.correo, u.clave, 
+                       s.nombre as nombre_cede, s.id_sede as cede_id, 
+                       g.nombre as nombre_nivel 
+                FROM miembros m 
+                LEFT JOIN sedes s ON m.id_sede = s.id_sede 
+                LEFT JOIN grados g ON m.id_grado = g.id_grado
+                LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
+                ORDER BY m.id_rol ASC, m.nombre ASC";
         $result = $this->db->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -19,24 +24,28 @@ class Usuario extends Model {
     public function create($data) {
         $clave = password_hash($data['numero_documento'], PASSWORD_DEFAULT);
         
-        $sql = "INSERT INTO usuarios (nombre, apellido, tipo_documento, numero_documento, fecha_nacimiento, nivel_id, telefono, correo, rol_id, clave, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
         
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssssissis", 
+        $stmt->bind_param("ssssisi", 
             $data['nombre'], 
             $data['apellido'], 
-            $data['tipo_documento'], 
             $data['numero_documento'], 
             $data['fecha_nacimiento'], 
             $data['nivel_id'], 
             $data['telefono'], 
-            $data['correo'], 
-            $data['rol_id'], 
-            $clave
+            $data['rol_id']
         );
         
         if ($stmt->execute()) {
             $usuario_id = $stmt->insert_id;
+            
+            if (!empty($data['correo'])) {
+                $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)";
+                $stmtLog = $this->db->prepare($sqlLog);
+                $stmtLog->bind_param("iss", $usuario_id, $data['correo'], $clave);
+                $stmtLog->execute();
+            }
             
             if (!empty($data['cede_id'])) {
                 $this->assignSede($usuario_id, $data['cede_id']);
@@ -47,27 +56,27 @@ class Usuario extends Model {
     }
 
     public function update($id, $data) {
-        $sql = "UPDATE usuarios SET nombre = ?, apellido = ?, tipo_documento = ?, numero_documento = ?, fecha_nacimiento = ?, nivel_id = ?, telefono = ?, correo = ?, rol_id = ? WHERE id = ?";
+        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, id_rol = ? WHERE id_miembro = ?";
         
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("sssssissii", 
+        $stmt->bind_param("ssssisii", 
             $data['nombre'], 
             $data['apellido'], 
-            $data['tipo_documento'], 
             $data['numero_documento'], 
             $data['fecha_nacimiento'], 
             $data['nivel_id'], 
             $data['telefono'], 
-            $data['correo'], 
             $data['rol_id'], 
             $id
         );
         
         if ($stmt->execute()) {
+             if (!empty($data['correo'])) {
+                $correoEscaped = $this->db->real_escape_string($data['correo']);
+                $this->db->query("INSERT INTO userlog (id_miembro, correo, clave) VALUES ($id, '$correoEscaped', '') ON DUPLICATE KEY UPDATE correo = VALUES(correo)");
+             }
+
              if (isset($data['cede_id'])) {
-                // Remove existing
-                $this->db->query("DELETE FROM usuario_sede WHERE usuario_id = $id");
-                // Assign new
                 $this->assignSede($id, $data['cede_id']);
              }
              return true;
@@ -76,14 +85,14 @@ class Usuario extends Model {
     }
 
     public function delete($id) {
-        $stmt = $this->db->prepare("DELETE FROM usuarios WHERE id = ?");
+        $stmt = $this->db->prepare("DELETE FROM miembros WHERE id_miembro = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
     private function assignSede($usuario_id, $sede_id) {
-        $stmt = $this->db->prepare("INSERT INTO usuario_sede (usuario_id, sede_id) VALUES (?, ?)");
-        $stmt->bind_param("ii", $usuario_id, $sede_id);
+        $stmt = $this->db->prepare("UPDATE miembros SET id_sede = ? WHERE id_miembro = ?");
+        $stmt->bind_param("ii", $sede_id, $usuario_id);
         $stmt->execute();
     }
 }

@@ -74,7 +74,7 @@ CREATE TABLE `grados` (
 
 CREATE TABLE `info_miembros` (
   `id_info_miemb` int NOT NULL,
-  `id_miembro` int DEFAULT NULL,
+  `id_miembro` int NOT NULL,
   `descripcion_perfil` text,
   `logros` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -94,7 +94,7 @@ CREATE TABLE `miembros` (
   `fecha_n` date DEFAULT NULL,
   `telefono` varchar(20) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT '1',
-  `id_documento` int DEFAULT NULL,
+  `id_documento` int NOT NULL,
   `id_sede` int DEFAULT NULL,
   `id_rol` int DEFAULT NULL,
   `id_grado` int DEFAULT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE `miembros` (
 
 CREATE TABLE `multimedia_galeria` (
   `id_multimedia` int NOT NULL,
-  `id_miembro` int DEFAULT NULL,
+  `id_miembro` int NOT NULL,
   `tipo_archivo` enum('imagen','video') NOT NULL,
   `ruta_archivo` varchar(255) NOT NULL,
   `titulo` varchar(100) DEFAULT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE `multimedia_galeria` (
 
 CREATE TABLE `noticias` (
   `id_noticias` int NOT NULL,
-  `id_miembro` int DEFAULT NULL,
+  `id_miembro` int NOT NULL,
   `titulo` varchar(150) NOT NULL,
   `descripcion` text,
   `contenido` text,
@@ -140,8 +140,8 @@ CREATE TABLE `noticias` (
 
 CREATE TABLE `pagos` (
   `id_pago` int NOT NULL,
-  `id_miembro` int DEFAULT NULL,
-  `id_descrip` int DEFAULT NULL,
+  `id_miembro` int NOT NULL,
+  `id_descrip` int NOT NULL,
   `id_transaccion_api` varchar(255) DEFAULT NULL,
   `estado_pago` varchar(50) DEFAULT NULL,
   `plataforma_pago` varchar(100) DEFAULT NULL,
@@ -180,8 +180,8 @@ CREATE TABLE `sedes` (
 
 CREATE TABLE `teoria` (
   `id_teoria` int NOT NULL,
-  `id_grado` int DEFAULT NULL,
-  `id_tipo_de_t` int DEFAULT NULL,
+  `id_grado` int NOT NULL,
+  `id_tipo_de_t` int NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `contenido` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -205,7 +205,7 @@ CREATE TABLE `tipo_de_teoria` (
 
 CREATE TABLE `userlog` (
   `id_userlog` int NOT NULL,
-  `id_miembro` int DEFAULT NULL,
+  `id_miembro` int NOT NULL,
   `correo` varchar(100) NOT NULL,
   `clave` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -250,6 +250,7 @@ ALTER TABLE `info_miembros`
 --
 ALTER TABLE `miembros`
   ADD PRIMARY KEY (`id_miembro`),
+  ADD UNIQUE KEY `num_doc` (`num_doc`),
   ADD KEY `id_documento` (`id_documento`),
   ADD KEY `id_sede` (`id_sede`),
   ADD KEY `id_rol` (`id_rol`),
@@ -409,49 +410,49 @@ ALTER TABLE `userlog`
 -- Filtros para la tabla `info_miembros`
 --
 ALTER TABLE `info_miembros`
-  ADD CONSTRAINT `info_miembros_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`);
+  ADD CONSTRAINT `info_miembros_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `miembros`
 --
 ALTER TABLE `miembros`
-  ADD CONSTRAINT `miembros_ibfk_1` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
-  ADD CONSTRAINT `miembros_ibfk_2` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`),
-  ADD CONSTRAINT `miembros_ibfk_3` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`),
-  ADD CONSTRAINT `miembros_ibfk_4` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`),
-  ADD CONSTRAINT `miembros_ibfk_5` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`);
+  ADD CONSTRAINT `miembros_ibfk_1` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `miembros_ibfk_2` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `miembros_ibfk_3` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `miembros_ibfk_4` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `miembros_ibfk_5` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `multimedia_galeria`
 --
 ALTER TABLE `multimedia_galeria`
-  ADD CONSTRAINT `multimedia_galeria_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`);
+  ADD CONSTRAINT `multimedia_galeria_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `noticias`
 --
 ALTER TABLE `noticias`
-  ADD CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`);
+  ADD CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  ADD CONSTRAINT `pagos_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`),
-  ADD CONSTRAINT `pagos_ibfk_2` FOREIGN KEY (`id_descrip`) REFERENCES `descripcion_pago` (`id_descrip`);
+  ADD CONSTRAINT `pagos_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pagos_ibfk_2` FOREIGN KEY (`id_descrip`) REFERENCES `descripcion_pago` (`id_descrip`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `teoria`
 --
 ALTER TABLE `teoria`
-  ADD CONSTRAINT `teoria_ibfk_1` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`),
-  ADD CONSTRAINT `teoria_ibfk_2` FOREIGN KEY (`id_tipo_de_t`) REFERENCES `tipo_de_teoria` (`id_tipo_de_t`);
+  ADD CONSTRAINT `teoria_ibfk_1` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `teoria_ibfk_2` FOREIGN KEY (`id_tipo_de_t`) REFERENCES `tipo_de_teoria` (`id_tipo_de_t`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `userlog`
 --
 ALTER TABLE `userlog`
-  ADD CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`);
+  ADD CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`id_miembro`) REFERENCES `miembros` (`id_miembro`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

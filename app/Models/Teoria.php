@@ -6,63 +6,43 @@ use App\Core\Model;
 class Teoria extends Model {
     
     public function getAll() {
-        // Updated to include level name
-        $sql = "SELECT t.*, n.nombre as nivel_nombre, n.orden 
-                FROM teoria_galeria t 
-                LEFT JOIN niveles n ON t.nivel_id = n.id 
-                ORDER BY n.orden ASC, t.id ASC";
+        // Updated to include level name and mapping fields to new schema (teoria)
+        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, '' as url_video, t.id_grado as nivel_id, 
+                       g.nombre as nivel_nombre, g.id_grado as orden 
+                FROM teoria t 
+                LEFT JOIN grados g ON t.id_grado = g.id_grado 
+                ORDER BY g.id_grado ASC, t.id_teoria ASC";
         $result = $this->db->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     public function create($data) {
-        $stmt = $this->db->prepare("INSERT INTO teoria_galeria (titulo, descripcion, url_video, nivel_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id']);
+        $tipo_defecto = 1;
+        $stmt = $this->db->prepare("INSERT INTO teoria (nombre, contenido, id_grado, id_tipo_de_t) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $tipo_defecto);
         return $stmt->execute();
     }
 
     public function update($id, $data) {
-        $stmt = $this->db->prepare("UPDATE teoria_galeria SET titulo = ?, descripcion = ?, url_video = ?, nivel_id = ? WHERE id = ?");
-        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $id);
+        $stmt = $this->db->prepare("UPDATE teoria SET nombre = ?, contenido = ?, id_grado = ? WHERE id_teoria = ?");
+        $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $id);
         return $stmt->execute();
     }
 
     public function delete($id) {
-        $stmt = $this->db->prepare("DELETE FROM teoria_galeria WHERE id = ?");
+        $stmt = $this->db->prepare("DELETE FROM teoria WHERE id_teoria = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
     // New methods for Student Favorites
     public function getFavorites($usuario_id) {
-        $ids = [];
-        $stmt = $this->db->prepare("SELECT teoria_id FROM usuario_teoria_personal WHERE usuario_id = ?");
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while($row = $result->fetch_assoc()) {
-            $ids[] = $row['teoria_id'];
-        }
-        return $ids;
+        // Favorite functionality disabled as the table was removed in new DB schema
+        return [];
     }
 
     public function toggleFavorite($usuario_id, $teoria_id) {
-        // Check if exists
-        $stmt = $this->db->prepare("SELECT id FROM usuario_teoria_personal WHERE usuario_id = ? AND teoria_id = ?");
-        $stmt->bind_param("ii", $usuario_id, $teoria_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            // Remove
-            $del = $this->db->prepare("DELETE FROM usuario_teoria_personal WHERE usuario_id = ? AND teoria_id = ?");
-            $del->bind_param("ii", $usuario_id, $teoria_id);
-            return $del->execute() ? 'removed' : 'error';
-        } else {
-            // Add
-            $add = $this->db->prepare("INSERT INTO usuario_teoria_personal (usuario_id, teoria_id) VALUES (?, ?)");
-            $add->bind_param("ii", $usuario_id, $teoria_id);
-            return $add->execute() ? 'added' : 'error';
-        }
+        // Favorite functionality disabled
+        return 'removed';
     }
 }
