@@ -9,6 +9,14 @@ if (isset($_GET['error'])) {
         $error = "Debes iniciar sesión para acceder.";
     } elseif ($_GET['error'] == 'timeout') {
          $error = "Sesión expirada por inactividad.";
+    } elseif ($_GET['error'] == 'pending') {
+        $error = "Tu solicitud está en revisión. El administrador te avisará cuando puedas entrar.";
+    }
+}
+$mensaje = null;
+if (isset($_GET['msg'])) {
+    if ($_GET['msg'] == 'sent') {
+        $mensaje = "¡Solicitud enviada! Tu registro ha sido enviado al administrador para su aprobación.";
     }
 }
 ?>
@@ -68,10 +76,19 @@ if (isset($_GET['error'])) {
                 </div>
             </div>
             <?php if ($error): ?>
-                <div class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-center animate-pulse">
+                <div class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-center animate-shake">
                     <p class="text-sm text-red-600 dark:text-red-400 font-medium flex items-center justify-center gap-2">
                          <span class="material-icons-outlined text-sm">error</span>
                          <?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($mensaje): ?>
+                <div class="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-center">
+                    <p class="text-sm text-emerald-600 dark:text-emerald-400 font-medium flex items-center justify-center gap-2">
+                         <span class="material-icons-outlined text-sm">check_circle</span>
+                         <?= htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8') ?>
                     </p>
                 </div>
             <?php endif; ?>
@@ -79,6 +96,12 @@ if (isset($_GET['error'])) {
                 <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-bold text-white bg-tkd-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tkd-blue transition-all transform hover:-translate-y-0.5 uppercase tracking-wider font-display">
                     Iniciar Sesión
                 </button>
+            </div>
+            <div class="text-center mt-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    ¿No tienes cuenta? 
+                    <a href="<?= base_url('/registro') ?>" class="text-tkd-blue hover:text-blue-700 font-bold decoration-2 hover:underline">Regístrate aquí</a>
+                </p>
             </div>
         </form>
         

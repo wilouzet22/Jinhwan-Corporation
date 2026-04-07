@@ -53,16 +53,14 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                             </td>
                             <td class="px-6 py-4">
                                 <?php switch($miembro['rol_id']): 
-                                    case Roles::SUPERUSUARIO: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">Superusuario</span>
-                                    <?php break; case Roles::ADMINISTRADOR: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">Admin</span>
+                                    case Roles::ADMINISTRADOR: ?>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200 shadow-sm">Administrador</span>
                                     <?php break; case Roles::MAESTRO: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Maestro</span>
-                                    <?php break; case Roles::CONTADOR: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-cyan-100 text-cyan-800">Contador</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 border border-purple-200 shadow-sm">Instructor</span>
+                                    <?php break; case Roles::ESTUDIANTE: ?>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200 shadow-sm">Alumno</span>
                                     <?php break; default: ?>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Estudiante</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">Invitado</span>
                                 <?php endswitch; ?>
                             </td>
                             <td class="px-6 py-4 text-xs text-text-light-secondary dark:text-dark-secondary">
@@ -169,12 +167,10 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
                 <div>
                     <label for="rol_id" class="block text-sm font-medium mb-1">Rol</label>
-                    <select name="rol_id" id="rol_id" required class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-slate-700 shadow-sm">
-                        <option value="<?= Roles::ESTUDIANTE ?>">Estudiante</option>
-                        <option value="<?= Roles::MAESTRO ?>">Maestro</option>
+                    <select name="rol_id" id="rol_id" required class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-slate-700 shadow-sm transition-all focus:ring-primary focus:border-primary">
+                        <option value="<?= Roles::ESTUDIANTE ?>">Alumno (Estudiante)</option>
+                        <option value="<?= Roles::MAESTRO ?>">Instructor (Maestro)</option>
                         <option value="<?= Roles::ADMINISTRADOR ?>">Administrador</option>
-                        <option value="<?= Roles::CONTADOR ?>">Contador</option>
-                        <option value="<?= Roles::SUPERUSUARIO ?>">Superusuario</option>
                     </select>
                 </div>
             </div>

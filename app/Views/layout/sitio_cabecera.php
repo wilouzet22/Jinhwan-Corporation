@@ -38,7 +38,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
 <div class="flex h-screen overflow-hidden">
     <!-- Mobile Header -->
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-tkd-black/90 backdrop-blur-md shadow-lg border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3">
-         <a class="flex items-center gap-2" href="/jinwha/index.php">
+         <a class="flex items-center gap-2" href="<?= base_url('/') ?>">
             <img src="<?= asset('img/visual/logo.png') ?>" alt="Jinnwhan Logo" class="h-10 w-auto object-contain">
             <span class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase leading-none">Jinnwhan</span>
          </a>
@@ -68,17 +68,20 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                     </div>
                     <div class="py-1">
 
-                        <a href="/jinwha/admin/sedes" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-red">
+                        <a href="<?= base_url('/admin/sedes') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-red transition-colors">
                             Administración
                         </a>
-                        <a href="/jinwha/logout" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-blue">
+                        <a href="<?= base_url('/logout') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-blue transition-colors">
                             <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">logout</span> Cerrar Sesión</span>
                         </a>
                     </div>
                 <?php else: ?>
                     <div class="py-1">
-                        <a href="/jinwha/login" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-blue">
+                        <a href="<?= base_url('/login') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-blue transition-colors">
                              <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">login</span> Iniciar Sesión</span>
+                        </a>
+                        <a href="<?= base_url('/registro') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-tkd-red transition-colors">
+                             <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">how_to_reg</span> Registrarse</span>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -98,7 +101,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
 
         <!-- Navigation Links -->
         <nav class="flex-grow overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
-            <a href="/jinwha/index.php" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
+            <a href="<?= base_url('/') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">home</span>
                 <span class="font-display font-medium tracking-wide uppercase">Inicio</span>
             </a>
@@ -112,7 +115,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="font-display font-medium uppercase tracking-wider">Ascensos</span>
             </a>
             <?php endif; ?>
-            <a href="/jinwha/nosotros" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
+            <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
                 <span class="material-icons-outlined text-tkd-red group-hover:scale-110 transition-transform">info</span>
                 <span class="font-display font-medium uppercase tracking-wider">Nosotros</span>
             </a>

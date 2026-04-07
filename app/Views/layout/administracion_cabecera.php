@@ -66,6 +66,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                         <span class="font-display font-medium tracking-wide">Miembros</span>
                     </a>
                 </li>
+                <li>
+                    <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'registros' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-200 dark:ring-indigo-800' : '' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'registros' ? 'text-indigo-600 dark:text-indigo-400' : '' ?>">how_to_reg</span>
+                        <span class="font-display font-medium tracking-wide">Solicitudes</span>
+                    </a>
+                </li>
                 
             </ul>
         </nav>

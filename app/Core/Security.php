@@ -16,6 +16,8 @@ class Security {
 
         // 1. Verify if session exists
         if (!isset($_SESSION['id'])) {
+            $log = date('Y-m-d H:i:s') . " - Session Fail: Missing ID. Session=" . session_id() . "\n";
+            file_put_contents('debug_login.txt', $log, FILE_APPEND);
             self::redirectLogin('no_session');
         }
         
@@ -69,9 +71,23 @@ class Security {
         $rol_id = $_SESSION['rol_id'] ?? null;
         
         if (!Roles::esAdmin($rol_id)) {
-            header('Location: /jinwha/index.php?msg=access_denied');
+            $log = date('Y-m-d H:i:s') . " - Admin Fail: Invalid Rol=" . var_export($rol_id, true) . "\n";
+            file_put_contents('debug_login.txt', $log, FILE_APPEND);
+            $base = self::getBasePath();
+            header("Location: " . $base . "/index.php?msg=access_denied");
             exit;
         }
+        
+        $log = date('Y-m-d H:i:s') . " - Admin Success: Rol=" . $rol_id . "\n";
+        file_put_contents('debug_login.txt', $log, FILE_APPEND);
+    }
+
+    private static function getBasePath() {
+        $base = dirname($_SERVER['SCRIPT_NAME']);
+        if ($base === DIRECTORY_SEPARATOR || $base === '/' || $base === '\\') {
+            return '';
+        }
+        return $base;
     }
 
     public static function startSecureSession($usuario) {
@@ -102,7 +118,8 @@ class Security {
     }
 
     public static function redirectLogin($motivo = '') {
-        $url = '/jinwha/login';
+        $base = self::getBasePath();
+        $url = $base . '/login';
         if ($motivo) {
             $url .= '?error=' . urlencode($motivo);
         }

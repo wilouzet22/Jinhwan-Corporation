@@ -36,7 +36,7 @@
             <div class="absolute inset-0 bg-gradient-to-r from-tkd-black/90 via-tkd-black/50 to-transparent z-10"></div>
             <img alt="Dojang Interior" class="w-full h-full object-cover opacity-60" src="<?= asset('img/slider2.png') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl">
+                <div class="max-w-3xl animate-fade-in-up">
                     <div class="inline-block px-4 py-2 bg-tkd-blue text-white font-bold uppercase tracking-widest mb-4 transform -skew-x-12">
                         <span class="block transform skew-x-12">Disciplina y Honor</span>
                     </div>
@@ -58,7 +58,7 @@
             <div class="absolute inset-0 bg-gradient-to-r from-tkd-black/90 via-tkd-black/50 to-transparent z-10"></div>
             <img alt="Taekwondo Action" class="w-full h-full object-cover opacity-60" src="<?= asset('img/slider3.png') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl">
+                <div class="max-w-3xl animate-fade-in-up">
                     <div class="inline-block px-4 py-2 bg-tkd-gold text-white font-bold uppercase tracking-widest mb-4 transform -skew-x-12">
                         <span class="block transform skew-x-12">Espíritu Indomable</span>
                     </div>
@@ -137,6 +137,6 @@
     </div>
 </section>
 
-<script src="js/modules/index-slider.js" defer></script>
+<script src="<?= asset('js/modules/index-slider.js') ?>" defer></script>
 
 <?php include __DIR__ . '/../layout/sitio_pie.php'; ?>

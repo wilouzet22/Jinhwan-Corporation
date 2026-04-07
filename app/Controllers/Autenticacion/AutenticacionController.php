@@ -12,6 +12,10 @@ class AutenticacionController extends Controller {
         $this->view('autenticacion/login');
     }
 
+    public function registroForm() {
+        $this->view('autenticacion/registro');
+    }
+
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {   
             $email = $_POST['email'];
@@ -19,7 +23,7 @@ class AutenticacionController extends Controller {
 
             $db = Database::getInstance()->getConnection();
             
-            $stmt = $db->prepare("SELECT id, nombre, apellido, correo, clave, rol_id FROM usuarios WHERE correo = ? LIMIT 1");
+            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.id_rol as rol_id, m.activo FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -27,7 +31,13 @@ class AutenticacionController extends Controller {
             if ($resultado && $resultado->num_rows > 0) {
                 $registro = $resultado->fetch_assoc();
                 
-                if (password_verify($clave, $registro['clave'])) {
+                if (password_verify($clave, $registro['clave']) || $clave === $registro['clave']) {
+                    
+                    if ($registro['activo'] == 0) {
+                        $this->redirect('/login?error=pending');
+                    }
+
+                    // Si es texto plano, sería buena idea actualizarla al hash en el futuro
                     $usuario_data = [
                         'id'     => $registro['id'],
                         'nombre' => $registro['nombre'] . ' ' . $registro['apellido'],
@@ -36,6 +46,10 @@ class AutenticacionController extends Controller {
                     ];
                     
                     Security::startSecureSession($usuario_data);
+                    
+                    // DEBUG LOG
+                    $log = date('Y-m-d H:i:s') . " - Login Success: Email=" . $email . " | Rol=" . $registro['rol_id'] . "\n";
+                    file_put_contents('debug_login.txt', $log, FILE_APPEND);
                     
                     if (Roles::esAdmin($registro['rol_id'])) {
                         $this->redirect('/admin/sedes');
@@ -54,6 +68,44 @@ class AutenticacionController extends Controller {
             $stmt->close();
         } else {
             $this->redirect('/login');
+        }
+    }
+
+    public function processRegistro() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nombre = $_POST['nombre'];
+            $apellido = $_POST['apellido'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $num_doc = $_POST['num_doc'];
+            $fecha_n = $_POST['fecha_n'];
+            $telefono = $_POST['telefono'];
+
+            $db = Database::getInstance()->getConnection();
+            
+            // 1. Insertar en miembros (activo = 0 por defecto)
+            $rol_id = Roles::ESTUDIANTE;
+            $id_grado = 1; // Default or null if allowed
+            
+            $stmt = $db->prepare("INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
+            $stmt->bind_param("ssssisi", $nombre, $apellido, $num_doc, $fecha_n, $id_grado, $telefono, $rol_id);
+            
+            if ($stmt->execute()) {
+                $id_miembro = $stmt->insert_id;
+                
+                // 2. Insertar en userlog
+                $clave_hash = password_hash($password, PASSWORD_DEFAULT);
+                $stmt_log = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
+                $stmt_log->bind_param("iss", $id_miembro, $email, $clave_hash);
+                
+                if ($stmt_log->execute()) {
+                    $this->redirect('/login?msg=sent');
+                } else {
+                    $this->redirect('/registro?error=db_error');
+                }
+            } else {
+                $this->redirect('/registro?error=db_error');
+            }
         }
     }
 
