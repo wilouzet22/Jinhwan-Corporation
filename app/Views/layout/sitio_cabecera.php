@@ -20,7 +20,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     
     <!-- Google Fonts: Oswald (Headings) & Roboto (Body) -->
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
-    <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.png') ?>">
+    <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <!-- Mobile Header -->
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-tkd-black/90 backdrop-blur-md shadow-lg border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3">
          <a class="flex items-center gap-2" href="<?= base_url('/') ?>">
-            <img src="<?= asset('img/visual/logo.png') ?>" alt="Jinnwhan Logo" class="h-10 w-auto object-contain">
+            <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinnwhan Logo" class="h-10 w-auto object-contain">
             <span class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase leading-none">Jinnwhan</span>
          </a>
          <button class="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" id="mobile-menu-btn">
@@ -91,7 +91,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         <!-- Sidebar Header (Logo) -->
         <div class="p-8 pt-12 flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
             <div class="relative w-40 h-40 mb-4 transition-transform duration-500 hover:scale-105">
-                <img src="<?= asset('img/visual/logo.png') ?>" alt="Jinhwan Organization" class="w-full h-full object-contain filter drop-shadow-xl">
+                <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinhwan Organization" class="w-full h-full object-contain filter drop-shadow-xl">
             </div>
             <div class="text-center">
                 <h1 class="font-display font-bold text-2xl text-slate-900 dark:text-white tracking-widest leading-none mb-1">JINHWAN</h1>

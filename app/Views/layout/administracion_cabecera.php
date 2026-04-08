@@ -29,7 +29,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     <aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden md:flex flex-col shadow-xl z-20">
         <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/50">
             <a href="/jinwha/index.php" class="flex flex-col items-center group">
-                <img src="<?= asset('img/visual/logo.png') ?>" alt="AppAdmin" class="h-24 w-auto object-contain mb-3 drop-shadow-lg transition-transform group-hover:scale-105 duration-300">
+                <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-24 w-auto object-contain mb-3 drop-shadow-lg transition-transform group-hover:scale-105 duration-300">
                 <div class="text-center">
                     <h1 class="font-display font-bold text-xl text-slate-900 dark:text-white tracking-widest leading-none">JINHWAN</h1>
                     <span class="text-xs font-bold text-tkd-red tracking-[0.2em] uppercase">Admin Panel</span>

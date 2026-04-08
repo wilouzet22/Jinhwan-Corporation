@@ -20,26 +20,25 @@ if (isset($_GET['error'])) {
     <link href="<?= asset('styles/output.css') ?>" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 </head>
-<body class="bg-tkd-black min-h-screen font-body flex items-center justify-center relative py-12 px-4 overflow-x-hidden">
+<body class="bg-tkd-black h-screen font-body flex items-center justify-center relative overflow-hidden">
     
     <!-- Background Image with Blur -->
-    <div class="fixed inset-0 z-0">
-        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-sm scale-110 opacity-40" alt="Background">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+    <div class="absolute inset-0 z-0">
+        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-sm scale-110 opacity-50" alt="Background">
+        <div class="absolute inset-0 bg-black/40"></div>
     </div>
 
-    <!-- Register Container -->
-    <div class="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 animate-fade-in-up relative z-10 overflow-hidden">
+    <!-- Register Container (Compacto 2 columnas) -->
+    <div class="w-full max-w-2xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 animate-fade-in-up relative z-10 overflow-hidden text-white">
         <!-- Decorative Top Line -->
-        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-tkd-red via-tkd-black to-tkd-blue"></div>
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tkd-red via-tkd-black to-tkd-blue"></div>
 
-        <div class="p-8 md:p-12">
-            <div class="text-center mb-10">
-                <div class="inline-block p-4 rounded-3xl bg-slate-50 dark:bg-slate-800 mb-6 shadow-inner">
-                    <img src="<?= asset('img/visual/logo.png') ?>" alt="Jinhwan" class="h-20 w-auto object-contain">
+        <div class="p-4 md:p-6">
+            <div class="text-center mb-4">
+                <div class="inline-block mb-2">
+                    <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinhwan" class="h-16 w-auto object-contain">
                 </div>
-                <h2 class="text-4xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-wider">Solicitud de Registro</h2>
-                <p class="text-slate-500 dark:text-slate-400 mt-3 text-lg">Únete a nuestra organización</p>
+                <h2 class="text-xl font-display font-bold text-white uppercase tracking-wider">Solicitud de Registro</h2>
             </div>
 
             <?php if ($error): ?>
@@ -51,64 +50,52 @@ if (isset($_GET['error'])) {
                 </div>
             <?php endif; ?>
 
-            <form class="grid grid-cols-1 md:grid-cols-2 gap-6" method="POST" action="<?= base_url('/registro/process') ?>">
-                <!-- Personal Info Section -->
-                <div class="space-y-6">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 dark:border-slate-800 pb-2">Datos Personales</h3>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre(s)</label>
-                        <input name="nombre" type="text" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Apellido(s)</label>
-                        <input name="apellido" type="text" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Documento de Identidad</label>
-                        <input name="num_doc" type="text" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all" placeholder="CC / TI / Pasaporte">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fecha de Nacimiento</label>
-                        <input name="fecha_n" type="date" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                    </div>
+            <form class="grid grid-cols-2 gap-x-4 gap-y-3" method="POST" action="<?= base_url('/registro/process') ?>">
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Nombre(s)</label>
+                    <input name="nombre" type="text" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
                 </div>
 
-                <!-- Account Info Section -->
-                <div class="space-y-6">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100 dark:border-slate-800 pb-2">Datos de Cuenta</h3>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Apellido(s)</label>
+                    <input name="apellido" type="text" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Correo Electrónico</label>
-                        <input name="email" type="email" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                    </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Documento Identidad</label>
+                    <input name="num_doc" type="text" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Teléfono de Contacto</label>
-                        <input name="telefono" type="tel" required class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                    </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Fecha Nacimiento</label>
+                    <input name="fecha_n" type="date" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Contraseña</label>
-                        <input name="password" type="password" required minlength="6" class="block w-full rounded-xl border-gray-300 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:ring-tkd-blue focus:border-tkd-blue transition-all">
-                        <p class="text-[10px] text-slate-500 mt-1">Mínimo 6 caracteres</p>
-                    </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Correo Electrónico</label>
+                    <input name="email" type="email" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-xl text-base font-bold text-white bg-tkd-blue hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tkd-blue transition-all transform hover:-translate-y-1 uppercase tracking-widest font-display">
-                            Enviar Solicitud
-                        </button>
-                    </div>
+                <div>
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Teléfono</label>
+                    <input name="telefono" type="tel" required class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block text-[11px] font-medium text-slate-300 mb-0.5">Contraseña (Mín. 6 carc.)</label>
+                    <input name="password" type="password" required minlength="6" class="block w-full py-1.5 px-3 rounded-lg border-slate-700 bg-slate-800 text-white text-sm focus:ring-tkd-blue transition-all">
+                </div>
+
+                <div class="col-span-2 pt-1">
+                    <button type="submit" class="w-full flex justify-center py-2.5 px-4 rounded-lg shadow-xl text-sm font-bold text-white bg-tkd-blue hover:bg-blue-700 transition-all uppercase tracking-widest font-display">
+                        Enviar Solicitud
+                    </button>
                 </div>
             </form>
 
-            <div class="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800 text-center">
-                <p class="text-sm text-slate-500 dark:text-slate-400">
-                    ¿Ya tienes una cuenta aprobada? 
-                    <a href="<?= base_url('/login') ?>" class="text-tkd-blue hover:text-blue-700 font-bold decoration-2 hover:underline">Inicia sesión</a>
+            <div class="mt-4 pt-4 border-t border-slate-800 text-center">
+                <p class="text-xs text-slate-400">
+                    ¿Ya tienes cuenta? <a href="<?= base_url('/login') ?>" class="text-tkd-blue hover:text-blue-700 font-bold">Inicia sesión</a>
                 </p>
             </div>
         </div>

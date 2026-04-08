@@ -9,4 +9,10 @@ class InicioController extends Controller {
             'page_title' => 'Jinnwhan Organization - Taekwondo'
         ]);
     }
+
+    public function portal() {
+        $this->view('web/portal', [
+            'page_title' => 'Bienvenido - Jinhwa Corporation'
+        ]);
+    }
 }

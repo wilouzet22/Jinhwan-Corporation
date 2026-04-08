@@ -1,0 +1,4 @@
+2026-04-07 04:01:00 - Session Fail: Missing ID. Session=18373frauiec4m96bo0397k63b
+2026-04-07 04:01:20 - Login Success: Email=admin@jinhwa.com | Rol=1
+2026-04-07 04:01:20 - Admin Success: Rol=1
+2026-04-07 04:09:03 - Admin Success: Rol=1

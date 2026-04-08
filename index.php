@@ -56,7 +56,9 @@ if (session_status() === PHP_SESSION_NONE) {
 $router = new Router();
 
 // Define Routes - Web
-$router->get('/', [InicioController::class, 'index']);
+$router->get('/', [InicioController::class, 'portal']);
+$router->get('/portal', [InicioController::class, 'portal']);
+$router->get('/inicio', [InicioController::class, 'index']);
 $router->get('/index.php', [InicioController::class, 'index']);
 $router->get('/nosotros', [PaginaController::class, 'nosotros']);
 $router->get('/sedes', [WebSedesController::class, 'index']);
