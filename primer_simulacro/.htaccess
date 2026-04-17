@@ -1,0 +1,15 @@
+# --- Configuracion de rutas amigables ---
+
+# Activa el motor de reescritura de URLs (mod_rewrite) de Apache
+RewriteEngine On
+
+# Si el recurso solicitado por el usuario NO es un archivo fisico existente en el disco (ej: css, jpg)
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Si el recurso solicitado por el usuario NO es una carpeta o directorio existente
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Entonces, captura la ruta completa de la URL visitada ^(.*)$
+# Y redírigela al sistema pasandosela como parametro de la url (index.php?url=)
+# [QSA] mantiene otros parametros que pudieran existir, [L] marca esta regla como la ultima.
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
