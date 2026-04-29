@@ -22,6 +22,7 @@ require_once __DIR__ . '/app/Controllers/Administracion/AscensosController.php';
 require_once __DIR__ . '/app/Controllers/Administracion/SedesController.php';
 require_once __DIR__ . '/app/Controllers/Administracion/MiembrosController.php';
 require_once __DIR__ . '/app/Controllers/Administracion/RegistrosController.php';
+require_once __DIR__ . '/app/Controllers/Administracion/DashboardController.php';
 require_once __DIR__ . '/app/Controllers/Autenticacion/AutenticacionController.php';
 require_once __DIR__ . '/app/Controllers/Web/PaginaController.php';
 require_once __DIR__ . '/app/Controllers/Web/InstructoresController.php';
@@ -39,6 +40,7 @@ use App\Controllers\Web\SedesController as WebSedesController;
 use App\Controllers\Administracion\SedesController as AdminSedesController;
 use App\Controllers\Administracion\MiembrosController;
 use App\Controllers\Administracion\RegistrosController;
+use App\Controllers\Administracion\DashboardController;
 use App\Controllers\Autenticacion\AutenticacionController;
 use App\Controllers\Web\PaginaController;
 use App\Controllers\Web\InstructoresController;
@@ -75,6 +77,9 @@ $router->post('/login/process', [AutenticacionController::class, 'login']);
 $router->get('/logout', [AutenticacionController::class, 'logout']);
 $router->get('/registro', [AutenticacionController::class, 'registroForm']);
 $router->post('/registro/process', [AutenticacionController::class, 'processRegistro']);
+
+// Define Routes - Admin Dashboard
+$router->get('/admin/dashboard', [DashboardController::class, 'index']);
 
 // Define Routes - Admin
 $router->get('/admin/ascensos', [AscensosController::class, 'index']);

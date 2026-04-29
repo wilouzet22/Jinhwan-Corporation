@@ -49,6 +49,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     <span class="px-4 text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block">Gestión</span>
                 </li>
                 <li>
+                    <a href="<?= base_url('/admin/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-50 dark:bg-blue-900/20 text-tkd-blue dark:text-blue-400 ring-1 ring-blue-200 dark:ring-blue-800' : '' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-blue dark:text-blue-400' : '' ?>">dashboard</span>
+                        <span class="font-display font-medium tracking-wide">Dashboard</span>
+                    </a>
+                </li>
+                <li>
                     <a href="/jinwha/admin/sedes" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-blue-900/20 text-tkd-blue dark:text-blue-400 ring-1 ring-blue-200 dark:ring-blue-800' : '' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-blue dark:text-blue-400' : '' ?>">place</span>
                         <span class="font-display font-medium tracking-wide">Sedes</span>

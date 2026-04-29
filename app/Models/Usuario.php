@@ -6,7 +6,7 @@ use App\Core\Model;
 class Usuario extends Model {
     
     public function getAllWithDetails() {
-        $sql = "SELECT m.id_miembro as id, m.id_rol as rol_id, m.id_grado as nivel_id, 
+        $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id, 
                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento, 
                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo, 
                        u.correo, u.clave, 
@@ -16,7 +16,7 @@ class Usuario extends Model {
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede 
                 LEFT JOIN grados g ON m.id_grado = g.id_grado
                 LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
-                ORDER BY m.id_rol ASC, m.nombre ASC";
+                ORDER BY m.rol ASC, m.nombre ASC";
         $result = $this->db->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -24,7 +24,7 @@ class Usuario extends Model {
     public function create($data) {
         $clave = password_hash($data['numero_documento'], PASSWORD_DEFAULT);
         
-        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
         
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("ssssisi", 
@@ -56,7 +56,7 @@ class Usuario extends Model {
     }
 
     public function update($id, $data) {
-        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, id_rol = ? WHERE id_miembro = ?";
+        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ? WHERE id_miembro = ?";
         
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("ssssisii", 

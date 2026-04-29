@@ -23,7 +23,7 @@ class AutenticacionController extends Controller {
 
             $db = Database::getInstance()->getConnection();
             
-            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.id_rol as rol_id, m.activo FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
+            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -52,7 +52,7 @@ class AutenticacionController extends Controller {
                     file_put_contents('debug_login.txt', $log, FILE_APPEND);
                     
                     if (Roles::esAdmin($registro['rol_id'])) {
-                        $this->redirect('/admin/sedes');
+                        $this->redirect('/admin/dashboard');
                     } elseif ($registro['rol_id'] == Roles::ESTUDIANTE) {
                         // TODO: Update when student view is migrated
                         $this->redirect('/ascensos'); // Assuming public/student view
@@ -87,7 +87,7 @@ class AutenticacionController extends Controller {
             $rol_id = Roles::ESTUDIANTE;
             $id_grado = 1; // Default or null if allowed
             
-            $stmt = $db->prepare("INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
+            $stmt = $db->prepare("INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
             $stmt->bind_param("ssssisi", $nombre, $apellido, $num_doc, $fecha_n, $id_grado, $telefono, $rol_id);
             
             if ($stmt->execute()) {
