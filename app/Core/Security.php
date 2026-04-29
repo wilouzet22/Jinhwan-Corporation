@@ -74,7 +74,7 @@ class Security {
             $log = date('Y-m-d H:i:s') . " - Admin Fail: Invalid Rol=" . var_export($rol_id, true) . "\n";
             file_put_contents('debug_login.txt', $log, FILE_APPEND);
             $base = self::getBasePath();
-            header("Location: " . $base . "/index.php?msg=access_denied");
+            header("Location: " . $base . "/?msg=access_denied");
             exit;
         }
         

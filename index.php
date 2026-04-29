@@ -27,7 +27,8 @@ require_once __DIR__ . '/app/Controllers/Autenticacion/AutenticacionController.p
 require_once __DIR__ . '/app/Controllers/Web/PaginaController.php';
 require_once __DIR__ . '/app/Controllers/Web/InstructoresController.php';
 require_once __DIR__ . '/app/Controllers/Web/GaleriaController.php';
-require_once __DIR__ . '/app/Controllers/Estudiante/AscensosController.php';
+require_once __DIR__ . '/app/Controllers/Estudiante/DashboardController.php';
+require_once __DIR__ . '/app/Controllers/Estudiante/EstudioController.php';
 
 use App\Core\Router;
 use App\Models\Teoria;
@@ -45,7 +46,8 @@ use App\Controllers\Autenticacion\AutenticacionController;
 use App\Controllers\Web\PaginaController;
 use App\Controllers\Web\InstructoresController;
 use App\Controllers\Web\GaleriaController;
-use App\Controllers\Estudiante\AscensosController as StudentAscensosController;
+use App\Controllers\Estudiante\DashboardController as StudentDashboardController;
+use App\Controllers\Estudiante\EstudioController as StudentEstudioController;
 
 // Initialize Session if not already started
 if (session_status() === PHP_SESSION_NONE) {
@@ -68,8 +70,9 @@ $router->get('/instructores', [InstructoresController::class, 'index']);
 $router->get('/galeria', [GaleriaController::class, 'index']);
 
 // Student Routes
-$router->get('/ascensos', [StudentAscensosController::class, 'index']);
-$router->post('/ascensos/toggle', [StudentAscensosController::class, 'toggle']);
+$router->get('/estudiante/dashboard', [StudentDashboardController::class, 'index']);
+$router->get('/estudiante/estudio', [StudentEstudioController::class, 'index']);
+$router->post('/ascensos/toggle', [StudentEstudioController::class, 'toggle']); // Keep old endpoint for JS compatibility
 
 // Define Routes - Auth
 $router->get('/login', [AutenticacionController::class, 'loginForm']);

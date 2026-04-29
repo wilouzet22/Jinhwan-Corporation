@@ -22,10 +22,10 @@ include __DIR__ . '/../layout/sitio_cabecera.php';
     <div class="absolute inset-0 bg-gradient-to-l from-tkd-red/20 to-transparent"></div>
     <div class="container mx-auto px-4 relative z-10 text-center">
         <h1 class="text-5xl md:text-6xl font-display font-bold uppercase tracking-wider mb-4 animate-fade-in-up">
-            Material de <span class="text-tkd-red">Ascenso</span>
+            Estudio <span class="text-tkd-red">Teórico</span>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-light animate-fade-in-up" style="animation-delay: 0.2s;">
-            Recursos teóricos y técnicos para tu próximo grado. Estudia con disciplina.
+            Todo el material teórico de todos los grados. Estudia con disciplina.
         </p>
     </div>
     <!-- Decorative Shape -->
@@ -146,6 +146,6 @@ include __DIR__ . '/../layout/sitio_cabecera.php';
     // Data passed from PHP
     const miTeoriaIds = <?= json_encode($mi_teoria_ids) ?>;
 </script>
-<script src="/jinwha/public/js/modules/estudiante-ascensos.js" defer></script>
+<script src="<?= asset('js/modules/estudiante-ascensos.js') ?>" defer></script>
 
 <?php include __DIR__ . '/../layout/sitio_pie.php'; ?>

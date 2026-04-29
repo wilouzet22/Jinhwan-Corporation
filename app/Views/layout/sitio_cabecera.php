@@ -32,7 +32,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <script src="<?= asset('js/styles/main-config.js') ?>"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-Ne9/ZPNVK3w3pBBX6xE86bNG295dJl4CHttrCp3WiuD0VLkVU1xlXnL7V/NsT3VXBWNEjpP2Dl_631+gOYAZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="/jinwha/styles/custom.css" rel="stylesheet">
+    <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-tkd-gray dark:bg-tkd-black font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden">
 <div class="flex h-screen overflow-hidden">
@@ -105,26 +105,26 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">home</span>
                 <span class="font-display font-medium tracking-wide uppercase">Inicio</span>
             </a>
-            <a href="/jinwha/sedes" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
+            <a href="<?= base_url('/sedes') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
                 <span class="material-icons-outlined text-tkd-blue group-hover:scale-110 transition-transform">location_on</span>
                 <span class="font-display font-medium uppercase tracking-wider">Sedes</span>
             </a>
-            <?php if ($is_admin || $is_student): ?>
-            <a href="/jinwha/ascensos" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-gold transition-all group">
+            <?php if ($is_student): ?>
+            <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-gold transition-all group">
                 <span class="material-icons-outlined text-tkd-gold group-hover:scale-110 transition-transform">school</span>
-                <span class="font-display font-medium uppercase tracking-wider">Ascensos</span>
+                <span class="font-display font-medium uppercase tracking-wider">Mi Portal</span>
             </a>
             <?php endif; ?>
             <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
                 <span class="material-icons-outlined text-tkd-red group-hover:scale-110 transition-transform">info</span>
                 <span class="font-display font-medium uppercase tracking-wider">Nosotros</span>
             </a>
-            <a href="/jinwha/instructores" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
+            <a href="<?= base_url('/instructores') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
                 <span class="material-icons-outlined text-tkd-blue group-hover:scale-110 transition-transform">groups</span>
                 <span class="font-display font-medium uppercase tracking-wider">Instructores</span>
             </a>
 
-            <a href="/jinwha/galeria" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
+            <a href="<?= base_url('/galeria') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-all group">
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">collections</span>
                 <span class="font-display font-medium tracking-wide uppercase">Galería</span>
             </a>

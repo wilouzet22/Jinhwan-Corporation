@@ -21,7 +21,7 @@
                         </div>
                         <div class="mt-4 flex justify-end space-x-2">
                             <button onclick='openModal("edit", <?= json_encode($sede) ?>)' class="font-medium text-primary hover:underline">Editar</button>
-                            <form action="/jinwha/admin/sedes/delete" method="POST" class="inline-block" onsubmit="return confirm('¿Borrar esta sede?');">
+                            <form action="<?= base_url('/admin/sedes/delete') ?>" method="POST" class="inline-block" onsubmit="return confirm('¿Borrar esta sede?');">
                                 <input type="hidden" name="id" value="<?= $sede['id'] ?>">
                                 <button type="submit" class="font-medium text-red-500 hover:underline">Borrar</button>
                             </form>
@@ -45,7 +45,7 @@
 <div id="sede-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
     <div class="bg-surface-light dark:bg-surface-dark rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 id="modal-title" class="text-2xl font-bold mb-6"></h2>
-        <form id="sede-form" action="/jinwha/admin/sedes/create" method="POST">
+        <form id="sede-form" action="<?= base_url('/admin/sedes/create') ?>" method="POST">
             <input type="hidden" name="id" id="id">
             <div class="space-y-4">
                 <div>
@@ -82,11 +82,11 @@
         
         if (action === 'add') {
             title.textContent = 'Nueva Sede';
-            form.action = '/jinwha/admin/sedes/create';
+            form.action = '<?= base_url('/admin/sedes/create') ?>';
             document.getElementById('id').value = '';
         } else if (action === 'edit') {
             title.textContent = 'Editar Sede';
-            form.action = '/jinwha/admin/sedes/update';
+            form.action = '<?= base_url('/admin/sedes/update') ?>';
             
             document.getElementById('id').value = data.id;
             document.getElementById('nombre').value = data.nombre;

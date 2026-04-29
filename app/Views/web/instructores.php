@@ -27,7 +27,7 @@
             <div class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-t-4 border-tkd-red">
                 <div class="relative h-80 overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-t from-tkd-black/80 to-transparent z-10"></div>
-                    <img src="/jinwha/public/img/intructores/nelson-edited-1024x1024.jpg" alt="Nelson Restrepo Montaña" class="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700">
+                    <img src="<?= asset('img/intructores/nelson-edited-1024x1024.jpg') ?>" alt="Nelson Restrepo Montaña" class="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute bottom-0 left-0 p-6 z-20">
                         <h3 class="text-2xl font-display font-bold text-white uppercase mb-1">Nelson Restrepo Montaña</h3>
                         <span class="inline-block px-3 py-1 bg-tkd-red text-white text-xs font-bold uppercase tracking-wider rounded">Director General</span>

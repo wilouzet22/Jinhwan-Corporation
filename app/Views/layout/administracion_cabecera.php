@@ -28,7 +28,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     <!-- Sidebar -->
     <aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden md:flex flex-col shadow-xl z-20">
         <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/50">
-            <a href="/jinwha/index.php" class="flex flex-col items-center group">
+            <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-24 w-auto object-contain mb-3 drop-shadow-lg transition-transform group-hover:scale-105 duration-300">
                 <div class="text-center">
                     <h1 class="font-display font-bold text-xl text-slate-900 dark:text-white tracking-widest leading-none">JINHWAN</h1>
@@ -39,7 +39,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
         <nav class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
             <ul class="space-y-2">
                 <li>
-                    <a href="/jinwha/index.php" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
+                    <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-all group">
                         <span class="material-icons-outlined group-hover:text-tkd-blue transition-colors">arrow_back</span>
                         <span class="font-display font-medium tracking-wide uppercase">Volver</span>
                     </a>
@@ -55,19 +55,19 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     </a>
                 </li>
                 <li>
-                    <a href="/jinwha/admin/sedes" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-blue-900/20 text-tkd-blue dark:text-blue-400 ring-1 ring-blue-200 dark:ring-blue-800' : '' ?>">
+                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-blue-900/20 text-tkd-blue dark:text-blue-400 ring-1 ring-blue-200 dark:ring-blue-800' : '' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-blue dark:text-blue-400' : '' ?>">place</span>
                         <span class="font-display font-medium tracking-wide">Sedes</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/jinwha/admin/ascensos" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'ascensos' ? 'bg-amber-50 dark:bg-amber-900/20 text-tkd-gold dark:text-amber-400 ring-1 ring-amber-200 dark:ring-amber-800' : '' ?>">
+                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'ascensos' ? 'bg-amber-50 dark:bg-amber-900/20 text-tkd-gold dark:text-amber-400 ring-1 ring-amber-200 dark:ring-amber-800' : '' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-gold dark:text-amber-400' : '' ?>">timeline</span>
                         <span class="font-display font-medium tracking-wide">Ascensos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="/jinwha/admin/miembros" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'miembros' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-200 dark:ring-emerald-800' : '' ?>">
+                    <a href="<?= base_url('/admin/miembros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'miembros' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-200 dark:ring-emerald-800' : '' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'miembros' ? 'text-emerald-600 dark:text-emerald-400' : '' ?>">people</span>
                         <span class="font-display font-medium tracking-wide">Miembros</span>
                     </a>
@@ -91,7 +91,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Perfil</p>
                 </div>
              </a>
-             <a href="/jinwha/logout" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm font-medium" title="Cerrar Sesión">
+             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm font-medium" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
                 <span>Salir</span>
              </a>
@@ -102,6 +102,6 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- Top Mobile Header (visible only on mobile) -->
         <header class="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between">
-             <a href="/jinwha/index.php" class="font-bold text-lg">AppAdmin</a>
-             <a href="/jinwha/index.php" class="text-sm text-blue-600">Volver a Web</a>
+             <a href="<?= base_url('/index.php') ?>" class="font-bold text-lg">AppAdmin</a>
+             <a href="<?= base_url('/index.php') ?>" class="text-sm text-blue-600">Volver a Web</a>
         </header>

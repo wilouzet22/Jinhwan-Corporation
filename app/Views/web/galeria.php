@@ -11,7 +11,7 @@
             <?php foreach ($imagenes as $imagen): 
                  // Fix paths for web display
                  // $imagen is something like "img/galeria/foto.jpg" or "public/img/galeria/foto.jpg"
-                 // Web path should be relative to server root e.g. /jinwha/img/...
+                 // Web path should be relative to server root e.g. using asset('img/...')
                  $imagenUrl = asset(str_replace('public/', '', $imagen));
             ?>
                  <a href="<?= htmlspecialchars($imagenUrl) ?>" class="overflow-hidden rounded-lg shadow-lg group">

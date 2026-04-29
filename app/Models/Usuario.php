@@ -72,8 +72,11 @@ class Usuario extends Model {
         
         if ($stmt->execute()) {
              if (!empty($data['correo'])) {
-                $correoEscaped = $this->db->real_escape_string($data['correo']);
-                $this->db->query("INSERT INTO userlog (id_miembro, correo, clave) VALUES ($id, '$correoEscaped', '') ON DUPLICATE KEY UPDATE correo = VALUES(correo)");
+                $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, '') ON DUPLICATE KEY UPDATE correo = VALUES(correo)";
+                $stmtLog = $this->db->prepare($sqlLog);
+                $stmtLog->bind_param("is", $id, $data['correo']);
+                $stmtLog->execute();
+                $stmtLog->close();
              }
 
              if (isset($data['cede_id'])) {
@@ -94,5 +97,25 @@ class Usuario extends Model {
         $stmt = $this->db->prepare("UPDATE miembros SET id_sede = ? WHERE id_miembro = ?");
         $stmt->bind_param("ii", $sede_id, $usuario_id);
         $stmt->execute();
+    }
+
+    public function getById($id) {
+        $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id, 
+                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento, 
+                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo, 
+                        u.correo, u.clave, 
+                        s.nombre as nombre_sede, s.id_sede as sede_id, 
+                        g.nombre as nombre_nivel 
+                FROM miembros m 
+                LEFT JOIN sedes s ON m.id_sede = s.id_sede 
+                LEFT JOIN grados g ON m.id_grado = g.id_grado
+                LEFT JOIN userlog u ON m.id_miembro = u.id_miembro 
+                WHERE m.id_miembro = ?";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
     }
 }

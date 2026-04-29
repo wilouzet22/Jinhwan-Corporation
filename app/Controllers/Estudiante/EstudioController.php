@@ -4,8 +4,9 @@ namespace App\Controllers\Estudiante;
 use App\Core\Controller;
 use App\Core\Security;
 use App\Models\Teoria;
+use App\Models\Usuario;
 
-class AscensosController extends Controller {
+class EstudioController extends Controller {
     
     public function __construct() {
         Security::verifySession();
@@ -13,10 +14,14 @@ class AscensosController extends Controller {
 
     public function index() {
         $teoriaModel = new Teoria();
-        $teorias = $teoriaModel->getAll(); // This already handles joins and ordering
+        $teorias = $teoriaModel->getAll(); 
+        
+        $usuarioModel = new Usuario();
+        $estudiante = $usuarioModel->getById($_SESSION['id']);
+        
         $usuario_id = $_SESSION['id'];
         $favorites = $teoriaModel->getFavorites($usuario_id);
-
+        
         // Process resources (mirroring legacy logic)
         foreach ($teorias as &$teoria) {
             $teoria['recursos'] = [];
@@ -29,10 +34,11 @@ class AscensosController extends Controller {
             }
         }
 
-        $this->view('estudiante/ascensos', [
+        $this->view('estudiante/estudio', [
             'teorias' => $teorias,
-            'mi_teoria_ids' => $favorites, // Renamed to match legacy JS expectation or view
-            'page_title' => 'Material de Ascenso'
+            'mi_teoria_ids' => $favorites,
+            'estudiante' => $estudiante,
+            'page_title' => 'Estudio Teórico'
         ]);
     }
 

@@ -27,8 +27,18 @@ class Sede extends Model {
     }
 
     public function delete($id) {
+        // 1. Desvincular a todos los miembros de esta sede (dejarlos en NULL)
+        $stmtDesvincular = $this->db->prepare("UPDATE miembros SET id_sede = NULL WHERE id_sede = ?");
+        $stmtDesvincular->bind_param("i", $id);
+        $stmtDesvincular->execute();
+        $stmtDesvincular->close();
+
+        // 2. Ahora sí, eliminar la sede de forma segura
         $stmt = $this->db->prepare("DELETE FROM sedes WHERE id_sede = ?");
         $stmt->bind_param("i", $id);
-        return $stmt->execute();
+        $resultado = $stmt->execute();
+        $stmt->close();
+        
+        return $resultado;
     }
 }

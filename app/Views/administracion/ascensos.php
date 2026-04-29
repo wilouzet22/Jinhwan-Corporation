@@ -46,7 +46,7 @@
                             <button onclick='openModal("update_teoria", <?= json_encode($teoria) ?>)' class="text-sm font-medium text-text-light-secondary dark:text-dark-secondary hover:text-primary flex items-center">
                                 <span class="material-icons-outlined text-base mr-1">edit</span> Editar
                             </button>
-                            <form method="POST" action="/jinwha/admin/ascensos/delete" onsubmit="return confirm('¿Eliminar este tema?');">
+                            <form method="POST" action="<?= base_url('/admin/ascensos/delete') ?>" onsubmit="return confirm('¿Eliminar este tema?');">
                                 <input type="hidden" name="id" value="<?= $teoria['id'] ?>">
                                 <button type="submit" class="text-sm font-medium text-text-light-secondary dark:text-dark-secondary hover:text-red-500 flex items-center">
                                     <span class="material-icons-outlined text-base mr-1">delete</span> Eliminar
@@ -70,7 +70,7 @@
             </button>
         </div>
         
-        <form id="theory-form" action="/jinwha/admin/ascensos/create" method="POST" class="p-6 space-y-4">
+        <form id="theory-form" action="<?= base_url('/admin/ascensos/create') ?>" method="POST" class="p-6 space-y-4">
             <input type="hidden" name="id" id="id">
             
             <div>
@@ -123,11 +123,11 @@
         
         if (action === 'create_teoria') {
             title.textContent = 'Nuevo Tema';
-            form.action = '/jinwha/admin/ascensos/create';
+            form.action = '<?= base_url('/admin/ascensos/create') ?>';
             document.getElementById('id').value = '';
         } else if (action === 'update_teoria') {
             title.textContent = 'Editar Tema';
-            form.action = '/jinwha/admin/ascensos/update';
+            form.action = '<?= base_url('/admin/ascensos/update') ?>';
             
             // Fill data
             document.getElementById('id').value = data.id;

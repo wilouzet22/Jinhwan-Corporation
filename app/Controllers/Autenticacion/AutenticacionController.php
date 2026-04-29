@@ -37,7 +37,15 @@ class AutenticacionController extends Controller {
                         $this->redirect('/login?error=pending');
                     }
 
-                    // Si es texto plano, sería buena idea actualizarla al hash en el futuro
+                    // Actualización silenciosa de contraseña plana a Hash seguro
+                    if (!password_verify($clave, $registro['clave'])) {
+                        $nuevo_hash = password_hash($clave, PASSWORD_DEFAULT);
+                        $stmtUpdate = $db->prepare("UPDATE userlog SET clave = ? WHERE id_miembro = ?");
+                        $stmtUpdate->bind_param("si", $nuevo_hash, $registro['id']);
+                        $stmtUpdate->execute();
+                        $stmtUpdate->close();
+                    }
+
                     $usuario_data = [
                         'id'     => $registro['id'],
                         'nombre' => $registro['nombre'] . ' ' . $registro['apellido'],
@@ -54,8 +62,7 @@ class AutenticacionController extends Controller {
                     if (Roles::esAdmin($registro['rol_id'])) {
                         $this->redirect('/admin/dashboard');
                     } elseif ($registro['rol_id'] == Roles::ESTUDIANTE) {
-                        // TODO: Update when student view is migrated
-                        $this->redirect('/ascensos'); // Assuming public/student view
+                        $this->redirect('/estudiante/dashboard'); 
                     } else {
                         $this->redirect('/');
                     }

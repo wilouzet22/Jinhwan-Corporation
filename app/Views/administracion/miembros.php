@@ -40,8 +40,26 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                                 <span class="font-mono text-xs bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded"><?= htmlspecialchars($miembro['tipo_documento']) ?></span>
                                 <?= htmlspecialchars($miembro['numero_documento']) ?>
                             </td>
+                            <?php
+                                $nivel = strtolower($miembro['nombre_nivel'] ?? '');
+                                $beltClass = 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'; // Default / Sin Asignar
+                                
+                                if (str_contains($nivel, 'blanco')) {
+                                    $beltClass = 'bg-white text-slate-800 border border-slate-200 shadow-sm';
+                                } elseif (str_contains($nivel, 'amarillo')) {
+                                    $beltClass = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                                } elseif (str_contains($nivel, 'verde')) {
+                                    $beltClass = 'bg-green-100 text-green-800 border border-green-200';
+                                } elseif (str_contains($nivel, 'azul')) {
+                                    $beltClass = 'bg-blue-100 text-blue-800 border border-blue-200';
+                                } elseif (str_contains($nivel, 'rojo')) {
+                                    $beltClass = 'bg-red-100 text-red-800 border border-red-200';
+                                } elseif (str_contains($nivel, 'negro') || str_contains($nivel, 'dan')) {
+                                    $beltClass = 'bg-slate-900 text-white border border-slate-700 shadow-md';
+                                }
+                            ?>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold <?= $beltClass ?>">
                                     <?= htmlspecialchars($miembro['nombre_nivel'] ?? 'Sin Asignar') ?>
                                 </span>
                             </td>
@@ -71,7 +89,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                                 <button onclick='openModal("edit", <?= json_encode($miembro) ?>)' class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3" title="Editar">
                                     <span class="material-icons-outlined">edit</span>
                                 </button>
-                                <form action="/jinwha/admin/miembros/delete" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar este miembro?');">
+                                <form action="<?= base_url('/admin/miembros/delete') ?>" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar este miembro?');">
                                     <input type="hidden" name="id" value="<?= $miembro['id'] ?>">
                                     <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" title="Borrar">
                                         <span class="material-icons-outlined">delete</span>
@@ -92,7 +110,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         <div class="p-6 border-b border-border-light dark:border-border-dark">
             <h2 id="modal-title" class="text-xl font-bold"></h2>
         </div>
-        <form id="member-form" action="/jinwha/admin/miembros/create" method="POST" class="p-6">
+        <form id="member-form" action="<?= base_url('/admin/miembros/create') ?>" method="POST" class="p-6">
             <input type="hidden" name="id" id="id">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -196,11 +214,11 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         
         if (action === 'add') {
             title.textContent = 'Añadir Nuevo Miembro';
-            form.action = '/jinwha/admin/miembros/create';
+            form.action = '<?= base_url('/admin/miembros/create') ?>';
             document.getElementById('id').value = '';
         } else if (action === 'edit') {
             title.textContent = 'Editar Miembro';
-            form.action = '/jinwha/admin/miembros/update';
+            form.action = '<?= base_url('/admin/miembros/update') ?>';
             
             document.getElementById('id').value = data.id;
             document.getElementById('nombre').value = data.nombre;

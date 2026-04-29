@@ -20,10 +20,10 @@
                         Nuestra organización se dedica a la excelencia, la evolución y la formación de carácter a través del Taekwondo.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="/jinwha/sedes" class="px-8 py-4 bg-tkd-red hover:bg-red-700 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-red-900/20">
+                        <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-tkd-red hover:bg-red-700 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-red-900/20">
                             Encuentra tu Sede
                         </a>
-                        <a href="/jinwha/ascensos" class="px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-tkd-black font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1">
+                        <a href="<?= base_url('/ascensos') ?>" class="px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-tkd-black font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1">
                             Ver Programas
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                     <p class="text-xl text-slate-300 mb-8 max-w-2xl font-light border-l-4 border-tkd-gold pl-6">
                         Instalaciones de primer nivel y maestros certificados para guiar tu camino marcial.
                     </p>
-                    <a href="/jinwha/sedes" class="px-8 py-4 bg-tkd-blue hover:bg-blue-700 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-900/20">
+                    <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-tkd-blue hover:bg-blue-700 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-900/20">
                         Conoce Más
                     </a>
                 </div>
@@ -68,7 +68,7 @@
                     <p class="text-xl text-slate-300 mb-8 max-w-2xl font-light border-l-4 border-tkd-red pl-6">
                         El Taekwondo no es solo un deporte, es un estilo de vida que fortalece cuerpo y mente.
                     </p>
-                    <a href="/jinwha/ascensos" class="px-8 py-4 bg-tkd-gold hover:bg-amber-600 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-amber-900/20">
+                    <a href="<?= base_url('/ascensos') ?>" class="px-8 py-4 bg-tkd-gold hover:bg-amber-600 text-white font-display font-bold uppercase tracking-wider rounded transition-all transform hover:-translate-y-1 shadow-lg shadow-amber-900/20">
                         Únete Hoy
                     </a>
                 </div>
