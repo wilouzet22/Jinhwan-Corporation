@@ -1,48 +1,133 @@
 <?php
+/**
+ * ============================================================
+ * MODELO DE TEORÍA (Teoria)
+ * ============================================================
+ * Gestiona el contenido teórico de ascenso de cinturones.
+ * Cada teoría está asociada a un grado/nivel y contiene un
+ * título y descripción con el material de estudio.
+ *
+ * Tabla principal: 'teoria'
+ * Campos relevantes:
+ *   - id_teoria    → clave primaria
+ *   - nombre       → título del tema teórico (alias 'titulo')
+ *   - contenido    → descripción/cuerpo del tema (alias 'descripcion')
+ *   - id_grado     → nivel al que pertenece este material
+ *   - id_tipo_de_t → tipo de teoría (1 = por defecto)
+ *
+ * Nota: las funcionalidades de favoritos fueron DESHABILITADAS
+ * al migrar el esquema de la base de datos. Los métodos existen
+ * pero retornan valores neutros sin consultar la BD.
+ * ============================================================
+ */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Teoria extends Model {
-    
+
+    /**
+     * Obtiene todos los temas teóricos con su información de nivel.
+     *
+     * Realiza JOIN con 'grados' para incluir el nombre del nivel
+     * al que pertenece cada tema.
+     *
+     * Ordenado por: grado ASC (menor nivel primero), luego por id_teoria ASC.
+     * Esto permite agrupar el contenido por cinturón de forma ordenada.
+     *
+     * Alias devueltos por compatibilidad con las vistas:
+     *   - t.nombre    → 'titulo'
+     *   - t.contenido → 'descripcion'
+     *   - '' (vacío)  → 'url_video' (campo desactivado en el nuevo esquema)
+     *   - t.id_grado  → 'nivel_id'
+     *   - g.nombre    → 'nivel_nombre'
+     *   - g.id_grado  → 'orden'
+     *
+     * @return array Lista de teorías como arrays asociativos
+     */
     public function getAll() {
-        // Updated to include level name and mapping fields to new schema (teoria)
-        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, '' as url_video, t.id_grado as nivel_id, 
-                       g.nombre as nivel_nombre, g.id_grado as orden 
-                FROM teoria t 
-                LEFT JOIN grados g ON t.id_grado = g.id_grado 
+        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, '' as url_video, t.id_grado as nivel_id,
+                       g.nombre as nivel_nombre, g.id_grado as orden
+                FROM teoria t
+                LEFT JOIN grados g ON t.id_grado = g.id_grado
                 ORDER BY g.id_grado ASC, t.id_teoria ASC";
+
         $result = $this->db->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    /**
+     * Crea un nuevo tema teórico en la base de datos.
+     *
+     * El campo 'id_tipo_de_t' se fija en 1 (tipo por defecto) ya que
+     * actualmente no hay selección de tipo en la interfaz.
+     *
+     * @param  array $data Datos del tema:
+     *                     'titulo'      → nombre del tema
+     *                     'descripcion' → contenido explicativo
+     *                     'nivel_id'    → ID del grado al que pertenece
+     * @return bool  true si se insertó correctamente
+     */
     public function create($data) {
-        $tipo_defecto = 1;
+        $tipo_defecto = 1; // Tipo de teoría por defecto (sin selección en UI)
+
         $stmt = $this->db->prepare("INSERT INTO teoria (nombre, contenido, id_grado, id_tipo_de_t) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $tipo_defecto);
         return $stmt->execute();
     }
 
+    /**
+     * Actualiza un tema teórico existente.
+     *
+     * @param  int   $id   ID del tema a modificar
+     * @param  array $data Nuevos datos del tema (titulo, descripcion, nivel_id)
+     * @return bool  true si se actualizó correctamente
+     */
     public function update($id, $data) {
         $stmt = $this->db->prepare("UPDATE teoria SET nombre = ?, contenido = ?, id_grado = ? WHERE id_teoria = ?");
         $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $id);
         return $stmt->execute();
     }
 
+    /**
+     * Elimina un tema teórico por su ID.
+     *
+     * @param  int  $id ID del tema a eliminar
+     * @return bool true si se eliminó correctamente
+     */
     public function delete($id) {
         $stmt = $this->db->prepare("DELETE FROM teoria WHERE id_teoria = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
-    // New methods for Student Favorites
+    /**
+     * [DESHABILITADO] Obtiene los IDs de teorías marcadas como favoritas por un usuario.
+     *
+     * Esta funcionalidad fue desactivada al migrar al nuevo esquema de base de datos
+     * (la tabla de favoritos fue eliminada). Se mantiene el método para evitar romper
+     * el código que lo llama en EstudioController.
+     *
+     * @param  int   $usuario_id ID del usuario (no usado)
+     * @return array Siempre retorna array vacío []
+     */
     public function getFavorites($usuario_id) {
-        // Favorite functionality disabled as the table was removed in new DB schema
+        // Funcionalidad deshabilitada: la tabla de favoritos no existe en el nuevo esquema
         return [];
     }
 
+    /**
+     * [DESHABILITADO] Agrega o quita una teoría de los favoritos de un usuario.
+     *
+     * Idem que getFavorites: deshabilitado por migración de esquema.
+     * Se mantiene por compatibilidad con el endpoint AJAX /ascensos/toggle.
+     *
+     * @param  int    $usuario_id ID del usuario (no usado)
+     * @param  int    $teoria_id  ID de la teoría (no usado)
+     * @return string Siempre retorna 'removed'
+     */
     public function toggleFavorite($usuario_id, $teoria_id) {
-        // Favorite functionality disabled
+        // Funcionalidad deshabilitada
         return 'removed';
     }
 }

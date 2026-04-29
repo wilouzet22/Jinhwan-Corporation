@@ -1,10 +1,17 @@
 RewriteEngine On
 
-# Redirect Trailing Slashes If Not A Folder...
+# ── ELIMINAR BARRA FINAL ──────────────────────────────────────────
+# Si la URL termina en '/' pero NO es un directorio real del servidor,
+# se redirige permanentemente (301) a la misma URL sin la barra final.
+# Ejemplo: /sedes/ → /sedes
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ $1 [L,R=301]
 
-# Handle Front Controller...
+# ── FRONT CONTROLLER ─────────────────────────────────────────────
+# Si la URL solicitada NO corresponde a un directorio real (-d)
+# ni a un archivo real (-f), se redirige internamente a index.php.
+# Esto permite que el Router de PHP maneje todas las rutas amigables
+# sin necesidad de que existan archivos físicos para cada ruta.
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]

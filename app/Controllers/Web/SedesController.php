@@ -1,31 +1,40 @@
 <?php
+/**
+ * ============================================================
+ * CONTROLADOR DE SEDES – SITIO WEB PÚBLICO (SedesController)
+ * ============================================================
+ * Muestra la lista pública de sedes del club de Taekwondo.
+ * No requiere autenticación (acceso libre).
+ *
+ * Ruta: GET /sedes
+ * Vista: web/sedes
+ *
+ * Obtiene las sedes de la base de datos con su conteo de miembros
+ * y las presenta de forma pública para informar a visitantes
+ * sobre las ubicaciones disponibles del club.
+ * ============================================================
+ */
 namespace App\Controllers\Web;
 
 use App\Core\Controller;
 use App\Models\Sede;
 
 class SedesController extends Controller {
+
+    /**
+     * Lista las sedes disponibles del club para el público general.
+     * Ruta: GET /sedes
+     *
+     * Usa Sede::getAll() que retorna nombre, dirección, horario
+     * y número de estudiantes de cada sede.
+     */
     public function index() {
         $sedeModel = new Sede();
-        $sedes = $sedeModel->getAll();
-        
-        // Enrich with student count if needed (currently model just selects *)
-        // Ideally Model should support this or we query manually.
-        // For now using raw query in Model or simple query here.
-        // But Sede model getAll is simple. Let's make a specific method in Sede Model if needed,
-        // or just rely on basic data for now since the original query had a JOIN.
-        
-        // Let's perform the specific query here or update Model.
-        // Updating Model is better but to be quick and consistent with MVC:
-        // We will stick to basic data or add methods to Sede model later.
-        // However the view expects 'numero_estudiantes'.
-        
-        // Quick fix: allow Model to run custom query or add specific method
-        // For now let's just pass basic data, or update Sede model (which I can't do in this turn easily without re-reading).
-        // Actually I created Sede model earlier, it's simple select *.
-        // I will add a method to Sede model in next turn or just use basic data.
-        // Wait, I can overwrite Sede model file now with the method!
-        
-        $this->view('web/sedes', ['sedes' => $sedes, 'page_title' => 'Nuestras Sedes']);
+        $sedes     = $sedeModel->getAll(); // Incluye JOIN con miembros para el conteo
+
+        $this->view('web/sedes', [
+            'sedes'      => $sedes,
+            'page_title' => 'Nuestras Sedes'
+        ]);
     }
 }
