@@ -25,8 +25,11 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
 </head>
 <body class="bg-tkd-gray dark:bg-tkd-black text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-red selection:text-white">
 <div class="flex min-h-screen bg-tkd-gray dark:bg-tkd-black">
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden glass-backdrop transition-opacity duration-300"></div>
+
     <!-- Sidebar -->
-    <aside class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden md:flex flex-col shadow-xl z-20">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
         <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/50">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-24 w-auto object-contain mb-3 drop-shadow-lg transition-transform group-hover:scale-105 duration-300">
@@ -99,9 +102,14 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <!-- Top Mobile Header (visible only on mobile) -->
-        <header class="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between">
-             <a href="<?= base_url('/index.php') ?>" class="font-bold text-lg">AppAdmin</a>
+        <header class="md:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between z-30">
+             <div class="flex items-center gap-3">
+                 <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
+                    <span class="material-icons-outlined text-3xl">menu</span>
+                 </button>
+                 <a href="<?= base_url('/index.php') ?>" class="font-bold text-lg">AppAdmin</a>
+             </div>
              <a href="<?= base_url('/index.php') ?>" class="text-sm text-blue-600">Volver a Web</a>
         </header>
