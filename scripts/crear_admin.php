@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/app/Config/Database.php';
+require_once __DIR__ . '/../app/Config/Database.php';
 
 try {
     $db = App\Config\Database::getInstance()->getConnection();
