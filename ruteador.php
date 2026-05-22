@@ -1,0 +1,91 @@
+<?php
+/**
+ * ============================================================
+ * RUTEADOR (Router Dispatcher)
+ * ============================================================
+ * Extraído de index.php para seguir la guía proyectoMVC-master.
+ * Gestiona todas las rutas de la aplicación.
+ * ============================================================
+ */
+
+// ── CARGA DE CONTROLADORES ──────────────────────────────────
+require_once __DIR__ . '/controladores/Web/InicioController.php';
+require_once __DIR__ . '/controladores/Web/SedesController.php';
+require_once __DIR__ . '/controladores/Web/PaginaController.php';
+require_once __DIR__ . '/controladores/Web/InstructoresController.php';
+require_once __DIR__ . '/controladores/Web/GaleriaController.php';
+
+require_once __DIR__ . '/controladores/Administracion/AscensosController.php';
+require_once __DIR__ . '/controladores/Administracion/SedesController.php';
+require_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
+require_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
+require_once __DIR__ . '/controladores/Administracion/DashboardController.php';
+
+require_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
+
+require_once __DIR__ . '/controladores/Estudiante/DashboardController.php';
+require_once __DIR__ . '/controladores/Estudiante/EstudioController.php';
+
+// ── IMPORTACIÓN DE NAMESPACES ───────────────────────────────
+use App\Core\Router;
+use App\Controllers\Web\InicioController;
+use App\Controllers\Web\PaginaController;
+use App\Controllers\Web\InstructoresController;
+use App\Controllers\Web\GaleriaController;
+use App\Controllers\Web\SedesController as WebSedesController;
+use App\Controllers\Administracion\SedesController as AdminSedesController;
+use App\Controllers\Administracion\AscensosController;
+use App\Controllers\Administracion\MiembrosController;
+use App\Controllers\Administracion\RegistrosController;
+use App\Controllers\Administracion\DashboardController;
+use App\Controllers\Autenticacion\AutenticacionController;
+use App\Controllers\Estudiante\DashboardController as StudentDashboardController;
+use App\Controllers\Estudiante\EstudioController as StudentEstudioController;
+
+// ── INSTANCIA Y RUTAS ───────────────────────────────────────
+$router = new Router();
+
+// SITIO PÚBLICO
+$router->get('/', [InicioController::class, 'portal']);
+$router->get('/portal', [InicioController::class, 'portal']);
+$router->get('/inicio', [InicioController::class, 'index']);
+$router->get('/nosotros', [PaginaController::class, 'nosotros']);
+$router->get('/sedes', [WebSedesController::class, 'index']);
+$router->get('/instructores', [InstructoresController::class, 'index']);
+$router->get('/galeria', [GaleriaController::class, 'index']);
+
+// ESTUDIANTE
+$router->get('/estudiante/dashboard', [StudentDashboardController::class, 'index']);
+$router->get('/estudiante/estudio', [StudentEstudioController::class, 'index']);
+$router->post('/ascensos/toggle', [StudentEstudioController::class, 'toggle']);
+
+// AUTENTICACIÓN
+$router->get('/login', [AutenticacionController::class, 'loginForm']);
+$router->post('/login/process', [AutenticacionController::class, 'login']);
+$router->get('/logout', [AutenticacionController::class, 'logout']);
+$router->get('/registro', [AutenticacionController::class, 'registroForm']);
+$router->post('/registro/process', [AutenticacionController::class, 'processRegistro']);
+
+// ADMINISTRADOR
+$router->get('/admin/dashboard', [DashboardController::class, 'index']);
+$router->get('/admin/ascensos', [AscensosController::class, 'index']);
+$router->post('/admin/ascensos/create', [AscensosController::class, 'store']);
+$router->post('/admin/ascensos/update', [AscensosController::class, 'update']);
+$router->post('/admin/ascensos/delete', [AscensosController::class, 'delete']);
+
+$router->get('/admin/sedes', [AdminSedesController::class, 'index']);
+$router->post('/admin/sedes/create', [AdminSedesController::class, 'store']);
+$router->post('/admin/sedes/update', [AdminSedesController::class, 'update']);
+$router->post('/admin/sedes/delete', [AdminSedesController::class, 'delete']);
+
+$router->get('/admin/miembros', [MiembrosController::class, 'index']);
+$router->post('/admin/miembros/create', [MiembrosController::class, 'store']);
+$router->post('/admin/miembros/update', [MiembrosController::class, 'update']);
+$router->post('/admin/miembros/delete', [MiembrosController::class, 'delete']);
+
+$router->get('/admin/registros', [RegistrosController::class, 'index']);
+$router->post('/admin/registros/aprobar', [RegistrosController::class, 'aprobar']);
+$router->post('/admin/registros/rechazar', [RegistrosController::class, 'rechazar']);
+
+// DESPACHO
+$router->dispatch();
