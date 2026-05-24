@@ -15,6 +15,7 @@ require_once __DIR__ . '/helpers/url_helper.php';
 require_once __DIR__ . '/core/Router.php';
 require_once __DIR__ . '/core/Controller.php';
 require_once __DIR__ . '/core/Model.php';
+require_once __DIR__ . '/core/Roles.php';
 require_once __DIR__ . '/core/Security.php';
 
 // ── CARGA DE MODELOS ──────────────────────────────────────────

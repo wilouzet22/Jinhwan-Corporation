@@ -63,8 +63,22 @@ class Router {
         // Ejemplo: si la app está en http://localhost/Jinhwan-Corporation-main/
         //          la ruta /Jinhwan-Corporation-main/sedes se convierte en /sedes
         $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+        
+        // Normalizar barras invertidas (Windows)
+        $scriptName = str_replace('\\', '/', $scriptName);
+
         if ($scriptName !== '/' && strpos($path, $scriptName) === 0) {
             $path = substr($path, strlen($scriptName));
+        }
+
+        // Si la URL explícitamente tiene /index.php, también quitarlo
+        if (strpos($path, '/index.php') === 0) {
+            $path = substr($path, strlen('/index.php'));
+        }
+
+        // Si la ruta queda vacía tras limpiar prefijos, apuntar a la raíz
+        if ($path === '') {
+            $path = '/';
         }
 
         // Buscar la ruta dentro del método HTTP correspondiente

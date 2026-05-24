@@ -34,7 +34,7 @@ class Controller {
         extract($data);
 
         // Construir la ruta absoluta al archivo de vista
-        $viewPath = __DIR__ . "/../Views/$view.php";
+        $viewPath = __DIR__ . "/../vistas/$view.php";
 
         if (file_exists($viewPath)) {
             // Incluir/renderizar la vista

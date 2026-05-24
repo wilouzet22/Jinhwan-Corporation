@@ -225,7 +225,7 @@
         <div class="logo-wrapper" id="logoWrapper">
             <div class="svg-container">
                 <?php 
-                    $svgPath = __DIR__ . '/../../../public/img/visual/logo.svg';
+                    $svgPath = __DIR__ . '/../../public/img/visual/logo.svg';
                     if (file_exists($svgPath)) {
                         echo file_get_contents($svgPath);
                     } else {
