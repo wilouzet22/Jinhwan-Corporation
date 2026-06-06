@@ -1,6 +1,6 @@
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 mt-auto">
+    <footer class="bg-slate-950/40 backdrop-blur-sm border-t border-slate-900 text-slate-500 mt-auto">
         <div class="container mx-auto px-4 py-6 text-center text-sm">
-            &copy; 2025 Jinnwhan Corporation. Todos los derechos reservados.
+            &copy; 2025 Jinhwan Corporation. Todos los derechos reservados.
         </div>
     </footer>
     </div> <!-- Close Content Wrapper -->

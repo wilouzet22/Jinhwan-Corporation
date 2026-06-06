@@ -6,18 +6,18 @@
     <title><?= $page_title ?? 'Jinhwa Corporation' ?></title>
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
     <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
-    <!-- Google Fonts: Oswald (Headings) & Roboto (Body) -->
+    <!-- Google Fonts: Oswald (Headings) & Inter (Body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Modern Portal Styles */
         body {
-            background-color: #0c0e12;
+            background-color: #0b0f19;
             color: #ffffff;
             margin: 0;
             overflow: hidden;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -29,7 +29,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            background: radial-gradient(circle at center, #1a222e 0%, #0c0e12 100%);
+            background: radial-gradient(circle at center, #111827 0%, #0b0f19 100%);
             z-index: 1;
             padding: 20px;
         }
@@ -60,7 +60,7 @@
         .svg-container {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 0 35px rgba(220,38,38,0.25));
         }
 
         .svg-container svg {
@@ -125,14 +125,14 @@
             transition: all 0.4s ease;
             text-align: center;
             position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            border-radius: 12px;
         }
 
         /* SITIO WEB Specific */
         .btn-sitio {
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #ffffff;
         }
 
@@ -140,48 +140,49 @@
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
+            left: 5%;
             width: 0;
             height: 2px;
-            background-color: #ffffff;
+            background-color: #2563EB; /* TKD Blue */
             transition: width 0.4s ease;
         }
 
         .btn-sitio:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(37, 99, 235, 0.4);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
         }
         
         .btn-sitio:hover::after {
-            width: 100%;
+            width: 90%;
         }
 
         /* ACCEDER Specific */
         .btn-acceder {
-            border: 1px solid rgba(225, 29, 72, 0.3);
+            border: 1px solid rgba(220, 38, 38, 0.3);
             color: #ffffff;
-            background: rgba(225, 29, 72, 0.1);
+            background: rgba(220, 38, 38, 0.08);
         }
 
         .btn-acceder::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
+            left: 5%;
             width: 0;
             height: 2px;
-            background-color: #e11d48;
+            background-color: #DC2626; /* TKD Red */
             transition: width 0.4s ease;
         }
 
         .btn-acceder:hover {
-            background: rgba(225, 29, 72, 0.2);
-            border-color: rgba(225, 29, 72, 0.6);
-            box-shadow: 0 0 30px rgba(225, 29, 72, 0.15);
+            background: rgba(220, 38, 38, 0.15);
+            border-color: rgba(220, 38, 38, 0.6);
+            box-shadow: 0 0 35px rgba(220, 38, 38, 0.35);
         }
 
         .btn-acceder:hover::after {
-            width: 100%;
+            width: 90%;
         }
 
         .btn-subtitle {

@@ -29,14 +29,14 @@ function openAscensoModal(data) {
     data.recursos.forEach((recurso) => {
       const resourceCard = document.createElement("div");
       resourceCard.className =
-        "bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700";
+        "glass-card rounded-2xl p-6 border border-slate-800/80 shadow-lg";
 
       let contentHtml = "";
 
       if (recurso.tipo === "Video") {
         if (recurso.url.includes("uploads/")) {
           contentHtml = `
-                        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-black mb-3 shadow-lg">
+                        <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden bg-black mb-4 shadow-lg border border-slate-800/50">
                             <video controls class="w-full h-full object-contain">
                                 <source src="${recurso.url}" type="video/mp4">
                                 Tu navegador no soporta el elemento de video.
@@ -56,28 +56,28 @@ function openAscensoModal(data) {
 
             if (videoId) {
               contentHtml = `
-                                <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-black mb-3 shadow-lg">
+                                <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden bg-black mb-4 shadow-lg border border-slate-800/50">
                                     <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
                                 </div>
                              `;
             } else {
-              contentHtml = `<a href="${recurso.url}" target="_blank" class="flex items-center gap-2 text-tkd-blue hover:underline mb-2"><span class="material-icons-outlined">open_in_new</span> Ver Video Externo</a>`;
+              contentHtml = `<a href="${recurso.url}" target="_blank" class="inline-flex items-center gap-2 text-tkd-blue hover:text-blue-400 hover:underline mb-3 transition-colors"><span class="material-icons-outlined">open_in_new</span> Ver Video Externo</a>`;
             }
           } else {
-            contentHtml = `<a href="${recurso.url}" target="_blank" class="flex items-center gap-2 text-tkd-blue hover:underline mb-2"><span class="material-icons-outlined">open_in_new</span> Ver Video Externo</a>`;
+            contentHtml = `<a href="${recurso.url}" target="_blank" class="inline-flex items-center gap-2 text-tkd-blue hover:text-blue-400 hover:underline mb-3 transition-colors"><span class="material-icons-outlined">open_in_new</span> Ver Video Externo</a>`;
           }
         }
       } else if (recurso.tipo === "Imagen") {
-        contentHtml = `<img src="${recurso.url}" alt="${recurso.titulo}" class="w-full h-auto rounded-lg shadow-md mb-3">`;
+        contentHtml = `<img src="${recurso.url}" alt="${recurso.titulo}" class="w-full h-auto rounded-xl shadow-md border border-slate-800/50 mb-4">`;
       }
 
       resourceCard.innerHTML = `
-                <h4 class="font-bold text-lg mb-2 text-slate-800 dark:text-white flex items-center gap-2">
+                <h4 class="font-display font-bold text-lg mb-3 text-white flex items-center gap-2">
                     <span class="material-icons-outlined text-slate-400">${recurso.tipo === "Video" ? "movie" : "description"}</span>
                     ${recurso.titulo}
                 </h4>
                 ${contentHtml}
-                ${recurso.tipo !== "Video" && recurso.tipo !== "Imagen" ? `<a href="${recurso.url}" target="_blank" class="inline-flex items-center px-4 py-2 bg-tkd-blue text-white rounded hover:bg-blue-700 transition-colors text-sm font-bold uppercase tracking-wide">Ver Recurso</a>` : ""}
+                ${recurso.tipo !== "Video" && recurso.tipo !== "Imagen" ? `<a href="${recurso.url}" target="_blank" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-tkd-blue to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white rounded-xl transition-all text-sm font-bold uppercase tracking-wider shadow-md hover:shadow-[0_0_15px_rgba(37,99,235,0.3)]">Ver Recurso</a>` : ""}
             `;
 
       resourcesContainer.appendChild(resourceCard);
@@ -128,10 +128,10 @@ function switchTab(tab) {
   let visibleCount = 0;
 
   if (tab === "all") {
-    allBtn.classList.add("bg-tkd-red", "text-white", "shadow-md");
-    allBtn.classList.remove("text-slate-500");
-    mineBtn.classList.remove("bg-tkd-red", "text-white", "shadow-md");
-    mineBtn.classList.add("text-slate-500");
+    allBtn.classList.add("bg-tkd-red", "text-white", "shadow-[0_0_15px_rgba(220,38,38,0.4)]");
+    allBtn.classList.remove("text-slate-400", "hover:text-white");
+    mineBtn.classList.remove("bg-tkd-red", "text-white", "shadow-[0_0_15px_rgba(220,38,38,0.4)]");
+    mineBtn.classList.add("text-slate-400", "hover:text-white");
 
     cards.forEach((card) => {
       card.classList.remove("hidden");
@@ -139,10 +139,10 @@ function switchTab(tab) {
     });
     emptyState.classList.add("hidden");
   } else {
-    mineBtn.classList.add("bg-tkd-red", "text-white", "shadow-md");
-    mineBtn.classList.remove("text-slate-500");
-    allBtn.classList.remove("bg-tkd-red", "text-white", "shadow-md");
-    allBtn.classList.add("text-slate-500");
+    mineBtn.classList.add("bg-tkd-red", "text-white", "shadow-[0_0_15px_rgba(220,38,38,0.4)]");
+    mineBtn.classList.remove("text-slate-400", "hover:text-white");
+    allBtn.classList.remove("bg-tkd-red", "text-white", "shadow-[0_0_15px_rgba(220,38,38,0.4)]");
+    allBtn.classList.add("text-slate-400", "hover:text-white");
 
     cards.forEach((card) => {
       const id = parseInt(card.dataset.teoriaId);
@@ -180,13 +180,13 @@ function toggleMiTeoria(teoriaId) {
         if (data.action === "added") {
           miTeoriaIds.push(teoriaId);
           btn.classList.add("text-tkd-gold");
-          btn.classList.remove("text-slate-300");
+          btn.classList.remove("text-slate-400");
           icon.textContent = "star";
         } else {
           const index = miTeoriaIds.indexOf(teoriaId);
           if (index > -1) miTeoriaIds.splice(index, 1);
           btn.classList.remove("text-tkd-gold");
-          btn.classList.add("text-slate-300");
+          btn.classList.add("text-slate-400");
           icon.textContent = "star_border";
         }
 
