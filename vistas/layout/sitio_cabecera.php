@@ -51,7 +51,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/55 z-40 hidden md:hidden glass-backdrop transition-opacity duration-300"></div>
 
     <!-- Sidebar Navigation -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 glass-panel border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 glass-panel border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
         
         <!-- Admin Menu Hamburger (Top Left) -->
         <div class="absolute top-4 left-4 z-50">
@@ -118,9 +118,9 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="material-icons-outlined text-tkd-red group-hover:scale-110 transition-transform">info</span>
                 <span class="font-display font-medium uppercase tracking-wider">Nosotros</span>
             </a>
-            <a href="<?= base_url('/instructores') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-blue transition-all group nav-link blue-hover">
-                <span class="material-icons-outlined text-tkd-blue group-hover:scale-110 transition-transform">groups</span>
-                <span class="font-display font-medium uppercase tracking-wider">Instructores</span>
+            <a href="<?= base_url('/miembros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-blue transition-all group nav-link blue-hover">
+                <span class="material-icons-outlined group-hover:scale-110 transition-transform">people</span>
+                <span class="font-display font-medium uppercase tracking-wider">Miembros</span>
             </a>
 
             <a href="<?= base_url('/galeria') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-red transition-all group nav-link">

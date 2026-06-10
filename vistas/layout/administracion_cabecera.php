@@ -31,7 +31,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     <div id="sidebar-backdrop" class="fixed inset-0 bg-black/55 z-40 hidden md:hidden glass-backdrop transition-opacity duration-300"></div>
 
     <!-- Sidebar -->
-    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-72 glass-panel border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 glass-panel border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
         <div class="p-8 border-b border-slate-800 flex flex-col items-center justify-center bg-slate-950/20">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-24 w-auto object-contain mb-3 drop-shadow-[0_0_15px_rgba(220,38,38,0.15)] transition-transform group-hover:scale-105 duration-300">
@@ -75,6 +75,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     <a href="<?= base_url('/admin/miembros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/60 transition-all group <?= ($current_page ?? '') === 'miembros' ? 'bg-emerald-500/10 border-l-2 border-l-emerald-500 text-emerald-400' : '' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'miembros' ? 'text-emerald-400' : '' ?>">people</span>
                         <span class="font-display font-medium tracking-wide">Miembros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/admin/perfiles-publicos') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800/60 transition-all group <?= ($current_page ?? '') === 'perfiles_publicos' ? 'bg-cyan-500/10 border-l-2 border-l-cyan-500 text-cyan-400' : '' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'perfiles_publicos' ? 'text-cyan-400' : '' ?>">public</span>
+                        <span class="font-display font-medium tracking-wide">Perfiles Públicos</span>
                     </a>
                 </li>
                 <li>

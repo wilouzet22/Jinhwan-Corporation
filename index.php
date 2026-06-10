@@ -23,6 +23,7 @@ require_once __DIR__ . '/modelos/Sede.php';
 require_once __DIR__ . '/modelos/Nivel.php';
 require_once __DIR__ . '/modelos/Teoria.php';
 require_once __DIR__ . '/modelos/Usuario.php';
+require_once __DIR__ . '/modelos/MultimediaGaleria.php';
 
 // ── INICIO DE SESIÓN ─────────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {

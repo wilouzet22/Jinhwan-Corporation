@@ -48,7 +48,7 @@
             width: 220px;
             height: 220px;
             z-index: 10;
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -79,9 +79,9 @@
             stroke-width: 1.5px;
             stroke-linecap: round;
             stroke-linejoin: round;
-            transition: stroke-dashoffset 2.8s cubic-bezier(0.4, 0, 0.2, 1), 
-                        fill-opacity 1.2s ease, 
-                        stroke-opacity 1s ease;
+            transition: stroke-dashoffset 1.0s cubic-bezier(0.4, 0, 0.2, 1), 
+                        fill-opacity 0.5s ease, 
+                        stroke-opacity 0.3s ease;
         }
 
         /* Actions Section */
@@ -90,7 +90,7 @@
             gap: 30px;
             opacity: 0;
             transform: translateY(20px);
-            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
             z-index: 20;
             width: 100%;
@@ -297,8 +297,8 @@
                 path.style.fill = fillColor;
                 
                 // Cascade delays: drawing -> filling -> hide stroke
-                const seqDelay = index * 0.02;
-                path.style.transitionDelay = `${seqDelay}s, ${seqDelay + 1.2}s, ${seqDelay + 2.2}s`;
+                const seqDelay = index * 0.005;
+                path.style.transitionDelay = `${seqDelay}s, ${seqDelay + 0.5}s, ${seqDelay + 1.0}s`;
             });
 
             // Trigger reflow
@@ -313,7 +313,7 @@
                     // Hide stroke after filling
                     setTimeout(() => {
                         item.path.style.strokeOpacity = '0';
-                    }, 3000);
+                    }, 1200);
                 });
 
                 // 6. Final Transition to buttons
@@ -321,10 +321,10 @@
                     logoWrapper.classList.add('minimized');
                     setTimeout(() => {
                         actionsContainer.classList.add('show');
-                    }, 400); 
-                }, 5500);
+                    }, 200); 
+                }, 1800);
 
-            }, 600);
+            }, 200);
         });
     </script>
 </body>

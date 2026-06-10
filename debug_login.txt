@@ -4,3 +4,21 @@
 2026-06-03 01:03:27 - Admin Success: Rol=1
 2026-06-03 01:03:31 - Admin Success: Rol=1
 2026-06-03 01:03:34 - Admin Success: Rol=1
+2026-06-06 17:19:10 - Login Success: Email=admin@jinhwa.com | Rol=1
+2026-06-06 17:19:32 - Login Success: Email=admin@jinhwa.com | Rol=1
+2026-06-06 17:22:44 - Login Success: Email=admin@jinhwa.com | Rol=Administracion
+2026-06-06 17:22:44 - Admin Success: Rol=Administracion
+2026-06-06 17:22:48 - Admin Success: Rol=Administracion
+2026-06-06 17:24:13 - Admin Success: Rol=Administracion
+2026-06-06 17:26:01 - Admin Success: Rol=Administracion
+2026-06-06 17:26:01 - Admin Success: Rol=Administracion
+2026-06-09 19:54:22 - Login Success: Email=admin@jinhwa.com | Rol=Administracion
+2026-06-09 19:54:22 - Admin Success: Rol=Administracion
+2026-06-09 20:05:50 - Admin Success: Rol=Administracion
+2026-06-09 20:05:55 - Admin Success: Rol=Administracion
+2026-06-09 20:10:57 - Admin Success: Rol=Administracion
+2026-06-09 20:11:01 - Admin Success: Rol=Administracion
+2026-06-09 20:11:21 - Admin Success: Rol=Administracion
+2026-06-09 20:11:30 - Admin Success: Rol=Administracion
+2026-06-09 20:11:30 - Admin Success: Rol=Administracion
+2026-06-09 20:11:48 - Admin Success: Rol=Administracion

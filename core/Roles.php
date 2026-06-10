@@ -17,13 +17,19 @@ namespace App\Config;
 class Roles {
 
     /** Rol de Administrador: acceso total al panel de administración */
-    const ADMINISTRADOR = 1;
+    const ADMINISTRADOR = 'Administracion';
 
     /** Rol de Maestro/Instructor (uso futuro o especial) */
-    const MAESTRO = 2;
+    const MAESTRO = 'Maestros';
 
-    /** Rol de Estudiante: acceso al dashboard y módulo de estudio */
-    const ESTUDIANTE = 3;
+    /** Rol de Profesor */
+    const PROFESOR = 'Profesores';
+
+    /** Rol de Monitor */
+    const MONITOR = 'Monitores';
+
+    /** Rol de Estudiante/Deportista: acceso al dashboard y módulo de estudio */
+    const ESTUDIANTE = 'Deportistas';
 
     /**
      * Comprueba si un rol_id corresponde al Administrador.

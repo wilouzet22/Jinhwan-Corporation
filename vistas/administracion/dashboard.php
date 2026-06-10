@@ -1,18 +1,15 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-<main class="flex-grow container mx-auto p-6 lg:p-10 space-y-10 relative overflow-hidden">
-    <!-- Abstract Ambient Glows -->
-    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-tkd-blue/5 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-tkd-red/5 rounded-full blur-3xl pointer-events-none"></div>
+<main class="flex-grow container mx-auto p-6 lg:p-10 space-y-8">
 
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h1 class="text-4xl font-display font-bold text-white uppercase tracking-tight">Panel de Control</h1>
-            <p class="text-slate-400 mt-2 font-light">Bienvenido al ecosistema de gestión de Jinhwa Corporation</p>
+            <h1 class="text-3xl font-bold text-slate-100">Panel de Control</h1>
+            <p class="text-slate-400 mt-1 text-sm">Resumen general y métricas de la academia</p>
         </div>
         <div class="flex items-center gap-3">
-            <div class="glass-card px-4 py-2 rounded-xl text-sm font-bold text-slate-400 flex items-center gap-2">
+            <div class="bg-slate-900 px-4 py-2 rounded-lg text-sm font-medium text-slate-400 flex items-center gap-2 border border-slate-800 shadow-sm">
                 <span class="material-icons-outlined text-sm">calendar_today</span>
                 <?= date('d M, Y') ?>
             </div>
@@ -20,110 +17,116 @@
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Members -->
-        <div class="glass-card p-6 rounded-3xl group border border-slate-800/80 flex items-center gap-5 hover:border-tkd-blue/40 hover:shadow-[0_0_20px_rgba(37,99,235,0.15)] transition-all">
-            <div class="w-14 h-14 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-center text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white transition-all">
-                <span class="material-icons-outlined text-3xl">people</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 flex items-center gap-5 hover:border-slate-700 transition-colors shadow-sm">
+            <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <span class="material-icons-outlined text-2xl">people</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Miembros</p>
-                <h3 class="text-2xl font-display font-bold text-white"><?= $stats['total_miembros'] ?></h3>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Miembros</p>
+                <h3 class="text-2xl font-bold text-slate-100"><?= $stats['total_miembros'] ?></h3>
             </div>
         </div>
 
         <!-- Active Members -->
-        <div class="glass-card p-6 rounded-3xl group border border-slate-800/80 flex items-center gap-5 hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all">
-            <div class="w-14 h-14 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                <span class="material-icons-outlined text-3xl">verified</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 flex items-center gap-5 hover:border-slate-700 transition-colors shadow-sm">
+            <div class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                <span class="material-icons-outlined text-2xl">verified</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Activos</p>
-                <h3 class="text-2xl font-display font-bold text-white"><?= $stats['activos'] ?></h3>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Activos</p>
+                <h3 class="text-2xl font-bold text-slate-100"><?= $stats['activos'] ?></h3>
             </div>
         </div>
 
         <!-- Pending Registrations -->
-        <div class="glass-card p-6 rounded-3xl group border border-slate-800/80 flex items-center gap-5 hover:border-tkd-red/40 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)] transition-all">
-            <div class="w-14 h-14 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-center text-tkd-red group-hover:bg-tkd-red group-hover:text-white transition-all">
-                <span class="material-icons-outlined text-3xl">how_to_reg</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 flex items-center gap-5 hover:border-slate-700 transition-colors shadow-sm">
+            <div class="w-12 h-12 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <span class="material-icons-outlined text-2xl">how_to_reg</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Pendientes</p>
-                <h3 class="text-2xl font-display font-bold text-white"><?= $stats['pendientes'] ?></h3>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pendientes</p>
+                <h3 class="text-2xl font-bold text-slate-100"><?= $stats['pendientes'] ?></h3>
             </div>
         </div>
 
         <!-- Total Sedes -->
-        <div class="glass-card p-6 rounded-3xl group border border-slate-800/80 flex items-center gap-5 hover:border-tkd-gold/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all">
-            <div class="w-14 h-14 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-center text-tkd-gold group-hover:bg-tkd-gold group-hover:text-white transition-all">
-                <span class="material-icons-outlined text-3xl">store</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 flex items-center gap-5 hover:border-slate-700 transition-colors shadow-sm">
+            <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
+                <span class="material-icons-outlined text-2xl">store</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sedes</p>
-                <h3 class="text-2xl font-display font-bold text-white"><?= $stats['total_sedes'] ?></h3>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sedes</p>
+                <h3 class="text-2xl font-bold text-slate-100"><?= $stats['total_sedes'] ?></h3>
             </div>
         </div>
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Belt Distribution Chart -->
-        <div class="glass-card p-8 rounded-3xl border border-slate-800/80">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="text-xl font-display font-bold text-white uppercase tracking-wider">Distribución por Grados</h3>
-                <span class="material-icons-outlined text-slate-500">donut_large</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-base font-semibold text-slate-100">Distribución por Grados</h3>
+                <span class="material-icons-outlined text-slate-500 text-sm">donut_large</span>
             </div>
-            <div class="h-64">
+            <div class="h-64 flex-grow relative">
                 <canvas id="gradosChart"></canvas>
             </div>
         </div>
 
         <!-- Sedes Distribution Chart -->
-        <div class="glass-card p-8 rounded-3xl border border-slate-800/80">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="text-xl font-display font-bold text-white uppercase tracking-wider">Alumnos por Sede</h3>
-                <span class="material-icons-outlined text-slate-500">bar_chart</span>
+        <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-base font-semibold text-slate-100">Alumnos por Sede</h3>
+                <span class="material-icons-outlined text-slate-500 text-sm">bar_chart</span>
             </div>
-            <div class="h-64">
+            <div class="h-64 flex-grow relative">
                 <canvas id="sedesChart"></canvas>
             </div>
         </div>
     </div>
 
     <!-- Recent Activity Table -->
-    <div class="glass-card rounded-3xl border border-slate-800/80 overflow-hidden relative z-10">
-        <div class="p-8 border-b border-slate-800 flex items-center justify-between">
-            <h3 class="text-xl font-display font-bold text-white uppercase tracking-wider">Últimos Registros</h3>
-            <a href="<?= base_url('/admin/miembros') ?>" class="text-tkd-blue hover:text-blue-400 text-xs font-bold uppercase tracking-widest transition-colors">Ver todos</a>
+    <div class="bg-slate-900 rounded-xl border border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+            <h3 class="text-base font-semibold text-slate-100">Últimos Registros</h3>
+            <a href="<?= base_url('/admin/miembros') ?>" class="text-blue-500 hover:text-blue-400 text-xs font-medium transition-colors">Ver todos</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-950/40 border-b border-slate-800">
-                        <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Miembro</th>
-                        <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Fecha</th>
-                        <th class="px-8 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Estado</th>
+                    <tr class="bg-slate-950/50">
+                        <th class="px-6 py-3 text-xs font-semibold text-slate-400 uppercase">Miembro</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate-400 uppercase text-center">Fecha</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate-400 uppercase text-center">Estado</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800/50">
+                <tbody class="divide-y divide-slate-800/80">
                     <?php foreach ($ultimos_miembros as $miembro): ?>
-                        <tr class="hover:bg-slate-900/20 transition-all">
-                            <td class="px-8 py-4">
+                        <tr class="hover:bg-slate-800/30 transition-colors">
+                            <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-center text-slate-300 font-bold text-sm">
+                                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-medium text-xs">
                                         <?= strtoupper(substr($miembro['nombre'], 0, 1)) ?>
                                     </div>
-                                    <span class="font-bold text-slate-200"><?= htmlspecialchars($miembro['nombre'] . ' ' . $miembro['apellido']) ?></span>
+                                    <span class="font-medium text-slate-200 text-sm"><?= htmlspecialchars($miembro['nombre'] . ' ' . $miembro['apellido']) ?></span>
                                 </div>
                             </td>
-                            <td class="px-8 py-4 text-center text-sm text-slate-400 font-light">
+                            <td class="px-6 py-4 text-center text-sm text-slate-400">
                                 <?= $miembro['fecha'] ?>
                             </td>
-                            <td class="px-8 py-4 text-center">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider <?= $miembro['activo'] ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/30' : 'bg-amber-950/60 text-amber-400 border border-amber-800/30' ?>">
-                                    <?= $miembro['activo'] ? 'Activo' : 'Pendiente' ?>
-                                </span>
+                            <td class="px-6 py-4 text-center">
+                                <?php if ($miembro['activo']): ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                        Activo
+                                    </span>
+                                <?php else: ?>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                                        Pendiente
+                                    </span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -148,12 +151,12 @@
                 datasets: [{
                     data: gradosData.map(d => d.cantidad),
                     backgroundColor: [
-                        '#334155', '#facc15', '#22c55e', '#3b82f6', '#ef4444', '#1e293b',
-                        '#94a3b8', '#64748b'
+                        '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b',
+                        '#0ea5e9', '#ec4899'
                     ],
-                    borderColor: '#0b0f19',
+                    borderColor: '#0f172a',
                     borderWidth: 2,
-                    hoverOffset: 10
+                    hoverOffset: 4
                 }]
             },
             options: {
@@ -164,13 +167,13 @@
                         position: 'right',
                         labels: {
                             color: '#94a3b8',
-                            font: { family: 'Inter', size: 10 },
+                            font: { family: 'Inter', size: 11 },
                             usePointStyle: true,
                             padding: 15
                         }
                     }
                 },
-                cutout: '70%'
+                cutout: '75%'
             }
         });
 
@@ -184,11 +187,9 @@
                 datasets: [{
                     label: 'Alumnos',
                     data: sedesData.map(d => d.cantidad),
-                    backgroundColor: 'rgba(37, 99, 235, 0.75)',
-                    borderColor: 'rgba(37, 99, 235, 1)',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    maxBarThickness: 40
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4,
+                    maxBarThickness: 32
                 }]
             },
             options: {
@@ -200,12 +201,12 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(148, 163, 184, 0.05)' },
-                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                        grid: { color: 'rgba(148, 163, 184, 0.1)', drawBorder: false },
+                        ticks: { color: '#94a3b8', font: { size: 11 } }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#94a3b8', font: { size: 10 } }
+                        ticks: { color: '#94a3b8', font: { size: 11 } }
                     }
                 }
             }

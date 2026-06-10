@@ -12,12 +12,13 @@
 require_once __DIR__ . '/controladores/Web/InicioController.php';
 require_once __DIR__ . '/controladores/Web/SedesController.php';
 require_once __DIR__ . '/controladores/Web/PaginaController.php';
-require_once __DIR__ . '/controladores/Web/InstructoresController.php';
+require_once __DIR__ . '/controladores/Web/MiembrosController.php';
 require_once __DIR__ . '/controladores/Web/GaleriaController.php';
 
 require_once __DIR__ . '/controladores/Administracion/AscensosController.php';
 require_once __DIR__ . '/controladores/Administracion/SedesController.php';
 require_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
+require_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController.php';
 require_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
 require_once __DIR__ . '/controladores/Administracion/DashboardController.php';
 
@@ -30,12 +31,13 @@ require_once __DIR__ . '/controladores/Estudiante/EstudioController.php';
 use App\Core\Router;
 use App\Controllers\Web\InicioController;
 use App\Controllers\Web\PaginaController;
-use App\Controllers\Web\InstructoresController;
+use App\Controllers\Web\MiembrosController as WebMiembrosController;
 use App\Controllers\Web\GaleriaController;
 use App\Controllers\Web\SedesController as WebSedesController;
 use App\Controllers\Administracion\SedesController as AdminSedesController;
 use App\Controllers\Administracion\AscensosController;
 use App\Controllers\Administracion\MiembrosController;
+use App\Controllers\Administracion\PerfilesPublicosController;
 use App\Controllers\Administracion\RegistrosController;
 use App\Controllers\Administracion\DashboardController;
 use App\Controllers\Autenticacion\AutenticacionController;
@@ -51,7 +53,7 @@ $router->get('/portal', [InicioController::class, 'portal']);
 $router->get('/inicio', [InicioController::class, 'index']);
 $router->get('/nosotros', [PaginaController::class, 'nosotros']);
 $router->get('/sedes', [WebSedesController::class, 'index']);
-$router->get('/instructores', [InstructoresController::class, 'index']);
+$router->get('/miembros', [WebMiembrosController::class, 'index']);
 $router->get('/galeria', [GaleriaController::class, 'index']);
 
 // ESTUDIANTE
@@ -82,6 +84,9 @@ $router->get('/admin/miembros', [MiembrosController::class, 'index']);
 $router->post('/admin/miembros/create', [MiembrosController::class, 'store']);
 $router->post('/admin/miembros/update', [MiembrosController::class, 'update']);
 $router->post('/admin/miembros/delete', [MiembrosController::class, 'delete']);
+
+$router->get('/admin/perfiles-publicos', [PerfilesPublicosController::class, 'index']);
+$router->post('/admin/perfiles-publicos/update', [PerfilesPublicosController::class, 'update']);
 
 $router->get('/admin/registros', [RegistrosController::class, 'index']);
 $router->post('/admin/registros/aprobar', [RegistrosController::class, 'aprobar']);

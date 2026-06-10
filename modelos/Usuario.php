@@ -213,4 +213,41 @@ class Usuario extends Model {
         $result = $stmt->get_result();
         return $result->fetch_assoc(); // Retorna un array o null si no se encontró
     }
+
+    /**
+     * Obtiene los miembros que tienen mostrar_en_web = 1, junto con su URL multimedia.
+     * Utilizado para la página web pública.
+     */
+    public function getPublicProfiles() {
+        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, mg.url as instagram_url
+                FROM miembros m
+                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
+                WHERE m.mostrar_en_web = 1
+                ORDER BY m.rol ASC, m.nombre ASC";
+        $result = $this->db->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Obtiene todos los miembros con su información de perfil público.
+     * Utilizado en el panel de administración de Perfiles Públicos.
+     */
+    public function getAllWithPublicProfileInfo() {
+        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.mostrar_en_web, mg.url as instagram_url
+                FROM miembros m
+                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
+                ORDER BY m.nombre ASC";
+        $result = $this->db->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Actualiza la información del perfil público de un miembro.
+     */
+    public function updatePublicProfile($id, $mostrar_en_web, $descripcion_perfil, $rol) {
+        $sql = "UPDATE miembros SET mostrar_en_web = ?, descripcion_perfil = ?, rol = ? WHERE id_miembro = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("issi", $mostrar_en_web, $descripcion_perfil, $rol, $id);
+        return $stmt->execute();
+    }
 }
