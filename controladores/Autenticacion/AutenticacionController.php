@@ -116,6 +116,10 @@ class AutenticacionController extends Controller {
                     // Redirigir según el rol del usuario autenticado
                     if (Roles::esAdmin($registro['rol_id'])) {
                         $this->redirect('/admin/dashboard');        // Administrador → panel de control
+                    } elseif (Roles::esMaestro($registro['rol_id'])
+                           || $registro['rol_id'] == Roles::PROFESOR
+                           || $registro['rol_id'] == Roles::MONITOR) {
+                        $this->redirect('/maestro/dashboard');      // Maestro/Profesor/Monitor → panel de instructor
                     } elseif ($registro['rol_id'] == Roles::ESTUDIANTE) {
                         $this->redirect('/estudiante/dashboard');   // Estudiante → portal del alumno
                     } else {

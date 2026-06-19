@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
 ?>
 <!DOCTYPE html>
-<html class="dark" lang="es">
+<html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -18,78 +18,131 @@ $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
     
+    <!-- Theme Toggle Script (Inline to prevent FOUC) -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script src="<?= asset('js/styles/administracion-config.js') ?>"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'tkd-blue': '#2563EB',
+                        'tkd-red': '#DC2626',
+                        'tkd-gold': '#FACC15',
+                    },
+                    fontFamily: {
+                        'body': ['Inter', 'sans-serif'],
+                        'display': ['Oswald', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-[#0f172a] text-slate-200 font-body antialiased selection:bg-blue-500 selection:text-white">
-<div class="flex min-h-screen bg-[#0f172a]">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-blue-500 selection:text-white transition-colors duration-300">
+<div class="flex min-h-screen">
     <!-- Mobile Sidebar Backdrop -->
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/55 z-40 hidden md:hidden transition-opacity duration-300"></div>
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <!-- Sidebar -->
-    <aside id="estudiante-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-[#1e293b] border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="p-8 border-b border-slate-800 flex flex-col items-center justify-center">
+    <aside id="estudiante-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
+        <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppEstudiante" class="h-24 w-auto object-contain mb-3 transition-transform group-hover:scale-105 duration-300">
                 <div class="text-center">
-                    <h1 class="font-bold text-xl text-white uppercase tracking-widest leading-none">JINHWAN</h1>
-                    <span class="text-xs font-semibold text-blue-400 tracking-[0.1em] uppercase">Portal Alumno</span>
+                    <h1 class="font-bold text-xl text-slate-900 dark:text-white uppercase tracking-widest leading-none transition-colors">JINHWAN</h1>
+                    <span class="text-xs font-semibold text-tkd-blue tracking-[0.1em] uppercase">Portal Alumno</span>
                 </div>
             </a>
         </div>
         <nav class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
             <ul class="space-y-2">
                 <li>
-                    <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all group">
+                    <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white transition-all group">
                         <span class="material-icons-outlined transition-colors">arrow_back</span>
                         <span class="font-medium tracking-wide uppercase text-sm">Sitio Web</span>
                     </a>
                 </li>
                 <li>
-                    <div class="my-4 border-t border-slate-800/80"></div>
-                    <span class="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 block">Menú Principal</span>
+                    <div class="my-4 border-t border-slate-200 dark:border-slate-800/80 transition-colors"></div>
+                    <span class="px-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">Menú Principal</span>
                 </li>
                 <li>
-                    <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-500/10 border-l-2 border-l-blue-500 text-blue-400' : '' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'dashboard' ? 'text-blue-400' : '' ?>">dashboard</span>
+                    <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-50 dark:bg-blue-500/10 border-l-2 border-l-blue-500 text-tkd-blue' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-blue' : '' ?>">dashboard</span>
                         <span class="font-medium tracking-wide text-sm">Mi Resumen</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/estudiante/estudio') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800 transition-all group <?= ($current_page ?? '') === 'estudio' ? 'bg-red-500/10 border-l-2 border-l-red-500 text-red-400' : '' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'estudio' ? 'text-red-400' : '' ?>">menu_book</span>
+                    <a href="<?= base_url('/estudiante/historial') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'historial' ? 'bg-tkd-gold/10 border-l-2 border-l-tkd-gold text-yellow-600 dark:text-yellow-500' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'historial' ? 'text-yellow-600 dark:text-yellow-500' : '' ?>">history</span>
+                        <span class="font-medium tracking-wide text-sm">Mi Historial</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/estudiante/estudio') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'estudio' ? 'bg-red-50 dark:bg-red-500/10 border-l-2 border-l-red-500 text-tkd-red' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'estudio' ? 'text-tkd-red' : '' ?>">menu_book</span>
                         <span class="font-medium tracking-wide text-sm">Material Teórico</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/estudiante/perfil') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'perfil' ? 'bg-purple-50 dark:bg-purple-500/10 border-l-2 border-l-purple-500 text-purple-600 dark:text-purple-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'perfil' ? 'text-purple-600 dark:text-purple-400' : '' ?>">person</span>
+                        <span class="font-medium tracking-wide text-sm">Mi Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'calendario' ? 'bg-teal-50 dark:bg-teal-500/10 border-l-2 border-l-teal-500 text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'calendario' ? 'text-teal-600 dark:text-teal-400' : '' ?>">event</span>
+                        <span class="font-medium tracking-wide text-sm">Calendario</span>
                     </a>
                 </li>
             </ul>
         </nav>
-        <div class="p-6 border-t border-slate-800 bg-slate-900/50">
-             <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-800 transition group">
-                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-md">
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
+            <!-- Theme Toggle -->
+            <div class="flex items-center justify-between mb-3 px-2">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
+                <button id="theme-toggle" type="button" class="text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
+                    <span id="theme-toggle-dark-icon" class="hidden material-icons-outlined text-[20px]">light_mode</span>
+                    <span id="theme-toggle-light-icon" class="hidden material-icons-outlined text-[20px]">dark_mode</span>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-3 p-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
                     <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
                 </div>
                 <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-medium text-white truncate" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
-                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Alumno</p>
+                    <p class="font-bold text-slate-900 dark:text-white truncate transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
+                    <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Alumno</p>
                 </div>
-             </a>
-             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-sm font-medium mt-2" title="Cerrar Sesión">
+            </div>
+            <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-sm font-semibold mt-1 focus:outline-none" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
                 <span>Salir</span>
-             </a>
+            </a>
         </div>
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative bg-[#0f172a]">
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
         <!-- Top Mobile Header (visible only on mobile) -->
-        <header class="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between z-30">
+        <header class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
-                 <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-slate-800 text-slate-300 transition-colors">
+                 <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
                     <span class="material-icons-outlined text-3xl">menu</span>
                  </button>
-                 <span class="font-bold text-lg text-white">Portal Alumno</span>
+                 <span class="font-bold text-lg text-slate-900 dark:text-white transition-colors">Portal Alumno</span>
              </div>
         </header>

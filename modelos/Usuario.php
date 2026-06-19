@@ -40,7 +40,7 @@ class Usuario extends Model {
                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
                        u.correo, u.clave,
-                       s.nombre as nombre_cede, s.id_sede as cede_id,
+                       s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel
                 FROM miembros m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
@@ -74,7 +74,7 @@ class Usuario extends Model {
         $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssisi",
+        $stmt->bind_param("ssssiss",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
@@ -97,8 +97,8 @@ class Usuario extends Model {
             }
 
             // Asignar sede si se especificó
-            if (!empty($data['cede_id'])) {
-                $this->assignSede($usuario_id, $data['cede_id']);
+            if (!empty($data['sede_id'])) {
+                $this->assignSede($usuario_id, $data['sede_id']);
             }
 
             return true;
@@ -124,7 +124,7 @@ class Usuario extends Model {
         $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ? WHERE id_miembro = ?";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssisii",
+        $stmt->bind_param("ssssissi",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
@@ -147,8 +147,8 @@ class Usuario extends Model {
             }
 
             // Actualizar la sede asignada
-            if (isset($data['cede_id'])) {
-                $this->assignSede($id, $data['cede_id']);
+            if (isset($data['sede_id'])) {
+                $this->assignSede($id, $data['sede_id']);
             }
 
             return true;

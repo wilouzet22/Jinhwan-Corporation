@@ -43,4 +43,14 @@ class Roles {
     public static function esAdmin($rol_id) {
         return $rol_id == self::ADMINISTRADOR;
     }
+
+    /**
+     * Comprueba si un rol_id corresponde al Maestro/Instructor.
+     *
+     * @param  string|null $rol_id ID de rol obtenido de la sesión o BD
+     * @return bool     true si es Maestro, false en cualquier otro caso
+     */
+    public static function esMaestro($rol_id) {
+        return $rol_id == self::MAESTRO;
+    }
 }

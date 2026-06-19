@@ -19,6 +19,7 @@ namespace App\Controllers\Estudiante;
 use App\Core\Controller;
 use App\Core\Security;
 use App\Models\Usuario;
+use App\Config\Roles;
 
 class DashboardController extends Controller {
 
@@ -27,7 +28,16 @@ class DashboardController extends Controller {
      * No verifica rol específico (cualquier usuario autenticado puede ver su dashboard).
      */
     public function __construct() {
-        Security::verifySession(); // Verificar sesión activa con todos los checks de seguridad
+        Security::verifySession();
+
+        // Proteger la ruta: si el usuario no es estudiante, redirigir a su panel correcto
+        $rol = $_SESSION['rol_id'] ?? null;
+        if (Roles::esAdmin($rol)) {
+            header('Location: ' . base_url('/admin/dashboard')); exit;
+        }
+        if (Roles::esMaestro($rol) || $rol === Roles::PROFESOR || $rol === Roles::MONITOR) {
+            header('Location: ' . base_url('/maestro/dashboard')); exit;
+        }
     }
 
     /**

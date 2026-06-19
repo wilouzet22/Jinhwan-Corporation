@@ -55,10 +55,26 @@ class RegistrosController extends Controller {
         $result      = $db->query($sql);
         $solicitudes = $result->fetch_all(MYSQLI_ASSOC);
 
+        // Obtener solicitudes de ascenso pendientes
+        $sqlAscensos = "SELECT s.id, s.id_miembro, s.id_grado_solicitado, s.observaciones, s.fecha_solicitud,
+                               m.nombre as nombre_alumno, m.apellido as apellido_alumno,
+                               g_act.nombre as grado_actual, g_sol.nombre as grado_solicitado,
+                               maest.nombre as nombre_maestro, maest.apellido as apellido_maestro
+                        FROM solicitudes_ascenso s
+                        JOIN miembros m ON s.id_miembro = m.id_miembro
+                        JOIN grados g_act ON s.id_grado_actual = g_act.id_grado
+                        JOIN grados g_sol ON s.id_grado_solicitado = g_sol.id_grado
+                        JOIN miembros maest ON s.id_maestro = maest.id_miembro
+                        WHERE s.estado = 'pendiente'
+                        ORDER BY s.id DESC";
+        $resultAscensos = $db->query($sqlAscensos);
+        $solicitudes_ascenso = $resultAscensos->fetch_all(MYSQLI_ASSOC);
+
         $this->view('administracion/registros', [
-            'solicitudes'  => $solicitudes,
-            'page_title'   => 'Solicitudes de Registro',
-            'current_page' => 'registros'
+            'solicitudes'          => $solicitudes,
+            'solicitudes_ascenso'  => $solicitudes_ascenso,
+            'page_title'           => 'Solicitudes Pendientes',
+            'current_page'         => 'registros'
         ]);
     }
 
@@ -118,6 +134,64 @@ class RegistrosController extends Controller {
             } else {
                 $this->redirect('/admin/registros?error=1');
             }
+        }
+    }
+
+    /**
+     * Aprueba una propuesta de ascenso de grado.
+     * Ruta: POST /admin/registros/aprobar-ascenso
+     */
+    public function aprobarAscenso() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_solicitud        = intval($_POST['id']);
+            $id_miembro          = intval($_POST['id_miembro']);
+            $id_grado_solicitado = intval($_POST['id_grado_solicitado']);
+
+            $db = Database::getInstance()->getConnection();
+
+            // 1. Iniciar transacción
+            $db->begin_transaction();
+
+            try {
+                // Actualizar solicitud a aprobado
+                $stmt1 = $db->prepare("UPDATE solicitudes_ascenso SET estado = 'aprobado', fecha_resolucion = CURRENT_TIMESTAMP WHERE id = ?");
+                $stmt1->bind_param("i", $id_solicitud);
+                $stmt1->execute();
+                $stmt1->close();
+
+                // Actualizar miembro al nuevo grado
+                $stmt2 = $db->prepare("UPDATE miembros SET id_grado = ? WHERE id_miembro = ?");
+                $stmt2->bind_param("ii", $id_grado_solicitado, $id_miembro);
+                $stmt2->execute();
+                $stmt2->close();
+
+                $db->commit();
+                $this->redirect('/admin/registros?msg=promo_approved');
+            } catch (\Exception $e) {
+                $db->rollback();
+                $this->redirect('/admin/registros?error=1');
+            }
+        }
+    }
+
+    /**
+     * Rechaza una propuesta de ascenso de grado.
+     * Ruta: POST /admin/registros/rechazar-ascenso
+     */
+    public function rechazarAscenso() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_solicitud = intval($_POST['id']);
+            $db = Database::getInstance()->getConnection();
+
+            $stmt = $db->prepare("UPDATE solicitudes_ascenso SET estado = 'rechazado', fecha_resolucion = CURRENT_TIMESTAMP WHERE id = ?");
+            $stmt->bind_param("i", $id_solicitud);
+
+            if ($stmt->execute()) {
+                $this->redirect('/admin/registros?msg=promo_rejected');
+            } else {
+                $this->redirect('/admin/registros?error=1');
+            }
+            $stmt->close();
         }
     }
 }

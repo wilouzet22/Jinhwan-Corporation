@@ -12,7 +12,7 @@ $is_admin = $rol_id && Roles::esAdmin($rol_id);
 $is_student = $rol_id == Roles::ESTUDIANTE;
 ?>
 <!DOCTYPE html>
-<html class="dark scroll-smooth" lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -28,58 +28,84 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
     
+    <!-- Theme Toggle Script (Inline to prevent FOUC) -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script src="<?= asset('js/styles/main-config.js') ?>"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'tkd-blue': '#2563EB',
+                        'tkd-red': '#DC2626',
+                        'tkd-gold': '#FACC15',
+                    },
+                    fontFamily: {
+                        'body': ['Inter', 'sans-serif'],
+                        'display': ['Oswald', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-Ne9/ZPNVK3w3pBBX6xE86bNG295dJl4CHttrCp3WiuD0VLkVU1xlXnL7V/NsT3VXBWNEjpP2Dl_631+gOYAZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-[#0b0f19] font-body text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden">
+<body class="bg-slate-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden transition-colors duration-300">
 <div class="flex h-screen overflow-hidden">
     <!-- Mobile Header -->
-    <div class="md:hidden fixed top-0 w-full z-50 bg-[#0b0f19]/90 backdrop-blur-md shadow-lg border-b border-slate-800 flex justify-between items-center px-4 py-3">
+    <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3 transition-colors duration-300">
          <a class="flex items-center gap-2" href="<?= base_url('/') ?>">
             <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinnwhan Logo" class="h-10 w-auto object-contain">
-            <span class="font-display font-bold text-lg text-white uppercase leading-none">Jinnwhan</span>
+            <span class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase leading-none transition-colors">Jinnwhan</span>
          </a>
-         <button class="p-2 rounded-md hover:bg-slate-800 text-slate-300 transition-colors" id="mobile-menu-btn">
+         <button class="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" id="mobile-menu-btn">
             <span class="material-icons-outlined text-3xl">menu</span>
         </button>
     </div>
 
     <!-- Mobile Sidebar Backdrop -->
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/55 z-40 hidden md:hidden glass-backdrop transition-opacity duration-300"></div>
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
 
     <!-- Sidebar Navigation -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 glass-panel border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
         
         <!-- Admin Menu Hamburger (Top Left) -->
         <div class="absolute top-4 left-4 z-50">
-            <button id="admin-menu-toggle" class="p-2 rounded-full hover:bg-slate-800/80 text-slate-400 hover:text-tkd-red transition-all duration-300">
+            <button id="admin-menu-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-400 hover:text-tkd-red transition-all duration-300 focus:outline-none">
                 <span class="material-icons-outlined text-2xl">menu</span>
             </button>
             
             <!-- Admin Dropdown Menu -->
-            <div id="admin-menu-dropdown" class="hidden absolute top-10 left-0 w-56 bg-slate-900/95 backdrop-blur-md rounded-lg shadow-2xl border border-slate-800 overflow-hidden transform origin-top-left transition-all duration-200 z-50">
+            <div id="admin-menu-dropdown" class="hidden absolute top-10 left-0 w-56 bg-white dark:bg-slate-900 backdrop-blur-md rounded-lg shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform origin-top-left transition-all duration-200 z-50">
                 <?php if ($is_admin): ?>
-                    <div class="px-4 py-3 border-b border-slate-800 bg-slate-950/50">
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Administración</p>
-                        <p class="text-sm font-bold text-white truncate"><?= htmlspecialchars($_SESSION['nombre'] ?? 'Admin') ?></p>
+                    <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 transition-colors">
+                        <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Administración</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors"><?= htmlspecialchars($_SESSION['nombre'] ?? 'Admin') ?></p>
                     </div>
                     <div class="py-1">
-                        <a href="<?= base_url('/admin/sedes') ?>" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-tkd-red transition-colors">
+                        <a href="<?= base_url('/admin/sedes') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-colors">
                             Administración
                         </a>
-                        <a href="<?= base_url('/logout') ?>" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-tkd-blue transition-colors">
+                        <a href="<?= base_url('/logout') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-colors">
                             <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">logout</span> Cerrar Sesión</span>
                         </a>
                     </div>
                 <?php else: ?>
                     <div class="py-1">
-                        <a href="<?= base_url('/login') ?>" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-tkd-blue transition-colors">
+                        <a href="<?= base_url('/login') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-colors">
                              <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">login</span> Iniciar Sesión</span>
                         </a>
-                        <a href="<?= base_url('/registro') ?>" class="block px-4 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-tkd-red transition-colors">
+                        <a href="<?= base_url('/registro') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-colors">
                              <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">how_to_reg</span> Registrarse</span>
                         </a>
                     </div>
@@ -88,49 +114,56 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         </div>
 
         <!-- Sidebar Header (Logo) -->
-        <div class="p-8 pt-12 flex flex-col items-center justify-center border-b border-slate-800 bg-slate-950/20">
-            <div class="relative w-40 h-40 mb-4 transition-transform duration-500 hover:scale-105 animate-float">
-                <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinhwan Organization" class="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+        <div class="p-8 pt-12 flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/20 transition-colors">
+            <div class="relative w-40 h-40 mb-4 transition-transform duration-500 hover:scale-105">
+                <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinhwan Organization" class="w-full h-full object-contain">
             </div>
             <div class="text-center">
-                <h1 class="font-display font-bold text-2xl text-white tracking-widest leading-none mb-1">JINHWAN</h1>
-                <h2 class="font-display font-bold text-lg text-tkd-red tracking-widest uppercase text-glow-gold">CORPORATION</h2>
+                <h1 class="font-display font-bold text-2xl text-slate-900 dark:text-white tracking-widest leading-none mb-1 transition-colors">JINHWAN</h1>
+                <h2 class="font-display font-bold text-lg text-tkd-red tracking-widest uppercase">CORPORATION</h2>
             </div>
         </div>
 
         <!-- Navigation Links -->
         <nav class="flex-grow overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
-            <a href="<?= base_url('/') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-red transition-all group nav-link">
+            <a href="<?= base_url('/') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-red dark:hover:text-tkd-red transition-all group nav-link">
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">home</span>
                 <span class="font-display font-medium tracking-wide uppercase">Inicio</span>
             </a>
-            <a href="<?= base_url('/sedes') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-blue transition-all group nav-link blue-hover">
+            <a href="<?= base_url('/sedes') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-blue dark:hover:text-tkd-blue transition-all group nav-link">
                 <span class="material-icons-outlined text-tkd-blue group-hover:scale-110 transition-transform">location_on</span>
                 <span class="font-display font-medium uppercase tracking-wider">Sedes</span>
             </a>
             <?php if ($is_student): ?>
-            <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-gold transition-all group nav-link gold-hover">
+            <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-gold dark:hover:text-tkd-gold transition-all group nav-link">
                 <span class="material-icons-outlined text-tkd-gold group-hover:scale-110 transition-transform">school</span>
                 <span class="font-display font-medium uppercase tracking-wider">Mi Portal</span>
             </a>
             <?php endif; ?>
-            <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-red transition-all group nav-link">
+            <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-red dark:hover:text-tkd-red transition-all group nav-link">
                 <span class="material-icons-outlined text-tkd-red group-hover:scale-110 transition-transform">info</span>
                 <span class="font-display font-medium uppercase tracking-wider">Nosotros</span>
             </a>
-            <a href="<?= base_url('/miembros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-blue transition-all group nav-link blue-hover">
+            <a href="<?= base_url('/miembros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all group nav-link">
                 <span class="material-icons-outlined group-hover:scale-110 transition-transform">people</span>
                 <span class="font-display font-medium uppercase tracking-wider">Miembros</span>
             </a>
-
-            <a href="<?= base_url('/galeria') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-800/60 hover:text-tkd-red transition-all group nav-link">
+            <a href="<?= base_url('/galeria') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-red dark:hover:text-tkd-red transition-all group nav-link">
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">collections</span>
                 <span class="font-display font-medium tracking-wide uppercase">Galería</span>
             </a>
         </nav>
 
-        <!-- Sidebar Footer Removed (Admin Button was here) -->
-        <div class="h-4"></div>
+        <!-- Sidebar Footer: Theme Toggle -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
+            <div class="flex items-center justify-between px-2">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
+                <button id="theme-toggle" type="button" class="text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
+                    <span id="theme-toggle-dark-icon" class="hidden material-icons-outlined text-[20px]">light_mode</span>
+                    <span id="theme-toggle-light-icon" class="hidden material-icons-outlined text-[20px]">dark_mode</span>
+                </button>
+            </div>
+        </div>
     </aside>
 
     <!-- Main Content Wrapper -->

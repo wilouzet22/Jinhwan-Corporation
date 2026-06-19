@@ -145,6 +145,35 @@ class Security {
     }
 
     /**
+     * Verifica que el usuario autenticado tenga rol de Maestro.
+     * Debe llamarse DESPUÉS de verifySession().
+     */
+    public static function verifyMaestro() {
+        self::initSession();
+        $rol_id = $_SESSION['rol_id'] ?? null;
+
+        // Permite acceso a Maestros, Profesores y Monitores
+        $tieneAcceso = Roles::esMaestro($rol_id)
+                    || $rol_id === Roles::PROFESOR
+                    || $rol_id === Roles::MONITOR;
+
+        if (!$tieneAcceso) {
+            // Registrar el intento no autorizado
+            $log = date('Y-m-d H:i:s') . " - Maestro Fail: Invalid Rol=" . var_export($rol_id, true) . "\n";
+            file_put_contents('debug_login.txt', $log, FILE_APPEND);
+
+            // Redirigir a la portada con mensaje de acceso denegado
+            $base = self::getBasePath();
+            header("Location: " . $base . "/?msg=access_denied");
+            exit;
+        }
+
+        // Registrar acceso de maestro exitoso
+        $log = date('Y-m-d H:i:s') . " - Maestro Success: Rol=" . $rol_id . "\n";
+        file_put_contents('debug_login.txt', $log, FILE_APPEND);
+    }
+
+    /**
      * Calcula el prefijo base del proyecto (subcarpeta del servidor).
      * Devuelve '' si la app está en la raíz, o la ruta de subcarpeta si no.
      *
