@@ -4,12 +4,98 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 ?>
 
     <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 relative z-10">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 relative z-10 gap-4">
             <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">Gestión de Miembros</h1>
-            <button onclick="openModal('add')" class="bg-tkd-blue text-white font-display font-bold uppercase tracking-wider py-3 px-5 rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 focus:outline-none">
-                <span class="material-icons-outlined">person_add</span>
-                Añadir Nuevo Miembro
-            </button>
+            <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                <div class="relative w-full sm:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-icons-outlined text-slate-400 text-sm">search</span>
+                    </div>
+                    <input type="text" id="member-search" placeholder="Buscar miembro..." 
+                           class="block w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
+                </div>
+                <button onclick="openModal('add')" class="w-full sm:w-auto bg-tkd-blue text-white font-display font-bold uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none shrink-0">
+                    <span class="material-icons-outlined">person_add</span>
+                    <span class="hidden sm:inline">Añadir Nuevo Miembro</span>
+                    <span class="sm:hidden">Añadir</span>
+                </button>
+            </div>
+        </div>
+        <!-- Filtros y Estadísticas -->
+        <div class="mb-8 grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
+            <!-- Filtros (Izquierda) -->
+            <div class="lg:col-span-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm transition-colors duration-300">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                        <span class="material-icons-outlined text-tkd-blue">filter_alt</span>
+                        Filtros
+                    </h2>
+                    <button id="btn-reset-filters" class="text-xs text-slate-400 hover:text-tkd-blue transition-colors hidden focus:outline-none">Limpiar</button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Sede</label>
+                        <select id="filter-sede" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
+                            <option value="all">Todas las Sedes</option>
+                            <?php foreach($sedes_list as $sede): ?>
+                                <option value="<?= htmlspecialchars($sede['nombre']) ?>"><?= htmlspecialchars($sede['nombre']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Cinturón</label>
+                        <select id="filter-nivel" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
+                            <option value="all">Todos los Cinturones</option>
+                            <?php foreach($niveles_list as $nivel): ?>
+                                <option value="<?= htmlspecialchars($nivel['nombre']) ?>"><?= htmlspecialchars($nivel['nombre']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Rol</label>
+                        <select id="filter-rol" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
+                            <option value="all">Todos los Roles</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Instructor">Instructor</option>
+                            <option value="Alumno">Alumno</option>
+                            <option value="Invitado">Invitado</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Estado</label>
+                        <select id="filter-estado" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
+                            <option value="all">Todos</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Pendiente">Pendiente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficas (Derecha) -->
+            <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Cinturones -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
+                    <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Distribución de Cinturones</h3>
+                    <div class="flex-grow relative w-full flex items-center justify-center min-h-[200px]">
+                        <canvas id="chart-cinturones"></canvas>
+                        <div id="chart-cinturones-empty" class="absolute inset-0 flex items-center justify-center text-sm text-slate-400 hidden">Sin datos para mostrar</div>
+                    </div>
+                </div>
+                
+                <!-- Sedes -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
+                    <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Alumnos por Sede</h3>
+                    <div class="flex-grow relative w-full flex items-center justify-center min-h-[200px]">
+                        <canvas id="chart-sedes"></canvas>
+                        <div id="chart-sedes-empty" class="absolute inset-0 flex items-center justify-center text-sm text-slate-400 hidden">Sin datos para mostrar</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
@@ -243,6 +329,56 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
+
+    // Funcionalidad de Búsqueda
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('member-search');
+        const tableBody = document.querySelector('tbody');
+        const rows = tableBody.querySelectorAll('tr');
+        
+        function filterTable(query) {
+            const lowerQuery = query.toLowerCase();
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                // If it's the "No results" row, skip it for the search logic
+                if (row.id === 'no-results-row') return;
+
+                const text = row.textContent.toLowerCase();
+                if (text.includes(lowerQuery)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Handle "No results found" message
+            let noResultsRow = document.getElementById('no-results-row');
+            if (visibleCount === 0) {
+                if (!noResultsRow) {
+                    noResultsRow = document.createElement('tr');
+                    noResultsRow.id = 'no-results-row';
+                    noResultsRow.innerHTML = `<td colspan="7" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">No se encontraron miembros que coincidan con la búsqueda.</td>`;
+                    tableBody.appendChild(noResultsRow);
+                } else {
+                    noResultsRow.style.display = '';
+                }
+            } else {
+                if (noResultsRow) noResultsRow.style.display = 'none';
+            }
+        }
+        
+        searchInput.addEventListener('input', (e) => filterTable(e.target.value));
+        
+        // Comprobar si hay un parámetro 'search' en la URL (proveniente del dashboard)
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlSearch = urlParams.get('search');
+        if (urlSearch) {
+            searchInput.value = urlSearch;
+            filterTable(urlSearch);
+        }
+    });
 </script>
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>

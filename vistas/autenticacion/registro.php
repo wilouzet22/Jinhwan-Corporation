@@ -3,6 +3,10 @@ $error = null;
 if (isset($_GET['error'])) {
     if ($_GET['error'] == 'db_error') {
         $error = "Hubo un problema al procesar tu registro. Por favor, inténtalo de nuevo.";
+    } elseif ($_GET['error'] == 'doc_not_found') {
+        $error = "El número de documento no está registrado en el club.";
+    } elseif ($_GET['error'] == 'already_registered') {
+        $error = "Este documento ya tiene una cuenta activa.";
     }
 }
 ?>
@@ -33,12 +37,12 @@ if (isset($_GET['error'])) {
     <script src="<?= asset('js/styles/main-config.js') ?>"></script>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex items-center justify-center relative overflow-hidden selection:bg-tkd-red selection:text-white transition-colors duration-300">
+<body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white transition-colors duration-300 py-12">
     
     <!-- Background Image with Blur & Premium Glows -->
-    <div class="absolute inset-0 z-0">
-        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[6px] scale-105 opacity-10 dark:opacity-20" alt="Background">
-        <div class="absolute inset-0 bg-gradient-to-tr from-slate-100 dark:from-[#0b0f19] via-slate-100/90 dark:via-[#0b0f19]/90 to-slate-200/80 dark:to-[#111827]/80"></div>
+    <div class="fixed inset-0 z-0">
+        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">
+        <div class="absolute inset-0 bg-gradient-to-tr from-white/60 dark:from-[#0b0f19]/90 via-white/40 dark:via-[#0b0f19]/80 to-blue-100/50 dark:to-[#111827]/80"></div>
         <!-- Ambient Light Gradients -->
         <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-tkd-red/5 dark:bg-tkd-red/10 blur-[120px] pointer-events-none animate-pulse-slow"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-tkd-blue/5 dark:bg-tkd-blue/10 blur-[120px] pointer-events-none animate-pulse-slow" style="animation-delay: 1.5s;"></div>
@@ -74,17 +78,7 @@ if (isset($_GET['error'])) {
             <?php endif; ?>
 
             <form class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4" method="POST" action="<?= base_url('/registro/process') ?>">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Nombre(s)</label>
-                    <input name="nombre" type="text" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
-                </div>
 
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Apellido(s)</label>
-                    <input name="apellido" type="text" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
-                </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Documento Identidad</label>
@@ -92,11 +86,7 @@ if (isset($_GET['error'])) {
                         class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Fecha Nacimiento</label>
-                    <input name="fecha_n" type="date" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300 select-none">
-                </div>
+
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Correo Electrónico</label>
@@ -104,11 +94,7 @@ if (isset($_GET['error'])) {
                         class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Teléfono</label>
-                    <input name="telefono" type="tel" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
-                </div>
+
 
                 <div class="md:col-span-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Contraseña (Mín. 6 carc.)</label>

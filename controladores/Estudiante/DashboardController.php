@@ -49,12 +49,17 @@ class DashboardController extends Controller {
      */
     public function index() {
         $usuarioModel = new Usuario();
+        $eventoModel = new \App\Models\Evento();
 
         // Obtener los datos del estudiante autenticado usando su ID de sesión
         $estudiante = $usuarioModel->getById($_SESSION['id']); // $_SESSION['id'] fue guardado en startSecureSession()
+        
+        // Obtener próximos 3 eventos
+        $proximos_eventos = $eventoModel->getUpcoming(3);
 
         $this->view('estudiante/dashboard', [
             'estudiante' => $estudiante,    // Datos personales del alumno
+            'proximos_eventos' => $proximos_eventos, // Próximos eventos
             'page_title' => 'Portal del Alumno'
         ]);
     }

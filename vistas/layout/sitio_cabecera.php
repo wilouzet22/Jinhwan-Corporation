@@ -60,7 +60,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-Ne9/ZPNVK3w3pBBX6xE86bNG295dJl4CHttrCp3WiuD0VLkVU1xlXnL7V/NsT3VXBWNEjpP2Dl_631+gOYAZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-slate-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden transition-colors duration-300">
+<body class="bg-gradient-to-br from-blue-50 via-slate-50 to-red-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden transition-colors duration-300">
 <div class="flex h-screen overflow-hidden">
     <!-- Mobile Header -->
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3 transition-colors duration-300">
@@ -77,7 +77,10 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
 
     <!-- Sidebar Navigation -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 border-r transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static
+        bg-white dark:bg-slate-950
+        border-slate-200/60 dark:border-slate-800
+        [background:linear-gradient(160deg,#ffffff_0%,#f0f4ff_60%,#fdf0f0_100%)] dark:[background:#020817]">
         
         <!-- Admin Menu Hamburger (Top Left) -->
         <div class="absolute top-4 left-4 z-50">
@@ -114,8 +117,11 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         </div>
 
         <!-- Sidebar Header (Logo) -->
-        <div class="p-8 pt-12 flex flex-col items-center justify-center border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/20 transition-colors">
-            <div class="relative w-40 h-40 mb-4 transition-transform duration-500 hover:scale-105">
+        <!-- Decorative accent top bar (light mode only) -->
+        <div class="h-1 w-full bg-gradient-to-r from-tkd-blue via-tkd-red to-tkd-gold dark:opacity-30 flex-shrink-0"></div>
+        <div class="p-8 pt-10 flex flex-col items-center justify-center border-b border-slate-200/60 dark:border-slate-800
+            [background:linear-gradient(135deg,#f8faff_0%,#fff5f5_100%)] dark:[background:rgba(2,8,23,0.2)] transition-colors">
+            <div class="relative w-40 h-40 mb-4 transition-transform duration-500 hover:scale-105 drop-shadow-md">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinhwan Organization" class="w-full h-full object-contain">
             </div>
             <div class="text-center">

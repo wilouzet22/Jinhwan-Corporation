@@ -64,12 +64,12 @@ if (isset($_GET['msg'])) {
     </script>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex items-center justify-center relative overflow-hidden selection:bg-tkd-red selection:text-white transition-colors duration-300">
+<body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white transition-colors duration-300 py-12">
     
     <!-- Background Image with Blur -->
-    <div class="absolute inset-0 z-0">
-        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[6px] scale-105 opacity-10 dark:opacity-20" alt="Background">
-        <div class="absolute inset-0 bg-gradient-to-tr from-slate-100 dark:from-[#0b0f19] via-slate-100/90 dark:via-[#0b0f19]/90 to-slate-200/80 dark:to-[#111827]/80"></div>
+    <div class="fixed inset-0 z-0">
+        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">
+        <div class="absolute inset-0 bg-gradient-to-tr from-white/60 dark:from-[#0b0f19]/90 via-white/40 dark:via-[#0b0f19]/80 to-blue-100/50 dark:to-[#111827]/80"></div>
     </div>
 
     <!-- Back to Site Button -->

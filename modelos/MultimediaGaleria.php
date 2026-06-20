@@ -3,7 +3,8 @@
  * ============================================================
  * MODELO DE MULTIMEDIA GALERIA (MultimediaGaleria)
  * ============================================================
- * Gestiona los enlaces multimedia de los miembros (ej. Instagram)
+ * Gestiona los enlaces multimedia de los miembros (ej. YouTube)
+ * y también la galería general de Instagram del club.
  * ============================================================
  */
 namespace App\Models;
@@ -33,19 +34,59 @@ class MultimediaGaleria extends Model {
      * @return bool
      */
     public function upsert($id_miembro, $url) {
-        // Verifica si ya existe
         $existente = $this->getByMiembroId($id_miembro);
         
         if ($existente) {
-            $sql = "UPDATE multimedia_galeria SET url = ? WHERE id_miembro = ?";
+            $sql = "UPDATE multimedia_galeria SET url_youtube = ? WHERE id_miembro = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("si", $url, $id_miembro);
             return $stmt->execute();
         } else {
-            $sql = "INSERT INTO multimedia_galeria (id_miembro, url) VALUES (?, ?)";
+            $sql = "INSERT INTO multimedia_galeria (id_miembro, url_youtube) VALUES (?, ?)";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("is", $id_miembro, $url);
             return $stmt->execute();
         }
+    }
+
+    /**
+     * ==================================================
+     * MÉTODOS PARA GALERÍA GENERAL (INSTAGRAM)
+     * ==================================================
+     */
+
+    /**
+     * Obtiene todas las publicaciones generales (donde id_miembro es NULL).
+     * @return array
+     */
+    public function getAllGeneral() {
+        $sql = "SELECT * FROM multimedia_galeria WHERE id_miembro IS NULL ORDER BY fecha_agregado DESC";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Inserta una nueva publicación en la galería general.
+     * @param string $url_instagram
+     * @param string $descripcion
+     * @return bool
+     */
+    public function insertGeneral($url_instagram, $descripcion) {
+        $sql = "INSERT INTO multimedia_galeria (url_instagram, descripcion) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("ss", $url_instagram, $descripcion);
+        return $stmt->execute();
+    }
+
+    /**
+     * Elimina una publicación multimedia por su ID.
+     * @param int $id_multimedia
+     * @return bool
+     */
+    public function delete($id_multimedia) {
+        $sql = "DELETE FROM multimedia_galeria WHERE id_multimedia = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $id_multimedia);
+        return $stmt->execute();
     }
 }

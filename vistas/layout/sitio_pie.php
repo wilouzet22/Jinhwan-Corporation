@@ -1,5 +1,5 @@
     <!-- Footer -->
-    <footer class="bg-white dark:bg-slate-950/80 backdrop-blur-md text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 relative overflow-hidden mt-auto transition-colors duration-300">
+    <footer class="bg-white dark:bg-[#060913] backdrop-blur-md dark:backdrop-blur-none text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800/60 relative overflow-hidden mt-auto transition-colors duration-300">
         <!-- Top accent line -->
         <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-tkd-red to-transparent opacity-80"></div>
         

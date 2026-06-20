@@ -57,12 +57,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <!-- Sidebar -->
-    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center">
+    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
+        <div class="p-6 border-b border-slate-800 flex items-center justify-center">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-10 w-auto object-contain transition-transform group-hover:scale-105 duration-300">
                 <div class="flex flex-col">
-                    <h1 class="font-display font-bold text-xl text-slate-900 dark:text-white tracking-wider leading-none">JINHWAN</h1>
+                    <h1 class="font-display font-bold text-xl text-white tracking-wider leading-none">JINHWAN</h1>
                     <span class="text-[10px] font-bold text-tkd-purple tracking-widest uppercase mt-0.5">Panel Instructor</span>
                 </div>
             </a>
@@ -70,48 +70,48 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
         <nav class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
             <ul class="space-y-1">
                 <li>
-                    <span class="px-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block mt-2">Navegación</span>
+                    <span class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block mt-2">Navegación</span>
                 </li>
                 <li>
-                    <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors group">
+                    <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors group">
                         <span class="material-icons-outlined text-xl group-hover:text-tkd-purple transition-colors">public</span>
                         <span class="font-medium text-sm">Volver al Sitio</span>
                     </a>
                 </li>
                 <li>
-                    <div class="my-4 border-t border-slate-100 dark:border-slate-800/60"></div>
-                    <span class="px-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">Instructor</span>
+                    <div class="my-4 border-t border-slate-800/60"></div>
+                    <span class="px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block">Instructor</span>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/dashboard') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-purple-50 dark:bg-tkd-purple/10 text-tkd-purple font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                    <a href="<?= base_url('/maestro/dashboard') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-purple' : '' ?>">dashboard</span>
                         <span class="text-sm font-medium">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'alumnos' ? 'bg-purple-50 dark:bg-tkd-purple/10 text-tkd-purple font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                    <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'alumnos' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'alumnos' ? 'text-tkd-purple' : '' ?>">people</span>
                         <span class="text-sm font-medium">Mis Alumnos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'solicitudes_ascenso' ? 'bg-purple-50 dark:bg-tkd-purple/10 text-tkd-purple font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                    <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'solicitudes_ascenso' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'solicitudes_ascenso' ? 'text-tkd-purple' : '' ?>">timeline</span>
                         <span class="text-sm font-medium">Solicitudes Ascenso</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-purple-50 dark:bg-tkd-purple/10 text-tkd-purple font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-tkd-purple' : '' ?>">event</span>
                         <span class="text-sm font-medium">Calendario</span>
                     </a>
                 </li>
             </ul>
         </nav>
-        <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
+        <div class="p-4 border-t border-slate-800 bg-slate-900/50">
              <div class="flex items-center justify-between mb-3 px-2">
                  <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
-                 <button id="theme-toggle" type="button" class="text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
+                 <button id="theme-toggle" type="button" class="text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
                      <span id="theme-toggle-dark-icon" class="hidden material-icons-outlined text-[20px]">light_mode</span>
                      <span id="theme-toggle-light-icon" class="hidden material-icons-outlined text-[20px]">dark_mode</span>
                  </button>
@@ -122,12 +122,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
                     <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
                 </div>
                 <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-bold text-slate-900 dark:text-white truncate" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
-                    <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Instructor</p>
+                    <p class="font-bold text-white truncate" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
+                    <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Instructor</p>
                 </div>
              </div>
              
-             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm font-semibold mt-1" title="Cerrar Sesión">
+             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors text-sm font-semibold mt-1" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
                 <span>Cerrar Sesión</span>
               </a>
@@ -137,12 +137,12 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
     <!-- Main Content Wrapper -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative transition-colors duration-300">
         <!-- Top Mobile Header (visible only on mobile) -->
-        <header class="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
+        <header class="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
-                 <button id="mobile-menu-btn" class="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
+                 <button id="mobile-menu-btn" class="p-2 -ml-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
                     <span class="material-icons-outlined text-2xl">menu</span>
                  </button>
-                 <span class="font-display font-bold text-lg text-slate-900 dark:text-white">JINHWAN</span>
+                 <span class="font-display font-bold text-lg text-white">JINHWAN</span>
              </div>
              <a href="<?= base_url('/index.php') ?>" class="text-xs font-semibold text-tkd-purple uppercase tracking-wider">Ver Web</a>
         </header>

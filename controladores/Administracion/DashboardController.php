@@ -64,6 +64,10 @@ class DashboardController extends Controller {
         $res = $db->query("SELECT COUNT(*) as total FROM miembros WHERE activo = 0");
         $stats['pendientes'] = $res->fetch_assoc()['total'];
 
+        // Total de solicitudes de ascenso pendientes
+        $res = $db->query("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE estado = 'pendiente'");
+        $stats['pendientes_ascenso'] = $res->fetch_assoc()['total'];
+
         // Total de sedes registradas en el sistema
         $res = $db->query("SELECT COUNT(*) as total FROM sedes");
         $stats['total_sedes'] = $res->fetch_assoc()['total'];
@@ -98,6 +102,9 @@ class DashboardController extends Controller {
         $resUltimos = $db->query($sqlUltimos);
         $ultimos_miembros = $resUltimos->fetch_all(MYSQLI_ASSOC);
 
+        // ── [5] PRÓXIMOS EVENTOS ─────────────────────────────────
+        $proximos_eventos = (new \App\Models\Evento())->getUpcoming(3);
+
         // ── RENDERIZAR VISTA ─────────────────────────────────────
         // Pasar todos los datos a la vista del dashboard administrativo
         $this->view('administracion/dashboard', [
@@ -105,6 +112,7 @@ class DashboardController extends Controller {
             'distribucion_grados' => $distribucion_grados, // Datos para gráfica de grados
             'distribucion_sedes'  => $distribucion_sedes,  // Datos para gráfica de sedes
             'ultimos_miembros'    => $ultimos_miembros,    // Lista de últimos registros
+            'proximos_eventos'    => $proximos_eventos,    // Próximos eventos del calendario
             'page_title'          => 'Panel de Control',   // Título de la página (para <title> y breadcrumb)
             'current_page'        => 'dashboard'           // Indica cuál ítem del menú lateral está activo
         ]);

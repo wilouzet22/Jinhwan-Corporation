@@ -108,10 +108,12 @@ INSERT INTO `miembros` (`id_miembro`, `nombre`, `apellido`, `peso`, `num_doc`, `
 
 CREATE TABLE `multimedia_galeria` (
   `id_multimedia` int NOT NULL,
-  `id_miembro` int NOT NULL,
-  `url_youtube` varchar(255) NOT NULL,
+  `id_miembro` int DEFAULT NULL,
+  `url_youtube` varchar(255) DEFAULT NULL,
+  `url_instagram` varchar(255) DEFAULT NULL,
   `titulo` varchar(100) DEFAULT NULL,
-  `descripcion` text
+  `descripcion` text,
+  `fecha_agregado` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------

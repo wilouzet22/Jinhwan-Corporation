@@ -26,6 +26,26 @@ class Evento extends Model {
     }
 
     /**
+     * Obtiene los próximos eventos a partir de la fecha actual.
+     *
+     * @param int $limit Número máximo de eventos a devolver
+     * @return array Lista de eventos
+     */
+    public function getUpcoming($limit = 5) {
+        $sql = "SELECT id_evento as id, titulo as title, descripcion as description, fecha_inicio as start, fecha_fin as end, id_miembro 
+                FROM eventos 
+                WHERE fecha_inicio >= CURRENT_DATE() 
+                ORDER BY fecha_inicio ASC 
+                LIMIT ?";
+                
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
      * Crea un nuevo evento en la base de datos.
      *
      * @param  array $data Datos del evento

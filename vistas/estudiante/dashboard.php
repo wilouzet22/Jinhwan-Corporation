@@ -62,6 +62,35 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                     <span class="material-icons-outlined">arrow_forward_ios</span>
                 </div>
             </a>
+
+            <!-- Upcoming Events Widget -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
+                <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                    <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Próximos Eventos</h3>
+                    <a href="<?= base_url('/usuario/calendario') ?>" class="text-tkd-blue hover:text-blue-700 text-xs font-semibold transition-colors">Ver calendario</a>
+                </div>
+                <div class="p-5 divide-y divide-slate-100 dark:divide-slate-800/80">
+                    <?php if (!empty($proximos_eventos)): ?>
+                        <?php foreach($proximos_eventos as $evento): ?>
+                            <div class="py-3 first:pt-0 last:pb-0 flex items-center gap-4">
+                                <div class="bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 w-14 h-14 rounded-lg flex flex-col items-center justify-center shrink-0 border border-blue-100 dark:border-blue-500/20">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider"><?= date('M', strtotime($evento['start'])) ?></span>
+                                    <span class="text-xl font-black leading-none"><?= date('d', strtotime($evento['start'])) ?></span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200"><?= htmlspecialchars($evento['title']) ?></h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
+                                        <span class="material-icons-outlined text-[14px]">schedule</span>
+                                        <?= date('h:i A', strtotime($evento['start'])) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 py-2">No hay eventos próximos en este momento.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
         
     </div>

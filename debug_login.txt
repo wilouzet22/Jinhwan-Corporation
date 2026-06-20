@@ -94,3 +94,60 @@
 2026-06-19 05:03:32 - Login Success: Email=maestrouno@gmail.com | Rol=Maestros
 2026-06-19 05:03:32 - Maestro Success: Rol=Maestros
 2026-06-19 05:04:00 - Login Success: Email=estudiante@gmail.com | Rol=Deportistas
+2026-06-19 15:16:22 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-06-19 15:16:22 - Admin Success: Rol=Administracion
+2026-06-19 15:16:27 - Admin Success: Rol=Administracion
+2026-06-19 15:16:37 - Admin Success: Rol=Administracion
+2026-06-19 15:16:39 - Admin Success: Rol=Administracion
+2026-06-19 15:16:41 - Admin Success: Rol=Administracion
+2026-06-19 15:16:47 - Admin Success: Rol=Administracion
+2026-06-19 15:16:49 - Admin Success: Rol=Administracion
+2026-06-19 15:16:50 - Admin Success: Rol=Administracion
+2026-06-19 15:17:03 - Admin Success: Rol=Administracion
+2026-06-19 15:17:16 - Admin Success: Rol=Administracion
+2026-06-19 15:20:21 - Admin Success: Rol=Administracion
+2026-06-19 15:20:24 - Admin Success: Rol=Administracion
+2026-06-19 15:20:24 - Admin Success: Rol=Administracion
+2026-06-19 15:20:31 - Admin Success: Rol=Administracion
+2026-06-19 15:23:55 - Admin Success: Rol=Administracion
+2026-06-19 15:34:08 - Admin Success: Rol=Administracion
+2026-06-19 15:34:15 - Admin Success: Rol=Administracion
+2026-06-19 15:44:45 - Admin Success: Rol=Administracion
+2026-06-19 15:53:08 - Admin Success: Rol=Administracion
+2026-06-19 15:53:24 - Login Success: Email=maestrouno@gmail.com | Rol=Maestros
+2026-06-19 15:53:24 - Maestro Success: Rol=Maestros
+2026-06-19 15:53:29 - Maestro Success: Rol=Maestros
+2026-06-19 15:53:36 - Maestro Success: Rol=Maestros
+2026-06-19 15:53:45 - Maestro Success: Rol=Maestros
+2026-06-19 15:53:48 - Maestro Success: Rol=Maestros
+2026-06-19 15:54:20 - Login Success: Email=estudiante@gmail.com | Rol=Deportistas
+2026-06-19 16:19:01 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-06-19 16:19:01 - Admin Success: Rol=Administracion
+2026-06-19 16:19:07 - Admin Success: Rol=Administracion
+2026-06-19 16:19:50 - Admin Success: Rol=Administracion
+2026-06-19 16:19:50 - Admin Success: Rol=Administracion
+2026-06-19 16:19:54 - Admin Success: Rol=Administracion
+2026-06-19 16:19:54 - Admin Success: Rol=Administracion
+2026-06-19 16:19:57 - Admin Success: Rol=Administracion
+2026-06-19 16:19:57 - Admin Success: Rol=Administracion
+2026-06-19 16:20:03 - Admin Success: Rol=Administracion
+2026-06-19 16:20:03 - Admin Success: Rol=Administracion
+2026-06-19 16:20:15 - Admin Success: Rol=Administracion
+2026-06-19 16:20:19 - Admin Success: Rol=Administracion
+2026-06-19 16:20:45 - Admin Success: Rol=Administracion
+2026-06-19 16:31:30 - Admin Success: Rol=Administracion
+2026-06-19 16:31:47 - Admin Success: Rol=Administracion
+2026-06-19 16:32:14 - Admin Success: Rol=Administracion
+2026-06-19 16:32:14 - Admin Success: Rol=Administracion
+2026-06-19 16:32:18 - Admin Success: Rol=Administracion
+2026-06-19 16:32:18 - Admin Success: Rol=Administracion
+2026-06-19 16:33:24 - Admin Success: Rol=Administracion
+2026-06-19 16:33:24 - Admin Success: Rol=Administracion
+2026-06-19 16:33:58 - Admin Success: Rol=Administracion
+2026-06-19 16:33:58 - Admin Success: Rol=Administracion
+2026-06-19 16:34:08 - Admin Success: Rol=Administracion
+2026-06-19 16:34:08 - Admin Success: Rol=Administracion
+2026-06-19 16:35:27 - Admin Success: Rol=Administracion
+2026-06-19 16:35:27 - Admin Success: Rol=Administracion
+2026-06-19 16:35:43 - Admin Success: Rol=Administracion
+2026-06-19 16:35:43 - Admin Success: Rol=Administracion

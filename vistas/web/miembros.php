@@ -1,7 +1,9 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
 <!-- Hero Section -->
-<section class="relative py-20 bg-slate-100 dark:bg-[#0b0f19] overflow-hidden transition-colors duration-300">
+<section class="relative py-20 overflow-hidden transition-colors duration-300" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="absolute inset-0">
         <div class="absolute inset-0 bg-gradient-to-r from-slate-100 dark:from-[#0b0f19] via-slate-100/90 dark:via-[#0b0f19]/90 to-tkd-blue/15"></div>
     </div>
@@ -17,7 +19,9 @@
 </section>
 
 <!-- Miembros Section -->
-<section class="py-12 bg-slate-50 dark:bg-[#0b0f19] relative overflow-hidden min-h-screen transition-colors duration-300">
+<section class="py-12 relative overflow-hidden min-h-screen transition-colors duration-300" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <!-- Filters -->

@@ -22,6 +22,7 @@ require_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController
 require_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
 require_once __DIR__ . '/controladores/Administracion/DashboardController.php';
 require_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
+require_once __DIR__ . '/controladores/Administracion/ReportesController.php';
 
 require_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
 
@@ -50,6 +51,7 @@ use App\Controllers\Administracion\PerfilesPublicosController;
 use App\Controllers\Administracion\RegistrosController;
 use App\Controllers\Administracion\DashboardController;
 use App\Controllers\Administracion\CalendarioController as AdminCalendarioController;
+use App\Controllers\Administracion\ReportesController;
 use App\Controllers\Autenticacion\AutenticacionController;
 use App\Controllers\Usuario\CalendarioController as UsuarioCalendarioController;
 use App\Controllers\Estudiante\DashboardController as StudentDashboardController;
@@ -118,6 +120,8 @@ $router->get('/admin/calendario/get-eventos', [AdminCalendarioController::class,
 $router->post('/admin/calendario/create', [AdminCalendarioController::class, 'store']);
 $router->post('/admin/calendario/update', [AdminCalendarioController::class, 'update']);
 $router->post('/admin/calendario/delete', [AdminCalendarioController::class, 'delete']);
+
+$router->get('/admin/reportes', [ReportesController::class, 'index']);
 
 // USUARIO (Estudiantes y Maestros)
 $router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);

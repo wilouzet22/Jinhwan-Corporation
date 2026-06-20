@@ -14,7 +14,7 @@ include $cabecera;
 <!-- FullCalendar CSS -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 
-<main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
+<main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300 max-w-5xl">
     <div class="flex justify-between items-center mb-8 relative z-10">
         <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight">Calendario de Eventos</h1>
     </div>
@@ -58,6 +58,7 @@ include $cabecera;
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            height: 650,
             locale: 'es',
             headerToolbar: {
                 left: 'prev,next today',

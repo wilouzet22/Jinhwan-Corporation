@@ -91,50 +91,82 @@
         </div>
     </div>
 
-    <!-- Recent Activity Table -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
-        <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Deportistas Registrados Recientemente</h3>
-            <a href="<?= base_url('/maestro/alumnos') ?>" class="text-tkd-purple hover:text-purple-700 dark:hover:text-purple-400 text-xs font-semibold transition-colors">Ver todos</a>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-slate-50 dark:bg-slate-950/50">
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Deportista</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Fecha Nacimiento</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Estado</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
-                    <?php foreach ($ultimos_alumnos as $miembro): ?>
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-purple-50 dark:bg-purple-950/40 flex items-center justify-center text-tkd-purple font-bold text-xs shrink-0">
-                                        <?= strtoupper(substr($miembro['nombre'], 0, 1)) ?>
-                                    </div>
-                                    <span class="font-semibold text-slate-700 dark:text-slate-200 text-sm"><?= htmlspecialchars($miembro['nombre'] . ' ' . $miembro['apellido']) ?></span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
-                                <?= $miembro['fecha'] ?>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <?php if ($miembro['activo']): ?>
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 uppercase tracking-wider">
-                                        Activo
-                                    </span>
-                                <?php else: ?>
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 uppercase tracking-wider">
-                                        Pendiente
-                                    </span>
-                                <?php endif; ?>
-                            </td>
+    <!-- Bottom Section: Recent Activity & Upcoming Events -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Activity Table -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300 flex flex-col">
+            <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Deportistas Registrados Recientemente</h3>
+                <a href="<?= base_url('/maestro/alumnos') ?>" class="text-tkd-purple hover:text-purple-700 dark:hover:text-purple-400 text-xs font-semibold transition-colors">Ver todos</a>
+            </div>
+            <div class="overflow-x-auto flex-grow">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-950/50">
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Deportista</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Fecha Nacimiento</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Estado</th>
                         </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                        <?php foreach ($ultimos_alumnos as $miembro): ?>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-purple-50 dark:bg-purple-950/40 flex items-center justify-center text-tkd-purple font-bold text-xs shrink-0">
+                                            <?= strtoupper(substr($miembro['nombre'], 0, 1)) ?>
+                                        </div>
+                                        <span class="font-semibold text-slate-700 dark:text-slate-200 text-sm"><?= htmlspecialchars($miembro['nombre'] . ' ' . $miembro['apellido']) ?></span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center text-sm font-medium text-slate-500 dark:text-slate-400">
+                                    <?= $miembro['fecha'] ?>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <?php if ($miembro['activo']): ?>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 uppercase tracking-wider">
+                                            Activo
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 uppercase tracking-wider">
+                                            Pendiente
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Upcoming Events Widget -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300 flex flex-col">
+            <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Próximos Eventos</h3>
+                <a href="<?= base_url('/usuario/calendario') ?>" class="text-tkd-blue hover:text-blue-700 text-xs font-semibold transition-colors">Ver calendario</a>
+            </div>
+            <div class="p-5 divide-y divide-slate-100 dark:divide-slate-800/80 flex-grow">
+                <?php if (!empty($proximos_eventos)): ?>
+                    <?php foreach($proximos_eventos as $evento): ?>
+                        <div class="py-3 first:pt-0 last:pb-0 flex items-center gap-4">
+                            <div class="bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 w-12 h-12 rounded-lg flex flex-col items-center justify-center shrink-0 border border-blue-100 dark:border-blue-500/20">
+                                <span class="text-[10px] font-bold uppercase tracking-wider"><?= date('M', strtotime($evento['start'])) ?></span>
+                                <span class="text-lg font-black leading-none"><?= date('d', strtotime($evento['start'])) ?></span>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200"><?= htmlspecialchars($evento['title']) ?></h4>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1">
+                                    <span class="material-icons-outlined text-[13px]">schedule</span>
+                                    <?= date('h:i A', strtotime($evento['start'])) ?>
+                                </p>
+                            </div>
+                        </div>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
+                <?php else: ?>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 py-2">No hay eventos próximos.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </main>

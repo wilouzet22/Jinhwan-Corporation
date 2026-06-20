@@ -1,9 +1,11 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
 <!-- Hero / Intro Section -->
-<section class="relative py-24 bg-slate-100 dark:bg-[#0b0f19] overflow-hidden transition-colors duration-300">
+<section class="relative py-24 overflow-hidden transition-colors duration-300" style="background: linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="absolute inset-0">
-        <img src="<?= asset('img/visual/alumnos-1024x768.jpeg') ?>" alt="Grupo Jinwhan" class="w-full h-full object-cover opacity-10 dark:opacity-25 blur-sm">
+        <img src="<?= asset('img/visual/alumnos-1024x768.jpeg') ?>" alt="Grupo Jinwhan" class="w-full h-full object-cover opacity-20 dark:opacity-25 blur-sm">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-100/80 dark:from-[#0b0f19]/80 via-slate-100/60 dark:via-[#0b0f19]/60 to-slate-100 dark:to-[#0b0f19]"></div>
     </div>
     <div class="container mx-auto px-4 relative z-10 text-center">
@@ -22,7 +24,9 @@
 </section>
 
 <!-- Main Infographic Content -->
-<section class="py-16 bg-slate-50 dark:bg-[#0b0f19] relative overflow-hidden transition-colors duration-300">
+<section class="py-16 relative overflow-hidden transition-colors duration-300" style="background: linear-gradient(180deg,#ffffff 0%,#eff6ff 50%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 50%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <!-- Decorative Background Elements -->
     <div class="absolute top-0 left-0 w-64 h-64 bg-tkd-blue/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-tkd-red/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>

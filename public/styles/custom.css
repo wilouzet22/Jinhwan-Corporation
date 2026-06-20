@@ -1,106 +1,206 @@
-/* Custom Page Transitions */
+/* ============================================
+   JINHWAN CORPORATION — Premium Styles
+   ============================================ */
+
+/* Fade-in on load */
 body {
   opacity: 0;
-  animation: fadeIn 0.8s ease-in-out forwards;
-  background-color: #0b0f19; /* Deep dark background */
+  animation: fadeIn 0.55s ease-out forwards;
 }
-
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Premium Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #0f172a; 
-}
-::-webkit-scrollbar-thumb {
-  background: #334155; 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+  --tkd-red:  #DC2626;
+  --tkd-blue: #2563EB;
+  --tkd-gold: #F59E0B;
 }
 
-/* Navigation Link Animation */
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 6px; }
+
+html.dark ::-webkit-scrollbar-track { background: #0f172a; }
+html.dark ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+html.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+html:not(.dark) ::-webkit-scrollbar-track { background: #e2e8f0; }
+html:not(.dark) ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #334155 transparent; }
+
+/* ============================================
+   SIDEBAR — LIGHT MODE: vivid gradient
+   ============================================ */
+html:not(.dark) #sidebar {
+  background: linear-gradient(175deg, #ffffff 0%, #eef2ff 55%, #fff1f2 100%) !important;
+  border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
+  box-shadow: 6px 0 32px rgba(99, 102, 241, 0.10) !important;
+}
+
+/* Top rainbow accent bar */
+html:not(.dark) #sidebar::before {
+  content: '';
+  display: block;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #2563EB 0%, #DC2626 50%, #F59E0B 100%);
+  flex-shrink: 0;
+}
+
+/* Logo area */
+html:not(.dark) #sidebar > div:nth-child(3) {
+  background: linear-gradient(135deg, #f0f4ff 0%, #fff5f5 100%) !important;
+}
+
+/* Nav link hover */
+html:not(.dark) .nav-link:hover {
+  background: linear-gradient(90deg, rgba(37,99,235,0.10) 0%, transparent 100%) !important;
+}
+
+/* Sidebar footer */
+html:not(.dark) #sidebar .border-t {
+  background: linear-gradient(135deg, #eef2ff 0%, #fff1f2 100%) !important;
+}
+
+/* ============================================
+   BODY BACKGROUND — LIGHT MODE
+   ============================================ */
+html:not(.dark) body {
+  background: #f0f4ff !important;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(37,99,235,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(220,38,38,0.06) 0%, transparent 55%) !important;
+  background-attachment: fixed !important;
+}
+
+/* ============================================
+   HERO SLIDER — LIGHT MODE
+   Images fully visible, minimal overlay
+   ============================================ */
+
+/* The light-mode overlay div on each slide */
+html:not(.dark) .slider-item .light-overlay {
+  background: linear-gradient(
+    100deg,
+    rgba(255,255,255,0.25) 0%,
+    rgba(255,255,255,0.05) 38%,
+    transparent 65%
+  );
+}
+
+/* Slider images: full saturation, no blend modes */
+html:not(.dark) .slider-item img {
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: saturate(1.15) brightness(0.97) !important;
+}
+
+/* Dark overlay (existing dark-mode class) */
+html.dark .slider-item img {
+  opacity: 0.45 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* ============================================
+   NAV LINKS
+   ============================================ */
 .nav-link {
   position: relative;
-  transition: color 0.3s ease;
+  transition: all 0.25s ease;
 }
 .nav-link::after {
   content: "";
   position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -4px;
-  left: 0;
-  background-color: #dc2626; /* TKD Red */
-  transition: width 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 3px;
+  height: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--tkd-red);
+  border-radius: 2px 0 0 2px;
+  transition: height 0.3s ease, box-shadow 0.3s ease;
 }
 .nav-link:hover::after {
-  width: 100%;
-  box-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
-}
-.nav-link.blue-hover:hover::after {
-  background-color: #2563EB;
-  box-shadow: 0 0 10px rgba(37, 99, 235, 0.8);
-}
-.nav-link.gold-hover:hover::after {
-  background-color: #F59E0B;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+  height: 60%;
+  box-shadow: 0 0 10px rgba(220,38,38,0.5);
 }
 
-/* Glassmorphism Classes (Premium Dark) */
-.glass-panel {
-  background: rgba(17, 24, 39, 0.65); /* tkd-black mostly */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+/* ============================================
+   CARDS — LIGHT MODE POP
+   ============================================ */
+html:not(.dark) .bg-white {
+  background: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(37,99,235,0.07) !important;
+}
+html:not(.dark) .bg-white:hover {
+  box-shadow: 0 4px 20px rgba(37,99,235,0.14), 0 1px 6px rgba(0,0,0,0.06) !important;
+  transform: translateY(-1px);
 }
 
-.glass-card {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+/* ============================================
+   SECTIONS — LIGHT MODE GRADIENT BACKGROUNDS
+   ============================================ */
+html:not(.dark) .section-light {
+  background: linear-gradient(180deg, #eef2ff 0%, #ffffff 45%, #fff1f2 100%);
 }
 
-.glass-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(220, 38, 38, 0.3);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(220, 38, 38, 0.1);
+/* Override plain slate sections */
+html:not(.dark) section {
+  position: relative;
 }
 
-/* Glow Utilities */
-.glow-red {
-  box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
-}
-.glow-blue {
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
-}
-.hover-glow-red:hover {
-  box-shadow: 0 0 25px rgba(220, 38, 38, 0.7);
-}
-.text-glow-gold {
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+/* ============================================
+   FOOTER — LIGHT MODE
+   ============================================ */
+html:not(.dark) footer {
+  background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #fff1f2 100%) !important;
+  border-top: 1px solid rgba(37,99,235,0.12) !important;
 }
 
-/* Utility for smooth scrolling in specific containers */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+/* ============================================
+   THEME TOGGLE BUTTON
+   ============================================ */
+html:not(.dark) #theme-toggle {
+  background: linear-gradient(135deg, #eff6ff, #fef2f2);
+  border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 8px;
+}
+html:not(.dark) #theme-toggle:hover {
+  background: linear-gradient(135deg, #dbeafe, #fee2e2);
 }
 
-/* Animated Gradient Text */
-.bg-gradient-animate {
-  background-size: 200% auto;
-  animation: gradientShine 5s linear infinite;
-}
-@keyframes gradientShine {
-  to { background-position: 200% center; }
-}
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+.glass-panel { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+html.dark  .glass-panel { background: rgba(17,24,39,0.65); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+html:not(.dark) .glass-panel { background: rgba(255,255,255,0.75); border: 1px solid rgba(37,99,235,0.12); box-shadow: 0 4px 24px rgba(37,99,235,0.10); }
+
+.glass-card { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+html.dark  .glass-card { background: rgba(30,41,59,0.5); border: 1px solid rgba(255,255,255,0.05); }
+html:not(.dark) .glass-card { background: rgba(255,255,255,0.80); border: 1px solid rgba(37,99,235,0.10); }
+.glass-card:hover { transform: translateY(-4px); }
+html.dark  .glass-card:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(220,38,38,0.1); }
+html:not(.dark) .glass-card:hover { box-shadow: 0 12px 36px rgba(37,99,235,0.15); }
+
+/* ============================================
+   GLOW UTILITIES
+   ============================================ */
+.glow-red  { box-shadow: 0 0 15px rgba(220,38,38,0.5); }
+.glow-blue { box-shadow: 0 0 15px rgba(37,99,235,0.5); }
+.hover-glow-red:hover { box-shadow: 0 0 25px rgba(220,38,38,0.7); }
+.text-glow-gold { text-shadow: 0 0 10px rgba(245,158,11,0.6); }
+
+/* ============================================
+   ANIMATED GRADIENT TEXT
+   ============================================ */
+.bg-gradient-animate { background-size: 200% auto; animation: gradientShine 5s linear infinite; }
+@keyframes gradientShine { to { background-position: 200% center; } }

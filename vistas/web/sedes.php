@@ -1,7 +1,9 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
 <!-- Page Header -->
-<section class="bg-slate-100 dark:bg-[#0b0f19] text-slate-900 dark:text-white py-20 relative overflow-hidden transition-colors duration-300">
+<section class="text-slate-900 dark:text-white py-20 relative overflow-hidden transition-colors duration-300" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="absolute inset-0 bg-gradient-to-r from-tkd-blue/10 dark:from-tkd-blue/15 to-transparent"></div>
     <div class="container mx-auto px-4 relative z-10 text-center">
         <h1 class="text-5xl md:text-6xl font-display font-bold uppercase tracking-wider mb-4 animate-fade-in-up transition-colors">
@@ -14,7 +16,9 @@
     </div>
 </section>
 
-<section class="py-16 bg-slate-50 dark:bg-[#0b0f19] min-h-[60vh] relative overflow-hidden transition-colors duration-300">
+<section class="py-16 relative min-h-[60vh] overflow-hidden transition-colors duration-300" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)">
+    <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($sedes as $index => $cede): ?>
@@ -22,7 +26,7 @@
                     <!-- Map Container -->
                     <div class="aspect-video relative overflow-hidden border-b border-slate-200 dark:border-slate-800/80 transition-colors">
                         <div class="absolute inset-0 bg-slate-100/30 dark:bg-[#0b0f19]/35 group-hover:bg-transparent transition-colors z-10 pointer-events-none"></div>
-                        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= urlencode($cede['direccion']) ?>&output=embed" class="grayscale invert opacity-80 group-hover:grayscale-0 group-hover:invert-0 group-hover:opacity-100 transition-all duration-500"></iframe>
+                        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= urlencode($cede['direccion']) ?>&output=embed" class="grayscale dark:invert opacity-80 group-hover:grayscale-0 group-hover:dark:invert-0 group-hover:opacity-100 transition-all duration-500"></iframe>
                     </div>
                     
                     <!-- Content -->

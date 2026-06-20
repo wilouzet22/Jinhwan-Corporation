@@ -157,44 +157,51 @@ class AutenticacionController extends Controller {
      */
     public function processRegistro() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Leer todos los campos del formulario
-            $nombre   = $_POST['nombre'];
-            $apellido = $_POST['apellido'];
+            // Leer los campos enviados por el formulario (solo se envían num_doc, email y password)
+            $num_doc  = $_POST['num_doc'];
             $email    = $_POST['email'];
             $password = $_POST['password'];
-            $num_doc  = $_POST['num_doc'];
-            $fecha_n  = $_POST['fecha_n'];
-            $telefono = $_POST['telefono'];
 
             $db = Database::getInstance()->getConnection();
 
-            // Paso 1: Insertar en 'miembros' con activo = 0 (pendiente de aprobación)
-            // El rol se fija como ESTUDIANTE y el grado inicial es 1 (grado más bajo)
-            $rol_id   = Roles::ESTUDIANTE;
-            $id_grado = 1; // Grado inicial por defecto (Blanco)
+            // Paso 1: Verificar si el documento existe en la tabla de miembros importados
+            $stmt = $db->prepare("SELECT id_miembro, activo FROM miembros WHERE num_doc = ? LIMIT 1");
+            $stmt->bind_param("s", $num_doc);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
 
-            $stmt = $db->prepare("INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
-            $stmt->bind_param("ssssisi", $nombre, $apellido, $num_doc, $fecha_n, $id_grado, $telefono, $rol_id);
+            if ($resultado && $resultado->num_rows > 0) {
+                $miembro = $resultado->fetch_assoc();
+                $id_miembro = $miembro['id_miembro'];
 
-            if ($stmt->execute()) {
-                // Obtener el ID asignado al nuevo miembro
-                $id_miembro = $stmt->insert_id;
+                // Paso 2: Verificar si este miembro ya tiene una cuenta en userlog
+                $stmtCheck = $db->prepare("SELECT id_userlog FROM userlog WHERE id_miembro = ? LIMIT 1");
+                $stmtCheck->bind_param("i", $id_miembro);
+                $stmtCheck->execute();
+                $resCheck = $stmtCheck->get_result();
 
-                // Paso 2: Insertar credenciales en 'userlog' con la contraseña hasheada
-                $clave_hash = password_hash($password, PASSWORD_DEFAULT);
-                $stmt_log   = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
-                $stmt_log->bind_param("iss", $id_miembro, $email, $clave_hash);
-
-                if ($stmt_log->execute()) {
-                    // Registro exitoso → redirigir al login con mensaje de confirmación
-                    $this->redirect('/login?msg=sent');
+                if ($resCheck && $resCheck->num_rows > 0) {
+                    // Ya tiene una cuenta
+                    $this->redirect('/registro?error=already_registered');
                 } else {
-                    // Error al insertar en userlog
-                    $this->redirect('/registro?error=db_error');
+                    // Paso 3: Insertar credenciales en 'userlog' con la contraseña hasheada
+                    $clave_hash = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt_log   = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
+                    $stmt_log->bind_param("iss", $id_miembro, $email, $clave_hash);
+
+                    if ($stmt_log->execute()) {
+                        // Si el miembro estaba inactivo (0), lo podemos activar opcionalmente o dejar pendiente.
+                        // En la importación lo dejamos como 1 (activo), por lo que podrán loguearse directamente.
+                        // Redirigir al login
+                        $this->redirect('/login?msg=sent');
+                    } else {
+                        // Error al insertar en userlog
+                        $this->redirect('/registro?error=db_error');
+                    }
                 }
             } else {
-                // Error al insertar en miembros
-                $this->redirect('/registro?error=db_error');
+                // El documento no fue encontrado en la base de datos de miembros
+                $this->redirect('/registro?error=doc_not_found');
             }
         }
     }

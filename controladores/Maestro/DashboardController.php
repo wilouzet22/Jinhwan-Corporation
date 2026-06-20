@@ -75,11 +75,15 @@ class DashboardController extends Controller {
         $resUltimos = $db->query($sqlUltimos);
         $ultimos_alumnos = $resUltimos->fetch_all(MYSQLI_ASSOC);
 
+        // ── [4] PRÓXIMOS EVENTOS ─────────────────────────────────
+        $proximos_eventos = (new \App\Models\Evento())->getUpcoming(3);
+
         // ── RENDERIZAR VISTA ─────────────────────────────────────
         $this->view('maestro/dashboard', [
             'stats'               => $stats,
             'distribucion_grados' => $distribucion_grados,
             'ultimos_alumnos'     => $ultimos_alumnos,
+            'proximos_eventos'    => $proximos_eventos,
             'page_title'          => 'Dashboard Instructor',
             'current_page'        => 'dashboard'
         ]);
