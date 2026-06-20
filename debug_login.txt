@@ -151,3 +151,48 @@
 2026-06-19 16:35:27 - Admin Success: Rol=Administracion
 2026-06-19 16:35:43 - Admin Success: Rol=Administracion
 2026-06-19 16:35:43 - Admin Success: Rol=Administracion
+2026-06-20 20:59:00 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-06-20 20:59:00 - Admin Success: Rol=Administracion
+2026-06-20 20:59:29 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-06-20 20:59:29 - Admin Success: Rol=Administracion
+2026-06-20 21:01:10 - Admin Success: Rol=Administracion
+2026-06-20 21:01:15 - Admin Success: Rol=Administracion
+2026-06-20 21:07:24 - Admin Success: Rol=Administracion
+2026-06-20 21:10:09 - Admin Success: Rol=Administracion
+2026-06-20 21:10:13 - Admin Success: Rol=Administracion
+2026-06-20 21:10:17 - Admin Success: Rol=Administracion
+2026-06-20 21:14:48 - Admin Success: Rol=Administracion
+2026-06-20 21:14:59 - Admin Success: Rol=Administracion
+2026-06-20 21:15:02 - Admin Success: Rol=Administracion
+2026-06-20 21:15:19 - Admin Success: Rol=Administracion
+2026-06-20 21:16:16 - Admin Success: Rol=Administracion
+2026-06-20 21:16:18 - Admin Success: Rol=Administracion
+2026-06-20 21:16:44 - Admin Success: Rol=Administracion
+2026-06-20 21:16:44 - Admin Success: Rol=Administracion
+2026-06-20 21:44:08 - Admin Success: Rol=Administracion
+2026-06-20 21:44:10 - Admin Success: Rol=Administracion
+2026-06-20 21:44:19 - Admin Success: Rol=Administracion
+2026-06-20 21:44:21 - Admin Success: Rol=Administracion
+2026-06-20 21:45:11 - Admin Success: Rol=Administracion
+2026-06-20 21:49:09 - Admin Success: Rol=Administracion
+2026-06-20 22:04:16 - Admin Success: Rol=Administracion
+2026-06-20 22:04:44 - Admin Success: Rol=Administracion
+2026-06-20 22:05:59 - Admin Success: Rol=Administracion
+2026-06-20 22:05:59 - Admin Success: Rol=Administracion
+2026-06-20 22:07:38 - Admin Success: Rol=Administracion
+2026-06-20 22:12:47 - Admin Success: Rol=Administracion
+2026-06-20 22:13:56 - Admin Success: Rol=Administracion
+2026-06-20 22:14:03 - Admin Success: Rol=Administracion
+2026-06-20 22:14:06 - Admin Success: Rol=Administracion
+2026-06-20 22:15:22 - Admin Success: Rol=Administracion
+2026-06-20 22:18:13 - Admin Success: Rol=Administracion
+2026-06-20 22:18:13 - Admin Success: Rol=Administracion
+2026-06-20 22:18:38 - Login Success: Email=estudiante@gmail.com | Rol=Deportistas
+2026-06-20 22:40:50 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-06-20 22:40:50 - Admin Success: Rol=Administracion
+2026-06-20 22:41:18 - Admin Success: Rol=Administracion
+2026-06-20 22:41:26 - Admin Success: Rol=Administracion
+2026-06-20 22:41:27 - Admin Success: Rol=Administracion
+2026-06-20 22:41:28 - Admin Success: Rol=Administracion
+2026-06-20 22:41:31 - Admin Success: Rol=Administracion
+2026-06-20 22:43:23 - Admin Success: Rol=Administracion

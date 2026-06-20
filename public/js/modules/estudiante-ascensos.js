@@ -25,6 +25,20 @@ function openAscensoModal(data) {
   const resourcesContainer = document.getElementById("modal-resources");
   resourcesContainer.innerHTML = "";
 
+  if (!data.recursos) data.recursos = [];
+  
+  if (data.url_video) {
+      // Check if it's already in the resources to avoid duplicates on multiple clicks
+      const hasMainVideo = data.recursos.some(r => r.url === data.url_video);
+      if (!hasMainVideo) {
+          data.recursos.unshift({
+              tipo: 'Video',
+              titulo: 'Video Demostrativo',
+              url: data.url_video
+          });
+      }
+  }
+
   if (data.recursos && data.recursos.length > 0) {
     data.recursos.forEach((recurso) => {
       const resourceCard = document.createElement("div");

@@ -70,7 +70,7 @@ class AutenticacionController extends Controller {
 
             // Buscar el usuario por correo en 'userlog' con JOIN a 'miembros'
             // para obtener el rol, nombre completo y estado de activación
-            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
+            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo, m.foto_perfil FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -103,7 +103,8 @@ class AutenticacionController extends Controller {
                         'id'     => $registro['id'],
                         'nombre' => $registro['nombre'] . ' ' . $registro['apellido'],
                         'correo' => $registro['correo'],
-                        'rol_id' => $registro['rol_id']
+                        'rol_id' => $registro['rol_id'],
+                        'foto_perfil' => $registro['foto_perfil']
                     ];
 
                     // Crear sesión segura: regenera ID, guarda datos, timestamps y User-Agent
@@ -157,9 +158,9 @@ class AutenticacionController extends Controller {
      */
     public function processRegistro() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Leer los campos enviados por el formulario (solo se envían num_doc, email y password)
+            // Leer los campos enviados por el formulario
             $num_doc  = $_POST['num_doc'];
-            $email    = $_POST['email'];
+            $email    = strtolower(trim($_POST['email'])); // Acepta correos en mayúsculas y los convierte a minúsculas
             $password = $_POST['password'];
 
             $db = Database::getInstance()->getConnection();
@@ -190,8 +191,6 @@ class AutenticacionController extends Controller {
                     $stmt_log->bind_param("iss", $id_miembro, $email, $clave_hash);
 
                     if ($stmt_log->execute()) {
-                        // Si el miembro estaba inactivo (0), lo podemos activar opcionalmente o dejar pendiente.
-                        // En la importación lo dejamos como 1 (activo), por lo que podrán loguearse directamente.
                         // Redirigir al login
                         $this->redirect('/login?msg=sent');
                     } else {
@@ -201,7 +200,78 @@ class AutenticacionController extends Controller {
                 }
             } else {
                 // El documento no fue encontrado en la base de datos de miembros
-                $this->redirect('/registro?error=doc_not_found');
+                // Guardar los datos en sesión temporalmente para completarlos
+                $_SESSION['temp_registro'] = [
+                    'num_doc' => $num_doc,
+                    'email' => $email,
+                    'password' => $password
+                ];
+                $this->redirect('/registro/completar');
+            }
+        }
+    }
+
+    /**
+     * Muestra el formulario para completar los datos de un usuario nuevo.
+     * Ruta: GET /registro/completar
+     */
+    public function completarRegistroForm() {
+        if (!isset($_SESSION['temp_registro'])) {
+            $this->redirect('/registro');
+        }
+
+        $sedeModel = new \App\Models\Sede();
+        $sedes = $sedeModel->getAll();
+
+        $this->view('autenticacion/completar_registro', [
+            'sedes' => $sedes
+        ]);
+    }
+
+    /**
+     * Procesa el formulario final de registro de un usuario nuevo.
+     * Ruta: POST /registro/completar/process
+     */
+    public function processCompletarRegistro() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['temp_registro'])) {
+            $temp = $_SESSION['temp_registro'];
+            
+            $nombre = $_POST['nombre'];
+            $apellido = $_POST['apellido'];
+            $fecha_nacimiento = $_POST['fecha_nacimiento'];
+            $telefono = trim($_POST['telefono'] ?? '');
+            $sede_id = $_POST['sede_id'];
+            
+            $db = Database::getInstance()->getConnection();
+            $db->begin_transaction();
+
+            try {
+                // Insertar el miembro con activo = 0
+                // id_grado por defecto = 1 (Blanco)
+                $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_sede, rol, activo) VALUES (?, ?, ?, ?, 1, ?, ?, 'Estudiante', 0)";
+                $stmt = $db->prepare($sql);
+                $stmt->bind_param("sssssi", $nombre, $apellido, $temp['num_doc'], $fecha_nacimiento, $telefono, $sede_id);
+                $stmt->execute();
+                
+                $id_miembro = $stmt->insert_id;
+
+                // Insertar credenciales en userlog
+                $clave_hash = password_hash($temp['password'], PASSWORD_DEFAULT);
+                $stmt_log = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
+                $stmt_log->bind_param("iss", $id_miembro, $temp['email'], $clave_hash);
+                $stmt_log->execute();
+
+                $db->commit();
+                
+                // Limpiar la sesión temporal
+                unset($_SESSION['temp_registro']);
+                
+                // Redirigir al login con mensaje de éxito (pendiente de aprobación)
+                $this->redirect('/login?msg=sent');
+
+            } catch (\Exception $e) {
+                $db->rollback();
+                $this->redirect('/registro?error=db_error');
             }
         }
     }

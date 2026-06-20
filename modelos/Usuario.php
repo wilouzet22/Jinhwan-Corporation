@@ -39,6 +39,7 @@ class Usuario extends Model {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
+                       m.foto_perfil,
                        u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel
@@ -198,6 +199,7 @@ class Usuario extends Model {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
                         m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
                         m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
+                        m.foto_perfil,
                         u.correo, u.clave,
                         s.nombre as nombre_sede, s.id_sede as sede_id,
                         g.nombre as nombre_nivel
@@ -215,11 +217,11 @@ class Usuario extends Model {
     }
 
     /**
-     * Obtiene los miembros que tienen mostrar_en_web = 1, junto con su URL multimedia.
+     * Obtiene los miembros que tienen mostrar_en_web = 1, junto con su URL multimedia y foto.
      * Utilizado para la página web pública.
      */
     public function getPublicProfiles() {
-        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, mg.url as instagram_url
+        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.foto_perfil, mg.url as instagram_url
                 FROM miembros m
                 LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
                 WHERE m.mostrar_en_web = 1
@@ -233,7 +235,7 @@ class Usuario extends Model {
      * Utilizado en el panel de administración de Perfiles Públicos.
      */
     public function getAllWithPublicProfileInfo() {
-        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.mostrar_en_web, mg.url as instagram_url
+        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.mostrar_en_web, m.foto_perfil, mg.url as instagram_url
                 FROM miembros m
                 LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
                 ORDER BY m.nombre ASC";

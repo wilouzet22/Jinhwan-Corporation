@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-    <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
+    <main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
         
         <div class="flex justify-between items-center mb-8 relative z-10">
             <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">Administración de Material</h1>
@@ -92,7 +92,7 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 transition-colors">URL Video (YouTube)</label>
-                <input type="url" name="url" id="url" placeholder="https://youtube.com/..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
+                <input type="url" name="url" id="url" placeholder="https://youtube.com/..." required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
             </div>
 
             <div>

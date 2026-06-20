@@ -59,30 +59,32 @@
             ?>
             <?php if(!empty($miembros)): ?>
                 <?php foreach($miembros as $m): ?>
-                    <div class="miembro-card bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden flex flex-col xl:flex-row shadow-md hover:shadow-xl transition-all duration-300" data-category="<?= htmlspecialchars($m['rol_id']) ?>">
+                    <?php $embed_url = !empty($m['instagram_url']) ? getCleanEmbedUrl($m['instagram_url']) : null; ?>
+                    <div class="miembro-card bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden flex flex-col <?= $embed_url ? 'xl:flex-row' : '' ?> shadow-md hover:shadow-xl transition-all duration-300" data-category="<?= htmlspecialchars($m['rol_id']) ?>">
+                        <?php if($embed_url): ?>
                         <!-- Left Side: Multimedia -->
                         <div class="xl:w-1/2 p-4 bg-slate-100 dark:bg-black/20 flex items-center justify-center min-h-[400px] transition-colors">
-                            <?php 
-                                $embed_url = !empty($m['instagram_url']) ? getCleanEmbedUrl($m['instagram_url']) : null;
-                                if($embed_url): 
-                            ?>
-                                <iframe src="<?= htmlspecialchars($embed_url) ?>" class="w-full h-full min-h-[500px] border-0 rounded-xl shadow-lg pointer-events-auto" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                            <?php else: ?>
-                                <div class="text-slate-400 dark:text-slate-500 text-center p-8 flex flex-col items-center transition-colors">
-                                    <span class="material-icons-outlined text-4xl mb-2">person</span>
-                                    <p class="text-sm">Sin multimedia</p>
-                                </div>
-                            <?php endif; ?>
+                            <iframe src="<?= htmlspecialchars($embed_url) ?>" class="w-full h-full min-h-[500px] border-0 rounded-xl shadow-lg pointer-events-auto" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
                         </div>
+                        <?php endif; ?>
 
                         <!-- Right Side: Info -->
-                        <div class="xl:w-1/2 p-8 flex flex-col justify-center space-y-4">
-                            <div>
-                                <h3 class="text-3xl font-display font-bold text-slate-900 dark:text-white mb-2 transition-colors"><?= htmlspecialchars($m['nombre'] . ' ' . $m['apellido']) ?></h3>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-tkd-blue/10 border border-blue-200 dark:border-tkd-blue/30 text-tkd-blue transition-colors">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-tkd-blue animate-pulse"></span>
-                                    <?= htmlspecialchars($m['rol_id']) ?>
-                                </span>
+                        <div class="<?= $embed_url ? 'xl:w-1/2' : 'w-full' ?> p-8 flex flex-col justify-center space-y-4">
+                            <div class="flex items-center gap-5">
+                                <?php if (!empty($m['foto_perfil'])): ?>
+                                    <img src="<?= base_url('/public/uploads/perfiles/' . $m['foto_perfil']) ?>" class="w-20 h-20 rounded-full object-cover shadow-md border-2 border-slate-200 dark:border-slate-700 shrink-0">
+                                <?php else: ?>
+                                    <div class="w-20 h-20 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-display font-bold text-3xl shadow-md shrink-0">
+                                        <?= strtoupper(substr($m['nombre'], 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <div>
+                                    <h3 class="text-3xl font-display font-bold text-slate-900 dark:text-white mb-2 transition-colors"><?= htmlspecialchars($m['nombre'] . ' ' . $m['apellido']) ?></h3>
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-tkd-blue/10 border border-blue-200 dark:border-tkd-blue/30 text-tkd-blue transition-colors">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-tkd-blue animate-pulse"></span>
+                                        <?= htmlspecialchars($m['rol_id']) ?>
+                                    </span>
+                                </div>
                             </div>
                             
                             <?php if(!empty($m['descripcion_perfil'])): ?>

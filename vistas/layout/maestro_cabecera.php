@@ -4,6 +4,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maestro';
+$foto_perfil = null;
+
+if (isset($_SESSION['id'])) {
+    $user_model = new \App\Models\Usuario();
+    $logged_user = $user_model->getById($_SESSION['id']);
+    if ($logged_user) {
+        $nombre_usuario = $logged_user['nombre'] . ' ' . $logged_user['apellido'];
+        $foto_perfil = $logged_user['foto_perfil'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -52,7 +62,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-purple selection:text-white transition-colors duration-300">
-<div class="flex min-h-screen">
+<div class="flex h-screen overflow-hidden">
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
@@ -106,6 +116,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
                         <span class="text-sm font-medium">Calendario</span>
                     </a>
                 </li>
+
             </ul>
         </nav>
         <div class="p-4 border-t border-slate-800 bg-slate-900/50">
@@ -117,15 +128,19 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
                  </button>
              </div>
              
-             <div class="flex items-center gap-3 p-2">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tkd-purple to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
-                    <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
-                </div>
+             <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-3 p-2 hover:bg-slate-800 rounded-lg transition-colors group <?= ($current_page ?? '') === 'perfil' ? 'bg-slate-800' : '' ?>">
+                <?php if (!empty($_SESSION['foto_perfil'])): ?>
+                    <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0 border border-slate-700">
+                <?php else: ?>
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tkd-purple to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                        <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-bold text-white truncate" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
+                    <p class="font-bold text-white truncate group-hover:text-tkd-purple transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
                     <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Instructor</p>
                 </div>
-             </div>
+             </a>
              
              <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors text-sm font-semibold mt-1" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
@@ -135,7 +150,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300">
         <!-- Top Mobile Header (visible only on mobile) -->
         <header class="md:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">

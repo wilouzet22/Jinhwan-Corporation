@@ -5,6 +5,16 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // En administración, a veces usamos 'usuario' o variables directas de sesión
 $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admin';
+$foto_perfil = null;
+
+if (isset($_SESSION['id'])) {
+    $user_model = new \App\Models\Usuario();
+    $logged_user = $user_model->getById($_SESSION['id']);
+    if ($logged_user) {
+        $nombre_usuario = $logged_user['nombre'] . ' ' . $logged_user['apellido'];
+        $foto_perfil = $logged_user['foto_perfil'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -51,7 +61,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-blue selection:text-white transition-colors duration-300">
-<div class="flex min-h-screen">
+<div class="flex h-screen overflow-hidden">
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
@@ -88,18 +98,6 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-blue' : '' ?>">place</span>
-                        <span class="text-sm font-medium">Sedes</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-blue' : '' ?>">timeline</span>
-                        <span class="text-sm font-medium">Ascensos</span>
-                    </a>
-                </li>
-                <li>
                     <a href="<?= base_url('/admin/miembros') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'miembros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'miembros' ? 'text-tkd-blue' : '' ?>">people</span>
                         <span class="text-sm font-medium">Miembros</span>
@@ -112,9 +110,21 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     </a>
                 </li>
                 <li>
+                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-blue' : '' ?>">timeline</span>
+                        <span class="text-sm font-medium">Ascensos</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'registros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'registros' ? 'text-tkd-blue' : '' ?>">how_to_reg</span>
                         <span class="text-sm font-medium">Solicitudes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-blue' : '' ?>">place</span>
+                        <span class="text-sm font-medium">Sedes</span>
                     </a>
                 </li>
                 <li>
@@ -124,12 +134,18 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                     </a>
                 </li>
                 <li>
+                    <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'galeria' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'galeria' ? 'text-tkd-blue' : '' ?>">collections</span>
+                        <span class="text-sm font-medium">Galería</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'reportes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'reportes' ? 'text-tkd-blue' : '' ?>">insights</span>
                         <span class="text-sm font-medium">Reportes</span>
                     </a>
                 </li>
-                
+
             </ul>
         </nav>
         <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
@@ -141,15 +157,19 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
                  </button>
              </div>
              
-             <div class="flex items-center gap-3 p-2">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
-                    <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
-                </div>
+             <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-3 p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors <?= ($current_page ?? '') === 'perfil' ? 'bg-slate-200 dark:bg-slate-800' : '' ?>">
+                <?php if (!empty($_SESSION['foto_perfil'])): ?>
+                    <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0 border border-slate-200 dark:border-slate-800">
+                <?php else: ?>
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                        <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-bold text-slate-900 dark:text-white truncate" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
+                    <p class="font-bold text-slate-900 dark:text-white truncate group-hover:text-tkd-blue transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
                     <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Administrador</p>
                 </div>
-             </div>
+             </a>
              
              <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm font-semibold mt-1" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
@@ -159,7 +179,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300">
         <!-- Top Mobile Header (visible only on mobile) -->
         <header class="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">

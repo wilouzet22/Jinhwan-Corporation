@@ -3,20 +3,15 @@ namespace App\Controllers\Administracion;
 
 use App\Core\Controller;
 use App\Models\MultimediaGaleria;
+use App\Core\Security;
 
 class GaleriaController extends Controller {
 
     private $galeriaModel;
 
     public function __construct() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'administrador') {
-            header('Location: ' . base_url('/login'));
-            exit;
-        }
+        Security::verifySession();
+        Security::verifyAdmin();
 
         $this->galeriaModel = new MultimediaGaleria();
     }

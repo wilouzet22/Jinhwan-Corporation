@@ -46,7 +46,7 @@ class Teoria extends Model {
      * @return array Lista de teorías como arrays asociativos
      */
     public function getAll() {
-        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, '' as url_video, t.id_grado as nivel_id,
+        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, t.url_video, t.id_grado as nivel_id,
                        g.nombre as nivel_nombre, g.id_grado as orden
                 FROM teoria t
                 LEFT JOIN grados g ON t.id_grado = g.id_grado
@@ -71,8 +71,8 @@ class Teoria extends Model {
     public function create($data) {
         $tipo_defecto = 1; // Tipo de teoría por defecto (sin selección en UI)
 
-        $stmt = $this->db->prepare("INSERT INTO teoria (nombre, contenido, id_grado, id_tipo_de_t) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $tipo_defecto);
+        $stmt = $this->db->prepare("INSERT INTO teoria (nombre, contenido, url_video, id_grado, id_tipo_de_t) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $tipo_defecto);
         return $stmt->execute();
     }
 
@@ -84,8 +84,8 @@ class Teoria extends Model {
      * @return bool  true si se actualizó correctamente
      */
     public function update($id, $data) {
-        $stmt = $this->db->prepare("UPDATE teoria SET nombre = ?, contenido = ?, id_grado = ? WHERE id_teoria = ?");
-        $stmt->bind_param("ssii", $data['titulo'], $data['descripcion'], $data['nivel_id'], $id);
+        $stmt = $this->db->prepare("UPDATE teoria SET nombre = ?, contenido = ?, url_video = ?, id_grado = ? WHERE id_teoria = ?");
+        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $id);
         return $stmt->execute();
     }
 

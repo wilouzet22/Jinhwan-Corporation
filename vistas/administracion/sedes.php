@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-    <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
+    <main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
         
         <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-8 relative z-10 transition-colors">Administración de Sedes</h1>
         

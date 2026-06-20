@@ -88,6 +88,7 @@ if (isset($_GET['error'])) {
 
 
 
+
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Correo Electrónico</label>
                     <input name="email" type="email" required 

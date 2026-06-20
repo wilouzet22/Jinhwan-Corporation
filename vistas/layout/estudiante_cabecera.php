@@ -4,6 +4,16 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
+$foto_perfil = null;
+
+if (isset($_SESSION['id'])) {
+    $user_model = new \App\Models\Usuario();
+    $logged_user = $user_model->getById($_SESSION['id']);
+    if ($logged_user) {
+        $nombre_usuario = $logged_user['nombre'] . ' ' . $logged_user['apellido'];
+        $foto_perfil = $logged_user['foto_perfil'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -50,7 +60,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-blue-500 selection:text-white transition-colors duration-300">
-<div class="flex min-h-screen">
+<div class="flex h-screen overflow-hidden">
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
@@ -95,12 +105,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
                         <span class="font-medium tracking-wide text-sm">Material Teórico</span>
                     </a>
                 </li>
-                <li>
-                    <a href="<?= base_url('/estudiante/perfil') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'perfil' ? 'bg-purple-50 dark:bg-purple-500/10 border-l-2 border-l-purple-500 text-purple-600 dark:text-purple-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'perfil' ? 'text-purple-600 dark:text-purple-400' : '' ?>">person</span>
-                        <span class="font-medium tracking-wide text-sm">Mi Perfil</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'calendario' ? 'bg-teal-50 dark:bg-teal-500/10 border-l-2 border-l-teal-500 text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
                         <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'calendario' ? 'text-teal-600 dark:text-teal-400' : '' ?>">event</span>
@@ -119,15 +124,19 @@ $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
                 </button>
             </div>
             
-            <div class="flex items-center gap-3 p-2">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
-                    <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
-                </div>
+            <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-3 p-2 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors group <?= ($current_page ?? '') === 'perfil' ? 'bg-slate-200 dark:bg-slate-800' : '' ?>">
+                <?php if (!empty($_SESSION['foto_perfil'])): ?>
+                    <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shadow-sm shrink-0 border border-slate-200 dark:border-slate-700">
+                <?php else: ?>
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-sm shrink-0">
+                        <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-bold text-slate-900 dark:text-white truncate transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
+                    <p class="font-bold text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
                     <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Alumno</p>
                 </div>
-            </div>
+            </a>
             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-sm font-semibold mt-1 focus:outline-none" title="Cerrar Sesión">
                 <span class="material-icons-outlined text-lg">logout</span>
                 <span>Salir</span>
@@ -136,7 +145,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? 'Estudiante';
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden relative bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
         <!-- Top Mobile Header (visible only on mobile) -->
         <header class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">

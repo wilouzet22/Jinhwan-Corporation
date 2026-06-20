@@ -23,15 +23,16 @@ require_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
 require_once __DIR__ . '/controladores/Administracion/DashboardController.php';
 require_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
 require_once __DIR__ . '/controladores/Administracion/ReportesController.php';
+require_once __DIR__ . '/controladores/Administracion/GaleriaController.php';
 
 require_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
 
 require_once __DIR__ . '/controladores/Usuario/CalendarioController.php';
+require_once __DIR__ . '/controladores/Usuario/PerfilController.php';
 
 require_once __DIR__ . '/controladores/Estudiante/DashboardController.php';
 require_once __DIR__ . '/controladores/Estudiante/EstudioController.php';
 require_once __DIR__ . '/controladores/Estudiante/HistorialController.php';
-require_once __DIR__ . '/controladores/Estudiante/PerfilController.php';
 
 require_once __DIR__ . '/controladores/Maestro/DashboardController.php';
 require_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
@@ -52,12 +53,13 @@ use App\Controllers\Administracion\RegistrosController;
 use App\Controllers\Administracion\DashboardController;
 use App\Controllers\Administracion\CalendarioController as AdminCalendarioController;
 use App\Controllers\Administracion\ReportesController;
+use App\Controllers\Administracion\GaleriaController as AdminGaleriaController;
 use App\Controllers\Autenticacion\AutenticacionController;
 use App\Controllers\Usuario\CalendarioController as UsuarioCalendarioController;
+use App\Controllers\Usuario\PerfilController as SharedPerfilController;
 use App\Controllers\Estudiante\DashboardController as StudentDashboardController;
 use App\Controllers\Estudiante\EstudioController as StudentEstudioController;
 use App\Controllers\Estudiante\HistorialController as StudentHistorialController;
-use App\Controllers\Estudiante\PerfilController as StudentPerfilController;
 use App\Controllers\Maestro\DashboardController as MaestroDashboardController;
 use App\Controllers\Maestro\AlumnosController as MaestroAlumnosController;
 use App\Controllers\Maestro\SolicitudesAscensoController as MaestroSolicitudesController;
@@ -79,8 +81,12 @@ $router->get('/estudiante/dashboard', [StudentDashboardController::class, 'index
 $router->get('/estudiante/estudio', [StudentEstudioController::class, 'index']);
 $router->post('/ascensos/toggle', [StudentEstudioController::class, 'toggle']);
 $router->get('/estudiante/historial', [StudentHistorialController::class, 'index']);
-$router->get('/estudiante/perfil', [StudentPerfilController::class, 'index']);
-$router->post('/estudiante/perfil/update', [StudentPerfilController::class, 'update']);
+$router->get('/estudiante/perfil', [SharedPerfilController::class, 'index']);
+$router->post('/estudiante/perfil/update', [SharedPerfilController::class, 'update']);
+$router->get('/usuario/perfil', [SharedPerfilController::class, 'index']);
+$router->post('/usuario/perfil/update', [SharedPerfilController::class, 'update']);
+$router->get('/perfil', [SharedPerfilController::class, 'index']);
+$router->post('/perfil/update', [SharedPerfilController::class, 'update']);
 
 // AUTENTICACIÓN
 $router->get('/login', [AutenticacionController::class, 'loginForm']);
@@ -88,6 +94,8 @@ $router->post('/login/process', [AutenticacionController::class, 'login']);
 $router->get('/logout', [AutenticacionController::class, 'logout']);
 $router->get('/registro', [AutenticacionController::class, 'registroForm']);
 $router->post('/registro/process', [AutenticacionController::class, 'processRegistro']);
+$router->get('/registro/completar', [AutenticacionController::class, 'completarRegistroForm']);
+$router->post('/registro/completar/process', [AutenticacionController::class, 'processCompletarRegistro']);
 
 // ADMINISTRADOR
 $router->get('/admin/dashboard', [DashboardController::class, 'index']);
@@ -122,6 +130,11 @@ $router->post('/admin/calendario/update', [AdminCalendarioController::class, 'up
 $router->post('/admin/calendario/delete', [AdminCalendarioController::class, 'delete']);
 
 $router->get('/admin/reportes', [ReportesController::class, 'index']);
+
+$router->get('/admin/galeria', [AdminGaleriaController::class, 'index']);
+$router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
+$router->post('/admin/galeria/store', [AdminGaleriaController::class, 'store']);
+$router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']);
 
 // USUARIO (Estudiantes y Maestros)
 $router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);

@@ -90,15 +90,26 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
             
             <!-- Admin Dropdown Menu -->
             <div id="admin-menu-dropdown" class="hidden absolute top-10 left-0 w-56 bg-white dark:bg-slate-900 backdrop-blur-md rounded-lg shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform origin-top-left transition-all duration-200 z-50">
-                <?php if ($is_admin): ?>
+                <?php if (isset($_SESSION['id'])): ?>
                     <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 transition-colors">
-                        <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Administración</p>
-                        <p class="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors"><?= htmlspecialchars($_SESSION['nombre'] ?? 'Admin') ?></p>
+                        <p class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider"><?= htmlspecialchars($_SESSION['rol_id'] ?? 'Usuario') ?></p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white truncate transition-colors"><?= htmlspecialchars($_SESSION['nombre'] ?? 'Usuario') ?></p>
                     </div>
                     <div class="py-1">
-                        <a href="<?= base_url('/admin/sedes') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-colors">
-                            Administración
-                        </a>
+                        <?php if ($is_admin): ?>
+                            <a href="<?= base_url('/admin/dashboard') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-red transition-colors">
+                                Administración
+                            </a>
+                        <?php elseif ($is_student): ?>
+                            <a href="<?= base_url('/estudiante/dashboard') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-gold transition-colors">
+                                Mi Portal
+                            </a>
+                        <?php else: ?>
+                            <a href="<?= base_url('/maestro/dashboard') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-colors">
+                                Panel Instructor
+                            </a>
+                        <?php endif; ?>
+                        
                         <a href="<?= base_url('/logout') ?>" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-tkd-blue transition-colors">
                             <span class="flex items-center gap-2"><span class="material-icons-outlined text-sm">logout</span> Cerrar Sesión</span>
                         </a>
@@ -140,12 +151,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="material-icons-outlined text-tkd-blue group-hover:scale-110 transition-transform">location_on</span>
                 <span class="font-display font-medium uppercase tracking-wider">Sedes</span>
             </a>
-            <?php if ($is_student): ?>
-            <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-gold dark:hover:text-tkd-gold transition-all group nav-link">
-                <span class="material-icons-outlined text-tkd-gold group-hover:scale-110 transition-transform">school</span>
-                <span class="font-display font-medium uppercase tracking-wider">Mi Portal</span>
-            </a>
-            <?php endif; ?>
+
             <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-red dark:hover:text-tkd-red transition-all group nav-link">
                 <span class="material-icons-outlined text-tkd-red group-hover:scale-110 transition-transform">info</span>
                 <span class="font-display font-medium uppercase tracking-wider">Nosotros</span>

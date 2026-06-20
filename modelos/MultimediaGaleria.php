@@ -37,12 +37,12 @@ class MultimediaGaleria extends Model {
         $existente = $this->getByMiembroId($id_miembro);
         
         if ($existente) {
-            $sql = "UPDATE multimedia_galeria SET url_youtube = ? WHERE id_miembro = ?";
+            $sql = "UPDATE multimedia_galeria SET url = ? WHERE id_miembro = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("si", $url, $id_miembro);
             return $stmt->execute();
         } else {
-            $sql = "INSERT INTO multimedia_galeria (id_miembro, url_youtube) VALUES (?, ?)";
+            $sql = "INSERT INTO multimedia_galeria (id_miembro, url) VALUES (?, ?)";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param("is", $id_miembro, $url);
             return $stmt->execute();
@@ -60,7 +60,7 @@ class MultimediaGaleria extends Model {
      * @return array
      */
     public function getAllGeneral() {
-        $sql = "SELECT * FROM multimedia_galeria WHERE id_miembro IS NULL ORDER BY fecha_agregado DESC";
+        $sql = "SELECT * FROM multimedia_galeria WHERE id_miembro IS NULL ORDER BY id_multimedia DESC";
         $stmt = $this->db->query($sql);
         return $stmt->fetch_all(MYSQLI_ASSOC);
     }
@@ -72,7 +72,7 @@ class MultimediaGaleria extends Model {
      * @return bool
      */
     public function insertGeneral($url_instagram, $descripcion) {
-        $sql = "INSERT INTO multimedia_galeria (url_instagram, descripcion) VALUES (?, ?)";
+        $sql = "INSERT INTO multimedia_galeria (url, descripcion) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("ss", $url_instagram, $descripcion);
         return $stmt->execute();

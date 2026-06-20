@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-<main class="flex-grow container mx-auto p-6 lg:p-10 relative overflow-hidden transition-colors duration-300">
+<main class="flex-grow container mx-auto p-6 lg:p-10 relative transition-colors duration-300">
 
     <div class="flex justify-between items-center mb-10 relative z-10">
         <div>

@@ -31,7 +31,16 @@
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                                     <td class="p-4 text-center text-slate-500 font-mono text-xs"><?= $m['id'] ?></td>
                                     <td class="p-4">
-                                        <div class="font-medium text-slate-800 dark:text-slate-200 transition-colors"><?= htmlspecialchars($m['nombre'] . ' ' . $m['apellido']) ?></div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <?php if (!empty($m['foto_perfil'])): ?>
+                                                <img src="<?= base_url('/public/uploads/perfiles/' . $m['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shadow-sm shrink-0 border border-slate-200 dark:border-slate-700">
+                                            <?php else: ?>
+                                                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 font-bold text-xs shadow-sm shrink-0">
+                                                    <?= strtoupper(substr($m['nombre'], 0, 1)) ?>
+                                                </div>
+                                            <?php endif; ?>
+                                            <div class="font-medium text-slate-800 dark:text-slate-200 transition-colors"><?= htmlspecialchars($m['nombre'] . ' ' . $m['apellido']) ?></div>
+                                        </div>
                                         <?php if(!empty($m['descripcion_perfil'])): ?>
                                             <div class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-xs transition-colors" title="<?= htmlspecialchars($m['descripcion_perfil']) ?>">
                                                 <?= htmlspecialchars($m['descripcion_perfil']) ?>

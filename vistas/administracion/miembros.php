@@ -3,7 +3,7 @@ use App\Config\Roles;
 include __DIR__ . '/../layout/administracion_cabecera.php'; 
 ?>
 
-    <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
+    <main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 relative z-10 gap-4">
             <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">Gestión de Miembros</h1>
             <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">

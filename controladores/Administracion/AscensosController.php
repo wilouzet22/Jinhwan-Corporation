@@ -45,6 +45,14 @@ class AscensosController extends Controller {
 
         $this->teoriaModel = new Teoria();
         $this->nivelModel  = new Nivel();
+
+        // Asegurar silenciosamente que la columna de url_video existe en la base de datos
+        try {
+            $db = \App\Config\Database::getInstance()->getConnection();
+            $db->query("ALTER TABLE teoria ADD COLUMN url_video VARCHAR(255) DEFAULT NULL");
+        } catch (\Exception $e) {
+            // Ignorar excepción si la columna ya existe
+        }
     }
 
     /**
