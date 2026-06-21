@@ -11,7 +11,7 @@ class GaleriaController extends Controller {
 
     public function __construct() {
         Security::verifySession();
-        Security::verifyAdmin();
+        Security::verifyPermission('galeria');
 
         $this->galeriaModel = new MultimediaGaleria();
     }

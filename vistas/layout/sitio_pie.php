@@ -13,7 +13,7 @@
                             <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-red group-hover:bg-tkd-red group-hover:text-white transition-all duration-300">
                                 <span class="material-icons-outlined">phone</span>
                             </div>
-                            <a class="hover:text-slate-900 dark:hover:text-white transition-colors font-medium text-slate-600 dark:text-slate-300" href="tel:+573046783188">+57 304 6783188</a>
+                            <a class="hover:text-slate-900 dark:hover:text-white transition-colors font-medium text-slate-600 dark:text-slate-300" href="tel:+573246336836">+57 324 633 68 36</a>
                         </div>
                         <div class="flex items-center gap-4 group">
                             <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white transition-all duration-300">
@@ -34,7 +34,7 @@
                         <div>
                             <p class="font-bold text-slate-900 dark:text-white transition-colors">Sede Principal</p>
                             <p class="mt-1 text-slate-600 dark:text-slate-300 transition-colors">Carrera 110 #62Ac-81</p>
-                            <p class="text-sm text-slate-500 mt-2">Bogotá, Colombia</p>
+                            <p class="text-sm text-slate-500 mt-2">Medellin, Colombia</p>
                         </div>
                     </div>
                 </div>

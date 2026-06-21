@@ -117,6 +117,70 @@ if (isset($_SESSION['id'])) {
                     </a>
                 </li>
 
+                <?php
+                $hasSedes = \App\Core\Security::hasPermission('sedes');
+                $hasRegistros = \App\Core\Security::hasPermission('registros');
+                $hasAscensosAdmin = \App\Core\Security::hasPermission('ascensos');
+                $hasCalendarioAdmin = \App\Core\Security::hasPermission('calendario');
+                $hasGaleria = \App\Core\Security::hasPermission('galeria');
+                $hasReportes = \App\Core\Security::hasPermission('reportes');
+
+                if ($hasSedes || $hasRegistros || $hasAscensosAdmin || $hasCalendarioAdmin || $hasGaleria || $hasReportes): 
+                ?>
+                <li>
+                    <div class="my-4 border-t border-slate-800/60"></div>
+                    <span class="px-4 text-[10px] font-bold text-purple-400 uppercase tracking-widest mb-2 block">Administración Extra</span>
+                </li>
+                <?php if($hasSedes): ?>
+                <li>
+                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-purple' : '' ?>">place</span>
+                        <span class="text-sm font-medium">Sedes</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if($hasRegistros): ?>
+                <li>
+                    <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'registros' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'registros' ? 'text-tkd-purple' : '' ?>">how_to_reg</span>
+                        <span class="text-sm font-medium">Aprobar Registros</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if($hasAscensosAdmin): ?>
+                <li>
+                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-purple' : '' ?>">military_tech</span>
+                        <span class="text-sm font-medium">Aprobar Ascensos</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if($hasCalendarioAdmin): ?>
+                <li>
+                    <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario_admin' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario_admin' ? 'text-tkd-purple' : '' ?>">edit_calendar</span>
+                        <span class="text-sm font-medium">Gestionar Calendario</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if($hasGaleria): ?>
+                <li>
+                    <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'galeria' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'galeria' ? 'text-tkd-purple' : '' ?>">collections</span>
+                        <span class="text-sm font-medium">Gestionar Galería</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if($hasReportes): ?>
+                <li>
+                    <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'reportes' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'reportes' ? 'text-tkd-purple' : '' ?>">analytics</span>
+                        <span class="text-sm font-medium">Reportes</span>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php endif; ?>
+
             </ul>
         </nav>
         <div class="p-4 border-t border-slate-800 bg-slate-900/50">

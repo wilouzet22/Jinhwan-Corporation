@@ -145,6 +145,49 @@ class Security {
     }
 
     /**
+     * Verifica si el usuario actual tiene el permiso indicado.
+     * Los administradores siempre tienen todos los permisos (devuelve true).
+     * Los maestros pueden tener permisos dinámicos en $_SESSION['permisos_extra'].
+     * @param string $permiso La clave del permiso a verificar (ej. 'sedes', 'galeria')
+     * @return bool
+     */
+    public static function hasPermission($permiso) {
+        self::initSession();
+        $rol_id = $_SESSION['rol_id'] ?? null;
+
+        // Administrador siempre tiene permisos globales
+        if (Roles::esAdmin($rol_id)) {
+            return true;
+        }
+
+        // Para otros roles (como Maestro), revisamos su JSON de permisos extra
+        if (isset($_SESSION['permisos_extra']) && !empty($_SESSION['permisos_extra'])) {
+            $permisos = json_decode($_SESSION['permisos_extra'], true);
+            if (is_array($permisos) && isset($permisos[$permiso]) && $permisos[$permiso] === true) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifica que el usuario tenga un permiso específico (o sea Admin).
+     * Si no tiene acceso, redirige a la portada con error 'access_denied'.
+     */
+    public static function verifyPermission($permiso) {
+        self::initSession();
+        if (!self::hasPermission($permiso)) {
+            $log = date('Y-m-d H:i:s') . " - Permission Denied: Permiso=" . $permiso . " Rol=" . ($_SESSION['rol_id'] ?? 'null') . "\n";
+            file_put_contents('debug_login.txt', $log, FILE_APPEND);
+
+            $base = self::getBasePath();
+            header("Location: " . $base . "/?msg=access_denied");
+            exit;
+        }
+    }
+
+    /**
      * Verifica que el usuario autenticado tenga rol de Maestro.
      * Debe llamarse DESPUÉS de verifySession().
      */

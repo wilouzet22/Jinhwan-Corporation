@@ -41,7 +41,7 @@ class AscensosController extends Controller {
      * al de otros controladores admin).
      */
     public function __construct() {
-        Security::verifyAdmin(); // Verificar que el usuario tenga rol de administrador
+        Security::verifyPermission('ascensos'); // Verificar que el usuario tenga rol de administrador
 
         $this->teoriaModel = new Teoria();
         $this->nivelModel  = new Nivel();

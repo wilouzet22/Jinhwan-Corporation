@@ -14,10 +14,21 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <input type="text" id="member-search" placeholder="Buscar miembro..." 
                            class="block w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
                 </div>
+                
+                <!-- Export Buttons -->
+                <button onclick="exportToExcel()" class="w-full sm:w-auto bg-green-600 text-white font-display font-bold uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-md hover:bg-green-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none shrink-0" title="Exportar a Excel">
+                    <span class="material-icons-outlined">table_view</span>
+                    <span class="hidden sm:inline">Excel</span>
+                </button>
+                <button onclick="exportToPDF()" class="w-full sm:w-auto bg-red-600 text-white font-display font-bold uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-md hover:bg-red-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none shrink-0" title="Exportar a PDF">
+                    <span class="material-icons-outlined">picture_as_pdf</span>
+                    <span class="hidden sm:inline">PDF</span>
+                </button>
+
                 <button onclick="openModal('add')" class="w-full sm:w-auto bg-tkd-blue text-white font-display font-bold uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none shrink-0">
                     <span class="material-icons-outlined">person_add</span>
-                    <span class="hidden sm:inline">Añadir Nuevo Miembro</span>
-                    <span class="sm:hidden">Añadir</span>
+                    <span class="hidden lg:inline">Añadir Nuevo Miembro</span>
+                    <span class="lg:hidden">Añadir</span>
                 </button>
             </div>
         </div>
@@ -275,11 +286,42 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
                 <div class="col-span-1 md:col-span-2">
                     <label for="rol_id" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 transition-colors">Rol</label>
-                    <select name="rol_id" id="rol_id" required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
+                    <select name="rol_id" id="rol_id" onchange="togglePermisos(this.value)" required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
                         <option value="<?= Roles::ESTUDIANTE ?>">Alumno (Estudiante)</option>
                         <option value="<?= Roles::MAESTRO ?>">Instructor (Maestro)</option>
                         <option value="<?= Roles::ADMINISTRADOR ?>">Administrador</option>
                     </select>
+                </div>
+
+                <!-- Permisos Dinámicos (Solo para Maestros) -->
+                <div id="permisos_section" class="col-span-1 md:col-span-2 mt-4 hidden">
+                    <h3 class="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-3">Permisos Extra (Sub-administrador)</h3>
+                    <div class="grid grid-cols-2 gap-4 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-100 dark:border-purple-800/30">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_sedes" id="permiso_sedes" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Gestionar Sedes</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_registros" id="permiso_registros" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Aprobar Registros</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_ascensos" id="permiso_ascensos" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Aprobar Ascensos</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_calendario" id="permiso_calendario" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Gestionar Calendario</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_galeria" id="permiso_galeria" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Gestionar Galería</span>
+                        </label>
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="permiso_reportes" id="permiso_reportes" class="form-checkbox h-5 w-5 text-purple-600 rounded border-purple-300 focus:ring-purple-500">
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Ver Reportes</span>
+                        </label>
+                    </div>
                 </div>
             </div>
             
@@ -306,6 +348,8 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             title.textContent = 'Añadir Nuevo Miembro';
             form.action = '<?= base_url('/admin/miembros/create') ?>';
             document.getElementById('id').value = '';
+            document.getElementById('rol_id').value = '<?= Roles::ESTUDIANTE ?>';
+            togglePermisos('<?= Roles::ESTUDIANTE ?>');
         } else if (action === 'edit') {
             title.textContent = 'Editar Miembro';
             form.action = '<?= base_url('/admin/miembros/update') ?>';
@@ -321,6 +365,30 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('nivel_id').value = data.nivel_id;
             document.getElementById('sede_id').value = data.sede_id; // Note: sede_id comes from join in controller/model
             document.getElementById('rol_id').value = data.rol_id;
+            
+            togglePermisos(data.rol_id);
+            if (data.permisos_extra) {
+                try {
+                    let permisos = JSON.parse(data.permisos_extra);
+                    document.getElementById('permiso_sedes').checked = permisos.sedes || false;
+                    document.getElementById('permiso_registros').checked = permisos.registros || false;
+                    document.getElementById('permiso_ascensos').checked = permisos.ascensos || false;
+                    document.getElementById('permiso_calendario').checked = permisos.calendario || false;
+                    document.getElementById('permiso_galeria').checked = permisos.galeria || false;
+                    document.getElementById('permiso_reportes').checked = permisos.reportes || false;
+                } catch(e) { }
+            }
+        }
+    }
+    
+    function togglePermisos(rol_id) {
+        const sec = document.getElementById('permisos_section');
+        if (rol_id == 'Maestros' || rol_id == 'Profesores' || rol_id == 'Monitores') {
+            sec.classList.remove('hidden');
+        } else {
+            sec.classList.add('hidden');
+            // reset checkboxes
+            document.querySelectorAll('#permisos_section input[type="checkbox"]').forEach(cb => cb.checked = false);
         }
     }
     
@@ -379,6 +447,67 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             filterTable(urlSearch);
         }
     });
+</script>
+
+<!-- Scripts para exportar a PDF y Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script>
+    function getTableDataForExport() {
+        const rows = document.querySelectorAll('tbody tr:not(#no-results-row)');
+        let data = [];
+        // Header
+        data.push(['Miembro', 'Documento', 'Cinturón', 'Sede', 'Rol', 'Contacto']);
+        
+        rows.forEach(row => {
+            if(row.style.display !== 'none') {
+                const cols = row.querySelectorAll('td');
+                if(cols.length >= 6) {
+                    // Extract text content carefully
+                    let miembroText = cols[0].innerText.replace(/\n/g, ' ').trim();
+                    let docText = cols[1].innerText.replace(/\n/g, ' ').trim();
+                    let cinturonText = cols[2].innerText.replace(/\n/g, ' ').trim();
+                    let sedeText = cols[3].innerText.replace(/\n/g, ' ').trim();
+                    let rolText = cols[4].innerText.replace(/\n/g, ' ').trim();
+                    let contactoText = cols[5].innerText.replace(/\n/g, ' - ').trim();
+                    
+                    data.push([miembroText, docText, cinturonText, sedeText, rolText, contactoText]);
+                }
+            }
+        });
+        return data;
+    }
+
+    function exportToExcel() {
+        let data = getTableDataForExport();
+        let worksheet = XLSX.utils.aoa_to_sheet(data);
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Miembros");
+        XLSX.writeFile(workbook, "Miembros_Jinhwan.xlsx");
+    }
+
+    function exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('landscape');
+        
+        let data = getTableDataForExport();
+        let headers = [data[0]];
+        let body = data.slice(1);
+        
+        doc.text("Reporte de Miembros - Jinhwan Corporation", 14, 15);
+        
+        doc.autoTable({
+            head: headers,
+            body: body,
+            startY: 20,
+            theme: 'grid',
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [37, 99, 235] } // tkd-blue
+        });
+        
+        doc.save("Miembros_Jinhwan.pdf");
+    }
 </script>
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>

@@ -30,7 +30,7 @@ class RegistrosController extends Controller {
      */
     public function __construct() {
         Security::verifySession();
-        Security::verifyAdmin();
+        Security::verifyPermission('registros');
     }
 
     /**

@@ -70,7 +70,7 @@ class AutenticacionController extends Controller {
 
             // Buscar el usuario por correo en 'userlog' con JOIN a 'miembros'
             // para obtener el rol, nombre completo y estado de activación
-            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo, m.foto_perfil FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
+            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo, m.foto_perfil, m.permisos_extra FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -104,7 +104,8 @@ class AutenticacionController extends Controller {
                         'nombre' => $registro['nombre'] . ' ' . $registro['apellido'],
                         'correo' => $registro['correo'],
                         'rol_id' => $registro['rol_id'],
-                        'foto_perfil' => $registro['foto_perfil']
+                        'foto_perfil' => $registro['foto_perfil'],
+                        'permisos_extra' => $registro['permisos_extra']
                     ];
 
                     // Crear sesión segura: regenera ID, guarda datos, timestamps y User-Agent

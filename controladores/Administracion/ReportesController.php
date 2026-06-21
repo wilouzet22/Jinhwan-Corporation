@@ -39,7 +39,7 @@ class ReportesController extends Controller {
      */
     public function __construct() {
         Security::verifySession();
-        Security::verifyAdmin();
+        Security::verifyPermission('reportes');
 
         $this->usuarioModel = new Usuario();
         $this->sedeModel    = new Sede();

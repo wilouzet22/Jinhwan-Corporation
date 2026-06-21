@@ -19,7 +19,7 @@ class CalendarioController extends Controller {
 
     public function __construct() {
         Security::verifySession(); 
-        Security::verifyAdmin();   
+        Security::verifyPermission('calendario');   
         $this->eventoModel = new Evento();
     }
 

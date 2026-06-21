@@ -39,7 +39,7 @@ class Usuario extends Model {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
-                       m.foto_perfil,
+                       m.foto_perfil, m.permisos_extra,
                        u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel
@@ -72,17 +72,20 @@ class Usuario extends Model {
         $clave = password_hash($data['numero_documento'], PASSWORD_DEFAULT);
 
         // Insertar el miembro con activo = 1 (activo inmediatamente por el admin)
-        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, permisos_extra, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssiss",
+        $permisos_extra = isset($data['permisos_extra']) ? $data['permisos_extra'] : null;
+
+        $stmt->bind_param("ssssisss",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
             $data['fecha_nacimiento'],
             $data['nivel_id'],
             $data['telefono'],
-            $data['rol_id']
+            $data['rol_id'],
+            $permisos_extra
         );
 
         if ($stmt->execute()) {
@@ -122,10 +125,12 @@ class Usuario extends Model {
      * @return bool  true si se actualizó correctamente
      */
     public function update($id, $data) {
-        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ? WHERE id_miembro = ?";
+        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ?, permisos_extra = ? WHERE id_miembro = ?";
 
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ssssissi",
+        $permisos_extra = isset($data['permisos_extra']) ? $data['permisos_extra'] : null;
+
+        $stmt->bind_param("ssssisssi",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
@@ -133,6 +138,7 @@ class Usuario extends Model {
             $data['nivel_id'],
             $data['telefono'],
             $data['rol_id'],
+            $permisos_extra,
             $id
         );
 
@@ -197,10 +203,10 @@ class Usuario extends Model {
      */
     public function getById($id) {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
-                        m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
-                        m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
-                        m.foto_perfil,
-                        u.correo, u.clave,
+                       m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
+                       m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
+                       m.foto_perfil, m.permisos_extra,
+                       u.correo, u.clave,
                         s.nombre as nombre_sede, s.id_sede as sede_id,
                         g.nombre as nombre_nivel
                 FROM miembros m

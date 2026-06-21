@@ -100,6 +100,20 @@ class MiembrosController extends Controller {
                 'sede_id'           => $_POST['sede_id']
             ];
 
+            if ($data['rol_id'] == Roles::MAESTRO || $data['rol_id'] == Roles::PROFESOR || $data['rol_id'] == Roles::MONITOR) {
+                $permisos = [
+                    'sedes' => isset($_POST['permiso_sedes']),
+                    'registros' => isset($_POST['permiso_registros']),
+                    'ascensos' => isset($_POST['permiso_ascensos']),
+                    'calendario' => isset($_POST['permiso_calendario']),
+                    'galeria' => isset($_POST['permiso_galeria']),
+                    'reportes' => isset($_POST['permiso_reportes'])
+                ];
+                $data['permisos_extra'] = json_encode($permisos);
+            } else {
+                $data['permisos_extra'] = null;
+            }
+
             $this->usuarioModel->create($data);
             $this->redirect('/admin/miembros'); // Redirigir al listado tras crear
         }
@@ -128,6 +142,21 @@ class MiembrosController extends Controller {
                 'rol_id'            => $_POST['rol_id'],
                 'sede_id'           => $_POST['sede_id']
             ];
+
+            // Procesar permisos dinámicos para el rol Maestro
+            if ($data['rol_id'] == Roles::MAESTRO || $data['rol_id'] == Roles::PROFESOR || $data['rol_id'] == Roles::MONITOR) {
+                $permisos = [
+                    'sedes' => isset($_POST['permiso_sedes']),
+                    'registros' => isset($_POST['permiso_registros']),
+                    'ascensos' => isset($_POST['permiso_ascensos']),
+                    'calendario' => isset($_POST['permiso_calendario']),
+                    'galeria' => isset($_POST['permiso_galeria']),
+                    'reportes' => isset($_POST['permiso_reportes'])
+                ];
+                $data['permisos_extra'] = json_encode($permisos);
+            } else {
+                $data['permisos_extra'] = null;
+            }
 
             $this->usuarioModel->update($id, $data);
             $this->redirect('/admin/miembros');

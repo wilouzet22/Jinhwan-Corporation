@@ -33,7 +33,7 @@ class SedesController extends Controller {
      */
     public function __construct() {
         Security::verifySession(); // Verificar sesión activa con todos los checks
-        Security::verifyAdmin();   // Verificar rol de administrador
+        Security::verifyPermission('sedes');
         $this->sedeModel = new Sede();
     }
 

@@ -18,6 +18,9 @@ namespace App\Controllers\Maestro;
 use App\Core\Controller;
 use App\Core\Security;
 use App\Config\Database;
+use App\Models\Usuario;
+use App\Models\Nivel;
+use App\Config\Roles;
 
 class SolicitudesAscensoController extends Controller {
 
@@ -50,8 +53,20 @@ class SolicitudesAscensoController extends Controller {
         $solicitudes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
 
+        // Cargar alumnos y grados para la propuesta múltiple
+        $usuarioModel = new Usuario();
+        $nivelModel   = new Nivel();
+        
+        $miembros = $usuarioModel->getAllWithDetails();
+        $alumnos = array_filter($miembros, function($m) {
+            return $m['rol_id'] === Roles::ESTUDIANTE;
+        });
+        $grados_list = $nivelModel->getAll();
+
         $this->view('maestro/solicitudes_ascenso', [
             'solicitudes'  => $solicitudes,
+            'alumnos'      => $alumnos,
+            'grados_list'  => $grados_list,
             'page_title'   => 'Solicitudes de Ascenso',
             'current_page' => 'solicitudes_ascenso'
         ]);
@@ -65,32 +80,34 @@ class SolicitudesAscensoController extends Controller {
             $db = Database::getInstance()->getConnection();
             $id_maestro = $_SESSION['id'];
 
-            $id_miembro          = intval($_POST['id_miembro']);
-            $id_grado_actual     = intval($_POST['id_grado_actual']);
-            $id_grado_solicitado = intval($_POST['id_grado_solicitado']);
-            $observaciones       = trim($_POST['observaciones'] ?? '');
+            $alumnos_seleccionados = $_POST['alumnos_seleccionados'] ?? [];
+            $grados_actuales       = $_POST['grados_actuales'] ?? [];
+            $grados_solicitados    = $_POST['grados_solicitados'] ?? [];
+            $observaciones         = trim($_POST['observaciones'] ?? '');
 
-            // Validar que el miembro existe y es deportista
-            $stmtCheck = $db->prepare("SELECT id_miembro FROM miembros WHERE id_miembro = ? AND rol = 'Deportistas'");
-            $stmtCheck->bind_param("i", $id_miembro);
-            $stmtCheck->execute();
-            $exists = $stmtCheck->get_result()->num_rows > 0;
-            $stmtCheck->close();
-
-            if ($exists && $id_grado_actual > 0 && $id_grado_solicitado > 0) {
-                // Guardar la solicitud
-                $sql = "INSERT INTO solicitudes_ascenso (id_miembro, id_grado_actual, id_grado_solicitado, id_maestro, observaciones, estado)
-                        VALUES (?, ?, ?, ?, ?, 'pendiente')";
-                $stmt = $db->prepare($sql);
-                $stmt->bind_param("iiiis", $id_miembro, $id_grado_actual, $id_grado_solicitado, $id_maestro, $observaciones);
-                $stmt->execute();
-                $stmt->close();
-
-                $this->redirect('/maestro/solicitudes-ascenso?success=1');
+            if (empty($alumnos_seleccionados)) {
+                $this->redirect('/maestro/solicitudes-ascenso?error=no_selection');
                 return;
             }
 
-            $this->redirect('/maestro/alumnos?error=invalid_data');
+            $sql = "INSERT INTO solicitudes_ascenso (id_miembro, id_grado_actual, id_grado_solicitado, id_maestro, observaciones, estado)
+                    VALUES (?, ?, ?, ?, ?, 'pendiente')";
+            $stmt = $db->prepare($sql);
+
+            foreach ($alumnos_seleccionados as $id_miembro) {
+                $id_miembro = intval($id_miembro);
+                $id_grado_actual = intval($grados_actuales[$id_miembro] ?? 0);
+                $id_grado_solicitado = intval($grados_solicitados[$id_miembro] ?? 0);
+
+                // Solo insertar si los datos son válidos
+                if ($id_miembro > 0 && $id_grado_actual > 0 && $id_grado_solicitado > 0) {
+                    $stmt->bind_param("iiiis", $id_miembro, $id_grado_actual, $id_grado_solicitado, $id_maestro, $observaciones);
+                    $stmt->execute();
+                }
+            }
+            
+            $stmt->close();
+            $this->redirect('/maestro/solicitudes-ascenso?success=1');
         }
     }
 }
