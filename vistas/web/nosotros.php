@@ -146,7 +146,7 @@
             </div>
 
             <!-- Identity Image -->
-            <div class="relative rounded-3xl overflow-hidden shadow-xl group max-w-6xl mx-auto h-[400px]">
+            <div class="nosotros-identity-img relative rounded-3xl overflow-hidden shadow-xl group max-w-6xl mx-auto h-[400px] md:h-[400px]">
                 <img src="<?= asset('img/visual/uniforme-e1758154541512-1536x605.jpeg') ?>" alt="Uniforme Jinwhan" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19]/90 via-[#0b0f19]/25 to-transparent flex items-end p-8 md:p-12">
                     <div class="max-w-3xl">

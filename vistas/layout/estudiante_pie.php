@@ -48,21 +48,19 @@
         const backdrop = document.getElementById('sidebar-backdrop');
 
         if (mobileBtn && sidebar && backdrop) {
-            function toggleSidebar() {
-                const isClosed = sidebar.classList.contains('-translate-x-full');
-                if (isClosed) {
-                    sidebar.classList.remove('-translate-x-full');
-                    backdrop.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    sidebar.classList.add('-translate-x-full');
-                    backdrop.classList.add('hidden');
-                    document.body.style.overflow = '';
-                }
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
             }
-
-            mobileBtn.addEventListener('click', toggleSidebar);
-            backdrop.addEventListener('click', toggleSidebar);
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+            mobileBtn.addEventListener('click', (e) => { e.stopPropagation(); const isOpen = !sidebar.classList.contains('-translate-x-full'); isOpen ? closeSidebar() : openSidebar(); });
+            backdrop.addEventListener('click', closeSidebar);
+            sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', closeSidebar));
         }
     });
 </script>

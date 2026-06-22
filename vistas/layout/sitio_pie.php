@@ -101,30 +101,7 @@
         });
     }
 
-    // Sidebar Toggle Logic
-    const mobileBtn = document.getElementById('mobile-menu-btn');
-    const sidebar = document.getElementById('sidebar');
-    const backdrop = document.getElementById('sidebar-backdrop');
-    
-    if (mobileBtn && sidebar && backdrop) {
-        function toggleSidebar() {
-            const isClosed = sidebar.classList.contains('-translate-x-full');
-            if (isClosed) {
-                sidebar.classList.remove('-translate-x-full');
-                backdrop.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                backdrop.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        }
-
-        mobileBtn.addEventListener('click', toggleSidebar);
-        backdrop.addEventListener('click', toggleSidebar);
-    }
-
-    // Admin Menu Toggle is handled by navigation.js
+    // Sidebar y Admin Menu Toggle → manejados por navigation.js
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.js" integrity="sha512-Xth9Av_2znR5vALi4x2D2ksM2sC0o962KzQEVeP1xlG6TqGCI2pLflf3+S2G2bL4K0+2A1Q7F/AuYp1z0ll2EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
@@ -143,5 +120,6 @@
         }
     });
 </script>
+<script src="<?= asset('js/modules/navigation.js') ?>"></script>
 </body>
 </html>

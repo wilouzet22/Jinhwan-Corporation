@@ -204,3 +204,72 @@ html:not(.dark) .glass-card:hover { box-shadow: 0 12px 36px rgba(37,99,235,0.15)
    ============================================ */
 .bg-gradient-animate { background-size: 200% auto; animation: gradientShine 5s linear infinite; }
 @keyframes gradientShine { to { background-position: 200% center; } }
+
+/* ============================================
+   RESPONSIVE — MOBILE FIXES
+   ============================================ */
+
+/* Prevent any horizontal overflow on all pages */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+/* Sidebar logo: shrink on small screens */
+@media (max-width: 767px) {
+  /* Public site sidebar: reduce logo area */
+  #sidebar > div:nth-child(3) {
+    padding: 1.25rem !important;
+  }
+  #sidebar > div:nth-child(3) .relative.w-40 {
+    width: 6rem !important;
+    height: 6rem !important;
+  }
+
+  /* Admin hamburger dropdown: keep inside viewport */
+  #admin-menu-dropdown {
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* Members cards: always stack vertically on mobile */
+  .miembro-card {
+    flex-direction: column !important;
+  }
+  .miembro-card > div:first-child {
+    min-height: 280px !important;
+  }
+
+  /* Nosotros identity image: reduce height on mobile */
+  .nosotros-identity-img {
+    height: 240px !important;
+  }
+
+  /* Filter buttons: allow horizontal scroll */
+  .filter-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  /* Hero slider controls: move to bottom-center on mobile */
+  #hero-slider ~ div {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* Footer grid: already 1-col but ensure no overflow */
+  footer .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Pilares cards: full width on very small screens */
+  .grid.grid-cols-1 { gap: 1rem; }
+}
+
+/* Tablets: ensure sidebar still works */
+@media (min-width: 768px) {
+  #sidebar,
+  #admin-sidebar,
+  #maestro-sidebar,
+  #estudiante-sidebar {
+    position: static !important;
+    transform: translateX(0) !important;
+  }
+}

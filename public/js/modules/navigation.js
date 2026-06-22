@@ -1,10 +1,16 @@
-// Admin Menu Toggle logic for both public and admin headers
+// Navigation logic for public site, admin, maestro and estudiante panels
 document.addEventListener("DOMContentLoaded", () => {
 
   // ── Mobile hamburger menu ──────────────────────────────────────────────────
-  const mobileMenuBtn  = document.getElementById("mobile-menu-btn");
-  const sidebar        = document.getElementById("sidebar");
-  const backdrop       = document.getElementById("sidebar-backdrop");
+  // Support multiple sidebar IDs used across different layouts
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const sidebar = (
+    document.getElementById("sidebar") ||
+    document.getElementById("admin-sidebar") ||
+    document.getElementById("maestro-sidebar") ||
+    document.getElementById("estudiante-sidebar")
+  );
+  const backdrop = document.getElementById("sidebar-backdrop");
 
   function openSidebar() {
     sidebar.classList.remove("-translate-x-full");
@@ -25,16 +31,16 @@ document.addEventListener("DOMContentLoaded", () => {
       isOpen ? closeSidebar() : openSidebar();
     });
 
-    // Cerrar al tocar el backdrop
+    // Close when touching the backdrop
     backdrop.addEventListener("click", closeSidebar);
 
-    // Cerrar al navegar a un enlace del sidebar
+    // Close when navigating to a sidebar link
     sidebar.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", closeSidebar);
     });
   }
 
-  // ── Admin dropdown menu ────────────────────────────────────────────────────
+  // ── Admin dropdown menu (public site only) ─────────────────────────────────
   const adminToggle   = document.getElementById("admin-menu-toggle");
   const adminDropdown = document.getElementById("admin-menu-dropdown");
 
@@ -44,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       adminDropdown.classList.toggle("hidden");
     });
 
-    // Cerrar al hacer clic fuera
+    // Close when clicking outside
     document.addEventListener("click", (e) => {
       if (
         !adminDropdown.contains(e.target) &&

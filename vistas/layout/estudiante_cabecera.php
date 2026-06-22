@@ -60,7 +60,7 @@ if (isset($_SESSION['id'])) {
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-blue-500 selection:text-white transition-colors duration-300">
-<div class="flex h-screen overflow-hidden">
+<div class="flex min-h-screen md:h-screen md:overflow-hidden">
     <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 

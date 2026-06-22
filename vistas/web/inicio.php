@@ -1,7 +1,7 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
 <!-- Hero Section -->
-<section class="relative w-full h-[85vh] overflow-hidden dark:bg-[#0b0f19] transition-colors duration-300">
+<section class="relative w-full h-[75vh] sm:h-[85vh] overflow-hidden dark:bg-[#0b0f19] transition-colors duration-300">
     <!-- Light Mode Gradient Background -->
     <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #dbeafe 0%, #f0f4ff 40%, #ffe4e6 100%)"></div>
     <!-- Slider Container -->
@@ -25,7 +25,7 @@
                     <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl font-light border-l-2 border-tkd-blue/50 pl-6 leading-relaxed">
                         Nuestra organización se dedica a la excelencia, la evolución y la formación de carácter a través del Taekwondo.
                     </p>
-                    <div class="flex flex-wrap gap-4">
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-4">
                         <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-tkd-red text-white font-display font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-red-700 hover:shadow-lg transform hover:-translate-y-0.5">
                             Encuentra tu Sede
                         </a>

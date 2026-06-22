@@ -204,18 +204,33 @@
         @media (max-width: 768px) {
             .actions-container {
                 flex-direction: column;
-                gap: 50px;
-                margin-top: 0;
+                gap: 24px;
+                margin-top: 30px;
+                padding: 0 16px;
             }
             .logo-wrapper {
-                width: 250px;
-                height: 250px;
+                width: 180px;
+                height: 180px;
             }
             .logo-wrapper.minimized {
-                transform: scale(0.7) translateY(-40px);
+                transform: scale(0.6) translateY(-30px);
             }
             .portal-btn-group {
                 width: 100%;
+                max-width: 360px;
+            }
+            .btn-main {
+                padding: 16px;
+                font-size: 1.2rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .logo-wrapper {
+                width: 140px;
+                height: 140px;
+            }
+            .logo-wrapper.minimized {
+                transform: scale(0.55) translateY(-20px);
             }
         }
     </style>

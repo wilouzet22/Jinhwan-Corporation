@@ -60,8 +60,8 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-Ne9/ZPNVK3w3pBBX6xE86bNG295dJl4CHttrCp3WiuD0VLkVU1xlXnL7V/NsT3VXBWNEjpP2Dl_631+gOYAZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-slate-50 to-red-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white overflow-hidden transition-colors duration-300">
-<div class="flex h-screen overflow-hidden">
+<body class="bg-gradient-to-br from-blue-50 via-slate-50 to-red-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white transition-colors duration-300">
+<div class="flex min-h-screen md:h-screen md:overflow-hidden">
     <!-- Mobile Header -->
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3 transition-colors duration-300">
          <a class="flex items-center gap-2" href="<?= base_url('/') ?>">
@@ -179,8 +179,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     </aside>
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <div class="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         <!-- Scrollable Content Area -->
         <main class="flex-1 overflow-y-auto no-scrollbar scroll-smooth pt-16 md:pt-0" id="main-scroll">
             
-<script src="<?= asset('js/modules/navigation.js') ?>" defer></script>
