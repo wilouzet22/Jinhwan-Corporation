@@ -249,7 +249,7 @@ class AutenticacionController extends Controller {
             try {
                 // Insertar el miembro con activo = 0
                 // id_grado por defecto = 1 (Blanco)
-                $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_sede, rol, activo) VALUES (?, ?, ?, ?, 1, ?, ?, 'Estudiante', 0)";
+                $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_sede, rol, activo) VALUES (?, ?, ?, ?, 1, ?, ?, 'Deportistas', 0)";
                 $stmt = $db->prepare($sql);
                 $stmt->bind_param("sssssi", $nombre, $apellido, $temp['num_doc'], $fecha_nacimiento, $telefono, $sede_id);
                 $stmt->execute();

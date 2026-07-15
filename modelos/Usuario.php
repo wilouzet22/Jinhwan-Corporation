@@ -37,16 +37,18 @@ class Usuario extends Model {
      */
     public function getAllWithDetails() {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
-                       m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
-                       m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
-                       m.foto_perfil, m.permisos_extra,
+                       m.nombre, m.apellido, m.tipo_documento, m.num_doc as numero_documento,
+                       m.fecha_n as fecha_nacimiento, m.peso, m.division, m.ctgc, m.eps, m.rh,
+                       m.descripcion_perfil, m.logros, m.mostrar_en_web, m.foto_perfil, m.permisos_extra, m.activo,
                        u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
-                       g.nombre as nombre_nivel
+                       g.nombre as nombre_nivel,
+                       c.nombre as nombre_categoria, m.id_categoria as categoria_id
                 FROM miembros m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
                 LEFT JOIN grados g ON m.id_grado = g.id_grado
                 LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
+                LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
                 ORDER BY m.rol ASC, m.nombre ASC";
 
         $result = $this->db->query($sql);
@@ -72,20 +74,45 @@ class Usuario extends Model {
         $clave = password_hash($data['numero_documento'], PASSWORD_DEFAULT);
 
         // Insertar el miembro con activo = 1 (activo inmediatamente por el admin)
-        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, rol, permisos_extra, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
+        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, tipo_documento, fecha_n, id_grado, telefono, rol, permisos_extra, activo, id_sede, id_categoria, peso, division, ctgc, eps, rh, descripcion_perfil, logros, mostrar_en_web, foto_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $this->db->prepare($sql);
-        $permisos_extra = isset($data['permisos_extra']) ? $data['permisos_extra'] : null;
+        
+        $tipo_documento = $data['tipo_documento'] ?? 'TI';
+        $permisos_extra = $data['permisos_extra'] ?? null;
+        $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
+        $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
+        $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
+        $division = !empty($data['division']) ? $data['division'] : null;
+        $ctgc = !empty($data['ctgc']) ? $data['ctgc'] : null;
+        $eps = !empty($data['eps']) ? $data['eps'] : null;
+        $rh = !empty($data['rh']) ? $data['rh'] : null;
+        $descripcion_perfil = !empty($data['descripcion_perfil']) ? $data['descripcion_perfil'] : null;
+        $logros = !empty($data['logros']) ? $data['logros'] : null;
+        $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
+        $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
 
-        $stmt->bind_param("ssssisss",
+        $stmt->bind_param("sssssisssiidssssssis",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
+            $tipo_documento,
             $data['fecha_nacimiento'],
             $data['nivel_id'],
             $data['telefono'],
             $data['rol_id'],
-            $permisos_extra
+            $permisos_extra,
+            $sede_id,
+            $categoria_id,
+            $peso,
+            $division,
+            $ctgc,
+            $eps,
+            $rh,
+            $descripcion_perfil,
+            $logros,
+            $mostrar_en_web,
+            $foto_perfil
         );
 
         if ($stmt->execute()) {
@@ -95,14 +122,9 @@ class Usuario extends Model {
             // Si se proporcionó correo, crear las credenciales de acceso en userlog
             if (!empty($data['correo'])) {
                 $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)";
-                $stmtLog = $this->db->prepare($sqlLog);
+                $stmtLog = $db->prepare($sqlLog);
                 $stmtLog->bind_param("iss", $usuario_id, $data['correo'], $clave);
                 $stmtLog->execute();
-            }
-
-            // Asignar sede si se especificó
-            if (!empty($data['sede_id'])) {
-                $this->assignSede($usuario_id, $data['sede_id']);
             }
 
             return true;
@@ -125,20 +147,45 @@ class Usuario extends Model {
      * @return bool  true si se actualizó correctamente
      */
     public function update($id, $data) {
-        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ?, permisos_extra = ? WHERE id_miembro = ?";
+        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ?, permisos_extra = ?, id_sede = ?, id_categoria = ?, peso = ?, division = ?, ctgc = ?, eps = ?, rh = ?, descripcion_perfil = ?, logros = ?, mostrar_en_web = ?, foto_perfil = ? WHERE id_miembro = ?";
 
         $stmt = $this->db->prepare($sql);
-        $permisos_extra = isset($data['permisos_extra']) ? $data['permisos_extra'] : null;
+        
+        $tipo_documento = $data['tipo_documento'] ?? 'TI';
+        $permisos_extra = $data['permisos_extra'] ?? null;
+        $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
+        $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
+        $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
+        $division = !empty($data['division']) ? $data['division'] : null;
+        $ctgc = !empty($data['ctgc']) ? $data['ctgc'] : null;
+        $eps = !empty($data['eps']) ? $data['eps'] : null;
+        $rh = !empty($data['rh']) ? $data['rh'] : null;
+        $descripcion_perfil = !empty($data['descripcion_perfil']) ? $data['descripcion_perfil'] : null;
+        $logros = !empty($data['logros']) ? $data['logros'] : null;
+        $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
+        $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
 
-        $stmt->bind_param("ssssisssi",
+        $stmt->bind_param("sssssisssiidssssssisi",
             $data['nombre'],
             $data['apellido'],
             $data['numero_documento'],
+            $tipo_documento,
             $data['fecha_nacimiento'],
             $data['nivel_id'],
             $data['telefono'],
             $data['rol_id'],
             $permisos_extra,
+            $sede_id,
+            $categoria_id,
+            $peso,
+            $division,
+            $ctgc,
+            $eps,
+            $rh,
+            $descripcion_perfil,
+            $logros,
+            $mostrar_en_web,
+            $foto_perfil,
             $id
         );
 
@@ -151,11 +198,6 @@ class Usuario extends Model {
                 $stmtLog->bind_param("is", $id, $data['correo']);
                 $stmtLog->execute();
                 $stmtLog->close();
-            }
-
-            // Actualizar la sede asignada
-            if (isset($data['sede_id'])) {
-                $this->assignSede($id, $data['sede_id']);
             }
 
             return true;
@@ -176,6 +218,27 @@ class Usuario extends Model {
     public function delete($id) {
         $stmt = $this->db->prepare("DELETE FROM miembros WHERE id_miembro = ?");
         $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+
+    /**
+     * Elimina múltiples miembros a la vez en una sola consulta.
+     *
+     * Genera dinámicamente los placeholders (?), usa bind_param con
+     * 'splat' para pasar el array de IDs y ejecuta la consulta.
+     *
+     * @param  int[] $ids Array de IDs de miembros a eliminar
+     * @return bool  true si se ejecutó correctamente
+     */
+    public function deleteBulk(array $ids): bool {
+        if (empty($ids)) return false;
+
+        $count       = count($ids);
+        $placeholders = implode(',', array_fill(0, $count, '?'));
+        $types        = str_repeat('i', $count);
+
+        $stmt = $this->db->prepare("DELETE FROM miembros WHERE id_miembro IN ($placeholders)");
+        $stmt->bind_param($types, ...$ids);
         return $stmt->execute();
     }
 
@@ -203,16 +266,18 @@ class Usuario extends Model {
      */
     public function getById($id) {
         $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
-                       m.nombre, m.apellido, 'CC' as tipo_documento, m.num_doc as numero_documento,
-                       m.fecha_n as fecha_nacimiento, m.peso, NULL as categoria, m.telefono, m.activo,
-                       m.foto_perfil, m.permisos_extra,
+                       m.nombre, m.apellido, m.tipo_documento, m.num_doc as numero_documento,
+                       m.fecha_n as fecha_nacimiento, m.peso, m.division, m.ctgc, m.eps, m.rh,
+                       m.descripcion_perfil, m.logros, m.mostrar_en_web, m.foto_perfil, m.permisos_extra, m.activo,
                        u.correo, u.clave,
-                        s.nombre as nombre_sede, s.id_sede as sede_id,
-                        g.nombre as nombre_nivel
+                       s.nombre as nombre_sede, s.id_sede as sede_id,
+                       g.nombre as nombre_nivel,
+                       c.nombre as nombre_categoria, m.id_categoria as categoria_id
                 FROM miembros m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
                 LEFT JOIN grados g ON m.id_grado = g.id_grado
                 LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
+                LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
                 WHERE m.id_miembro = ?";
 
         $stmt = $this->db->prepare($sql);

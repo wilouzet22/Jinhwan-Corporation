@@ -113,6 +113,7 @@ $router->get('/admin/miembros', [MiembrosController::class, 'index']);
 $router->post('/admin/miembros/create', [MiembrosController::class, 'store']);
 $router->post('/admin/miembros/update', [MiembrosController::class, 'update']);
 $router->post('/admin/miembros/delete', [MiembrosController::class, 'delete']);
+$router->post('/admin/miembros/delete-bulk', [MiembrosController::class, 'deleteBulk']);
 
 $router->get('/admin/perfiles-publicos', [PerfilesPublicosController::class, 'index']);
 $router->post('/admin/perfiles-publicos/update', [PerfilesPublicosController::class, 'update']);
