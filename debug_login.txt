@@ -248,3 +248,28 @@
 2026-07-14 16:54:58 - Admin Success: Rol=Administracion
 2026-07-14 17:00:04 - Login Success: Email=admin@admin.com | Rol=Deportistas
 2026-07-14 17:59:21 - Login Success: Email=admin@admin.com | Rol=Deportistas
+2026-07-15 11:52:37 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-07-15 11:52:37 - Admin Success: Rol=Administracion
+2026-07-15 11:52:44 - Admin Success: Rol=Administracion
+2026-07-15 11:53:59 - Login Success: Email=samugomedo@gmail.com | Rol=Deportistas
+2026-07-15 12:01:17 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-07-15 12:01:17 - Admin Success: Rol=Administracion
+2026-07-15 12:10:10 - Admin Success: Rol=Administracion
+2026-07-15 12:10:47 - Admin Success: Rol=Administracion
+2026-07-15 12:16:06 - Admin Success: Rol=Administracion
+2026-07-21 16:46:38 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-07-21 16:46:38 - Admin Success: Rol=Administracion
+2026-07-21 16:47:10 - Admin Success: Rol=Administracion
+2026-07-21 16:53:30 - Admin Success: Rol=Administracion
+2026-07-21 16:53:30 - Admin Success: Rol=Administracion
+2026-07-21 16:58:02 - Admin Success: Rol=Administracion
+2026-07-21 16:58:21 - Admin Success: Rol=Administracion
+2026-07-21 16:58:21 - Admin Success: Rol=Administracion
+2026-07-29 11:53:44 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-07-29 11:53:44 - Admin Success: Rol=Administracion
+2026-07-29 11:53:55 - Admin Success: Rol=Administracion
+2026-07-29 11:55:39 - Admin Success: Rol=Administracion
+2026-07-29 11:56:54 - Admin Success: Rol=Administracion
+2026-07-29 11:57:34 - Admin Success: Rol=Administracion
+2026-08-03 13:46:16 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-08-03 13:46:16 - Admin Success: Rol=Administracion

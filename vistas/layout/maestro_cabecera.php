@@ -37,28 +37,20 @@ if (isset($_SESSION['id'])) {
         }
     </script>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'tkd-purple': '#7C3AED',
-                        'tkd-purple-hover': '#6D28D9',
-                        'tkd-blue': '#2563EB',
-                        'tkd-red': '#DC2626',
-                        'tkd-gold': '#FACC15',
-                    },
-                    fontFamily: {
-                        'body': ['Inter', 'sans-serif'],
-                        'display': ['Oswald', 'sans-serif'],
-                    }
-                }
-            }
+    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --color-tkd-blue: #2563EB;
+            --color-tkd-red: #DC2626;
+            --color-tkd-gold: #FACC15;
+            --color-tkd-purple: #7C3AED;
+            --color-tkd-purple-hover: #6D28D9;
+            --font-body: Inter, sans-serif;
+            --font-display: Oswald, sans-serif;
         }
-    </script>
+    </style>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-purple selection:text-white transition-colors duration-300">

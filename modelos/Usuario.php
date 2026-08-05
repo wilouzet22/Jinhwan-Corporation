@@ -43,12 +43,14 @@ class Usuario extends Model {
                        u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel,
-                       c.nombre as nombre_categoria, m.id_categoria as categoria_id
+                       c.nombre as nombre_categoria, m.id_categoria as categoria_id,
+                       mg.url as instagram_url
                 FROM miembros m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
                 LEFT JOIN grados g ON m.id_grado = g.id_grado
                 LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
                 LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
+                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
                 ORDER BY m.rol ASC, m.nombre ASC";
 
         $result = $this->db->query($sql);
@@ -272,12 +274,14 @@ class Usuario extends Model {
                        u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel,
-                       c.nombre as nombre_categoria, m.id_categoria as categoria_id
+                       c.nombre as nombre_categoria, m.id_categoria as categoria_id,
+                       mg.url as instagram_url
                 FROM miembros m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
                 LEFT JOIN grados g ON m.id_grado = g.id_grado
                 LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
                 LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
+                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
                 WHERE m.id_miembro = ?";
 
         $stmt = $this->db->prepare($sql);

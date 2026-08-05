@@ -55,16 +55,14 @@ include $cabecera;
                         <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Rol</span>
                         <span class="text-tkd-blue font-bold text-sm"><?= htmlspecialchars($usuario['rol_id'] ?? 'Deportista') ?></span>
                     </div>
-                    <?php if (($usuario['rol_id'] ?? '') === 'Deportistas'): ?>
-                        <div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors">
-                            <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Nivel</span>
-                            <span class="text-tkd-blue font-bold text-sm"><?= htmlspecialchars($usuario['nombre_nivel'] ?? 'Blanco') ?></span>
-                        </div>
-                        <div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors">
-                            <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Sede</span>
-                            <span class="text-slate-900 dark:text-slate-100 font-semibold text-sm"><?= htmlspecialchars($usuario['nombre_sede'] ?? 'Sin Asignar') ?></span>
-                        </div>
-                    <?php endif; ?>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors">
+                        <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Grado</span>
+                        <span class="text-tkd-blue font-bold text-sm"><?= htmlspecialchars($usuario['nombre_nivel'] ?? 'Ninguno') ?></span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors">
+                        <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Sede</span>
+                        <span class="text-slate-900 dark:text-slate-100 font-semibold text-sm"><?= htmlspecialchars($usuario['nombre_sede'] ?? 'Sin Asignar') ?></span>
+                    </div>
                     <div class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors">
                         <span class="text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">Correo</span>
                         <span class="text-slate-900 dark:text-slate-100 font-semibold text-xs"><?= htmlspecialchars($usuario['correo'] ?? 'Sin correo') ?></span>
@@ -75,7 +73,7 @@ include $cabecera;
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5">
                 <div class="flex items-start gap-3 text-tkd-blue dark:text-blue-400">
                     <span class="material-icons-outlined mt-0.5">info</span>
-                    <p class="text-sm">Algunos datos como tu nombre, documento, correo o sede solo pueden ser modificados por un administrador del sistema.</p>
+                    <p class="text-sm">Algunos datos institucionales como tu **Rol**, **Sede** y **Cinturón (Nivel)** solo pueden ser modificados por un administrador del sistema.</p>
                 </div>
             </div>
         </div>
@@ -114,19 +112,115 @@ include $cabecera;
 
                     <hr class="border-slate-200 dark:border-slate-800">
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Teléfono de Contacto</label>
-                            <input type="text" name="telefono" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: 3001234567">
-                        </div>
-                        <?php if (($usuario['rol_id'] ?? '') === 'Deportistas'): ?>
+                    <!-- Información Personal -->
+                    <div>
+                        <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Información Personal</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Peso (kg)</label>
-                                <input type="number" step="0.1" name="peso" value="<?= htmlspecialchars($usuario['peso'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: 65.5">
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Nombre(s) *</label>
+                                <input type="text" name="nombre" value="<?= htmlspecialchars($usuario['nombre'] ?? '') ?>" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
                             </div>
-                        <?php endif; ?>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Apellido(s) *</label>
+                                <input type="text" name="apellido" value="<?= htmlspecialchars($usuario['apellido'] ?? '') ?>" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Tipo de Documento *</label>
+                                <select name="tipo_documento" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
+                                    <option value="TI" <?= ($usuario['tipo_documento'] ?? '') === 'TI' ? 'selected' : '' ?>>T.I.</option>
+                                    <option value="CC" <?= ($usuario['tipo_documento'] ?? '') === 'CC' ? 'selected' : '' ?>>C.C.</option>
+                                    <option value="CE" <?= ($usuario['tipo_documento'] ?? '') === 'CE' ? 'selected' : '' ?>>C.E.</option>
+                                    <option value="PAS" <?= ($usuario['tipo_documento'] ?? '') === 'PAS' ? 'selected' : '' ?>>Pasaporte</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Número de Documento *</label>
+                                <input type="text" name="numero_documento" value="<?= htmlspecialchars($usuario['numero_documento'] ?? '') ?>" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Fecha de Nacimiento *</label>
+                                <input type="date" name="fecha_nacimiento" value="<?= htmlspecialchars($usuario['fecha_nacimiento'] ?? '') ?>" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
+                            </div>
+                        </div>
                     </div>
-                    
+
+                    <hr class="border-slate-200 dark:border-slate-800">
+
+                    <!-- Información de Contacto -->
+                    <div>
+                        <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Contacto</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Teléfono de Contacto</label>
+                                <input type="text" name="telefono" value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: 3001234567">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Correo Electrónico *</label>
+                                <input type="email" name="correo" value="<?= htmlspecialchars($usuario['correo'] ?? '') ?>" required class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="ejemplo@correo.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-200 dark:border-slate-800">
+
+                    <!-- Información Deportiva y de Salud -->
+                    <div>
+                        <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Salud y Deporte</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">EPS</label>
+                                <input type="text" name="eps" value="<?= htmlspecialchars($usuario['eps'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: Sura, Sanitas">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Grupo Sanguíneo (RH)</label>
+                                <select name="rh" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors">
+                                    <option value="">Seleccionar RH</option>
+                                    <?php 
+                                    $rh_options = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+                                    foreach ($rh_options as $option):
+                                    ?>
+                                        <option value="<?= $option ?>" <?= ($usuario['rh'] ?? '') === $option ? 'selected' : '' ?>><?= $option ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <?php if (($usuario['rol_id'] ?? '') === 'Deportistas'): ?>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Peso (kg)</label>
+                                    <input type="number" step="0.01" name="peso" value="<?= htmlspecialchars($usuario['peso'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: 65.5">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">División de Peso</label>
+                                    <input type="text" name="division" value="<?= htmlspecialchars($usuario['division'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: Minimosca -54kg">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Código CTGC</label>
+                                    <input type="text" name="ctgc" value="<?= htmlspecialchars($usuario['ctgc'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: CTGC-12345">
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-200 dark:border-slate-800">
+
+                    <!-- Perfil Público Web -->
+                    <div>
+                        <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Perfil Público Web</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="checkbox" name="mostrar_en_web" value="1" <?= ($usuario['mostrar_en_web'] ?? 0) == 1 ? 'checked' : '' ?> class="form-checkbox h-5 w-5 text-tkd-blue rounded border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-850 focus:ring-tkd-blue">
+                                <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Mostrar mi perfil en la página web pública del club</span>
+                            </label>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Descripción Corta / Biografía</label>
+                                <textarea name="descripcion_perfil" rows="3" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Cuéntanos un poco sobre ti..."><?= htmlspecialchars($usuario['descripcion_perfil'] ?? '') ?></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Logros y Reconocimientos</label>
+                                <textarea name="logros" rows="3" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Medallas, títulos, participaciones destacadas..."><?= htmlspecialchars($usuario['logros'] ?? '') ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+
                     <hr class="border-slate-200 dark:border-slate-800">
                     
                     <div>

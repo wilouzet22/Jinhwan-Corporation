@@ -152,6 +152,11 @@ class MiembrosController extends Controller {
             }
  
             $this->usuarioModel->create($data);
+            $newId = \App\Config\Database::getInstance()->getConnection()->insert_id;
+            if ($newId > 0 && isset($_POST['url_instagram'])) {
+                $multimediaModel = new \App\Models\MultimediaGaleria();
+                $multimediaModel->upsert($newId, trim($_POST['url_instagram']));
+            }
             $this->redirect('/admin/miembros');
         }
     }
@@ -247,6 +252,10 @@ class MiembrosController extends Controller {
             }
  
             $this->usuarioModel->update($id, $data);
+            if (isset($_POST['url_instagram'])) {
+                $multimediaModel = new \App\Models\MultimediaGaleria();
+                $multimediaModel->upsert($id, trim($_POST['url_instagram']));
+            }
             $this->redirect('/admin/miembros');
         }
     }

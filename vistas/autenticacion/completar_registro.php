@@ -26,9 +26,18 @@ if (!isset($_SESSION['temp_registro'])) {
         }
     </script>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script src="<?= asset('js/styles/main-config.js') ?>"></script>
+    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @custom-variant dark (&:where(.dark, .dark *));
+        @theme {
+            --color-tkd-blue: #2563EB;
+            --color-tkd-red: #DC2626;
+            --color-tkd-gold: #FACC15;
+            --font-body: Inter, sans-serif;
+            --font-display: Oswald, sans-serif;
+        }
+    </style>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white py-12">

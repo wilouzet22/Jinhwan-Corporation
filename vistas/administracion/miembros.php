@@ -387,6 +387,11 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
 
                 <div class="col-span-1 md:col-span-2">
+                    <label for="url_instagram" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 transition-colors">Enlace de Instagram</label>
+                    <input type="text" name="url_instagram" id="url_instagram" placeholder="Ej: https://instagram.com/nombreusuario" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
+                </div>
+
+                <div class="col-span-1 md:col-span-2">
                     <label for="foto_perfil" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 transition-colors">Foto de Perfil</label>
                     <div class="flex items-center gap-4">
                         <div id="foto-preview-container" class="h-16 w-16 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-950 flex items-center justify-center shrink-0">
@@ -592,6 +597,10 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                             <span class="text-slate-400 dark:text-slate-500 font-medium">Mostrar en la Web:</span>
                             <span class="font-semibold" id="detail-mostrar-web"></span>
                         </div>
+                        <div class="flex justify-between text-sm pb-2 border-b border-slate-200/40 dark:border-slate-800/40">
+                            <span class="text-slate-400 dark:text-slate-500 font-medium">Instagram:</span>
+                            <span class="font-semibold" id="detail-instagram"></span>
+                        </div>
                         <div class="text-sm">
                             <span class="block text-slate-400 dark:text-slate-500 font-medium mb-1">Descripción:</span>
                             <div class="text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-3 text-xs leading-relaxed italic animate-none" id="detail-descripcion"></div>
@@ -730,6 +739,14 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             displayWeb.textContent = 'No';
             displayWeb.className = 'text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-lg border border-slate-200/50 dark:border-slate-700/50';
         }
+
+        const detailInstagram = document.getElementById('detail-instagram');
+        if (data.instagram_url) {
+            detailInstagram.innerHTML = `<a href="${data.instagram_url}" target="_blank" class="text-tkd-blue dark:text-blue-400 hover:underline flex items-center gap-1 inline-flex"><span class="material-icons-outlined text-xs">open_in_new</span> Ver perfil</a>`;
+        } else {
+            detailInstagram.textContent = 'Sin registrar';
+            detailInstagram.className = 'text-slate-500 dark:text-slate-400 font-semibold';
+        }
         
         document.getElementById('detail-descripcion').textContent = data.descripcion_perfil || 'Sin descripción del perfil.';
         document.getElementById('detail-logros').textContent = data.logros || 'Sin logros registrados.';
@@ -804,6 +821,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('eps').value = '';
             document.getElementById('rh').value = '';
             document.getElementById('mostrar_en_web').checked = false;
+            document.getElementById('url_instagram').value = '';
             document.getElementById('descripcion_perfil').value = '';
             document.getElementById('logros').value = '';
             document.getElementById('foto-preview-img').classList.add('hidden');
@@ -835,6 +853,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('eps').value = data.eps || '';
             document.getElementById('rh').value = data.rh || '';
             document.getElementById('mostrar_en_web').checked = data.mostrar_en_web == 1;
+            document.getElementById('url_instagram').value = data.instagram_url || '';
             document.getElementById('descripcion_perfil').value = data.descripcion_perfil || '';
             document.getElementById('logros').value = data.logros || '';
             

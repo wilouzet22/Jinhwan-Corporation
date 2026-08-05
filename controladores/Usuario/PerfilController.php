@@ -44,16 +44,75 @@ class PerfilController extends Controller {
             $id_miembro = $_SESSION['id'];
 
             // Datos personales a actualizar
+            $nombre = trim($_POST['nombre'] ?? '');
+            $apellido = trim($_POST['apellido'] ?? '');
+            $tipo_documento = trim($_POST['tipo_documento'] ?? '');
+            $numero_documento = trim($_POST['numero_documento'] ?? '');
+            $fecha_nacimiento = trim($_POST['fecha_nacimiento'] ?? '');
             $telefono = trim($_POST['telefono'] ?? '');
+            $correo = strtolower(trim($_POST['correo'] ?? ''));
+            $eps = trim($_POST['eps'] ?? '');
+            $rh = trim($_POST['rh'] ?? '');
             $peso = trim($_POST['peso'] ?? '');
+            $division = trim($_POST['division'] ?? '');
+            $ctgc = trim($_POST['ctgc'] ?? '');
+            $descripcion_perfil = trim($_POST['descripcion_perfil'] ?? '');
+            $logros = trim($_POST['logros'] ?? '');
+            $mostrar_en_web = isset($_POST['mostrar_en_web']) ? 1 : 0;
+
+            $peso = empty($peso) ? NULL : (float)$peso;
+            $fecha_nacimiento = empty($fecha_nacimiento) ? NULL : $fecha_nacimiento;
             
             // Actualizar tabla miembros
-            $peso = empty($peso) ? NULL : $peso;
-            
-            $stmt = $db->prepare("UPDATE miembros SET telefono = ?, peso = ? WHERE id_miembro = ?");
-            $stmt->bind_param("sdi", $telefono, $peso, $id_miembro);
+            $sql = "UPDATE miembros SET 
+                        nombre = ?, 
+                        apellido = ?, 
+                        tipo_documento = ?, 
+                        num_doc = ?, 
+                        fecha_n = ?, 
+                        telefono = ?, 
+                        eps = ?, 
+                        rh = ?, 
+                        peso = ?, 
+                        division = ?, 
+                        ctgc = ?, 
+                        descripcion_perfil = ?, 
+                        logros = ?, 
+                        mostrar_en_web = ? 
+                    WHERE id_miembro = ?";
+
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("ssssssssdsssiii", 
+                $nombre, 
+                $apellido, 
+                $tipo_documento, 
+                $numero_documento, 
+                $fecha_nacimiento, 
+                $telefono, 
+                $eps, 
+                $rh, 
+                $peso, 
+                $division, 
+                $ctgc, 
+                $descripcion_perfil, 
+                $logros, 
+                $mostrar_en_web, 
+                $id_miembro
+            );
             $stmt->execute();
             $stmt->close();
+
+            // Actualizar correo en userlog
+            if (!empty($correo)) {
+                $stmtLog = $db->prepare("UPDATE userlog SET correo = ? WHERE id_miembro = ?");
+                $stmtLog->bind_param("si", $correo, $id_miembro);
+                $stmtLog->execute();
+                $stmtLog->close();
+                $_SESSION['correo'] = $correo;
+            }
+
+            // Sincronizar nombre en sesión
+            $_SESSION['nombre'] = $nombre . ' ' . $apellido;
 
             // Eliminar foto de perfil si se solicita
             if (isset($_POST['eliminar_foto']) && $_POST['eliminar_foto'] === '1') {
