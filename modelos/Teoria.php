@@ -1,28 +1,8 @@
 <?php
-/**
- * ============================================================
- * MODELO DE TEORÍA (Teoria)
- * ============================================================
- * Gestiona el contenido teórico de ascenso de cinturones.
- * Cada teoría está asociada a un grado/nivel y contiene un
- * título y descripción con el material de estudio.
- *
- * Tabla principal: 'teoria'
- * Campos relevantes:
- *   - id_teoria    → clave primaria
- *   - nombre       → título del tema teórico (alias 'titulo')
- *   - contenido    → descripción/cuerpo del tema (alias 'descripcion')
- *   - id_grado     → nivel al que pertenece este material
- *   - id_tipo_de_t → tipo de teoría (1 = por defecto)
- *
- * Nota: las funcionalidades de favoritos fueron DESHABILITADAS
- * al migrar el esquema de la base de datos. Los métodos existen
- * pero retornan valores neutros sin consultar la BD.
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
+
 
 class Teoria extends Model {
 

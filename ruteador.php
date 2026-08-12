@@ -1,14 +1,4 @@
 <?php
-/**
- * ============================================================
- * RUTEADOR (Router Dispatcher)
- * ============================================================
- * Extraído de index.php para seguir la guía proyectoMVC-master.
- * Gestiona todas las rutas de la aplicación.
- * ============================================================
- */
-
-// ── CARGA DE CONTROLADORES ──────────────────────────────────
 require_once __DIR__ . '/controladores/Web/InicioController.php';
 require_once __DIR__ . '/controladores/Web/SedesController.php';
 require_once __DIR__ . '/controladores/Web/PaginaController.php';
@@ -38,7 +28,6 @@ require_once __DIR__ . '/controladores/Maestro/DashboardController.php';
 require_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
 require_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
 
-// ── IMPORTACIÓN DE NAMESPACES ───────────────────────────────
 use App\Core\Router;
 use App\Controllers\Web\InicioController;
 use App\Controllers\Web\PaginaController;
@@ -64,7 +53,6 @@ use App\Controllers\Maestro\DashboardController as MaestroDashboardController;
 use App\Controllers\Maestro\AlumnosController as MaestroAlumnosController;
 use App\Controllers\Maestro\SolicitudesAscensoController as MaestroSolicitudesController;
 
-// ── INSTANCIA Y RUTAS ───────────────────────────────────────
 $router = new Router();
 
 // SITIO PÚBLICO
@@ -137,7 +125,7 @@ $router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
 $router->post('/admin/galeria/store', [AdminGaleriaController::class, 'store']);
 $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']);
 
-// USUARIO (Estudiantes y Maestros)
+// USUARIO
 $router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);
 $router->get('/usuario/calendario/get-eventos', [UsuarioCalendarioController::class, 'getEventos']);
 
@@ -147,5 +135,5 @@ $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesController::class, 'index']);
 $router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesController::class, 'store']);
 
-// DESPACHO
 $router->dispatch();
+

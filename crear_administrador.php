@@ -1,23 +1,18 @@
 <?php
-/**
- * Script para crear un usuario Administrador en la base de datos.
- */
 require_once __DIR__ . '/conexion.php';
 require_once __DIR__ . '/core/Roles.php';
 
 use App\Config\Database;
 use App\Config\Roles;
 
-// Configuración del nuevo Administrador
 $nombre = "Administrador";
 $apellido = "General";
 $documento = "99999999";
 $correo = "admin@jinhwan.com";
-$password = "admin2026"; // Cambia esta contraseña por seguridad
+$password = "admin2026";
 
 $db = Database::getInstance()->getConnection();
 
-// Verificar si el correo ya existe
 $stmtCheck = $db->prepare("SELECT id_userlog FROM userlog WHERE correo = ? LIMIT 1");
 $stmtCheck->bind_param("s", $correo);
 $stmtCheck->execute();
@@ -27,7 +22,6 @@ if ($resCheck && $resCheck->num_rows > 0) {
     die("Error: El correo '$correo' ya está registrado en el sistema.\n");
 }
 
-// Verificar si el documento ya existe
 $stmtDoc = $db->prepare("SELECT id_miembro FROM miembros WHERE num_doc = ? LIMIT 1");
 $stmtDoc->bind_param("s", $documento);
 $stmtDoc->execute();
@@ -40,11 +34,9 @@ if ($resDoc && $resDoc->num_rows > 0) {
 $db->begin_transaction();
 
 try {
-    // Insertar en la tabla miembros
-    // Rol: Administracion, Activo: 1, Grado: 20 (ninguno), Sede: 2 (Sede principal)
     $rol = Roles::ADMINISTRADOR;
-    $id_sede = 2; // Sede principal
-    $id_grado = 20; // ninguno
+    $id_sede = 2;
+    $id_grado = 20;
     $activo = 1;
     
     $sql = "INSERT INTO miembros (nombre, apellido, num_doc, rol, activo, id_sede, id_grado) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -54,7 +46,6 @@ try {
     
     $id_miembro = $stmt->insert_id;
     
-    // Insertar en la tabla userlog
     $clave_hash = password_hash($password, PASSWORD_DEFAULT);
     $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)";
     $stmtLog = $db->prepare($sqlLog);
@@ -76,3 +67,4 @@ try {
     $db->rollback();
     echo "Error al crear el administrador: " . $e->getMessage() . "\n";
 }
+

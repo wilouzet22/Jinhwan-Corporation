@@ -228,13 +228,10 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // ── DATOS INICIALES DESDE PHP ────────────────────────────────
     const allRows = Array.from(document.querySelectorAll('.member-row'));
 
-    // ── ESTADO DE FILTROS ────────────────────────────────────────
     const filters = { search: '', sede: 'all', nivel: 'all', rol: 'all', estado: 'all' };
 
-    // ── ELEMENTOS DEL DOM ────────────────────────────────────────
     const searchInput    = document.getElementById('filter-search');
     const sedeSelect     = document.getElementById('filter-sede');
     const nivelSelect    = document.getElementById('filter-nivel');
@@ -246,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const noResultsMsg   = document.getElementById('no-results-msg');
     const activeFilters  = document.getElementById('active-filters');
 
-    // ── PALETAS DE COLORES ───────────────────────────────────────
     const beltColors = {
         'blanco':   { bg: '#f8fafc', border: '#cbd5e1', text: '#1e293b' },
         'amarillo': { bg: '#fef9c3', border: '#fde047', text: '#a16207' },
@@ -267,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         'rgba(14, 165, 233, 0.8)',
     ];
 
-    // ── INICIALIZAR GRÁFICAS ─────────────────────────────────────
     const isDark = document.documentElement.classList.contains('dark');
     const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
     const tickColor = isDark ? '#94a3b8' : '#64748b';
@@ -311,7 +306,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ── LÓGICA DE FILTRADO ───────────────────────────────────────
     function applyFilters() {
         const query = filters.search.toLowerCase();
         let visibleRows = [];
@@ -420,7 +414,6 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFilters();
     };
 
-    // ── EVENT LISTENERS ──────────────────────────────────────────
     searchInput.addEventListener('input',  e => { filters.search = e.target.value; applyFilters(); });
     sedeSelect.addEventListener('change',  e => { filters.sede   = e.target.value; applyFilters(); });
     nivelSelect.addEventListener('change', e => { filters.nivel  = e.target.value; applyFilters(); });
@@ -433,7 +426,6 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFilters();
     });
 
-    // ── CARGA INICIAL ────────────────────────────────────────────
     applyFilters();
 });
 </script>

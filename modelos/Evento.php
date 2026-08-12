@@ -1,16 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE EVENTO (Evento)
- * ============================================================
- * Gestiona la tabla 'eventos' de la base de datos.
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Evento extends Model {
+
 
     /**
      * Obtiene todos los eventos.

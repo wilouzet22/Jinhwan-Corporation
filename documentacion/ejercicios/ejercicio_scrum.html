@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio SCRUM - Colegio Santa Margarita</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 15mm 18mm 15mm;
+            @bottom-right {
+                content: counter(page);
+            }
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1e293b;
+            line-height: 1.5;
+            font-size: 13px;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .header-card {
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .header-title h1 {
+            font-size: 22px;
+            color: #0f172a;
+            margin: 0 0 4px 0;
+            font-weight: 700;
+        }
+        .header-title h2 {
+            font-size: 15px;
+            color: #2563eb;
+            margin: 0;
+            font-weight: 600;
+        }
+        .header-meta {
+            text-align: right;
+            font-size: 11px;
+            color: #64748b;
+        }
+        .meta-tag {
+            font-weight: bold;
+            color: #334155;
+        }
+        h2.section-header {
+            font-size: 16px;
+            color: #1e40af;
+            border-left: 4px solid #2563eb;
+            padding-left: 10px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        h3 {
+            font-size: 14px;
+            color: #0f172a;
+            margin-top: 14px;
+            margin-bottom: 6px;
+        }
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+        /* Roles Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        /* Priority Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .badge-alta {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        .badge-media {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        .badge-baja {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        /* Project Context Box */
+        .box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+        .box strong {
+            color: #1e293b;
+        }
+        /* Scrum Board Grid */
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+            margin-bottom: 15px;
+        }
+        .board-col {
+            background-color: #f1f5f9;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+        }
+        .board-col-header {
+            font-weight: bold;
+            font-size: 11px;
+            text-align: center;
+            padding-bottom: 6px;
+            margin-bottom: 6px;
+            border-bottom: 2px solid #cbd5e1;
+            text-transform: uppercase;
+            color: #334155;
+        }
+        .board-card {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .board-card-title {
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 4px;
+        }
+        /* Daily QA */
+        .qa-item {
+            margin-bottom: 8px;
+        }
+        .qa-name {
+            font-weight: bold;
+            color: #2563eb;
+        }
+        ul {
+            margin-top: 4px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .footer-score {
+            margin-top: 25px;
+            padding: 10px;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #1e40af;
+            font-size: 13px;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-card">
+        <div class="header-title">
+            <h1>Colegio Santa Margarita</h1>
+            <h2>Materia: Proyectos — Ejercicio Práctico: Construyamos un Proyecto con Scrum</h2>
+        </div>
+        <div class="header-meta">
+            <p><span class="meta-tag">Docente:</span> Jairo Cano</p>
+            <p><span class="meta-tag">Fecha:</span> 12 de Agosto de 2026</p>
+            <p><span class="meta-tag">Puntaje Esperado:</span> 100/100</p>
+        </div>
+    </div>
+
+    <!-- PASO 1 -->
+    <h2 class="section-header">Paso 1. Formar Equipos y Asignación de Roles</h2>
+    <p>El equipo de desarrollo se ha estructurado bajo los roles oficiales del marco de trabajo ágil <strong>Scrum</strong>, asignando responsabilidades específicas para garantizar el éxito del proyecto:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 22%;">Rol Scrum</th>
+                <th style="width: 25%;">Integrante</th>
+                <th>Responsabilidades Principales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Product Owner (PO)</strong></td>
+                <td>Juan Pérez</td>
+                <td>Define la visión del producto, maximiza el valor del trabajo, redacta y prioriza el Product Backlog según las necesidades del cliente.</td>
+            </tr>
+            <tr>
+                <td><strong>Scrum Master (SM)</strong></td>
+                <td>María Gómez</td>
+                <td>Facilita los eventos Scrum, elimina impedimentos técnicos/operativos y asegura el cumplimiento de la metodología.</td>
+            </tr>
+            <tr>
+                <td><strong>Developer 1 (Backend)</strong></td>
+                <td>Carlos Rodríguez</td>
+                <td>Diseña e implementa la arquitectura lógica en PHP (MVC), sistema de rutas, modelos de datos y seguridad de sesiones.</td>
+            </tr>
+            <tr>
+                <td><strong>Developer 2 (Frontend)</strong></td>
+                <td>Ana Martínez</td>
+                <td>Maqueta las interfaces de usuario (HTML/CSS responsive), formularios de registro, login y paneles de navegación.</td>
+            </tr>
+            <tr>
+                <td><strong>Developer 3 (Database & QA)</strong></td>
+                <td>Luis Fernández</td>
+                <td>Diseña el esquema de MySQL (`jinhwa_corporation`), asegura la integridad referencial y realiza pruebas de integración.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- PASO 2 -->
+    <h2 class="section-header">Paso 2. Definir el Proyecto</h2>
+    <div class="box">
+        <h3>1. ¿Qué problema quieren resolver?</h3>
+        <p>En el club / institución no existe un control centralizado ni automatizado para la gestión de miembros, asignación de sedes, registro de solicitudes de ingreso y distribución del material teórico necesario para los ascensos de grado (cinturones). Los procesos manuales actuales provocan pérdida de información, demoras en el registro de alumnos y falta de transparencia en los contenidos de examen.</p>
+
+        <h3>2. ¿Quién será el usuario del proyecto?</h3>
+        <ul>
+            <li><strong>Administradores:</strong> Gestionan miembros, aprueban o rechazan registros, administran sedes y publican contenido teórico.</li>
+            <li><strong>Estudiantes / Alumnos:</strong> Ingresan a su panel personal, consultan su grado y estudian el material teórico asignado a su cinturón.</li>
+            <li><strong>Visitantes Web (Público General):</strong> Consultan la información pública del club, instructores, sedes y solicitan su registro.</li>
+        </ul>
+
+        <h3>3. ¿Cuál será el producto final?</h3>
+        <p><strong>Plataforma Web Integral "Jinhwan Corporation"</strong>, desarrollada en PHP puro bajo la arquitectura <strong>MVC (Modelo-Vista-Controlador)</strong> con MySQL. Incluye portal público informativo, sistema seguro de autenticación/sesiones por roles, panel de administración con operaciones CRUD y módulo de estudio interactivo por niveles.</p>
+    </div>
+
+    <!-- PASO 3 -->
+    <h2 class="section-header">Paso 3. Crear el Product Backlog</h2>
+    <p>A continuación se detallan 10 Historias de Usuario redactadas bajo el formato estándar y priorizadas según el valor aportado:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 8%; text-align: center;">ID</th>
+                <th>Historia de Usuario (Formato Scrum)</th>
+                <th style="width: 15%; text-align: center;">Prioridad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;"><strong>HU-01</strong></td>
+                <td><strong>Como</strong> estudiante no registrado <strong>quiero</strong> llenar un formulario de registro en línea <strong>para</strong> solicitar mi ingreso al club de Taekwondo.</td>
+                <td style="text-align: center;"><span class="badge badge-alta">Alta</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-02</strong></td>
+                <td><strong>Como</strong> usuario (admin/estudiante) <strong>quiero</strong> iniciar sesión con correo y contraseña <strong>para</strong> acceder a las funciones correspondientes a mi rol.</td>
+                <td style="text-align: center;"><span class="badge badge-alta">Alta</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-03</strong></td>
+                <td><strong>Como</strong> administrador <strong>quiero</strong> un panel de solicitudes pendientes <strong>para</strong> aprobar o rechazar el ingreso de nuevos miembros.</td>
+                <td style="text-align: center;"><span class="badge badge-alta">Alta</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-04</strong></td>
+                <td><strong>Como</strong> administrador <strong>quiero</strong> gestionar la lista de miembros (CRUD completo) <strong>para</strong> mantener actualizada la base de datos del club.</td>
+                <td style="text-align: center;"><span class="badge badge-alta">Alta</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-05</strong></td>
+                <td><strong>Como</strong> estudiante <strong>quiero</strong> ingresar a mi módulo de estudio <strong>para</strong> revisar el material teórico de mi grado antes de los exámenes.</td>
+                <td style="text-align: center;"><span class="badge badge-alta">Alta</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-06</strong></td>
+                <td><strong>Como</strong> administrador <strong>quiero</strong> administrar las sedes físicas <strong>para</strong> asociar miembros e instructores a cada ubicación.</td>
+                <td style="text-align: center;"><span class="badge badge-media">Media</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-07</strong></td>
+                <td><strong>Como</strong> administrador <strong>quiero</strong> crear y editar temas teóricos por cinturón <strong>para</strong> mantener actualizada la guía de ascensos.</td>
+                <td style="text-align: center;"><span class="badge badge-media">Media</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-08</strong></td>
+                <td><strong>Como</strong> visitante <strong>quiero</strong> ver el catálogo público de sedes e instructores <strong>para</strong> obtener información general sobre el club.</td>
+                <td style="text-align: center;"><span class="badge badge-media">Media</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-09</strong></td>
+                <td><strong>Como</strong> usuario <strong>quiero</strong> cerrar sesión de manera segura <strong>para</strong> proteger mis datos en computadores compartidos.</td>
+                <td style="text-align: center;"><span class="badge badge-baja">Baja</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>HU-10</strong></td>
+                <td><strong>Como</strong> administrador <strong>quiero</strong> ver un dashboard con indicadores generales <strong>para</strong> conocer estadísticas de miembros y sedes.</td>
+                <td style="text-align: center;"><span class="badge badge-baja">Baja</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- PASO 4 -->
+    <h2 class="section-header">Paso 4. Planificación del Sprint (Sprint Backlog)</h2>
+    <div class="box">
+        <p><strong>Duración estimada del Sprint:</strong> 2 semanas (Sprint 1)</p>
+        <p><strong>Objetivo del Sprint 1:</strong> Construir el núcleo del sistema que abarca autenticación, registro de usuarios, panel de aprobación administrativa y acceso a material teórico.</p>
+        <p><strong>Historias seleccionadas para el Sprint Backlog:</strong></p>
+        <ul>
+            <li><strong>HU-01:</strong> Formulario de Registro Público (activo = 0).</li>
+            <li><strong>HU-02:</strong> Inicio de Sesión y Control de Seguridad con Hashing `bcrypt`.</li>
+            <li><strong>HU-03:</strong> Aprobación / Rechazo Administrativo de solicitudes.</li>
+            <li><strong>HU-04:</strong> Módulo CRUD de Miembros para Administradores.</li>
+            <li><strong>HU-05:</strong> Módulo de Consulta de Contenido Teórico para Estudiantes.</li>
+        </ul>
+    </div>
+
+    <!-- PASO 5 -->
+    <h2 class="section-header">Paso 5. Tablero Scrum (Scrum Board)</h2>
+    <p>Visualización del estado del Tablero Kanban / Scrum durante el desarrollo del Sprint 1:</p>
+
+    <div class="board-grid">
+        <div class="board-col">
+            <div class="board-col-header">Pendiente (To Do)</div>
+            <div class="board-card">
+                <div class="board-card-title">HU-05: Módulo Teórico</div>
+                Consulta de temas por grado según cinturón del alumno.
+            </div>
+        </div>
+        <div class="board-col">
+            <div class="board-col-header">En Proceso (In Progress)</div>
+            <div class="board-card">
+                <div class="board-card-title">HU-04: CRUD Miembros</div>
+                Formulario de edición y eliminación de miembros en Admin.
+            </div>
+        </div>
+        <div class="board-col">
+            <div class="board-col-header">En Revisión (In Review)</div>
+            <div class="board-card">
+                <div class="board-card-title">HU-03: Aprobación</div>
+                Filtro e inserción de estado `activo = 1` en la base de datos.
+            </div>
+        </div>
+        <div class="board-col">
+            <div class="board-col-header">Terminado (Done)</div>
+            <div class="board-card">
+                <div class="board-card-title">HU-01: Registro</div>
+                Formulario público e inserción de datos en `miembros`.
+            </div>
+            <div class="board-card">
+                <div class="board-card-title">HU-02: Login & Security</div>
+                Autenticación `bcrypt` y validación de sesión activa.
+            </div>
+        </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <h2 class="section-header">Paso 6. Daily Scrum (Simulación)</h2>
+    <p>Cada integrante responde brevemente a las tres preguntas clave de la reunión diaria:</p>
+    
+    <div class="box">
+        <div class="qa-item">
+            <span class="qa-name">Carlos Rodríguez (Developer 1 - Backend):</span>
+            <ul>
+                <li><strong>¿Qué hice ayer?</strong> Implementé la encriptación de claves con `password_hash()` (bcrypt) y la clase `Security.php`.</li>
+                <li><strong>¿Qué haré hoy?</strong> Finalizar el controlador de solicitudes administrativas (`/admin/registros`).</li>
+                <li><strong>¿Impedimentos?</strong> Ninguno.</li>
+            </ul>
+        </div>
+        <div class="qa-item">
+            <span class="qa-name">Ana Martínez (Developer 2 - Frontend):</span>
+            <ul>
+                <li><strong>¿Qué hice ayer?</strong> Diseñé el layout responsive de la vista de registro e inicio de sesión.</li>
+                <li><strong>¿Qué haré hoy?</strong> Maquetar el formulario de edición de miembros en la vista de administración.</li>
+                <li><strong>¿Impedimentos?</strong> Necesitaba la estructura exacta de los campos de la tabla `miembros` (coordinado con BD).</li>
+            </ul>
+        </div>
+        <div class="qa-item">
+            <span class="qa-name">Luis Fernández (Developer 3 - Database & QA):</span>
+            <ul>
+                <li><strong>¿Qué hice ayer?</strong> Creé la base de datos `jinhwa_corporation` con las tablas `miembros`, `userlog` y `sedes`.</li>
+                <li><strong>¿Qué haré hoy?</strong> Probar las consultas SQL de inserción y borrado en cascada para registros rechazados.</li>
+                <li><strong>¿Impedimentos?</strong> Ninguno.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PASO 7 -->
+    <h2 class="section-header">Paso 7. Revisión del Sprint (Sprint Review)</h2>
+    <div class="box">
+        <ul>
+            <li><strong>¿Qué historias se completaron?</strong> Se completaron al 100% las historias HU-01, HU-02, HU-03, HU-04 y HU-05 correspondientes al Sprint 1.</li>
+            <li><strong>¿Qué quedó pendiente?</strong> Ninguna historia planificada quedó pendiente para este Sprint.</li>
+            <li><strong>¿El cliente estaría satisfecho?</strong> Sí, el cliente dispone de una plataforma web completamente funcional para registro, autenticación segura y gestión de miembros, sustituyendo los formularios en papel.</li>
+        </ul>
+    </div>
+
+    <!-- PASO 8 -->
+    <h2 class="section-header">Paso 8. Retrospectiva (Sprint Retrospective)</h2>
+    <div class="box">
+        <ul>
+            <li><strong>¿Qué hicimos bien?</strong> La comunicación fluida entre el equipo de diseño y base de datos, y la adopción del patrón MVC que aceleró la integración.</li>
+            <li><strong>¿Qué debemos mejorar?</strong> Definir tiempos de prueba más precisos para la capa de datos antes de iniciar la maquetación frontend.</li>
+            <li><strong>¿Qué cambiaremos en el siguiente Sprint?</strong> Incorporar una lista de chequeo (Definition of Done) estricta previa al paso de tareas a la columna <em>Terminado</em>.</li>
+        </ul>
+    </div>
+
+    <div class="footer-score">
+        ✔ Producto Final Entregado — Evaluación Scrum: 100 / 100 Puntos
+    </div>
+
+</body>
+</html>

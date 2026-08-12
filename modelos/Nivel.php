@@ -1,22 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE NIVEL/GRADO (Nivel)
- * ============================================================
- * Gestiona la tabla 'grados' de la base de datos.
- * Un grado representa el nivel o cinturón de un practicante
- * de Taekwondo (p. ej. Blanco, Amarillo, Verde, Azul, Rojo, Negro).
- *
- * Este modelo solo tiene operación de lectura (sin CRUD completo)
- * porque los grados son datos de catálogo administrados directamente
- * en la base de datos, no desde la interfaz web.
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Nivel extends Model {
+
 
     /**
      * Obtiene todos los niveles/grados disponibles ordenados de menor a mayor.

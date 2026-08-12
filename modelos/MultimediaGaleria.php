@@ -1,17 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE MULTIMEDIA GALERIA (MultimediaGaleria)
- * ============================================================
- * Gestiona los enlaces multimedia de los miembros (ej. YouTube)
- * y también la galería general de Instagram del club.
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class MultimediaGaleria extends Model {
+
 
     /**
      * Obtiene el registro multimedia de un miembro.

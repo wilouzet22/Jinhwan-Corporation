@@ -1,17 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE CATEGORÍA (Categoria)
- * ============================================================
- * Gestiona la tabla 'categoria' de la base de datos.
- * Define la categoría de edad del miembro (Pre-benjamín, Cadete, etc.).
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Categoria extends Model {
+
 
     /**
      * Obtiene todas las categorías disponibles ordenadas de menor a mayor edad.

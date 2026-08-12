@@ -184,7 +184,6 @@
             borderColor: isDarkMode() ? '#0f172a' : '#ffffff'
         });
 
-        // ── GRADOS CHART (DOUGHNUT) ─────────────────────────────
         const gradosData = <?= json_encode($distribucion_grados) ?>;
         const ctxGrados = document.getElementById('gradosChart');
         

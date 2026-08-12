@@ -37,7 +37,6 @@ class DashboardController extends Controller {
 
         $stats = [];
 
-        // ── [1] ESTADÍSTICAS GENERALES ──────────────────────────
         // Total de alumnos registrados (rol = 'Deportistas' y activos)
         $res = $db->query("SELECT COUNT(*) as total FROM miembros WHERE rol = 'Deportistas' AND activo = 1");
         $stats['total_alumnos'] = $res->fetch_assoc()['total'];
@@ -56,7 +55,6 @@ class DashboardController extends Controller {
         $stats['solicitudes_aprobadas'] = $stmt->get_result()->fetch_assoc()['total'];
         $stmt->close();
 
-        // ── [2] DISTRIBUCIÓN POR CINTURÓN/GRADO ─────────────────
         // Muestra cuántos deportistas hay en cada grado.
         $sqlGrados = "SELECT g.nombre, COUNT(m.id_miembro) as cantidad
                       FROM grados g
@@ -67,7 +65,6 @@ class DashboardController extends Controller {
         $resGrados = $db->query($sqlGrados);
         $distribucion_grados = $resGrados->fetch_all(MYSQLI_ASSOC);
 
-        // ── [3] ÚLTIMOS MIEMBROS DEPORTISTAS REGISTRADOS ────────
         $sqlUltimos = "SELECT nombre, apellido, fecha_n as fecha, activo
                        FROM miembros
                        WHERE rol = 'Deportistas'
@@ -75,10 +72,8 @@ class DashboardController extends Controller {
         $resUltimos = $db->query($sqlUltimos);
         $ultimos_alumnos = $resUltimos->fetch_all(MYSQLI_ASSOC);
 
-        // ── [4] PRÓXIMOS EVENTOS ─────────────────────────────────
         $proximos_eventos = (new \App\Models\Evento())->getUpcoming(3);
 
-        // ── RENDERIZAR VISTA ─────────────────────────────────────
         $this->view('maestro/dashboard', [
             'stats'               => $stats,
             'distribucion_grados' => $distribucion_grados,

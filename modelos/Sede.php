@@ -1,24 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE SEDE (Sede)
- * ============================================================
- * Gestiona la tabla 'sedes' de la base de datos.
- * Una sede es una sede física del club de Taekwondo donde
- * se realizan los entrenamientos.
- *
- * Campos relevantes en 'sedes':
- *   - id_sede  → clave primaria
- *   - nombre   → nombre de la sede
- *   - lugar    → dirección física (mapeado como 'direccion')
- *   - horario  → horario de atención (mapeado como 'telefono' por alias)
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Sede extends Model {
+
 
     /**
      * Obtiene todas las sedes con el conteo de miembros de cada una.

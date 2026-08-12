@@ -1,25 +1,10 @@
 <?php
-/**
- * ============================================================
- * MODELO DE USUARIO (Usuario)
- * ============================================================
- * Gestiona toda la interacción con la base de datos para el
- * manejo de miembros del club de Taekwondo.
- *
- * Tablas que utiliza:
- *   - miembros  → datos personales del miembro (nombre, grado, sede, etc.)
- *   - userlog   → credenciales de acceso (correo + contraseña hasheada)
- *   - sedes     → sede a la que pertenece el miembro
- *   - grados    → nivel/cinturón del miembro
- *
- * Operaciones: listar todos, buscar por ID, crear, actualizar, eliminar.
- * ============================================================
- */
 namespace App\Models;
 
 use App\Core\Model;
 
 class Usuario extends Model {
+
 
     /**
      * Obtiene todos los miembros con sus detalles completos.
