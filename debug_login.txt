@@ -273,3 +273,5 @@
 2026-07-29 11:57:34 - Admin Success: Rol=Administracion
 2026-08-03 13:46:16 - Login Success: Email=admin@admin.com | Rol=Administracion
 2026-08-03 13:46:16 - Admin Success: Rol=Administracion
+2026-08-05 12:16:52 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-08-05 12:16:52 - Admin Success: Rol=Administracion
