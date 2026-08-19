@@ -1,11 +1,11 @@
-    <!-- Footer -->
+    
     <footer class="bg-white dark:bg-[#060913] backdrop-blur-md dark:backdrop-blur-none text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800/60 relative overflow-hidden mt-auto transition-colors duration-300">
-        <!-- Top accent line -->
+        
         <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-tkd-red to-transparent opacity-80"></div>
         
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <!-- Contact -->
+                
                 <div class="space-y-6">
                     <h3 class="font-display font-bold text-2xl text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-red pl-4 transition-colors">Contacto</h3>
                     <div class="space-y-4 pl-5">
@@ -24,7 +24,6 @@
                     </div>
                 </div>
 
-                <!-- Address -->
                 <div class="space-y-6">
                     <h3 class="font-display font-bold text-2xl text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-blue pl-4 transition-colors">Ubicación</h3>
                     <div class="flex items-start gap-4 pl-5 group">
@@ -39,7 +38,6 @@
                     </div>
                 </div>
 
-                <!-- Social -->
                 <div class="space-y-6">
                     <h3 class="font-display font-bold text-2xl text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-gold pl-4 transition-colors">Síguenos</h3>
                     <div class="flex gap-4 pl-5">
@@ -60,12 +58,12 @@
         </div>
     </footer>
     
-    </main> <!-- End Main -->
-</div> <!-- End Content Wrapper -->
-</div> <!-- End Layout Flex -->
+    </main> 
+</div> 
+</div> 
 
 <script>
-    // Theme Toggle Logic (shared localStorage key)
+    
     const themeToggleBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
@@ -101,12 +99,11 @@
         });
     }
 
-    // Sidebar y Admin Menu Toggle → manejados por navigation.js
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.js" integrity="sha512-Xth9Av_2znR5vALi4x2D2ksM2sC0o962KzQEVeP1xlG6TqGCI2pLflf3+S2G2bL4K0+2A1Q7F/AuYp1z0ll2EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize SimpleLightbox if a gallery exists on the page
+        
         if(document.querySelector('.gallery a')) {
             var lightbox = new SimpleLightbox('.gallery a', {
                 overlay: true,

@@ -1,16 +1,15 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
-<!-- Hero Section -->
 <section class="relative w-full h-[75vh] sm:h-[85vh] overflow-hidden dark:bg-[#0b0f19] transition-colors duration-300">
-    <!-- Light Mode Gradient Background -->
+    
     <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #dbeafe 0%, #f0f4ff 40%, #ffe4e6 100%)"></div>
-    <!-- Slider Container -->
+    
     <div id="hero-slider" class="absolute inset-0">
-        <!-- Slide 1 -->
+        
         <div class="slider-item active h-full relative">
-            <!-- Light mode: thin text-readability overlay -->
+            
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
-            <!-- Dark mode overlay -->
+            
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
             <img alt="Taekwondo Training" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider.png') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,8 +35,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Slide 2 -->
+
         <div class="slider-item h-full relative hidden">
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
@@ -61,7 +59,6 @@
             </div>
         </div>
 
-        <!-- Slide 3 -->
         <div class="slider-item h-full relative hidden">
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
@@ -86,7 +83,6 @@
         </div>
     </div>
 
-    <!-- Slider Controls -->
     <div class="absolute bottom-10 right-10 z-30 flex space-x-4">
         <button id="prev-btn" class="w-12 h-12 rounded-full bg-white/60 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-white flex items-center justify-center hover:bg-tkd-red hover:text-white hover:border-tkd-red transition-all shadow-lg backdrop-blur">
             <span class="material-icons-outlined">chevron_left</span>
@@ -95,15 +91,13 @@
             <span class="material-icons-outlined">chevron_right</span>
         </button>
     </div>
-    
-    <!-- Decorative Bottom Shape -->
+
     <div class="absolute bottom-0 left-0 w-full h-24 z-20 transition-colors duration-300" style="clip-path: polygon(0 100%, 100% 100%, 100% 0);" id="hero-bottom-shape">
         <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #dbeafe 0%, #ffe4e6 100%)"></div>
         <div class="absolute inset-0 hidden dark:block bg-[#0b0f19]"></div>
     </div>
 </section>
 
-<!-- Features Section -->
 <section class="py-24 relative overflow-hidden transition-colors duration-300">
     <div class="dark:hidden absolute inset-0" style="background: linear-gradient(180deg, #eff6ff 0%, #ffffff 40%, #fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
@@ -116,7 +110,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Card 1 -->
+            
             <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 border-l-4 border-l-tkd-red p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 group">
                 <div class="w-16 h-16 bg-red-50 dark:bg-slate-900/80 border border-red-100 dark:border-slate-800 rounded-2xl flex items-center justify-center mb-6 text-tkd-red group-hover:bg-tkd-red group-hover:text-white group-hover:border-tkd-red transition-all duration-300">
                     <span class="material-icons-outlined text-3xl">fitness_center</span>
@@ -127,7 +121,6 @@
                 </p>
             </div>
 
-            <!-- Card 2 -->
             <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 border-l-4 border-l-tkd-blue p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 group">
                 <div class="w-16 h-16 bg-blue-50 dark:bg-slate-900/80 border border-blue-100 dark:border-slate-800 rounded-2xl flex items-center justify-center mb-6 text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white group-hover:border-tkd-blue transition-all duration-300">
                     <span class="material-icons-outlined text-3xl">psychology</span>
@@ -138,7 +131,6 @@
                 </p>
             </div>
 
-            <!-- Card 3 -->
             <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 border-l-4 border-l-tkd-gold p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 group">
                 <div class="w-16 h-16 bg-amber-50 dark:bg-slate-900/80 border border-amber-100 dark:border-slate-800 rounded-2xl flex items-center justify-center mb-6 text-tkd-gold group-hover:bg-tkd-gold group-hover:text-white group-hover:border-tkd-gold transition-all duration-300">
                     <span class="material-icons-outlined text-3xl">groups</span>

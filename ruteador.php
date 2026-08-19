@@ -55,7 +55,6 @@ use App\Controllers\Maestro\SolicitudesAscensoController as MaestroSolicitudesCo
 
 $router = new Router();
 
-// SITIO PÚBLICO
 $router->get('/', [InicioController::class, 'portal']);
 $router->get('/portal', [InicioController::class, 'portal']);
 $router->get('/inicio', [InicioController::class, 'index']);
@@ -64,7 +63,6 @@ $router->get('/sedes', [WebSedesController::class, 'index']);
 $router->get('/miembros', [WebMiembrosController::class, 'index']);
 $router->get('/galeria', [GaleriaController::class, 'index']);
 
-// ESTUDIANTE
 $router->get('/estudiante/dashboard', [StudentDashboardController::class, 'index']);
 $router->get('/estudiante/estudio', [StudentEstudioController::class, 'index']);
 $router->post('/ascensos/toggle', [StudentEstudioController::class, 'toggle']);
@@ -76,7 +74,6 @@ $router->post('/usuario/perfil/update', [SharedPerfilController::class, 'update'
 $router->get('/perfil', [SharedPerfilController::class, 'index']);
 $router->post('/perfil/update', [SharedPerfilController::class, 'update']);
 
-// AUTENTICACIÓN
 $router->get('/login', [AutenticacionController::class, 'loginForm']);
 $router->post('/login/process', [AutenticacionController::class, 'login']);
 $router->get('/logout', [AutenticacionController::class, 'logout']);
@@ -85,7 +82,6 @@ $router->post('/registro/process', [AutenticacionController::class, 'processRegi
 $router->get('/registro/completar', [AutenticacionController::class, 'completarRegistroForm']);
 $router->post('/registro/completar/process', [AutenticacionController::class, 'processCompletarRegistro']);
 
-// ADMINISTRADOR
 $router->get('/admin/dashboard', [DashboardController::class, 'index']);
 $router->get('/admin/ascensos', [AscensosController::class, 'index']);
 $router->post('/admin/ascensos/create', [AscensosController::class, 'store']);
@@ -125,11 +121,9 @@ $router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
 $router->post('/admin/galeria/store', [AdminGaleriaController::class, 'store']);
 $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']);
 
-// USUARIO
 $router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);
 $router->get('/usuario/calendario/get-eventos', [UsuarioCalendarioController::class, 'getEventos']);
 
-// MAESTRO
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesController::class, 'index']);

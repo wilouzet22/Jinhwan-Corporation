@@ -1,114 +1,77 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DEL PANEL DE ADMINISTRACIÓN (DashboardController)
- * ============================================================
- * Muestra el panel de control principal del administrador con
- * estadísticas generales del club de Taekwondo.
- *
- * Acceso: requiere sesión activa + rol de Administrador.
- * Ruta: GET /admin/dashboard
- * Vista: administracion/dashboard
- *
- * Datos que recopila y envía a la vista:
- *   1. Stats generales: total miembros, activos, pendientes, sedes
- *   2. Distribución de miembros por grado/cinturón
- *   3. Distribución de miembros por sede
- *   4. Los 5 últimos miembros registrados
- * ============================================================
- */
+
 namespace App\Controllers\Administracion;
 
 use App\Core\Controller;
 use App\Core\Security;
 use App\Config\Database;
+use App\Models\Evento;
 
 class DashboardController extends Controller {
 
-    /**
-     * Constructor: verifica sesión y rol de administrador antes de
-     * permitir el acceso a cualquier método de este controlador.
-     * Si la verificación falla, Security redirige automáticamente.
-     */
     public function __construct() {
-        Security::verifySession(); // Verifica sesión activa con todos los checks de seguridad
-        Security::verifyAdmin();   // Verifica que el rol sea Administrador (rol_id = 1)
+        Security::verifySession(); 
+        Security::verifyAdmin();   
     }
 
-    /**
-     * Muestra el panel de control administrativo con estadísticas.
-     * Ruta: GET /admin/dashboard
-     *
-     * Realiza 4 bloques de consultas SQL independientes:
-     *
-     *   [1] Estadísticas generales (4 conteos simples)
-     *   [2] Distribución por grado → datos para gráfica de cinturones
-     *   [3] Distribución por sede  → datos para gráfica por sede
-     *   [4] Últimos 5 miembros     → actividad reciente
-     */
     public function index() {
         $db = Database::getInstance()->getConnection();
 
         $stats = [];
 
-        // Total de miembros registrados (activos + inactivos)
-        $res = $db->query("SELECT COUNT(*) as total FROM miembros");
-        $stats['total_miembros'] = $res->fetch_assoc()['total'];
+        $res = $db->query("SELECT COUNT(*) as total FROM personas");
+        $stats['total_miembros'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Total de miembros activos (activo = 1, ya aprobados)
-        $res = $db->query("SELECT COUNT(*) as total FROM miembros WHERE activo = 1");
-        $stats['activos'] = $res->fetch_assoc()['total'];
+        $res = $db->query("SELECT COUNT(*) as total FROM personas WHERE activo = 1");
+        $stats['activos'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Total de solicitudes pendientes de aprobación (activo = 0)
-        $res = $db->query("SELECT COUNT(*) as total FROM miembros WHERE activo = 0");
-        $stats['pendientes'] = $res->fetch_assoc()['total'];
+        $res = $db->query("SELECT COUNT(*) as total FROM personas WHERE activo = 0");
+        $stats['pendientes'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Total de solicitudes de ascenso pendientes
         $res = $db->query("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE estado = 'pendiente'");
-        $stats['pendientes_ascenso'] = $res->fetch_assoc()['total'];
+        $stats['pendientes_ascenso'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Total de sedes registradas en el sistema
         $res = $db->query("SELECT COUNT(*) as total FROM sedes");
-        $stats['total_sedes'] = $res->fetch_assoc()['total'];
+        $stats['total_sedes'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Muestra cuántos miembros activos hay en cada grado.
-        // LEFT JOIN desde 'grados' para incluir grados sin miembros (cantidad = 0).
-        $sqlGrados = "SELECT g.nombre, COUNT(m.id_miembro) as cantidad
+        // Distribución de grados de deportistas activos
+        $sqlGrados = "SELECT g.nombre, COUNT(pd.id_persona) as cantidad
                       FROM grados g
-                      LEFT JOIN miembros m ON g.id_grado = m.id_grado AND m.activo = 1
+                      LEFT JOIN perfil_deportistas pd ON g.id_grado = pd.id_grado
+                      LEFT JOIN personas p ON pd.id_persona = p.id_persona AND p.activo = 1
                       GROUP BY g.id_grado, g.nombre
                       ORDER BY g.id_grado ASC";
         $resGrados = $db->query($sqlGrados);
-        $distribucion_grados = $resGrados->fetch_all(MYSQLI_ASSOC);
+        $distribucion_grados = $resGrados ? $resGrados->fetch_all(MYSQLI_ASSOC) : [];
 
-        // Muestra cuántos miembros activos hay en cada sede.
-        // LEFT JOIN desde 'sedes' para incluir sedes sin miembros (cantidad = 0).
-        $sqlSedes = "SELECT s.nombre, COUNT(m.id_miembro) as cantidad
+        // Distribución por sedes
+        $sqlSedes = "SELECT s.nombre, COUNT(p.id_persona) as cantidad
                      FROM sedes s
-                     LEFT JOIN miembros m ON s.id_sede = m.id_sede AND m.activo = 1
-                     GROUP BY s.id_sede, s.nombre";
+                     LEFT JOIN personas p ON s.id_sede = p.id_sede AND p.activo = 1
+                     GROUP BY s.id_sede, s.nombre
+                     ORDER BY s.id_sede ASC";
         $resSedes = $db->query($sqlSedes);
-        $distribucion_sedes = $resSedes->fetch_all(MYSQLI_ASSOC);
+        $distribucion_sedes = $resSedes ? $resSedes->fetch_all(MYSQLI_ASSOC) : [];
 
-        // Los 5 miembros más recientes (por ID descendente = más nuevo primero).
-        // Incluye su fecha de nacimiento y estado activo/inactivo.
-        $sqlUltimos = "SELECT nombre, apellido, fecha_n as fecha, activo
-                       FROM miembros
-                       ORDER BY id_miembro DESC LIMIT 5";
+        // Últimos miembros registrados
+        $sqlUltimos = "SELECT p.nombre, p.apellido, pd.fecha_n as fecha, p.activo
+                       FROM personas p
+                       LEFT JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
+                       ORDER BY p.id_persona DESC LIMIT 5";
         $resUltimos = $db->query($sqlUltimos);
-        $ultimos_miembros = $resUltimos->fetch_all(MYSQLI_ASSOC);
+        $ultimos_miembros = $resUltimos ? $resUltimos->fetch_all(MYSQLI_ASSOC) : [];
 
-        $proximos_eventos = (new \App\Models\Evento())->getUpcoming(3);
+        $eventoModel = new Evento();
+        $proximos_eventos = $eventoModel->getUpcoming(3);
 
-        // Pasar todos los datos a la vista del dashboard administrativo
         $this->view('administracion/dashboard', [
-            'stats'               => $stats,               // Contadores del resumen
-            'distribucion_grados' => $distribucion_grados, // Datos para gráfica de grados
-            'distribucion_sedes'  => $distribucion_sedes,  // Datos para gráfica de sedes
-            'ultimos_miembros'    => $ultimos_miembros,    // Lista de últimos registros
-            'proximos_eventos'    => $proximos_eventos,    // Próximos eventos del calendario
-            'page_title'          => 'Panel de Control',   // Título de la página (para <title> y breadcrumb)
-            'current_page'        => 'dashboard'           // Indica cuál ítem del menú lateral está activo
+            'stats'               => $stats,               
+            'distribucion_grados' => $distribucion_grados, 
+            'distribucion_sedes'  => $distribucion_sedes,  
+            'ultimos_miembros'    => $ultimos_miembros,    
+            'proximos_eventos'    => $proximos_eventos,    
+            'page_title'          => 'Panel de Control',   
+            'current_page'        => 'dashboard'           
         ]);
     }
 }

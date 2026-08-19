@@ -15,11 +15,11 @@ El equipo de desarrollo se ha constituido bajo la estructura de la metodología 
 
 | Rol Scrum | Integrante | Responsabilidad Principal |
 | :--- | :--- | :--- |
-| **Product Owner (PO)** | Juan Pérez | Maximiza el valor del producto, define las necesidades del cliente, redacta y prioriza el Product Backlog. |
-| **Scrum Master (SM)** | María Gómez | Facilita el proceso Scrum, remueve bloqueos e impedimentos y vela por el cumplimiento de la metodología. |
-| **Developer 1** | Carlos Rodríguez | Diseña e implementa la arquitectura backend (PHP, MVC, MySQL) y autenticación. |
-| **Developer 2** | Ana Martínez | Desarrolla la interfaz de usuario (HTML/CSS), vistas del portal web y panel responsive. |
-| **Developer 3** | Luis Fernández | Implementa la lógica de datos, modelos (CRUD miembros/sedes) y pruebas del sistema. |
+| **Scrum Master (SM)** | Samuel Gomez Londoño | Facilita el proceso Scrum, remueve bloqueos e impedimentos y vela por el cumplimiento de la metodología. |
+| **Diseñadora Base de Datos** | Mariana Mora Chavarria | Diseña e implementa el esquema de la base de datos MySQL, relaciones de tablas y consultas SQL. |
+| **Programadora** | Luciana Rodriguez Hernandez | Diseña e implementa la arquitectura backend (PHP, MVC, MySQL) y sistema de autenticación. |
+| **Programadora** | Estefani Andreina Montoya Soto | Desarrolla la lógica de negocios, funcionalidades CRUD (miembros/sedes) y pruebas del sistema. |
+| **Diseñadora Frontend** | Estefania Londoño Sanchez | Desarrolla la interfaz de usuario (HTML/CSS), vistas del portal web, maquetación y diseño responsive. |
 
 ---
 
@@ -94,19 +94,29 @@ Estado del Tablero Scrum al finalizar la primera semana del **Sprint 1**:
 
 Reunión diaria de seguimiento (duración máxima 1 minuto por integrante):
 
-* **Carlos Rodríguez (Developer 1 - Backend):**
+* **Samuel Gomez Londoño (Scrum Master):**
+  * *¿Qué hice ayer?* Coordiné la reunión diaria, me aseguré de remover bloqueos y revisé el avance del Sprint Backlog.
+  * *¿Qué haré hoy?* Facilitar la sincronización entre el equipo de diseño y programación para la entrega de las vistas.
+  * *¿Impedimentos?* Ninguno por el momento.
+
+* **Luciana Rodriguez Hernandez (Programadora - Backend):**
   * *¿Qué hice ayer?* Implementé el hash de contraseñas con bcrypt y el sistema de verificación de sesiones seguras (`Security.php`).
   * *¿Qué haré hoy?* Finalizar la revisión de la ruta `/admin/registros` para la aprobación de nuevos usuarios.
   * *¿Impedimentos?* Ninguno por el momento.
 
-* **Ana Martínez (Developer 2 - Frontend):**
+* **Estefania Londoño Sanchez (Diseñadora Frontend):**
   * *¿Qué hice ayer?* Maqueté la interfaz del formulario de registro y la vista de inicio de sesión.
   * *¿Qué haré hoy?* Diseñar el formulario de edición de miembros en la vista de administración.
-  * *¿Impedimentos?* Necesitaba confirmar los campos requeridos para la tabla `miembros`, pero ya fue coordinado con la base de datos.
+  * *¿Impedimentos?* Necesitaba confirmar los campos requeridos para la tabla `miembros`, coordinado con base de datos.
 
-* **Luis Fernández (Developer 3 - Database & Tests):**
+* **Mariana Mora Chavarria (Diseñadora Base de Datos):**
   * *¿Qué hice ayer?* Creé las tablas `miembros` y `userlog` en MySQL y sus relaciones con `sedes`.
   * *¿Qué haré hoy?* Realizar pruebas de inserción de usuarios y verificación de borrado en cascada para registros rechazados.
+  * *¿Impedimentos?* Ninguno.
+
+* **Estefani Andreina Montoya Soto (Programadora - Lógica):**
+  * *¿Qué hice ayer?* Desarrollé los métodos en los modelos para la gestión del CRUD de miembros.
+  * *¿Qué haré hoy?* Integrar las vistas del portal web con las respuestas del controlador.
   * *¿Impedimentos?* Ninguno.
 
 ---

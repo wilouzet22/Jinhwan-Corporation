@@ -1,5 +1,5 @@
 <?php 
-// Determine which layout to include based on the role
+
 $cabecera = __DIR__ . '/../layout/estudiante_cabecera.php';
 $pie = __DIR__ . '/../layout/estudiante_pie.php';
 
@@ -11,7 +11,6 @@ if (isset($rol) && strtolower($rol) === 'maestro') {
 include $cabecera; 
 ?>
 
-<!-- FullCalendar CSS -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 
 <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300 max-w-5xl">
@@ -24,7 +23,6 @@ include $cabecera;
     </div>
 </main>
 
-<!-- Modal de Lectura -->
 <div id="evento-modal-lectura" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transition-colors duration-300">
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -67,7 +65,7 @@ include $cabecera;
             },
             events: '<?= base_url('/usuario/calendario/get-eventos') ?>',
             eventClick: function(info) {
-                // Formatear la fecha para mostrar
+                
                 let dateObj = new Date(info.event.start);
                 let formattedDate = dateObj.toLocaleString('es-ES', { 
                     year: 'numeric', month: 'long', day: 'numeric',
@@ -98,7 +96,7 @@ include $cabecera;
 </script>
 
 <style>
-/* Estilos para adaptar FullCalendar al dark mode */
+
 .dark .fc-theme-standard .fc-scrollgrid { border-color: #1e293b; }
 .dark .fc-theme-standard td, .dark .fc-theme-standard th { border-color: #1e293b; }
 .dark .fc-col-header-cell-cushion, .dark .fc-daygrid-day-number { color: #f8fafc; }

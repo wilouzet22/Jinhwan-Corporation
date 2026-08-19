@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Casos de Uso UML - Jinhwa Corporation</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: #161e2e;
+            --border-color: #273549;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            
+            --system-bg: rgba(15, 23, 42, 0.6);
+            --system-border: #3b82f6;
+            
+            --actor-color: #f8fafc;
+            --actor-stroke: #38bdf8;
+            
+            --uc-bg: #1e1b4b;
+            --uc-border: #6366f1;
+            --uc-text: #e0e7ff;
+
+            --uc-admin-bg: #4c1d95;
+            --uc-admin-border: #a855f7;
+            
+            --uc-master-bg: #064e3b;
+            --uc-master-border: #10b981;
+            
+            --line-assoc: #64748b;
+            --line-include: #38bdf8;
+            --line-extend: #fbbf24;
+            --line-inherit: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .title-container h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-container h1 span {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .btn-primary {
+            background: #0284c7;
+            border-color: #38bdf8;
+        }
+
+        .btn-primary:hover {
+            background: #0369a1;
+        }
+
+        #viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        #viewport:active {
+            cursor: grabbing;
+        }
+
+        #canvas {
+            position: absolute;
+            transform-origin: 0 0;
+            top: 0;
+            left: 0;
+            width: 3500px;
+            height: 2800px;
+        }
+
+        svg#connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* System Boundary Box */
+        .system-boundary {
+            position: absolute;
+            background: var(--system-bg);
+            border: 2px dashed var(--system-border);
+            border-radius: 16px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .system-title {
+            position: absolute;
+            top: -16px;
+            left: 24px;
+            background: #1e293b;
+            color: #60a5fa;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* UML Actor */
+        .uml-actor {
+            position: absolute;
+            width: 90px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            z-index: 3;
+            transition: transform 0.2s;
+        }
+
+        .uml-actor:hover {
+            transform: scale(1.08);
+        }
+
+        .uml-actor svg {
+            width: 60px;
+            height: 70px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .actor-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--actor-color);
+            text-align: center;
+            margin-top: 6px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        /* UML Use Case Oval */
+        .use-case {
+            position: absolute;
+            width: 220px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--uc-bg), #2e1065);
+            border: 2px solid var(--uc-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            text-align: center;
+            cursor: move;
+            z-index: 2;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .use-case:hover {
+            box-shadow: 0 10px 28px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .use-case.uc-master {
+            background: linear-gradient(135deg, var(--uc-master-bg), #022c22);
+            border-color: var(--uc-master-border);
+        }
+
+        .use-case.uc-admin {
+            background: linear-gradient(135deg, var(--uc-admin-bg), #3b0764);
+            border-color: var(--uc-admin-border);
+        }
+
+        .uc-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.25;
+            pointer-events: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 620px;
+            max-width: 90vw;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0f172a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-symbol {
+            width: 80px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .legend-info h4 {
+            font-size: 0.85rem;
+            color: #ffffff;
+        }
+        .legend-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="title-container">
+            <h1>Diagrama de Casos de Uso <span>Jinhwa Corporation</span></h1>
+            <div class="subtitle">Casos de Uso del Sistema de Gestión de Taekwondo</div>
+        </div>
+        <div class="controls">
+            <button class="btn" id="btnZoomOut">🔍 -</button>
+            <button class="btn" id="btnZoomReset">100%</button>
+            <button class="btn" id="btnZoomIn">🔍 +</button>
+            <button class="btn" id="btnResetLayout">⚡ Organizar</button>
+            <button class="btn btn-primary" id="btnLegend">📖 Leyenda Casos de Uso</button>
+        </div>
+    </header>
+
+    <div id="viewport">
+        <div id="canvas">
+            <!-- System Boundary -->
+            <div class="system-boundary" id="systemBoundary" style="left: 620px; top: 380px; width: 1520px; height: 1850px;">
+                <div class="system-title">Sistema de Gestión Jinhwa Corporation</div>
+            </div>
+
+            <svg id="connections">
+                <defs>
+                    <!-- Include Arrow -->
+                    <marker id="marker-include" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Extend Arrow -->
+                    <marker id="marker-extend" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#fbbf24" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Inheritance Triangle -->
+                    <marker id="marker-inherit" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+                        <path d="M 0 0 L 12 6 L 0 12 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                    </marker>
+                </defs>
+            </svg>
+
+            <div id="elements-container"></div>
+        </div>
+    </div>
+
+    <!-- Leyenda Modal -->
+    <div class="modal" id="legendModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Simbología de Casos de Uso UML</h3>
+                <button class="close-btn" id="closeLegend">&times;</button>
+            </div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="40" height="40" viewBox="0 0 60 70">
+                            <circle cx="30" cy="14" r="10" fill="none" stroke="#38bdf8" stroke-width="3"/>
+                            <line x1="30" y1="24" x2="30" y2="46" stroke="#38bdf8" stroke-width="3"/>
+                            <line x1="12" y1="32" x2="48" y2="32" stroke="#38bdf8" stroke-width="3"/>
+                            <line x1="30" y1="46" x2="16" y2="66" stroke="#38bdf8" stroke-width="3"/>
+                            <line x1="30" y1="46" x2="44" y2="66" stroke="#38bdf8" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Actor</h4>
+                        <p>Rol que interactúa con el sistema.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <div style="width:50px; height:25px; border:2px solid #6366f1; border-radius:50%; background:#1e1b4b;"></div>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Caso de Uso</h4>
+                        <p>Función o tarea realizada por el sistema.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#64748b" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Asociación</h4>
+                        <p>Conexión entre Actor y Caso de Uso.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#marker-include)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>&lt;&lt;include&gt;&gt;</h4>
+                        <p>Inclusión obligatoria de otro caso de uso.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#marker-extend)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>&lt;&lt;extend&gt;&gt;</h4>
+                        <p>Extensión opcional de un caso de uso.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#10b981" stroke-width="2" marker-end="url(#marker-inherit)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Generalización</h4>
+                        <p>Herencia de roles entre actores.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const actorsData = [
+            { id: "visitante", name: "Visitante Web", x: 300, y: 520, stroke: "#38bdf8" },
+            { id: "usuario_auth", name: "Usuario Autenticado", x: 300, y: 980, stroke: "#a855f7" },
+            { id: "deportista", name: "Deportista", x: 300, y: 1320, stroke: "#6366f1" },
+            { id: "maestro", name: "Maestro / Instructor", x: 300, y: 1680, stroke: "#10b981" },
+            { id: "administrador", name: "Administrador", x: 2260, y: 1450, stroke: "#c084fc" }
+        ];
+
+        const useCasesData = [
+            // Módulo Público (Visitante)
+            { id: "uc01", text: "UC01: Consultar Portal e Inicio", category: "public", x: 720, y: 450 },
+            { id: "uc02", text: "UC02: Consultar Sedes y Horarios", category: "public", x: 1120, y: 450 },
+            { id: "uc03", text: "UC03: Consultar Galería Multimedia", category: "public", x: 1520, y: 450 },
+            { id: "uc04", text: "UC04: Consultar Perfiles de Instructores", category: "public", x: 720, y: 620 },
+            { id: "uc05", text: "UC05: Iniciar Sesión / Login", category: "public", x: 1120, y: 620 },
+            { id: "uc06", text: "UC06: Solicitar Registro de Miembro", category: "public", x: 1520, y: 620 },
+
+            // Módulo Estudiante / Usuario Autenticado
+            { id: "uc07", text: "UC07: Ver Dashboard Personal", category: "student", x: 720, y: 920 },
+            { id: "uc08", text: "UC08: Consultar Material Teórico por Cinturón", category: "student", x: 1120, y: 920 },
+            { id: "uc09", text: "UC09: Solicitar Ascenso de Grado", category: "student", x: 1520, y: 920 },
+            { id: "uc10", text: "UC10: Consultar Historial de Ascensos", category: "student", x: 920, y: 1120 },
+            { id: "uc11", text: "UC11: Actualizar Perfil Personal", category: "student", x: 1320, y: 1120 },
+
+            // Módulo Maestro
+            { id: "uc12", text: "UC12: Evaluar / Aprobar Ascenso", category: "master", x: 720, y: 1420 },
+            { id: "uc13", text: "UC13: Consultar Registros de Alumnos", category: "master", x: 1120, y: 1420 },
+            { id: "uc14", text: "UC14: Gestionar Contenido Teórico", category: "master", x: 1520, y: 1420 },
+            { id: "uc15", text: "UC15: Publicar Noticias y Comunicados", category: "master", x: 1120, y: 1620 },
+
+            // Módulo Administrador
+            { id: "uc16", text: "UC16: Gestionar Sedes (CRUD)", category: "admin", x: 720, y: 1880 },
+            { id: "uc17", text: "UC17: Aprobar Nuevos Registros", category: "admin", x: 1120, y: 1880 },
+            { id: "uc18", text: "UC18: Gestionar Roles y Permisos", category: "admin", x: 1520, y: 1880 },
+            { id: "uc19", text: "UC19: Publicar Eventos en Calendario", category: "admin", x: 920, y: 2060 },
+            { id: "uc20", text: "UC20: Generar Reportes del Club", category: "admin", x: 1320, y: 2060 }
+        ];
+
+        const relationshipsData = [
+            // Actor Generalization (Deportista, Maestro, Admin -> Usuario Autenticado)
+            { from: "deportista", to: "usuario_auth", type: "inherit", label: "" },
+            { from: "maestro", to: "usuario_auth", type: "inherit", label: "" },
+            { from: "administrador", to: "usuario_auth", type: "inherit", label: "" },
+
+            // Visitante Associations
+            { from: "visitante", to: "uc01", type: "assoc", label: "" },
+            { from: "visitante", to: "uc02", type: "assoc", label: "" },
+            { from: "visitante", to: "uc03", type: "assoc", label: "" },
+            { from: "visitante", to: "uc04", type: "assoc", label: "" },
+            { from: "visitante", to: "uc05", type: "assoc", label: "" },
+            { from: "visitante", to: "uc06", type: "assoc", label: "" },
+
+            // Usuario Autenticado Associations
+            { from: "usuario_auth", to: "uc07", type: "assoc", label: "" },
+            { from: "usuario_auth", to: "uc11", type: "assoc", label: "" },
+
+            // Deportista Associations
+            { from: "deportista", to: "uc08", type: "assoc", label: "" },
+            { from: "deportista", to: "uc09", type: "assoc", label: "" },
+            { from: "deportista", to: "uc10", type: "assoc", label: "" },
+
+            // Maestro Associations
+            { from: "maestro", to: "uc12", type: "assoc", label: "" },
+            { from: "maestro", to: "uc13", type: "assoc", label: "" },
+            { from: "maestro", to: "uc14", type: "assoc", label: "" },
+            { from: "maestro", to: "uc15", type: "assoc", label: "" },
+
+            // Administrador Associations
+            { from: "administrador", to: "uc16", type: "assoc", label: "" },
+            { from: "administrador", to: "uc17", type: "assoc", label: "" },
+            { from: "administrador", to: "uc18", type: "assoc", label: "" },
+            { from: "administrador", to: "uc19", type: "assoc", label: "" },
+            { from: "administrador", to: "uc20", type: "assoc", label: "" },
+
+            // Includes / Extends between Use Cases
+            { from: "uc07", to: "uc05", type: "include", label: "<<include>>" },
+            { from: "uc09", to: "uc08", type: "include", label: "<<include>>" },
+            { from: "uc12", to: "uc09", type: "include", label: "<<include>>" },
+            { from: "uc06", to: "uc17", type: "extend", label: "<<extend>>" }
+        ];
+
+        // State
+        let scale = 0.55;
+        let panX = 150;
+        let panY = 20;
+        let isDraggingViewport = false;
+        let startX = 0, startY = 0;
+        let activeDraggedItem = null;
+        let dragOffsetX = 0, dragOffsetY = 0;
+
+        const viewport = document.getElementById('viewport');
+        const canvas = document.getElementById('canvas');
+        const svg = document.getElementById('connections');
+        const container = document.getElementById('elements-container');
+
+        // Render Actors & Use Cases
+        function renderElements() {
+            container.innerHTML = '';
+
+            // Render Actors
+            actorsData.forEach(actor => {
+                const el = document.createElement('div');
+                el.className = 'uml-actor';
+                el.id = `actor-${actor.id}`;
+                el.style.left = `${actor.x}px`;
+                el.style.top = `${actor.y}px`;
+
+                el.innerHTML = `
+                    <svg viewBox="0 0 60 70">
+                        <circle cx="30" cy="14" r="10" fill="none" stroke="${actor.stroke}" stroke-width="3"/>
+                        <line x1="30" y1="24" x2="30" y2="46" stroke="${actor.stroke}" stroke-width="3"/>
+                        <line x1="12" y1="32" x2="48" y2="32" stroke="${actor.stroke}" stroke-width="3"/>
+                        <line x1="30" y1="46" x2="16" y2="66" stroke="${actor.stroke}" stroke-width="3"/>
+                        <line x1="30" y1="46" x2="44" y2="66" stroke="${actor.stroke}" stroke-width="3"/>
+                    </svg>
+                    <div class="actor-name">${actor.name}</div>
+                `;
+
+                el.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    activeDraggedItem = actor;
+                    dragOffsetX = e.clientX / scale - actor.x;
+                    dragOffsetY = e.clientY / scale - actor.y;
+                });
+
+                container.appendChild(el);
+            });
+
+            // Render Use Cases
+            useCasesData.forEach(uc => {
+                const el = document.createElement('div');
+                el.className = `use-case ${uc.category === 'master' ? 'uc-master' : (uc.category === 'admin' ? 'uc-admin' : '')}`;
+                el.id = `uc-${uc.id}`;
+                el.style.left = `${uc.x}px`;
+                el.style.top = `${uc.y}px`;
+
+                el.innerHTML = `<div class="uc-text">${uc.text}</div>`;
+
+                el.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    activeDraggedItem = uc;
+                    dragOffsetX = e.clientX / scale - uc.x;
+                    dragOffsetY = e.clientY / scale - uc.y;
+                });
+
+                container.appendChild(el);
+            });
+        }
+
+        // Render Connectors
+        function renderConnectors() {
+            const existing = svg.querySelectorAll('.connector-group');
+            existing.forEach(e => e.remove());
+
+            relationshipsData.forEach(rel => {
+                const fromObj = actorsData.find(a => a.id === rel.from) || useCasesData.find(u => u.id === rel.from);
+                const toObj = actorsData.find(a => a.id === rel.to) || useCasesData.find(u => u.id === rel.to);
+
+                if (!fromObj || !toObj) return;
+
+                const fromEl = document.getElementById(`actor-${rel.from}`) || document.getElementById(`uc-${rel.from}`);
+                const toEl = document.getElementById(`actor-${rel.to}`) || document.getElementById(`uc-${rel.to}`);
+
+                if (!fromEl || !toEl) return;
+
+                const fromRect = { x: fromObj.x, y: fromObj.y, w: fromEl.offsetWidth, h: fromEl.offsetHeight };
+                const toRect = { x: toObj.x, y: toObj.y, w: toEl.offsetWidth, h: toEl.offsetHeight };
+
+                const c1 = { x: fromRect.x + fromRect.w / 2, y: fromRect.y + fromRect.h / 2 };
+                const c2 = { x: toRect.x + toRect.w / 2, y: toRect.y + toRect.h / 2 };
+
+                const p1 = getIntersectionPoint(c1, c2, fromRect);
+                const p2 = getIntersectionPoint(c2, c1, toRect);
+
+                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                group.setAttribute('class', 'connector-group');
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                let pathClass = 'uml-path';
+                let markerEnd = '';
+
+                if (rel.type === 'assoc') {
+                    path.setAttribute('stroke', '#64748b');
+                    path.setAttribute('stroke-width', '2');
+                } else if (rel.type === 'include') {
+                    path.setAttribute('stroke', '#38bdf8');
+                    path.setAttribute('stroke-width', '2');
+                    path.setAttribute('stroke-dasharray', '6 4');
+                    markerEnd = 'url(#marker-include)';
+                } else if (rel.type === 'extend') {
+                    path.setAttribute('stroke', '#fbbf24');
+                    path.setAttribute('stroke-width', '2');
+                    path.setAttribute('stroke-dasharray', '6 4');
+                    markerEnd = 'url(#marker-extend)';
+                } else if (rel.type === 'inherit') {
+                    path.setAttribute('stroke', '#10b981');
+                    path.setAttribute('stroke-width', '2');
+                    markerEnd = 'url(#marker-inherit)';
+                }
+
+                path.setAttribute('d', `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`);
+                if (markerEnd) path.setAttribute('marker-end', markerEnd);
+
+                group.appendChild(path);
+
+                if (rel.label) {
+                    const midX = (p1.x + p2.x) / 2;
+                    const midY = (p1.y + p2.y) / 2 - 6;
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute('x', midX);
+                    text.setAttribute('y', midY);
+                    text.setAttribute('fill', rel.type === 'include' ? '#38bdf8' : '#fbbf24');
+                    text.setAttribute('font-size', '11px');
+                    text.setAttribute('font-weight', '700');
+                    text.setAttribute('text-anchor', 'middle');
+                    text.textContent = rel.label;
+                    group.appendChild(text);
+                }
+
+                svg.appendChild(group);
+            });
+        }
+
+        function getIntersectionPoint(cFrom, cTo, rect) {
+            const dx = cTo.x - cFrom.x;
+            const dy = cTo.y - cFrom.y;
+            if (dx === 0 && dy === 0) return cFrom;
+
+            const halfW = rect.w / 2;
+            const halfH = rect.h / 2;
+
+            const scaleX = Math.abs(dx) > 0 ? halfW / Math.abs(dx) : Infinity;
+            const scaleY = Math.abs(dy) > 0 ? halfH / Math.abs(dy) : Infinity;
+
+            const scale = Math.min(scaleX, scaleY);
+
+            return {
+                x: cFrom.x + dx * scale,
+                y: cFrom.y + dy * scale
+            };
+        }
+
+        function updateTransform() {
+            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+        }
+
+        viewport.addEventListener('mousedown', (e) => {
+            isDraggingViewport = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (activeDraggedItem) {
+                activeDraggedItem.x = e.clientX / scale - dragOffsetX;
+                activeDraggedItem.y = e.clientY / scale - dragOffsetY;
+                const el = document.getElementById(`actor-${activeDraggedItem.id}`) || document.getElementById(`uc-${activeDraggedItem.id}`);
+                if (el) {
+                    el.style.left = `${activeDraggedItem.x}px`;
+                    el.style.top = `${activeDraggedItem.y}px`;
+                }
+                renderConnectors();
+            } else if (isDraggingViewport) {
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTransform();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingViewport = false;
+            activeDraggedItem = null;
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 1.1;
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * zoomFactor, 2.5);
+            } else {
+                scale = Math.max(scale / zoomFactor, 0.2);
+            }
+            updateTransform();
+        });
+
+        document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
+        document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { scale = 0.55; panX = 150; panY = 20; updateTransform(); };
+        
+        document.getElementById('btnResetLayout').onclick = () => {
+            scale = 0.55; panX = 150; panY = 20;
+            updateTransform();
+            renderElements();
+            setTimeout(renderConnectors, 50);
+        };
+
+        const legendModal = document.getElementById('legendModal');
+        document.getElementById('btnLegend').onclick = () => legendModal.style.display = 'flex';
+        document.getElementById('closeLegend').onclick = () => legendModal.style.display = 'none';
+        legendModal.onclick = (e) => { if (e.target === legendModal) legendModal.style.display = 'none'; };
+
+        // Init
+        renderElements();
+        updateTransform();
+        setTimeout(renderConnectors, 100);
+    </script>
+</body>
+</html>

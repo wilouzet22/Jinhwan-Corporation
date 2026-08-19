@@ -13,11 +13,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
             <?php foreach ($teorias as $teoria): ?>
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md flex flex-col group hover:border-tkd-blue/40 dark:hover:border-tkd-blue/40 transition-all duration-300">
-                    <!-- Video Preview -->
+                    
                     <div class="aspect-video bg-slate-100 dark:bg-slate-950/60 relative overflow-hidden border-b border-slate-200 dark:border-slate-800 transition-colors">
                         <?php if (!empty($teoria['url_video'])): ?>
                             <?php 
-                                // Basic YouTube Embed conversion
+                                
                                 $video_url = $teoria['url_video'];
                                 if (strpos($video_url, 'youtube.com/watch?v=') !== false) {
                                     $video_url = str_replace('watch?v=', 'embed/', $video_url);
@@ -61,7 +61,6 @@
         </div>
     </main>
 
-<!-- Modal for Create/Edit Theory -->
 <div id="theory-modal" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transition-colors duration-300">
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center transition-colors">
@@ -116,8 +115,7 @@
         
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        
-        // Reset form
+
         form.reset();
         
         if (action === 'create_teoria') {
@@ -127,8 +125,7 @@
         } else if (action === 'update_teoria') {
             title.textContent = 'Editar Tema';
             form.action = '<?= base_url('/admin/ascensos/update') ?>';
-            
-            // Fill data
+
             document.getElementById('id').value = data.id;
             document.getElementById('titulo').value = data.titulo;
             document.getElementById('descripcion').value = data.descripcion;

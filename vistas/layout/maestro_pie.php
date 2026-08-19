@@ -3,11 +3,11 @@
             &copy; 2025 Jinhwan Corporation. Todos los derechos reservados.
         </div>
     </footer>
-    </div> <!-- Close Content Wrapper -->
-</div> <!-- Close Body Wrapper -->
+    </div> 
+</div> 
 
 <script>
-    // Theme Toggle Logic
+    
     const themeToggleBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
@@ -44,7 +44,6 @@
         });
     }
 
-    // Sidebar Toggle Logic for Maestro
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('maestro-sidebar');
     const backdrop = document.getElementById('sidebar-backdrop');

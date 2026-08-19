@@ -35,7 +35,6 @@
     </div>
 </section>
 
-<!-- Script para cargar los embeds de Instagram -->
 <script async src="//www.instagram.com/embed.js"></script>
 
 <?php include __DIR__ . '/../layout/sitio_pie.php'; ?>

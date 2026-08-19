@@ -1,78 +1,67 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DEL DASHBOARD DE MAESTRO (DashboardController)
- * ============================================================
- * Muestra el panel de control principal del Maestro/Instructor
- * con estadísticas de los deportistas y sus solicitudes de ascenso.
- *
- * Acceso: requiere sesión activa + rol de Maestro.
- * Ruta: GET /maestro/dashboard
- * Vista: maestro/dashboard
- * ============================================================
- */
+
 namespace App\Controllers\Maestro;
 
 use App\Core\Controller;
 use App\Core\Security;
 use App\Config\Database;
+use App\Models\Evento;
 
 class DashboardController extends Controller {
 
-    /**
-     * Constructor: verifica sesión y rol de maestro antes de
-     * permitir el acceso a este controlador.
-     */
     public function __construct() {
-        Security::verifySession(); // Verifica sesión activa
-        Security::verifyMaestro(); // Verifica rol de Maestro
+        Security::verifySession(); 
+        Security::verifyMaestro(); 
     }
 
-    /**
-     * Muestra el panel de control del maestro.
-     */
     public function index() {
         $db = Database::getInstance()->getConnection();
-        $id_maestro = $_SESSION['id'];
+        $id_maestro = (int)$_SESSION['id'];
 
         $stats = [];
 
-        // Total de alumnos registrados (rol = 'Deportistas' y activos)
-        $res = $db->query("SELECT COUNT(*) as total FROM miembros WHERE rol = 'Deportistas' AND activo = 1");
-        $stats['total_alumnos'] = $res->fetch_assoc()['total'];
+        // Total alumnos activos (perfil_deportistas con persona activa)
+        $res = $db->query("SELECT COUNT(*) as total 
+                           FROM perfil_deportistas pd
+                           JOIN personas p ON pd.id_persona = p.id_persona
+                           WHERE p.activo = 1");
+        $stats['total_alumnos'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Solicitudes de ascenso enviadas por este maestro que están pendientes
-        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_maestro = ? AND estado = 'pendiente'");
+        // Solicitudes pendientes de este maestro
+        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_persona_maestro = ? AND estado = 'pendiente'");
         $stmt->bind_param("i", $id_maestro);
         $stmt->execute();
-        $stats['solicitudes_pendientes'] = $stmt->get_result()->fetch_assoc()['total'];
+        $stats['solicitudes_pendientes'] = (int)$stmt->get_result()->fetch_assoc()['total'];
         $stmt->close();
 
-        // Solicitudes de ascenso enviadas por este maestro que fueron aprobadas
-        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_maestro = ? AND estado = 'aprobado'");
+        // Solicitudes aprobadas de este maestro
+        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_persona_maestro = ? AND estado = 'aprobado'");
         $stmt->bind_param("i", $id_maestro);
         $stmt->execute();
-        $stats['solicitudes_aprobadas'] = $stmt->get_result()->fetch_assoc()['total'];
+        $stats['solicitudes_aprobadas'] = (int)$stmt->get_result()->fetch_assoc()['total'];
         $stmt->close();
 
-        // Muestra cuántos deportistas hay en cada grado.
-        $sqlGrados = "SELECT g.nombre, COUNT(m.id_miembro) as cantidad
+        // Distribución de grados de alumnos
+        $sqlGrados = "SELECT g.nombre, COUNT(pd.id_persona) as cantidad
                       FROM grados g
-                      LEFT JOIN miembros m ON g.id_grado = m.id_grado AND m.activo = 1 AND m.rol = 'Deportistas'
+                      LEFT JOIN perfil_deportistas pd ON g.id_grado = pd.id_grado
+                      LEFT JOIN personas p ON pd.id_persona = p.id_persona AND p.activo = 1
                       GROUP BY g.id_grado, g.nombre
                       ORDER BY g.id_grado ASC";
                       
         $resGrados = $db->query($sqlGrados);
-        $distribucion_grados = $resGrados->fetch_all(MYSQLI_ASSOC);
+        $distribucion_grados = $resGrados ? $resGrados->fetch_all(MYSQLI_ASSOC) : [];
 
-        $sqlUltimos = "SELECT nombre, apellido, fecha_n as fecha, activo
-                       FROM miembros
-                       WHERE rol = 'Deportistas'
-                       ORDER BY id_miembro DESC LIMIT 5";
+        // Últimos 5 alumnos registrados
+        $sqlUltimos = "SELECT p.nombre, p.apellido, pd.fecha_n as fecha, p.activo
+                       FROM personas p
+                       JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
+                       ORDER BY p.id_persona DESC LIMIT 5";
         $resUltimos = $db->query($sqlUltimos);
-        $ultimos_alumnos = $resUltimos->fetch_all(MYSQLI_ASSOC);
+        $ultimos_alumnos = $resUltimos ? $resUltimos->fetch_all(MYSQLI_ASSOC) : [];
 
-        $proximos_eventos = (new \App\Models\Evento())->getUpcoming(3);
+        $eventoModel = new Evento();
+        $proximos_eventos = $eventoModel->getUpcoming(3);
 
         $this->view('maestro/dashboard', [
             'stats'               => $stats,

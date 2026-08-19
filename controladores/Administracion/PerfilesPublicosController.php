@@ -37,14 +37,12 @@ class PerfilesPublicosController extends Controller {
             $url_instagram = $_POST['url_instagram'] ?? '';
             $rol = $_POST['rol'] ?? '';
 
-            // Update user profile info and role
             $this->usuarioModel->updatePublicProfile($id, $mostrar_en_web, $descripcion, $rol);
 
-            // Upsert multimedia URL
             if (!empty($url_instagram)) {
                 $this->multimediaModel->upsert($id, $url_instagram);
             } else {
-                // If empty, we might want to clear it, but upsert handles empty as well.
+                
                 $this->multimediaModel->upsert($id, '');
             }
 

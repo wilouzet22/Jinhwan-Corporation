@@ -9,7 +9,6 @@
         </div>
     </div>
 
-    <!-- Alert Messages -->
     <?php if (isset($_GET['msg'])): ?>
         <div class="mb-8 p-5 rounded-2xl border animate-fade-in flex items-center gap-3 relative z-10 transition-colors shadow-sm
             <?= ($_GET['msg'] == 'approved' || $_GET['msg'] == 'promo_approved') 
@@ -29,10 +28,8 @@
         </div>
     <?php endif; ?>
 
-    <!-- TABS OR MULTIPLE CARDS -->
     <div class="space-y-12">
-        
-        <!-- SECTION 1: REGISTRO DE CUENTAS PENDIENTES -->
+
         <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
@@ -123,7 +120,6 @@
             </div>
         </div>
 
-        <!-- SECTION 2: SOLICITUDES DE ASCENSO DE GRADO -->
         <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">

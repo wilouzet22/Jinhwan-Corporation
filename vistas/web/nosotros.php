@@ -1,6 +1,5 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
-<!-- Hero / Intro Section -->
 <section class="relative py-24 overflow-hidden transition-colors duration-300" style="background: linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
@@ -23,17 +22,15 @@
     </div>
 </section>
 
-<!-- Main Infographic Content -->
 <section class="py-16 relative overflow-hidden transition-colors duration-300" style="background: linear-gradient(180deg,#ffffff 0%,#eff6ff 50%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 50%,#fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
-    <!-- Decorative Background Elements -->
+    
     <div class="absolute top-0 left-0 w-64 h-64 bg-tkd-blue/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-tkd-red/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <!-- Section 1: History & Mission (Image Right) -->
+
         <div class="flex flex-col lg:flex-row items-center gap-12 mb-24">
             <div class="lg:w-1/2 space-y-6">
                 <div class="flex items-center gap-4 mb-2">
@@ -70,7 +67,6 @@
             </div>
         </div>
 
-        <!-- Section 2: Participation (Full Width Cards) -->
         <div class="mb-24">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">
@@ -82,7 +78,7 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Card 1 -->
+                
                 <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 p-6 rounded-xl border-t-2 border-t-tkd-blue/50 group shadow-sm hover:shadow-md transition-all duration-300">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4 text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white transition-all duration-300">
                         <span class="material-icons-outlined">location_city</span>
@@ -93,7 +89,7 @@
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-tkd-blue rounded-full"></span>Campeones juegos ciudad de Medellín</li>
                     </ul>
                 </div>
-                <!-- Card 2 -->
+                
                 <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 p-6 rounded-xl border-t-2 border-t-tkd-red/50 group shadow-sm hover:shadow-md transition-all duration-300">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4 text-tkd-red group-hover:bg-tkd-red group-hover:text-white transition-all duration-300">
                         <span class="material-icons-outlined">map</span>
@@ -104,7 +100,7 @@
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-tkd-red rounded-full"></span>Campeones departamentales</li>
                     </ul>
                 </div>
-                <!-- Card 3 -->
+                
                 <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 p-6 rounded-xl border-t-2 border-t-tkd-gold/50 group shadow-sm hover:shadow-md transition-all duration-300">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4 text-tkd-gold group-hover:bg-tkd-gold group-hover:text-white transition-all duration-300">
                         <span class="material-icons-outlined">emoji_events</span>
@@ -115,7 +111,7 @@
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-tkd-gold rounded-full"></span>Campeones juegos universitarios</li>
                     </ul>
                 </div>
-                <!-- Card 4 -->
+                
                 <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 p-6 rounded-xl border-t-2 border-t-slate-300 dark:border-t-slate-700 group shadow-sm hover:shadow-md transition-all duration-300">
                     <div class="w-12 h-12 bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-500 dark:text-slate-300 group-hover:bg-slate-200 dark:group-hover:bg-slate-800 group-hover:text-slate-800 dark:group-hover:text-white transition-all duration-300">
                         <span class="material-icons-outlined">public</span>
@@ -128,9 +124,8 @@
             </div>
         </div>
 
-        <!-- Section 3: Structure & Staff -->
         <div class="space-y-16">
-            <!-- Header & Intro -->
+            
             <div class="text-center max-w-4xl mx-auto">
                  <div class="flex items-center justify-center gap-4 mb-6">
                     <div class="p-3 bg-tkd-gold text-white rounded-lg shadow-lg">
@@ -145,7 +140,6 @@
                 </p>
             </div>
 
-            <!-- Identity Image -->
             <div class="nosotros-identity-img relative rounded-3xl overflow-hidden shadow-xl group max-w-6xl mx-auto h-[400px] md:h-[400px]">
                 <img src="<?= asset('img/visual/uniforme-e1758154541512-1536x605.jpeg') ?>" alt="Uniforme Jinwhan" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19]/90 via-[#0b0f19]/25 to-transparent flex items-end p-8 md:p-12">
@@ -157,11 +151,8 @@
                 </div>
             </div>
 
-            <!-- Timeline -->
             <div class="max-w-5xl mx-auto relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-800 before:to-transparent pb-12 transition-colors">
-                
-                <!-- Items (Reusing existing content structure) -->
-                <!-- Item 0: Personal Administrativo -->
+
                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-12">
                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-[#0b0f19] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white shadow-md shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300">
                         <span class="material-icons-outlined text-sm">business_center</span>
@@ -186,7 +177,6 @@
                     </div>
                 </div>
 
-                <!-- Item 1: Coordinador General -->
                  <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-12">
                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-[#0b0f19] bg-tkd-red text-white shadow-md shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300">
                         <span class="material-icons-outlined text-sm">badge</span>
@@ -200,7 +190,6 @@
                     </div>
                 </div>
 
-                <!-- Item 3: Docentes -->
                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active mb-12">
                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-[#0b0f19] bg-tkd-gold text-white shadow-md shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300">
                         <span class="material-icons-outlined text-sm">sports_martial_arts</span>
@@ -211,7 +200,6 @@
                     </div>
                 </div>
 
-                <!-- Item 4: Equipo de Apoyo -->
                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-slate-50 dark:border-[#0b0f19] bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-white shadow-md shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors duration-300">
                         <span class="material-icons-outlined text-sm">health_and_safety</span>

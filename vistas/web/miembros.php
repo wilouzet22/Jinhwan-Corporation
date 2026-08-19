@@ -1,6 +1,5 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
-<!-- Hero Section -->
 <section class="relative py-20 overflow-hidden transition-colors duration-300" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
@@ -18,13 +17,11 @@
     </div>
 </section>
 
-<!-- Miembros Section -->
 <section class="py-12 relative overflow-hidden min-h-screen transition-colors duration-300" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        <!-- Filters -->
+
         <div class="flex flex-wrap justify-center gap-3 mb-12">
             <button class="filter-btn active px-6 py-2 rounded-full border-2 border-tkd-red bg-tkd-red/20 text-slate-900 dark:text-white font-medium hover:bg-tkd-red hover:text-white transition-all" data-filter="all">Todos</button>
             <button class="filter-btn px-6 py-2 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all" data-filter="Administracion">Administración</button>
@@ -36,7 +33,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="miembros-grid">
             <?php 
-            // Función auxiliar para obtener el iframe limpio
+            
             function getCleanEmbedUrl($url) {
                 if (strpos($url, 'youtube.com') !== false || strpos($url, 'youtu.be') !== false) {
                     $videoId = '';
@@ -62,13 +59,12 @@
                     <?php $embed_url = !empty($m['instagram_url']) ? getCleanEmbedUrl($m['instagram_url']) : null; ?>
                     <div class="miembro-card bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden flex flex-col <?= $embed_url ? 'xl:flex-row' : '' ?> shadow-md hover:shadow-xl transition-all duration-300" data-category="<?= htmlspecialchars($m['rol_id']) ?>">
                         <?php if($embed_url): ?>
-                        <!-- Left Side: Multimedia -->
+                        
                         <div class="xl:w-1/2 p-4 bg-slate-100 dark:bg-black/20 flex items-center justify-center min-h-[400px] transition-colors">
                             <iframe src="<?= htmlspecialchars($embed_url) ?>" class="w-full h-full min-h-[500px] border-0 rounded-xl shadow-lg pointer-events-auto" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
                         </div>
                         <?php endif; ?>
 
-                        <!-- Right Side: Info -->
                         <div class="<?= $embed_url ? 'xl:w-1/2' : 'w-full' ?> p-8 flex flex-col justify-center space-y-4">
                             <div class="flex items-center gap-5">
                                 <?php if (!empty($m['foto_perfil'])): ?>
@@ -105,10 +101,8 @@
     </div>
 </section>
 
-<!-- Instagram Embed Script -->
 <script async src="//www.instagram.com/embed.js"></script>
 
-<!-- Filter Script -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const filterBtns = document.querySelectorAll('.filter-btn');

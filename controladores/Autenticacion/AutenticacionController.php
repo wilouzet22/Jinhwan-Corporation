@@ -1,28 +1,5 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DE AUTENTICACIÓN (AutenticacionController)
- * ============================================================
- * Maneja todo el flujo de autenticación de la aplicación:
- *   - Mostrar el formulario de login
- *   - Procesar el login (verificar credenciales + sesión segura)
- *   - Mostrar el formulario de registro público
- *   - Procesar el registro (crear miembro pendiente de aprobación)
- *   - Cerrar sesión
- *
- * Flujo de Login:
- *   1. Buscar el correo en 'userlog' + JOIN con 'miembros'
- *   2. Verificar la contraseña (bcrypt o texto plano con migración automática)
- *   3. Verificar que el miembro esté activo
- *   4. Crear sesión segura
- *   5. Redirigir según el rol (admin/estudiante/otro)
- *
- * Flujo de Registro:
- *   1. Insertar en 'miembros' con activo = 0 (pendiente de aprobación)
- *   2. Insertar credenciales en 'userlog' con clave hasheada
- *   3. El admin aprueba el registro desde /admin/registros
- * ============================================================
- */
+
 namespace App\Controllers\Autenticacion;
 
 use App\Core\Controller;
@@ -32,45 +9,28 @@ use App\Config\Database;
 
 class AutenticacionController extends Controller {
 
-    /**
-     * Muestra el formulario de inicio de sesión.
-     * Ruta: GET /login
-     */
     public function loginForm() {
         $this->view('autenticacion/login');
     }
 
-    /**
-     * Muestra el formulario de registro público.
-     * Ruta: GET /registro
-     */
     public function registroForm() {
         $this->view('autenticacion/registro');
     }
 
-    /**
-     * Procesa el formulario de inicio de sesión.
-     * Ruta: POST /login/process
-     *
-     * Parámetros POST esperados:
-     *   - email    → correo electrónico del usuario
-     *   - password → contraseña en texto plano
-     *
-     * Errores posibles (redirige con ?error=):
-     *   - pending → el miembro existe pero no ha sido aprobado (activo=0)
-     *   - 1       → contraseña incorrecta
-     *   - 2       → correo no encontrado en la BD
-     */
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $email = $_POST['email'];
-            $clave = $_POST['password'];
+            $email = strtolower(trim($_POST['email'] ?? ''));
+            $clave = $_POST['password'] ?? '';
 
             $db = Database::getInstance()->getConnection();
 
-            // Buscar el usuario por correo en 'userlog' con JOIN a 'miembros'
-            // para obtener el rol, nombre completo y estado de activación
-            $stmt = $db->prepare("SELECT m.id_miembro as id, m.nombre, m.apellido, u.correo, u.clave, m.rol as rol_id, m.activo, m.foto_perfil, m.permisos_extra FROM userlog u JOIN miembros m ON u.id_miembro = m.id_miembro WHERE u.correo = ? LIMIT 1");
+            $sql = "SELECT p.id_persona as id, p.nombre, p.apellido, c.correo, c.clave, c.rol as rol_id,
+                           p.activo, p.foto_perfil, c.permisos_extra
+                    FROM credenciales c
+                    JOIN personas p ON c.id_persona = p.id_persona
+                    WHERE c.correo = ? LIMIT 1";
+
+            $stmt = $db->prepare($sql);
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
@@ -78,144 +38,109 @@ class AutenticacionController extends Controller {
             if ($resultado && $resultado->num_rows > 0) {
                 $registro = $resultado->fetch_assoc();
 
-                // Verificar contraseña: soporta bcrypt (password_verify) y texto plano legacy
-                // La comparación con texto plano es para cuentas que no han migrado aún
                 if (password_verify($clave, $registro['clave']) || $clave === $registro['clave']) {
 
-                    // Si el miembro existe pero está pendiente de aprobación (activo=0)
-                    if ($registro['activo'] == 0) {
+                    if ((int)$registro['activo'] === 0) {
                         $this->redirect('/login?error=pending');
                     }
 
-                    // MIGRACIÓN SILENCIOSA DE CONTRASEÑAS:
-                    // Si la contraseña estaba en texto plano (la verificación bcrypt falló),
-                    // se actualiza automáticamente a formato bcrypt seguro sin que el usuario note nada.
                     if (!password_verify($clave, $registro['clave'])) {
                         $nuevo_hash = password_hash($clave, PASSWORD_DEFAULT);
-                        $stmtUpdate = $db->prepare("UPDATE userlog SET clave = ? WHERE id_miembro = ?");
+                        $stmtUpdate = $db->prepare("UPDATE credenciales SET clave = ? WHERE id_persona = ?");
                         $stmtUpdate->bind_param("si", $nuevo_hash, $registro['id']);
                         $stmtUpdate->execute();
                         $stmtUpdate->close();
                     }
 
-                    // Construir el array de datos de sesión con solo lo necesario
                     $usuario_data = [
-                        'id'     => $registro['id'],
-                        'nombre' => $registro['nombre'] . ' ' . $registro['apellido'],
-                        'correo' => $registro['correo'],
-                        'rol_id' => $registro['rol_id'],
-                        'foto_perfil' => $registro['foto_perfil'],
+                        'id'             => $registro['id'],
+                        'nombre'         => $registro['nombre'] . ' ' . $registro['apellido'],
+                        'correo'         => $registro['correo'],
+                        'rol_id'         => $registro['rol_id'],
+                        'foto_perfil'    => $registro['foto_perfil'],
                         'permisos_extra' => $registro['permisos_extra']
                     ];
 
-                    // Crear sesión segura: regenera ID, guarda datos, timestamps y User-Agent
                     Security::startSecureSession($usuario_data);
 
-                    // Registrar el login exitoso en el archivo de debug
                     $log = date('Y-m-d H:i:s') . " - Login Success: Email=" . $email . " | Rol=" . $registro['rol_id'] . "\n";
                     file_put_contents('debug_login.txt', $log, FILE_APPEND);
 
-                    // Redirigir según el rol del usuario autenticado
                     if (Roles::esAdmin($registro['rol_id'])) {
-                        $this->redirect('/admin/dashboard');        // Administrador → panel de control
+                        $this->redirect('/admin/dashboard');        
                     } elseif (Roles::esMaestro($registro['rol_id'])
                            || $registro['rol_id'] == Roles::PROFESOR
                            || $registro['rol_id'] == Roles::MONITOR) {
-                        $this->redirect('/maestro/dashboard');      // Maestro/Profesor/Monitor → panel de instructor
+                        $this->redirect('/maestro/dashboard');      
                     } elseif ($registro['rol_id'] == Roles::ESTUDIANTE) {
-                        $this->redirect('/estudiante/dashboard');   // Estudiante → portal del alumno
+                        $this->redirect('/estudiante/dashboard');   
                     } else {
-                        $this->redirect('/');                       // Otros roles → portada
+                        $this->redirect('/');                       
                     }
 
                 } else {
-                    // Contraseña incorrecta
                     $this->redirect('/login?error=1');
                 }
             } else {
-                // El correo no existe en la base de datos
                 $this->redirect('/login?error=2');
             }
 
             $stmt->close();
         } else {
-            // Si se accede por GET en lugar de POST, redirigir al formulario
             $this->redirect('/login');
         }
     }
 
-    /**
-     * Procesa el formulario de registro público de nuevos estudiantes.
-     * Ruta: POST /registro/process
-     *
-     * El registro crea el miembro con activo = 0 (pendiente).
-     * El administrador debe aprobarlo desde /admin/registros.
-     *
-     * Parámetros POST esperados:
-     *   - nombre, apellido, email, password, num_doc, fecha_n, telefono
-     *
-     * Al finalizar con éxito, redirige a /login?msg=sent para mostrar
-     * el mensaje "Solicitud enviada, espere aprobación".
-     */
     public function processRegistro() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Leer los campos enviados por el formulario
-            $num_doc  = $_POST['num_doc'];
-            $email    = strtolower(trim($_POST['email'])); // Acepta correos en mayúsculas y los convierte a minúsculas
-            $password = $_POST['password'];
+            $num_doc  = trim($_POST['num_doc'] ?? '');
+            $email    = strtolower(trim($_POST['email'] ?? '')); 
+            $password = $_POST['password'] ?? '';
 
             $db = Database::getInstance()->getConnection();
 
-            // Paso 1: Verificar si el documento existe en la tabla de miembros importados
-            $stmt = $db->prepare("SELECT id_miembro, activo FROM miembros WHERE num_doc = ? LIMIT 1");
+            $stmt = $db->prepare("SELECT id_persona, activo FROM personas WHERE num_doc = ? LIMIT 1");
             $stmt->bind_param("s", $num_doc);
             $stmt->execute();
             $resultado = $stmt->get_result();
 
             if ($resultado && $resultado->num_rows > 0) {
-                $miembro = $resultado->fetch_assoc();
-                $id_miembro = $miembro['id_miembro'];
+                $persona = $resultado->fetch_assoc();
+                $id_persona = $persona['id_persona'];
 
-                // Paso 2: Verificar si este miembro ya tiene una cuenta en userlog
-                $stmtCheck = $db->prepare("SELECT id_userlog FROM userlog WHERE id_miembro = ? LIMIT 1");
-                $stmtCheck->bind_param("i", $id_miembro);
+                $stmtCheck = $db->prepare("SELECT id_credencial FROM credenciales WHERE id_persona = ? LIMIT 1");
+                $stmtCheck->bind_param("i", $id_persona);
                 $stmtCheck->execute();
                 $resCheck = $stmtCheck->get_result();
 
                 if ($resCheck && $resCheck->num_rows > 0) {
-                    // Ya tiene una cuenta
                     $this->redirect('/registro?error=already_registered');
                 } else {
-                    // Paso 3: Insertar credenciales en 'userlog' con la contraseña hasheada
                     $clave_hash = password_hash($password, PASSWORD_DEFAULT);
-                    $stmt_log   = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
-                    $stmt_log->bind_param("iss", $id_miembro, $email, $clave_hash);
+                    $rol_defecto = Roles::ESTUDIANTE;
+                    $stmt_log = $db->prepare("INSERT INTO credenciales (id_persona, correo, clave, rol) VALUES (?, ?, ?, ?)");
+                    $stmt_log->bind_param("isss", $id_persona, $email, $clave_hash, $rol_defecto);
 
                     if ($stmt_log->execute()) {
-                        // Redirigir al login
                         $this->redirect('/login?msg=sent');
                     } else {
-                        // Error al insertar en userlog
                         $this->redirect('/registro?error=db_error');
                     }
+                    $stmt_log->close();
                 }
+                $stmtCheck->close();
             } else {
-                // El documento no fue encontrado en la base de datos de miembros
-                // Guardar los datos en sesión temporalmente para completarlos
                 $_SESSION['temp_registro'] = [
                     'num_doc' => $num_doc,
-                    'email' => $email,
-                    'password' => $password
+                    'email'   => $email,
+                    'password'=> $password
                 ];
                 $this->redirect('/registro/completar');
             }
+            $stmt->close();
         }
     }
 
-    /**
-     * Muestra el formulario para completar los datos de un usuario nuevo.
-     * Ruta: GET /registro/completar
-     */
     public function completarRegistroForm() {
         if (!isset($_SESSION['temp_registro'])) {
             $this->redirect('/registro');
@@ -229,45 +154,47 @@ class AutenticacionController extends Controller {
         ]);
     }
 
-    /**
-     * Procesa el formulario final de registro de un usuario nuevo.
-     * Ruta: POST /registro/completar/process
-     */
     public function processCompletarRegistro() {
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['temp_registro'])) {
             $temp = $_SESSION['temp_registro'];
             
-            $nombre = $_POST['nombre'];
-            $apellido = $_POST['apellido'];
-            $fecha_nacimiento = $_POST['fecha_nacimiento'];
+            $nombre = trim($_POST['nombre'] ?? '');
+            $apellido = trim($_POST['apellido'] ?? '');
+            $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? null;
             $telefono = trim($_POST['telefono'] ?? '');
-            $sede_id = $_POST['sede_id'];
+            $sede_id = !empty($_POST['sede_id']) ? (int)$_POST['sede_id'] : null;
             
             $db = Database::getInstance()->getConnection();
             $db->begin_transaction();
 
             try {
-                // Insertar el miembro con activo = 0
-                // id_grado por defecto = 1 (Blanco)
-                $sql = "INSERT INTO miembros (nombre, apellido, num_doc, fecha_n, id_grado, telefono, id_sede, rol, activo) VALUES (?, ?, ?, ?, 1, ?, ?, 'Deportistas', 0)";
+                // 1. Insertar en personas
+                $sql = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, telefono, id_sede, activo) VALUES (?, ?, ?, 'TI', ?, ?, 0)";
                 $stmt = $db->prepare($sql);
-                $stmt->bind_param("sssssi", $nombre, $apellido, $temp['num_doc'], $fecha_nacimiento, $telefono, $sede_id);
+                $stmt->bind_param("ssssi", $nombre, $apellido, $temp['num_doc'], $telefono, $sede_id);
                 $stmt->execute();
-                
-                $id_miembro = $stmt->insert_id;
+                $id_persona = $stmt->insert_id;
+                $stmt->close();
 
-                // Insertar credenciales en userlog
+                // 2. Insertar en perfil_deportistas
+                $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n) VALUES (?, 1, 1, ?)";
+                $stmtDep = $db->prepare($sqlDep);
+                $stmtDep->bind_param("is", $id_persona, $fecha_nacimiento);
+                $stmtDep->execute();
+                $stmtDep->close();
+
+                // 3. Insertar en credenciales
                 $clave_hash = password_hash($temp['password'], PASSWORD_DEFAULT);
-                $stmt_log = $db->prepare("INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)");
-                $stmt_log->bind_param("iss", $id_miembro, $temp['email'], $clave_hash);
+                $rol_defecto = Roles::ESTUDIANTE;
+                $stmt_log = $db->prepare("INSERT INTO credenciales (id_persona, correo, clave, rol) VALUES (?, ?, ?, ?)");
+                $stmt_log->bind_param("isss", $id_persona, $temp['email'], $clave_hash, $rol_defecto);
                 $stmt_log->execute();
+                $stmt_log->close();
 
                 $db->commit();
-                
-                // Limpiar la sesión temporal
+
                 unset($_SESSION['temp_registro']);
-                
-                // Redirigir al login con mensaje de éxito (pendiente de aprobación)
+
                 $this->redirect('/login?msg=sent');
 
             } catch (\Exception $e) {
@@ -277,13 +204,6 @@ class AutenticacionController extends Controller {
         }
     }
 
-    /**
-     * Cierra la sesión del usuario actual de forma segura.
-     * Ruta: GET /logout
-     *
-     * Llama a Security::logout() que destruye toda la sesión,
-     * luego redirige al formulario de login.
-     */
     public function logout() {
         Security::logout();
         $this->redirect('/login');

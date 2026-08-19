@@ -1,6 +1,5 @@
 <?php include __DIR__ . '/../layout/sitio_cabecera.php'; ?>
 
-<!-- Page Header -->
 <section class="text-slate-900 dark:text-white py-20 relative overflow-hidden transition-colors duration-300" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
@@ -23,13 +22,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <?php foreach ($sedes as $index => $cede): ?>
                 <div class="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 rounded-2xl overflow-hidden group shadow-sm hover:shadow-lg animate-fade-in-up transition-all duration-300" style="animation-delay: <?= $index * 0.1 ?>s;">
-                    <!-- Map Container -->
+                    
                     <div class="aspect-video relative overflow-hidden border-b border-slate-200 dark:border-slate-800/80 transition-colors">
                         <div class="absolute inset-0 bg-slate-100/30 dark:bg-[#0b0f19]/35 group-hover:bg-transparent transition-colors z-10 pointer-events-none"></div>
                         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=<?= urlencode($cede['direccion']) ?>&output=embed" class="grayscale dark:invert opacity-80 group-hover:grayscale-0 group-hover:dark:invert-0 group-hover:opacity-100 transition-all duration-500"></iframe>
                     </div>
-                    
-                    <!-- Content -->
+
                     <div class="p-6 relative">
                         <div class="absolute top-0 right-6 transform -translate-y-1/2 w-12 h-12 bg-tkd-red rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-all duration-300">
                             <span class="material-icons-outlined">place</span>

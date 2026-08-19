@@ -1,12 +1,5 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DE CALENDARIO – ADMINISTRACIÓN (CalendarioController)
- * ============================================================
- * Gestiona el CRUD completo de eventos del calendario
- * desde el panel de administración.
- * ============================================================
- */
+
 namespace App\Controllers\Administracion;
 
 use App\Core\Controller;
@@ -23,9 +16,6 @@ class CalendarioController extends Controller {
         $this->eventoModel = new Evento();
     }
 
-    /**
-     * Muestra la vista del calendario.
-     */
     public function index() {
         $this->view('administracion/calendario', [
             'page_title'   => 'Calendario de Eventos',
@@ -33,9 +23,6 @@ class CalendarioController extends Controller {
         ]);
     }
 
-    /**
-     * Devuelve los eventos en formato JSON para FullCalendar.
-     */
     public function getEventos() {
         header('Content-Type: application/json');
         $eventos = $this->eventoModel->getAll();
@@ -43,9 +30,6 @@ class CalendarioController extends Controller {
         exit;
     }
 
-    /**
-     * Crea un nuevo evento.
-     */
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [
@@ -53,7 +37,7 @@ class CalendarioController extends Controller {
                 'description' => $_POST['descripcion'] ?? '',
                 'start'       => $_POST['fecha'],
                 'end'         => null,
-                'id_miembro'  => $_SESSION['id']
+                'id_persona'  => $_SESSION['id']
             ];
 
             $this->eventoModel->create($data);
@@ -61,9 +45,6 @@ class CalendarioController extends Controller {
         }
     }
 
-    /**
-     * Actualiza un evento.
-     */
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
@@ -79,9 +60,6 @@ class CalendarioController extends Controller {
         }
     }
 
-    /**
-     * Elimina un evento.
-     */
     public function delete() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];

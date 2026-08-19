@@ -1,5 +1,5 @@
 <?php
-// Iniciar sesión si no está iniciada para verificar estado de login
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -21,14 +21,13 @@ if (isset($_SESSION['id'])) {
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title><?= $page_title ?? 'Portal del Alumno' ?></title>
-    <!-- Google Fonts: Oswald (Headings) & Inter (Body) -->
+    
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
-    
-    <!-- Theme Toggle Script (Inline to prevent FOUC) -->
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -37,7 +36,6 @@ if (isset($_SESSION['id'])) {
         }
     </script>
 
-    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
@@ -53,10 +51,9 @@ if (isset($_SESSION['id'])) {
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-blue-500 selection:text-white transition-colors duration-300">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
-    <!-- Mobile Sidebar Backdrop -->
+    
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
-    <!-- Sidebar -->
     <aside id="estudiante-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
         <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
@@ -107,7 +104,7 @@ if (isset($_SESSION['id'])) {
             </ul>
         </nav>
         <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
-            <!-- Theme Toggle -->
+            
             <div class="flex items-center justify-between mb-3 px-2">
                 <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
                 <button id="theme-toggle" type="button" class="text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
@@ -136,9 +133,8 @@ if (isset($_SESSION['id'])) {
         </div>
     </aside>
 
-    <!-- Main Content Wrapper -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-        <!-- Top Mobile Header (visible only on mobile) -->
+        
         <header class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
                  <button id="mobile-menu-btn" class="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">

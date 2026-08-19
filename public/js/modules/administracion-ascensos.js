@@ -1,4 +1,4 @@
-// Admin Ascensos Logic
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('theory-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const actionInput = document.getElementById('action');
     const idInput = document.getElementById('id');
 
-    // Global function for onclick handlers
     window.openModal = function(action, data = {}) {
         if (!modal || !modalTitle || !theoryForm || !actionInput || !idInput) return;
         
@@ -33,8 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.remove('flex');
         }
     };
-    
-    // Close on click outside
+
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -43,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto open modal from URL params
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('open') === 'new') {
         openModal('add');

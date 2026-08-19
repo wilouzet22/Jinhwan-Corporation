@@ -4,7 +4,7 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
 ?>
 
 <main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto h-screen custom-scrollbar transition-colors duration-300">
-    <!-- Header -->
+    
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 transition-colors">Mi Historial de Ascensos</h1>
@@ -12,7 +12,6 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
         </div>
     </div>
 
-    <!-- Timeline Container -->
     <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 lg:p-10 transition-colors duration-300">
         <?php if (empty($ascensos)): ?>
             <div class="text-center py-16">
@@ -40,12 +39,11 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                     }
                 ?>
                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <!-- Icon Marker -->
+                    
                     <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-slate-900 <?= $ascenso['estado'] == 'aprobado' ? 'bg-tkd-blue text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300' ?> shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
                         <span class="material-icons-outlined text-xl"><?= $estadoIcon ?></span>
                     </div>
-                    
-                    <!-- Content Card -->
+
                     <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-slate-800 p-5 rounded-xl border <?= $borderColor ?> shadow-sm hover:shadow-md transition-all">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
                             <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">

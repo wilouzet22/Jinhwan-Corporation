@@ -2,14 +2,12 @@
 
 <main class="flex-grow container mx-auto p-6 lg:p-10 space-y-8">
 
-    <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Panel de Control</h1>
             <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Centro de acción y métricas rápidas</p>
         </div>
 
-        <!-- Buscador Rápido -->
         <div class="flex-grow max-w-md mx-auto md:mx-0 w-full">
             <form action="<?= base_url('/admin/miembros') ?>" method="GET" class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -28,7 +26,6 @@
         </div>
     </div>
 
-    <!-- Alertas (Action Center) -->
     <?php if ($stats['pendientes'] > 0 || $stats['pendientes_ascenso'] > 0): ?>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <?php if ($stats['pendientes'] > 0): ?>
@@ -59,11 +56,10 @@
     </div>
     <?php endif; ?>
 
-    <!-- Acciones Rápidas -->
     <div>
         <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Acciones Rápidas</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Gestionar Miembros -->
+            
             <a href="<?= base_url('/admin/miembros') ?>" class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center hover:border-tkd-blue dark:hover:border-tkd-blue transition-colors shadow-sm duration-300 group">
                 <div class="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-tkd-blue transition-colors mb-3">
                     <span class="material-icons-outlined text-3xl">people</span>
@@ -72,7 +68,6 @@
                 <p class="text-xs text-slate-500 mt-1"><?= $stats['activos'] ?> activos registrados</p>
             </a>
 
-            <!-- Gestionar Sedes -->
             <a href="<?= base_url('/admin/sedes') ?>" class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center hover:border-purple-500 dark:hover:border-purple-500 transition-colors shadow-sm duration-300 group">
                 <div class="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:bg-purple-50 dark:group-hover:bg-purple-500/10 group-hover:text-purple-500 transition-colors mb-3">
                     <span class="material-icons-outlined text-3xl">store</span>
@@ -81,7 +76,6 @@
                 <p class="text-xs text-slate-500 mt-1"><?= $stats['total_sedes'] ?> sedes habilitadas</p>
             </a>
 
-            <!-- Calendario -->
             <a href="<?= base_url('/admin/calendario') ?>" class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center hover:border-emerald-500 dark:hover:border-emerald-500 transition-colors shadow-sm duration-300 group">
                 <div class="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 group-hover:text-emerald-500 transition-colors mb-3">
                     <span class="material-icons-outlined text-3xl">event</span>
@@ -90,7 +84,6 @@
                 <p class="text-xs text-slate-500 mt-1">Crear o editar eventos</p>
             </a>
 
-            <!-- Ascensos -->
             <a href="<?= base_url('/admin/ascensos') ?>" class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center hover:border-amber-500 dark:hover:border-amber-500 transition-colors shadow-sm duration-300 group">
                 <div class="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400 group-hover:bg-amber-50 dark:group-hover:bg-amber-500/10 group-hover:text-amber-500 transition-colors mb-3">
                     <span class="material-icons-outlined text-3xl">school</span>
@@ -101,9 +94,8 @@
         </div>
     </div>
 
-    <!-- Bottom Section: Recent Activity & Upcoming Events -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Recent Activity Table -->
+        
         <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300 flex flex-col">
             <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Últimos Registros</h3>
@@ -150,7 +142,6 @@
             </div>
         </div>
 
-        <!-- Upcoming Events Widget -->
         <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300 flex flex-col">
             <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Próximos Eventos</h3>
@@ -180,6 +171,5 @@
         </div>
     </div>
 </main>
-
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>

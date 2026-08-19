@@ -1,14 +1,14 @@
-    </div> <!-- Cierra el flex-1 main wrapper de cabecera -->
-</div> <!-- Cierra el flex min-h-screen principal de cabecera -->
+    </div> 
+</div> 
 
 <script>
-    // Theme Toggle Logic (same localStorage key shared with admin panel)
+    
     const themeToggleBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
 
     if (themeToggleBtn) {
-        // Show the correct icon based on current theme
+        
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             lightIcon.classList.remove('hidden');
         } else {
@@ -41,7 +41,6 @@
         });
     }
 
-    // Sidebar Toggle Logic for Student
     document.addEventListener('DOMContentLoaded', function() {
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const sidebar = document.getElementById('estudiante-sidebar');

@@ -5,7 +5,6 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
 
 <main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto h-screen custom-scrollbar transition-colors duration-300">
 
-    <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 transition-colors">Portal del Alumno</h1>
@@ -14,8 +13,7 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        <!-- Profile Card -->
+
         <div class="lg:col-span-1">
             <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col items-center text-center transition-colors duration-300">
                 <div class="w-24 h-24 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-4xl font-bold text-tkd-blue mb-4 border border-slate-200 dark:border-slate-700 transition-colors">
@@ -34,8 +32,7 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                 </div>
             </div>
         </div>
-        
-        <!-- Quick Links -->
+
         <div class="lg:col-span-2 flex flex-col gap-6">
             <a href="<?= base_url('/estudiante/estudio') ?>" class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-6 hover:border-red-300 dark:hover:border-slate-600 transition-colors duration-300 group">
                 <div class="w-14 h-14 rounded-lg bg-red-50 dark:bg-red-500/10 text-tkd-red flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
@@ -63,7 +60,6 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                 </div>
             </a>
 
-            <!-- Upcoming Events Widget -->
             <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors duration-300">
                 <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">Próximos Eventos</h3>

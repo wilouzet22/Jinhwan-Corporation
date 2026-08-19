@@ -7,7 +7,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 relative z-10 gap-4">
             <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">Gestión de Miembros</h1>
             <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                <!-- Bulk Actions Bar (aparece cuando hay selección) -->
+                
                 <div id="bulk-action-bar" class="hidden w-full sm:w-auto items-center gap-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/40 rounded-xl px-4 py-2.5 transition-all">
                     <span id="bulk-count" class="text-sm font-bold text-red-700 dark:text-red-400">0 seleccionados</span>
                     <button onclick="confirmBulkDelete()" class="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider px-3 py-2 rounded-lg transition-colors focus:outline-none">
@@ -25,8 +25,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <input type="text" id="member-search" placeholder="Buscar miembro..." 
                            class="block w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
                 </div>
-                
-                <!-- Export Buttons -->
+
                 <button onclick="openExportModal('excel')" class="w-full sm:w-auto bg-green-600 text-white font-display font-bold uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-md hover:bg-green-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 focus:outline-none shrink-0" title="Exportar a Excel">
                     <span class="material-icons-outlined">table_view</span>
                     <span class="hidden sm:inline">Excel</span>
@@ -43,9 +42,9 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </button>
             </div>
         </div>
-        <!-- Filtros y Estadísticas -->
+        
         <div class="mb-8 grid grid-cols-1 lg:grid-cols-4 gap-6 relative z-10">
-            <!-- Filtros (Izquierda) -->
+            
             <div class="lg:col-span-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm transition-colors duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider flex items-center gap-2">
@@ -98,9 +97,8 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
 
-            <!-- Gráficas (Derecha) -->
             <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Cinturones -->
+                
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
                     <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Distribución de Cinturones</h3>
                     <div class="flex-grow relative w-full flex items-center justify-center min-h-[200px]">
@@ -108,8 +106,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         <div id="chart-cinturones-empty" class="absolute inset-0 flex items-center justify-center text-sm text-slate-400 hidden">Sin datos para mostrar</div>
                     </div>
                 </div>
-                
-                <!-- Sedes -->
+
                 <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
                     <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Alumnos por Sede</h3>
                     <div class="flex-grow relative w-full flex items-center justify-center min-h-[200px]">
@@ -173,7 +170,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                             </td>
                             <?php
                                 $nivel = strtolower($miembro['nombre_nivel'] ?? '');
-                                $beltClass = 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-900/60 dark:text-slate-400 dark:border-slate-800/80'; // Default
+                                $beltClass = 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-900/60 dark:text-slate-400 dark:border-slate-800/80'; 
                                 
                                 if (str_contains($nivel, 'blanco')) {
                                     $beltClass = 'bg-white text-slate-900 border border-slate-300 dark:border-slate-200 shadow-sm';
@@ -238,7 +235,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </table>
             </div>
         </div>
-   <!-- Modal -->
+   
 <div id="member-modal" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl transition-colors duration-300">
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between transition-colors">
@@ -251,7 +248,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             <input type="hidden" name="id" id="id">
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Personal Info -->
+                
                 <div class="col-span-1 md:col-span-2">
                     <h3 class="text-[10px] font-bold text-tkd-blue uppercase tracking-widest mb-1">Información Personal</h3>
                 </div>
@@ -284,8 +281,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
                 </div>
                 <div></div>
- 
-                <!-- Contact Info -->
+
                 <div class="col-span-1 md:col-span-2 mt-4">
                     <h3 class="text-[10px] font-bold text-tkd-blue uppercase tracking-widest mb-1">Contacto</h3>
                 </div>
@@ -298,8 +294,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <label for="correo" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 transition-colors">Correo Electrónico</label>
                     <input type="email" name="correo" id="correo" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none">
                 </div>
- 
-                <!-- Academic Info -->
+
                 <div class="col-span-1 md:col-span-2 mt-4">
                     <h3 class="text-[10px] font-bold text-tkd-blue uppercase tracking-widest mb-1">Información Académica</h3>
                 </div>
@@ -344,8 +339,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         <option value="<?= Roles::ADMINISTRADOR ?>">Administrador</option>
                     </select>
                 </div>
- 
-                <!-- Info de Salud -->
+
                 <div class="col-span-1 md:col-span-2 mt-4 border-t border-slate-100 dark:border-slate-800 pt-4">
                     <h3 class="text-[10px] font-bold text-tkd-blue uppercase tracking-widest mb-1">Información de Salud</h3>
                 </div>
@@ -374,7 +368,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
                 <div></div>
 
-                <!-- Perfil Web Público -->
                 <div class="col-span-1 md:col-span-2 mt-4 border-t border-slate-100 dark:border-slate-800 pt-4">
                     <h3 class="text-[10px] font-bold text-tkd-blue uppercase tracking-widest mb-1">Perfil Web Público</h3>
                 </div>
@@ -419,7 +412,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <textarea name="logros" id="logros" rows="3" placeholder="Medallas, títulos, participaciones destacadas..." class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-tkd-blue focus:ring-1 focus:ring-tkd-blue transition-colors focus:outline-none"></textarea>
                 </div>
 
-                <!-- Permisos Dinámicos (Solo para Maestros) -->
                 <div id="permisos_section" class="col-span-1 md:col-span-2 mt-4 hidden">
                     <h3 class="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-3">Permisos Extra (Sub-administrador)</h3>
                     <div class="grid grid-cols-2 gap-4 bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl border border-purple-100 dark:border-purple-800/30">
@@ -459,27 +451,22 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
     </div>
 </div>
 
-<!-- Modal de Detalle Completo de Miembro -->
 <div id="member-detail-modal" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl transition-colors duration-300 relative overflow-hidden">
-        
-        <!-- Decorative Top Line -->
+
         <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-tkd-red via-tkd-gold to-tkd-blue"></div>
-        
-        <!-- Header Panel with profile photo and name -->
+
         <div class="p-6 md:p-8 bg-slate-50/50 dark:bg-slate-950/20 border-b border-slate-100 dark:border-slate-850 flex flex-col sm:flex-row items-center gap-6 relative transition-colors">
             
             <button onclick="closeDetailModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors focus:outline-none">
                 <span class="material-icons-outlined text-2xl">close</span>
             </button>
-            
-            <!-- Large Profile Pic/Initial -->
+
             <div class="h-24 w-24 rounded-2xl border-2 border-white dark:border-slate-800 shadow-lg overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center shrink-0 transition-transform hover:scale-105">
                 <img id="detail-foto-img" class="h-full w-full object-cover hidden" alt="Foto">
                 <span id="detail-foto-initial" class="text-3xl font-display font-bold text-slate-700 dark:text-slate-300"></span>
             </div>
-            
-            <!-- Main Title & Tags -->
+
             <div class="text-center sm:text-left">
                 <h2 id="detail-fullname" class="text-2xl md:text-3xl font-display font-bold text-slate-900 dark:text-white tracking-tight uppercase"></h2>
                 
@@ -489,12 +476,10 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
         </div>
-        
-        <!-- Detailed Grid Data -->
+
         <div class="p-6 md:p-8 space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- Sección 1: Información Personal -->
+
                 <div class="bg-slate-50 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-850/60">
                     <h3 class="text-xs font-bold text-tkd-blue uppercase tracking-widest mb-4 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">badge</span>
@@ -515,8 +500,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         </div>
                     </div>
                 </div>
- 
-                <!-- Sección 2: Contacto -->
+
                 <div class="bg-slate-50 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-850/60">
                     <h3 class="text-xs font-bold text-tkd-blue uppercase tracking-widest mb-4 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">contacts</span>
@@ -533,8 +517,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         </div>
                     </div>
                 </div>
- 
-                <!-- Sección 3: Datos de Taekwondo -->
+
                 <div class="bg-slate-50 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-850/60">
                     <h3 class="text-xs font-bold text-tkd-blue uppercase tracking-widest mb-4 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">sports_kabaddi</span>
@@ -563,8 +546,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         </div>
                     </div>
                 </div>
- 
-                <!-- Sección 4: Información de Salud -->
+
                 <div class="bg-slate-50 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-850/60">
                     <h3 class="text-xs font-bold text-tkd-blue uppercase tracking-widest mb-4 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">health_and_safety</span>
@@ -585,8 +567,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         </div>
                     </div>
                 </div>
-                
-                <!-- Sección 5: Perfil Público Web -->
+
                 <div class="col-span-1 md:col-span-2 bg-slate-50 dark:bg-slate-950/40 p-5 rounded-2xl border border-slate-200/60 dark:border-slate-850/60">
                     <h3 class="text-xs font-bold text-tkd-blue uppercase tracking-widest mb-4 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">public</span>
@@ -611,25 +592,22 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         </div>
                     </div>
                 </div>
- 
-                <!-- Sección 6: Permisos Extra (Solo si es Instructor) -->
+
                 <div id="detail-section-permisos" class="col-span-1 md:col-span-2 bg-purple-50/50 dark:bg-purple-950/10 p-5 rounded-2xl border border-purple-100/50 dark:border-purple-900/20 hidden">
                     <h3 class="text-xs font-bold text-purple-700 dark:text-purple-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
                         <span class="material-icons-outlined text-base">lock_person</span>
                         Permisos del Sistema (Instructor)
                     </h3>
                     <div class="grid grid-cols-2 gap-3 text-xs text-slate-700 dark:text-slate-300 font-medium" id="detail-permisos-list">
-                        <!-- Permisos dinámicos se listan aquí -->
+                        
                     </div>
                 </div>
  
             </div>
         </div>
-        
-        <!-- Footer actions -->
+
         <div class="p-6 md:p-8 border-t border-slate-100 dark:border-slate-850 flex flex-wrap justify-between items-center bg-slate-50/30 dark:bg-slate-950/10 gap-4 transition-colors">
-            
-            <!-- Delete action (left-aligned) -->
+
             <form id="detail-delete-form" action="<?= base_url('/admin/miembros/delete') ?>" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este miembro?');">
                 <input type="hidden" name="id" id="detail-delete-id">
                 <button type="submit" class="flex items-center gap-1.5 px-5 py-3 rounded-xl border border-red-200 dark:border-red-800/40 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 font-bold uppercase text-xs transition-colors focus:outline-none">
@@ -637,8 +615,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     Eliminar
                 </button>
             </form>
-            
-            <!-- Cancel / Edit actions (right-aligned) -->
+
             <div class="flex items-center gap-3">
                 <button type="button" onclick="closeDetailModal()" class="px-5 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase text-xs rounded-xl transition-colors focus:outline-none">
                     Cerrar
@@ -664,8 +641,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         const modal = document.getElementById('member-detail-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        
-        // Header
+
         document.getElementById('detail-fullname').textContent = data.nombre + ' ' + data.apellido;
         
         const badgeRol = document.getElementById('detail-badge-rol');
@@ -693,8 +669,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             badgeEstado.textContent = "Pendiente";
             badgeEstado.classList.add("bg-amber-50", "text-amber-700", "border", "border-amber-200", "dark:bg-amber-950/60", "dark:text-amber-400", "dark:border-amber-800/30");
         }
-        
-        // Foto
+
         const fotoImg = document.getElementById('detail-foto-img');
         const fotoInitial = document.getElementById('detail-foto-initial');
         if (data.foto_perfil) {
@@ -706,31 +681,26 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             fotoInitial.textContent = data.nombre.substring(0, 1).toUpperCase();
             fotoInitial.classList.remove('hidden');
         }
-        
-        // Personal Info
+
         document.getElementById('detail-documento').textContent = (data.tipo_documento || 'TI') + ' ' + data.numero_documento;
         document.getElementById('detail-fecha-n').textContent = formatLocalDate(data.fecha_nacimiento);
         document.getElementById('detail-edad').textContent = calculateAge(data.fecha_nacimiento) + ' años';
-        
-        // Contacto
+
         document.getElementById('detail-telefono').textContent = data.telefono || 'Sin asignar';
         const detailCorreo = document.getElementById('detail-correo');
         detailCorreo.textContent = data.correo || 'Sin registrar';
         detailCorreo.title = data.correo || '';
-        
-        // Deportiva
+
         document.getElementById('detail-sede').textContent = data.nombre_sede || 'Sin asignar';
         document.getElementById('detail-cinturon').textContent = data.nombre_nivel || 'Ninguno';
         document.getElementById('detail-categoria').textContent = data.nombre_categoria || 'Sin asignar';
         document.getElementById('detail-division').textContent = data.division || 'Sin asignar';
         document.getElementById('detail-ctgc').textContent = data.ctgc || 'Sin asignar';
-        
-        // Salud
+
         document.getElementById('detail-eps').textContent = data.eps || 'Sin registrar';
         document.getElementById('detail-rh').textContent = data.rh || 'Sin registrar';
         document.getElementById('detail-peso').textContent = data.peso ? (data.peso + ' kg') : 'Sin registrar';
-        
-        // Web
+
         const displayWeb = document.getElementById('detail-mostrar-web');
         if (data.mostrar_en_web == 1) {
             displayWeb.textContent = 'Sí (Visible en web pública)';
@@ -750,8 +720,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         
         document.getElementById('detail-descripcion').textContent = data.descripcion_perfil || 'Sin descripción del perfil.';
         document.getElementById('detail-logros').textContent = data.logros || 'Sin logros registrados.';
-        
-        // Permisos
+
         const permisosSection = document.getElementById('detail-section-permisos');
         const permisosList = document.getElementById('detail-permisos-list');
         permisosList.innerHTML = '';
@@ -784,8 +753,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         } else {
             permisosSection.classList.add('hidden');
         }
-        
-        // Deletion form
+
         document.getElementById('detail-delete-id').value = data.id;
     }
     
@@ -812,8 +780,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('id').value = '';
             document.getElementById('rol_id').value = '<?= Roles::ESTUDIANTE ?>';
             togglePermisos('<?= Roles::ESTUDIANTE ?>');
-            
-            // Reset nuevos campos
+
             document.getElementById('categoria_id').value = '1';
             document.getElementById('division').value = '';
             document.getElementById('ctgc').value = '';
@@ -844,8 +811,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('nivel_id').value = data.nivel_id;
             document.getElementById('sede_id').value = data.sede_id || '';
             document.getElementById('rol_id').value = data.rol_id;
-            
-            // Cargar nuevos campos
+
             document.getElementById('categoria_id').value = data.categoria_id || '1';
             document.getElementById('division').value = data.division || '';
             document.getElementById('ctgc').value = data.ctgc || '';
@@ -856,8 +822,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             document.getElementById('url_instagram').value = data.instagram_url || '';
             document.getElementById('descripcion_perfil').value = data.descripcion_perfil || '';
             document.getElementById('logros').value = data.logros || '';
-            
-            // Foto de perfil preview
+
             const previewImg = document.getElementById('foto-preview-img');
             const previewPlaceholder = document.getElementById('foto-preview-placeholder');
             const deleteContainer = document.getElementById('delete-foto-container');
@@ -895,7 +860,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             sec.classList.remove('hidden');
         } else {
             sec.classList.add('hidden');
-            // reset checkboxes
+            
             document.querySelectorAll('#permisos_section input[type="checkbox"]').forEach(cb => cb.checked = false);
         }
     }
@@ -906,7 +871,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         modal.classList.remove('flex');
     }
 
-    // Bind edit button in details modal
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('detail-btn-edit').addEventListener('click', function() {
             if (activeMemberData) {
@@ -917,7 +881,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         });
     });
 
-    // Helper functions
     function calculateAge(birthdayStr) {
         if (!birthdayStr) return 0;
         const birthday = new Date(birthdayStr);
@@ -936,7 +899,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         return new Date(dateStr).toLocaleDateString('es-ES', options);
     }
 
-    // Funcionalidad de Búsqueda, Filtros y Gráficas
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput  = document.getElementById('member-search');
         const sedeSelect   = document.getElementById('filter-sede');
@@ -958,7 +920,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 
         const beltOrder = <?= json_encode(array_column($niveles_list, 'nombre')) ?>;
 
-        // Paletas de Colores para Gráficas (Colores sólidos y visibles)
         const beltColors = {
             'pinta verde':    { bg: '#dcfce7', stripe: '#22c55e', border: '#16a34a', isPattern: true },
             'punta verde':    { bg: '#dcfce7', stripe: '#22c55e', border: '#16a34a', isPattern: true },
@@ -983,18 +944,15 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             'default':        { bg: '#64748b', border: '#475569', isPattern: false },
         };
 
-        // Función para generar patrones de rayas diagonales para los cinturones con pinta
         function createStripePattern(baseColor, stripeColor) {
             const canvas = document.createElement('canvas');
             canvas.width = 12;
             canvas.height = 12;
             const ctx = canvas.getContext('2d');
-            
-            // Fondo
+
             ctx.fillStyle = baseColor;
             ctx.fillRect(0, 0, 12, 12);
-            
-            // Raya diagonal
+
             ctx.strokeStyle = stripeColor;
             ctx.lineWidth = 3.5;
             ctx.beginPath();
@@ -1020,7 +978,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
         const tickColor = isDark ? '#94a3b8' : '#64748b';
 
-        // Inicializar Gráficas
         const ctxCinturones = document.getElementById('chart-cinturones').getContext('2d');
         const ctxSedes      = document.getElementById('chart-sedes').getContext('2d');
 
@@ -1088,7 +1045,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 }
             });
 
-            // Control de mensaje sin resultados
             let noResultsRow = document.getElementById('no-results-row');
             if (visibleCount === 0) {
                 if (!noResultsRow) {
@@ -1103,7 +1059,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 if (noResultsRow) noResultsRow.style.display = 'none';
             }
 
-            // Mostrar/Ocultar botón de Limpiar Filtros
             const isAnyFilterActive = filters.search || filters.sede !== 'all' || filters.nivel !== 'all' || filters.rol !== 'all' || filters.estado !== 'all';
             if (resetBtn) {
                 if (isAnyFilterActive) {
@@ -1113,12 +1068,11 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 }
             }
 
-            // Actualizar Gráficas
             updateCharts(visibleRows);
         }
 
         function updateCharts(visibleRows) {
-            // — Cinturones —
+            
             const cinturonMap = {};
             visibleRows.forEach(row => {
                 const n = row.getAttribute('data-nivel') || 'Sin Asignar';
@@ -1159,7 +1113,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 chartCEmpty.classList.toggle('hidden', cData.length > 0);
             }
 
-            // — Sedes —
             const sedeMap = {};
             visibleRows.forEach(row => {
                 const s = row.getAttribute('data-sede') || 'Sin Asignar';
@@ -1180,7 +1133,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             }
         }
 
-        // Listeners
         searchInput.addEventListener('input', (e) => {
             filters.search = e.target.value;
             applyFilters();
@@ -1224,7 +1176,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             });
         }
 
-        // Cargar query inicial de la URL
         const urlParams = new URLSearchParams(window.location.search);
         const urlSearch = urlParams.get('search');
         if (urlSearch) {
@@ -1232,16 +1183,13 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             filters.search = urlSearch;
         }
 
-        // Primera carga
         applyFilters();
     });
 </script>
 
-<!-- Modal de Configuración de Exportación -->
 <div id="export-modal" class="fixed inset-0 bg-slate-900/60 dark:bg-black/70 backdrop-blur-sm z-[60] hidden items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl transition-colors duration-300">
-        
-        <!-- Header -->
+
         <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div id="export-modal-icon" class="h-10 w-10 rounded-xl flex items-center justify-center">
@@ -1256,18 +1204,15 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 <span class="material-icons-outlined">close</span>
             </button>
         </div>
-        
-        <!-- Column Picker -->
+
         <div class="p-6 space-y-3">
-            
-            <!-- Quick selects -->
+
             <div class="flex gap-2 mb-4">
                 <button type="button" onclick="selectAllExportCols()" class="text-xs font-bold text-tkd-blue hover:underline focus:outline-none">Seleccionar todo</button>
                 <span class="text-slate-300 dark:text-slate-700">|</span>
                 <button type="button" onclick="deselectAllExportCols()" class="text-xs font-bold text-slate-500 hover:underline focus:outline-none">Ninguno</button>
             </div>
 
-            <!-- Grupo: Datos Personales -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                 <div class="bg-slate-50 dark:bg-slate-950/50 px-4 py-2 text-[10px] font-bold text-tkd-blue uppercase tracking-widest">
                     Datos Personales
@@ -1288,7 +1233,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
 
-            <!-- Grupo: Contacto -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                 <div class="bg-slate-50 dark:bg-slate-950/50 px-4 py-2 text-[10px] font-bold text-tkd-blue uppercase tracking-widest">
                     Contacto
@@ -1305,7 +1249,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
 
-            <!-- Grupo: Taekwondo -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                 <div class="bg-slate-50 dark:bg-slate-950/50 px-4 py-2 text-[10px] font-bold text-tkd-blue uppercase tracking-widest">
                     Información Deportiva
@@ -1338,7 +1281,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
 
-            <!-- Grupo: Salud -->
             <div class="rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
                 <div class="bg-slate-50 dark:bg-slate-950/50 px-4 py-2 text-[10px] font-bold text-tkd-blue uppercase tracking-widest">
                     Salud
@@ -1359,8 +1301,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
         </div>
-        
-        <!-- Footer -->
+
         <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
             <p class="text-xs text-slate-400 dark:text-slate-500">Solo los miembros visibles (según filtros activos) serán exportados.</p>
             <button id="export-confirm-btn" onclick="confirmExport()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold uppercase text-xs text-white transition hover:shadow-lg focus:outline-none shrink-0">
@@ -1371,7 +1312,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
     </div>
 </div>
 
-<!-- Scripts para exportar a PDF y Excel y Chart.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -1379,7 +1319,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 <script>
     let currentExportType = 'excel';
 
-    // Definición de todas las columnas disponibles con su extractor
     const EXPORT_COLUMNS = {
         nombre:           { label: 'Nombre Completo',   get: (m) => (m.nombre + ' ' + m.apellido).trim() },
         documento:        { label: 'Documento',          get: (m) => (m.tipo_documento || '') + ' ' + (m.numero_documento || '') },
@@ -1397,7 +1336,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         peso:             { label: 'Peso (kg)',          get: (m) => m.peso || '' },
     };
 
-    // Datos completos de miembros desde PHP
     const ALL_MEMBERS_DATA = <?= json_encode(array_values($miembros)) ?>;
 
     function openExportModal(type) {
@@ -1448,7 +1386,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
     }
 
     function getVisibleMemberIds() {
-        // Get IDs of members currently visible in the table (respects active filters)
+        
         const ids = new Set();
         document.querySelectorAll('tbody tr:not(#no-results-row)').forEach(row => {
             if (row.style.display !== 'none') {
@@ -1467,13 +1405,11 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         }
 
         const visibleIds = getVisibleMemberIds();
-        // Filter members to only visible ones
+        
         const visibleMembers = ALL_MEMBERS_DATA.filter(m => visibleIds.has(String(m.id)));
 
-        // Build header row
         const headers = cols.map(c => EXPORT_COLUMNS[c]?.label || c);
 
-        // Build data rows
         const rows = visibleMembers.map(m => cols.map(c => {
             const val = EXPORT_COLUMNS[c]?.get(m);
             return val !== undefined && val !== null ? String(val) : '';
@@ -1498,7 +1434,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
     function doExportExcel(data) {
         const worksheet = XLSX.utils.aoa_to_sheet(data);
 
-        // Auto column widths
         const colWidths = data[0].map((_, i) => ({
             wch: Math.max(...data.map(row => (row[i] || '').length), data[0][i].length) + 4
         }));
@@ -1506,7 +1441,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'Miembros');
-        XLSX.writeFile(workbook, 'Miembros_Jinhwan_' + new Date().toLocaleDateString('es-CO').replace(/\//g, '-') + '.xlsx');
+        XLSX.writeFile(workbook, 'Miembros_Jinhwan_' + new Date().toLocaleDateString('es-CO').replace(/\
     }
 
     function doExportPDF(data) {
@@ -1535,11 +1470,10 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             margin: { left: 14, right: 14 },
         });
 
-        doc.save('Miembros_Jinhwan_' + new Date().toLocaleDateString('es-CO').replace(/\//g, '-') + '.pdf');
+        doc.save('Miembros_Jinhwan_' + new Date().toLocaleDateString('es-CO').replace(/\
     }
 </script>
 
-<!-- Formulario oculto para borrado masivo -->
 <form id="bulk-delete-form" action="<?= base_url('/admin/miembros/delete-bulk') ?>" method="POST" class="hidden">
     <div id="bulk-delete-ids"></div>
 </form>
@@ -1568,13 +1502,12 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             bulkBar.classList.add('hidden');
             bulkBar.classList.remove('flex');
         }
-        // Actualizar estado del checkbox de cabecera
+        
         const visible = getCheckboxes().filter(cb => cb.closest('tr').style.display !== 'none');
         selectAll.indeterminate = checked.length > 0 && checked.length < visible.length;
         selectAll.checked       = visible.length > 0 && checked.length === visible.length;
     }
 
-    // Seleccionar / Deseleccionar todos (solo filas visibles)
     selectAll.addEventListener('change', function() {
         const visible = getCheckboxes().filter(cb => cb.closest('tr').style.display !== 'none');
         visible.forEach(cb => {
@@ -1585,7 +1518,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         updateBulkBar();
     });
 
-    // Delegación de eventos en el tbody para los checkboxes individuales
     document.querySelector('tbody').addEventListener('change', function(e) {
         if (e.target.classList.contains('member-checkbox')) {
             e.target.closest('tr').classList.toggle('bg-red-50/30', e.target.checked);
@@ -1594,7 +1526,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
         }
     });
 
-    // Re-evaluar selección cuando cambien los filtros/búsqueda
     const observer = new MutationObserver(updateBulkBar);
     document.querySelectorAll('tbody tr').forEach(tr => {
         observer.observe(tr, { attributes: true, attributeFilter: ['style'] });
@@ -1619,7 +1550,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
 
         if (!confirm(msg)) return;
 
-        // Rellenar el formulario oculto con los IDs
         const container = document.getElementById('bulk-delete-ids');
         container.innerHTML = '';
         checked.forEach(cb => {

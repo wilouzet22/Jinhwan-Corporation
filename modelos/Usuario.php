@@ -5,218 +5,199 @@ use App\Core\Model;
 
 class Usuario extends Model {
 
-
-    /**
-     * Obtiene todos los miembros con sus detalles completos.
-     *
-     * Realiza JOINs para obtener:
-     *   - Nombre de la sede (sedes.nombre → nombre_cede)
-     *   - Nombre del nivel/grado (grados.nombre → nombre_nivel)
-     *   - Correo del usuario (userlog.correo)
-     *
-     * Ordenado por: rol ASC, nombre ASC
-     * (Admins primero, luego maestros, luego estudiantes, y dentro de
-     *  cada grupo en orden alfabético)
-     *
-     * @return array Lista de miembros como arrays asociativos
-     */
     public function getAllWithDetails() {
-        $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
-                       m.nombre, m.apellido, m.tipo_documento, m.num_doc as numero_documento,
-                       m.fecha_n as fecha_nacimiento, m.peso, m.division, m.ctgc, m.eps, m.rh,
-                       m.descripcion_perfil, m.logros, m.mostrar_en_web, m.foto_perfil, m.permisos_extra, m.activo,
-                       u.correo, u.clave,
+        $sql = "SELECT p.id_persona as id,
+                       COALESCE(u.rol, IF(pm.id_persona IS NOT NULL, 'Maestros', 'Deportistas')) as rol_id,
+                       COALESCE(pd.id_grado, pm.id_grado) as nivel_id,
+                       p.nombre, p.apellido, p.tipo_documento, p.num_doc as numero_documento,
+                       p.telefono, p.foto_perfil, p.activo,
+                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.ctgc, pd.eps, pd.rh,
+                       pd.id_categoria as categoria_id,
+                       pm.descripcion_perfil, pm.logros, COALESCE(pm.mostrar_en_web, 0) as mostrar_en_web,
+                       u.permisos_extra, u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel,
-                       c.nombre as nombre_categoria, m.id_categoria as categoria_id,
-                       mg.url as instagram_url
-                FROM miembros m
-                LEFT JOIN sedes s ON m.id_sede = s.id_sede
-                LEFT JOIN grados g ON m.id_grado = g.id_grado
-                LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
-                LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
-                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
-                ORDER BY m.rol ASC, m.nombre ASC";
+                       c.nombre as nombre_categoria,
+                       gm.url as instagram_url
+                FROM personas p
+                LEFT JOIN credenciales u ON p.id_persona = u.id_persona
+                LEFT JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
+                LEFT JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
+                LEFT JOIN sedes s ON p.id_sede = s.id_sede
+                LEFT JOIN grados g ON COALESCE(pd.id_grado, pm.id_grado) = g.id_grado
+                LEFT JOIN categorias c ON pd.id_categoria = c.id_categoria
+                LEFT JOIN galeria_multimedia gm ON p.id_persona = gm.id_persona
+                ORDER BY rol_id ASC, p.nombre ASC";
 
         $result = $this->db->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    /**
-     * Crea un nuevo miembro junto con sus credenciales de acceso.
-     *
-     * Proceso de dos pasos:
-     *   1. Insertar en 'miembros' (activo = 1 por defecto cuando el admin crea el usuario)
-     *   2. Si se proporcionó correo, insertar en 'userlog' con la clave
-     *      hasheada usando bcrypt (PASSWORD_DEFAULT).
-     *      La clave inicial es el número de documento del miembro.
-     *   3. Si se especificó una sede, asignarla mediante assignSede().
-     *
-     * @param  array $data Datos del miembro: nombre, apellido, numero_documento,
-     *                     fecha_nacimiento, nivel_id, telefono, rol_id, correo, cede_id
-     * @return bool  true si se creó correctamente, false en caso de error
-     */
     public function create($data) {
-        // La contraseña inicial del miembro es su número de documento hasheado
-        $clave = password_hash($data['numero_documento'], PASSWORD_DEFAULT);
+        $this->db->begin_transaction();
+        try {
+            $tipo_documento = $data['tipo_documento'] ?? 'TI';
+            $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
+            $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
+            $telefono = $data['telefono'] ?? '';
+            $num_doc = $data['numero_documento'] ?? '';
+            $rol = $data['rol_id'] ?? 'Deportistas';
+            $nivel_id = !empty($data['nivel_id']) ? (int)$data['nivel_id'] : 1;
 
-        // Insertar el miembro con activo = 1 (activo inmediatamente por el admin)
-        $sql = "INSERT INTO miembros (nombre, apellido, num_doc, tipo_documento, fecha_n, id_grado, telefono, rol, permisos_extra, activo, id_sede, id_categoria, peso, division, ctgc, eps, rh, descripcion_perfil, logros, mostrar_en_web, foto_perfil) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // 1. Insertar en tabla base personas
+            $sqlPersona = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, telefono, id_sede, foto_perfil, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+            $stmtPersona = $this->db->prepare($sqlPersona);
+            $stmtPersona->bind_param("sssssisi",
+                $data['nombre'],
+                $data['apellido'],
+                $num_doc,
+                $tipo_documento,
+                $telefono,
+                $sede_id,
+                $foto_perfil,
+                $activo
+            );
+            $activo = 1;
+            $stmtPersona->execute();
+            $persona_id = $stmtPersona->insert_id;
+            $stmtPersona->close();
 
-        $stmt = $this->db->prepare($sql);
-        
-        $tipo_documento = $data['tipo_documento'] ?? 'TI';
-        $permisos_extra = $data['permisos_extra'] ?? null;
-        $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
-        $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
-        $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
-        $division = !empty($data['division']) ? $data['division'] : null;
-        $ctgc = !empty($data['ctgc']) ? $data['ctgc'] : null;
-        $eps = !empty($data['eps']) ? $data['eps'] : null;
-        $rh = !empty($data['rh']) ? $data['rh'] : null;
-        $descripcion_perfil = !empty($data['descripcion_perfil']) ? $data['descripcion_perfil'] : null;
-        $logros = !empty($data['logros']) ? $data['logros'] : null;
-        $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
-        $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
+            // 2. Insertar en credenciales si tiene correo o es admin/maestro
+            $clave = password_hash($num_doc, PASSWORD_DEFAULT);
+            $correo = !empty($data['correo']) ? $data['correo'] : null;
+            $permisos_extra = $data['permisos_extra'] ?? null;
 
-        $stmt->bind_param("sssssisssiidssssssis",
-            $data['nombre'],
-            $data['apellido'],
-            $data['numero_documento'],
-            $tipo_documento,
-            $data['fecha_nacimiento'],
-            $data['nivel_id'],
-            $data['telefono'],
-            $data['rol_id'],
-            $permisos_extra,
-            $sede_id,
-            $categoria_id,
-            $peso,
-            $division,
-            $ctgc,
-            $eps,
-            $rh,
-            $descripcion_perfil,
-            $logros,
-            $mostrar_en_web,
-            $foto_perfil
-        );
-
-        if ($stmt->execute()) {
-            // Obtener el ID generado automáticamente para el nuevo miembro
-            $usuario_id = $stmt->insert_id;
-
-            // Si se proporcionó correo, crear las credenciales de acceso en userlog
-            if (!empty($data['correo'])) {
-                $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)";
-                $stmtLog = $db->prepare($sqlLog);
-                $stmtLog->bind_param("iss", $usuario_id, $data['correo'], $clave);
-                $stmtLog->execute();
+            if ($correo) {
+                $sqlCred = "INSERT INTO credenciales (id_persona, correo, clave, rol, permisos_extra) VALUES (?, ?, ?, ?, ?)";
+                $stmtCred = $this->db->prepare($sqlCred);
+                $stmtCred->bind_param("issss", $persona_id, $correo, $clave, $rol, $permisos_extra);
+                $stmtCred->execute();
+                $stmtCred->close();
             }
 
-            return true;
-        }
+            // 3. Insertar perfil según corresponda
+            if ($rol === 'Maestros' || $rol === 'Profesores' || $rol === 'Monitores') {
+                $descripcion = $data['descripcion_perfil'] ?? null;
+                $logros = $data['logros'] ?? null;
+                $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
 
-        return false;
+                $sqlMaestro = "INSERT INTO perfil_maestros (id_persona, id_grado, descripcion_perfil, logros, mostrar_en_web) VALUES (?, ?, ?, ?, ?)";
+                $stmtM = $this->db->prepare($sqlMaestro);
+                $stmtM->bind_param("iissi", $persona_id, $nivel_id, $descripcion, $logros, $mostrar_en_web);
+                $stmtM->execute();
+                $stmtM->close();
+            }
+
+            // Si es deportista o tiene información de taekwondo
+            if ($rol === 'Deportistas' || !empty($data['peso']) || !empty($data['categoria_id'])) {
+                $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
+                $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
+                $fecha_n = !empty($data['fecha_nacimiento']) ? $data['fecha_nacimiento'] : null;
+                $division = $data['division'] ?? null;
+                $ctgc = $data['ctgc'] ?? null;
+                $eps = $data['eps'] ?? null;
+                $rh = $data['rh'] ?? null;
+
+                $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, ctgc, eps, rh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmtDep = $this->db->prepare($sqlDep);
+                $stmtDep->bind_param("iiisdssss", $persona_id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $ctgc, $eps, $rh);
+                $stmtDep->execute();
+                $stmtDep->close();
+            }
+
+            $this->db->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->db->rollback();
+            return false;
+        }
     }
 
-    /**
-     * Actualiza los datos de un miembro existente.
-     *
-     * Actualiza la tabla 'miembros' con los nuevos datos personales.
-     * Si se proporcionó correo, actualiza o inserta (UPSERT) en 'userlog'.
-     * Si se especificó sede, actualiza la asignación de sede.
-     *
-     * Nota: la contraseña NO se modifica aquí (se mantiene la existente).
-     *
-     * @param  int   $id   ID del miembro a actualizar
-     * @param  array $data Nuevos datos del miembro
-     * @return bool  true si se actualizó correctamente
-     */
     public function update($id, $data) {
-        $sql = "UPDATE miembros SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, fecha_n = ?, id_grado = ?, telefono = ?, rol = ?, permisos_extra = ?, id_sede = ?, id_categoria = ?, peso = ?, division = ?, ctgc = ?, eps = ?, rh = ?, descripcion_perfil = ?, logros = ?, mostrar_en_web = ?, foto_perfil = ? WHERE id_miembro = ?";
+        $this->db->begin_transaction();
+        try {
+            $tipo_documento = $data['tipo_documento'] ?? 'TI';
+            $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
+            $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
+            $telefono = $data['telefono'] ?? '';
+            $num_doc = $data['numero_documento'] ?? '';
+            $rol = $data['rol_id'] ?? 'Deportistas';
+            $nivel_id = !empty($data['nivel_id']) ? (int)$data['nivel_id'] : 1;
+            $permisos_extra = $data['permisos_extra'] ?? null;
 
-        $stmt = $this->db->prepare($sql);
-        
-        $tipo_documento = $data['tipo_documento'] ?? 'TI';
-        $permisos_extra = $data['permisos_extra'] ?? null;
-        $sede_id = !empty($data['sede_id']) ? (int)$data['sede_id'] : null;
-        $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
-        $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
-        $division = !empty($data['division']) ? $data['division'] : null;
-        $ctgc = !empty($data['ctgc']) ? $data['ctgc'] : null;
-        $eps = !empty($data['eps']) ? $data['eps'] : null;
-        $rh = !empty($data['rh']) ? $data['rh'] : null;
-        $descripcion_perfil = !empty($data['descripcion_perfil']) ? $data['descripcion_perfil'] : null;
-        $logros = !empty($data['logros']) ? $data['logros'] : null;
-        $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
-        $foto_perfil = !empty($data['foto_perfil']) ? $data['foto_perfil'] : null;
+            // 1. Actualizar tabla personas
+            $sqlPersona = "UPDATE personas SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, telefono = ?, id_sede = ?, foto_perfil = COALESCE(?, foto_perfil) WHERE id_persona = ?";
+            $stmtPersona = $this->db->prepare($sqlPersona);
+            $stmtPersona->bind_param("sssssisi",
+                $data['nombre'],
+                $data['apellido'],
+                $num_doc,
+                $tipo_documento,
+                $telefono,
+                $sede_id,
+                $foto_perfil,
+                $id
+            );
+            $stmtPersona->execute();
+            $stmtPersona->close();
 
-        $stmt->bind_param("sssssisssiidssssssisi",
-            $data['nombre'],
-            $data['apellido'],
-            $data['numero_documento'],
-            $tipo_documento,
-            $data['fecha_nacimiento'],
-            $data['nivel_id'],
-            $data['telefono'],
-            $data['rol_id'],
-            $permisos_extra,
-            $sede_id,
-            $categoria_id,
-            $peso,
-            $division,
-            $ctgc,
-            $eps,
-            $rh,
-            $descripcion_perfil,
-            $logros,
-            $mostrar_en_web,
-            $foto_perfil,
-            $id
-        );
-
-        if ($stmt->execute()) {
-            // Actualizar el correo en userlog; si no existe registro, lo crea con clave vacía
-            // ON DUPLICATE KEY UPDATE → UPSERT (actualiza si ya existe la clave primaria)
+            // 2. Actualizar o insertar en credenciales
             if (!empty($data['correo'])) {
-                $sqlLog = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, '') ON DUPLICATE KEY UPDATE correo = VALUES(correo)";
-                $stmtLog = $this->db->prepare($sqlLog);
-                $stmtLog->bind_param("is", $id, $data['correo']);
-                $stmtLog->execute();
-                $stmtLog->close();
+                $sqlCred = "INSERT INTO credenciales (id_persona, correo, clave, rol, permisos_extra) 
+                            VALUES (?, ?, '', ?, ?) 
+                            ON DUPLICATE KEY UPDATE correo = VALUES(correo), rol = VALUES(rol), permisos_extra = VALUES(permisos_extra)";
+                $stmtCred = $this->db->prepare($sqlCred);
+                $stmtCred->bind_param("isss", $id, $data['correo'], $rol, $permisos_extra);
+                $stmtCred->execute();
+                $stmtCred->close();
             }
 
-            return true;
-        }
+            // 3. Actualizar o insertar en perfil_maestros
+            if ($rol === 'Maestros' || $rol === 'Profesores' || $rol === 'Monitores') {
+                $descripcion = $data['descripcion_perfil'] ?? null;
+                $logros = $data['logros'] ?? null;
+                $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
 
-        return false;
+                $sqlM = "INSERT INTO perfil_maestros (id_persona, id_grado, descripcion_perfil, logros, mostrar_en_web)
+                         VALUES (?, ?, ?, ?, ?)
+                         ON DUPLICATE KEY UPDATE id_grado = VALUES(id_grado), descripcion_perfil = VALUES(descripcion_perfil), logros = VALUES(logros), mostrar_en_web = VALUES(mostrar_en_web)";
+                $stmtM = $this->db->prepare($sqlM);
+                $stmtM->bind_param("iissi", $id, $nivel_id, $descripcion, $logros, $mostrar_en_web);
+                $stmtM->execute();
+                $stmtM->close();
+            }
+
+            // 4. Actualizar o insertar en perfil_deportistas
+            $categoria_id = !empty($data['categoria_id']) ? (int)$data['categoria_id'] : 1;
+            $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
+            $fecha_n = !empty($data['fecha_nacimiento']) ? $data['fecha_nacimiento'] : null;
+            $division = $data['division'] ?? null;
+            $ctgc = $data['ctgc'] ?? null;
+            $eps = $data['eps'] ?? null;
+            $rh = $data['rh'] ?? null;
+
+            $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, ctgc, eps, rh)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                       ON DUPLICATE KEY UPDATE id_grado = VALUES(id_grado), id_categoria = VALUES(id_categoria), fecha_n = VALUES(fecha_n), peso = VALUES(peso), division = VALUES(division), ctgc = VALUES(ctgc), eps = VALUES(eps), rh = VALUES(rh)";
+            $stmtDep = $this->db->prepare($sqlDep);
+            $stmtDep->bind_param("iiisdssss", $id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $ctgc, $eps, $rh);
+            $stmtDep->execute();
+            $stmtDep->close();
+
+            $this->db->commit();
+            return true;
+        } catch (\Exception $e) {
+            $this->db->rollback();
+            return false;
+        }
     }
 
-    /**
-     * Elimina un miembro de la base de datos por su ID.
-     *
-     * Nota: si hay restricciones de clave foránea con 'userlog',
-     * puede ser necesario eliminar primero el registro en userlog.
-     *
-     * @param  int  $id ID del miembro a eliminar
-     * @return bool true si se eliminó correctamente
-     */
     public function delete($id) {
-        $stmt = $this->db->prepare("DELETE FROM miembros WHERE id_miembro = ?");
+        $stmt = $this->db->prepare("DELETE FROM personas WHERE id_persona = ?");
         $stmt->bind_param("i", $id);
         return $stmt->execute();
     }
 
-    /**
-     * Elimina múltiples miembros a la vez en una sola consulta.
-     *
-     * Genera dinámicamente los placeholders (?), usa bind_param con
-     * 'splat' para pasar el array de IDs y ejecuta la consulta.
-     *
-     * @param  int[] $ids Array de IDs de miembros a eliminar
-     * @return bool  true si se ejecutó correctamente
-     */
     public function deleteBulk(array $ids): bool {
         if (empty($ids)) return false;
 
@@ -224,92 +205,76 @@ class Usuario extends Model {
         $placeholders = implode(',', array_fill(0, $count, '?'));
         $types        = str_repeat('i', $count);
 
-        $stmt = $this->db->prepare("DELETE FROM miembros WHERE id_miembro IN ($placeholders)");
+        $stmt = $this->db->prepare("DELETE FROM personas WHERE id_persona IN ($placeholders)");
         $stmt->bind_param($types, ...$ids);
         return $stmt->execute();
     }
 
-    /**
-     * Asigna una sede a un miembro (o la cambia si ya tenía una).
-     * Método privado: solo se usa internamente en create() y update().
-     *
-     * @param int $usuario_id ID del miembro
-     * @param int $sede_id    ID de la sede a asignar
-     */
-    private function assignSede($usuario_id, $sede_id) {
-        $stmt = $this->db->prepare("UPDATE miembros SET id_sede = ? WHERE id_miembro = ?");
-        $stmt->bind_param("ii", $sede_id, $usuario_id);
-        $stmt->execute();
-    }
-
-    /**
-     * Obtiene los datos completos de un miembro por su ID.
-     *
-     * Utilizado principalmente en el dashboard del estudiante para
-     * mostrar su nombre, nivel, sede y datos personales.
-     *
-     * @param  int        $id ID del miembro
-     * @return array|null Array asociativo con los datos del miembro, o null si no existe
-     */
     public function getById($id) {
-        $sql = "SELECT m.id_miembro as id, m.rol as rol_id, m.id_grado as nivel_id,
-                       m.nombre, m.apellido, m.tipo_documento, m.num_doc as numero_documento,
-                       m.fecha_n as fecha_nacimiento, m.peso, m.division, m.ctgc, m.eps, m.rh,
-                       m.descripcion_perfil, m.logros, m.mostrar_en_web, m.foto_perfil, m.permisos_extra, m.activo,
-                       u.correo, u.clave,
+        $sql = "SELECT p.id_persona as id,
+                       COALESCE(u.rol, IF(pm.id_persona IS NOT NULL, 'Maestros', 'Deportistas')) as rol_id,
+                       COALESCE(pd.id_grado, pm.id_grado) as nivel_id,
+                       p.nombre, p.apellido, p.tipo_documento, p.num_doc as numero_documento,
+                       p.telefono, p.foto_perfil, p.activo,
+                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.ctgc, pd.eps, pd.rh,
+                       pd.id_categoria as categoria_id,
+                       pm.descripcion_perfil, pm.logros, COALESCE(pm.mostrar_en_web, 0) as mostrar_en_web,
+                       u.permisos_extra, u.correo, u.clave,
                        s.nombre as nombre_sede, s.id_sede as sede_id,
                        g.nombre as nombre_nivel,
-                       c.nombre as nombre_categoria, m.id_categoria as categoria_id,
-                       mg.url as instagram_url
-                FROM miembros m
-                LEFT JOIN sedes s ON m.id_sede = s.id_sede
-                LEFT JOIN grados g ON m.id_grado = g.id_grado
-                LEFT JOIN userlog u ON m.id_miembro = u.id_miembro
-                LEFT JOIN categoria c ON m.id_categoria = c.id_categoria
-                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
-                WHERE m.id_miembro = ?";
+                       c.nombre as nombre_categoria,
+                       gm.url as instagram_url
+                FROM personas p
+                LEFT JOIN credenciales u ON p.id_persona = u.id_persona
+                LEFT JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
+                LEFT JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
+                LEFT JOIN sedes s ON p.id_sede = s.id_sede
+                LEFT JOIN grados g ON COALESCE(pd.id_grado, pm.id_grado) = g.id_grado
+                LEFT JOIN categorias c ON pd.id_categoria = c.id_categoria
+                LEFT JOIN galeria_multimedia gm ON p.id_persona = gm.id_persona
+                WHERE p.id_persona = ?";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc(); // Retorna un array o null si no se encontró
+        return $result->fetch_assoc(); 
     }
 
-    /**
-     * Obtiene los miembros que tienen mostrar_en_web = 1, junto con su URL multimedia y foto.
-     * Utilizado para la página web pública.
-     */
     public function getPublicProfiles() {
-        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.foto_perfil, mg.url as instagram_url
-                FROM miembros m
-                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
-                WHERE m.mostrar_en_web = 1
-                ORDER BY m.rol ASC, m.nombre ASC";
+        $sql = "SELECT p.id_persona as id, p.nombre, p.apellido,
+                       COALESCE(u.rol, 'Maestros') as rol_id,
+                       pm.descripcion_perfil, p.foto_perfil, gm.url as instagram_url
+                FROM personas p
+                INNER JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
+                LEFT JOIN credenciales u ON p.id_persona = u.id_persona
+                LEFT JOIN galeria_multimedia gm ON p.id_persona = gm.id_persona
+                WHERE pm.mostrar_en_web = 1 AND p.activo = 1
+                ORDER BY p.nombre ASC";
         $result = $this->db->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    /**
-     * Obtiene todos los miembros con su información de perfil público.
-     * Utilizado en el panel de administración de Perfiles Públicos.
-     */
     public function getAllWithPublicProfileInfo() {
-        $sql = "SELECT m.id_miembro as id, m.nombre, m.apellido, m.rol as rol_id, m.descripcion_perfil, m.mostrar_en_web, m.foto_perfil, mg.url as instagram_url
-                FROM miembros m
-                LEFT JOIN multimedia_galeria mg ON m.id_miembro = mg.id_miembro
-                ORDER BY m.nombre ASC";
+        $sql = "SELECT p.id_persona as id, p.nombre, p.apellido,
+                       COALESCE(u.rol, IF(pm.id_persona IS NOT NULL, 'Maestros', 'Deportistas')) as rol_id,
+                       pm.descripcion_perfil, COALESCE(pm.mostrar_en_web, 0) as mostrar_en_web,
+                       p.foto_perfil, gm.url as instagram_url
+                FROM personas p
+                LEFT JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
+                LEFT JOIN credenciales u ON p.id_persona = u.id_persona
+                LEFT JOIN galeria_multimedia gm ON p.id_persona = gm.id_persona
+                ORDER BY p.nombre ASC";
         $result = $this->db->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    /**
-     * Actualiza la información del perfil público de un miembro.
-     */
     public function updatePublicProfile($id, $mostrar_en_web, $descripcion_perfil, $rol) {
-        $sql = "UPDATE miembros SET mostrar_en_web = ?, descripcion_perfil = ?, rol = ? WHERE id_miembro = ?";
+        $sql = "INSERT INTO perfil_maestros (id_persona, descripcion_perfil, mostrar_en_web)
+                VALUES (?, ?, ?)
+                ON DUPLICATE KEY UPDATE descripcion_perfil = VALUES(descripcion_perfil), mostrar_en_web = VALUES(mostrar_en_web)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("issi", $mostrar_en_web, $descripcion_perfil, $rol, $id);
+        $stmt->bind_param("isi", $id, $descripcion_perfil, $mostrar_en_web);
         return $stmt->execute();
     }
 }

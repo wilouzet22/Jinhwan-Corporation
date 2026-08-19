@@ -12,7 +12,6 @@
         </button>
     </div>
 
-    <!-- Feedback Message -->
     <?php if (isset($_GET['success'])): ?>
         <div class="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-xl text-emerald-800 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
             <span class="material-icons-outlined text-lg">check_circle</span>
@@ -20,7 +19,6 @@
         </div>
     <?php endif; ?>
 
-    <!-- Solicitudes Table -->
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left border-collapse">
@@ -93,7 +91,6 @@
     </div>
 </main>
 
-<!-- Multiple Promotion Proposal Modal -->
 <div id="multiPromoModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeMultiPromoModal()"></div>

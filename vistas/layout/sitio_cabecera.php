@@ -1,9 +1,9 @@
 <?php
-// Iniciar sesión si no está iniciada para verificar estado de login
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Adjust path to roles.php
+
 use App\Config\Roles;
 
 $rol_id = $_SESSION['rol_id'] ?? null;
@@ -17,18 +17,15 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title><?= $page_title ?? 'Jinnwhan Organization - Taekwondo' ?></title>
-    
-    <!-- Google Fonts: Oswald (Headings) & Inter (Body) -->
+
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
     <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Material Icons -->
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
-    
-    <!-- Theme Toggle Script (Inline to prevent FOUC) -->
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -37,7 +34,6 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         }
     </script>
 
-    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
@@ -54,7 +50,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
 </head>
 <body class="bg-gradient-to-br from-blue-50 via-slate-50 to-red-50 dark:bg-[#0b0f19] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-tkd-red selection:text-white transition-colors duration-300">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
-    <!-- Mobile Header -->
+    
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3 transition-colors duration-300">
          <a class="flex items-center gap-2" href="<?= base_url('/') ?>">
             <img src="<?= asset('img/visual/logo.svg') ?>" alt="Jinnwhan Logo" class="h-10 w-auto object-contain">
@@ -65,22 +61,18 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         </button>
     </div>
 
-    <!-- Mobile Sidebar Backdrop -->
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden backdrop-blur-sm transition-opacity duration-300"></div>
 
-    <!-- Sidebar Navigation -->
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-60 border-r transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-2xl md:shadow-none md:static
         bg-white dark:bg-slate-950
         border-slate-200/60 dark:border-slate-800
         [background:linear-gradient(160deg,#ffffff_0%,#f0f4ff_60%,#fdf0f0_100%)] dark:[background:#020817]">
-        
-        <!-- Admin Menu Hamburger (Top Left) -->
+
         <div class="absolute top-4 left-4 z-50">
             <button id="admin-menu-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/80 text-slate-400 hover:text-tkd-red transition-all duration-300 focus:outline-none">
                 <span class="material-icons-outlined text-2xl">menu</span>
             </button>
-            
-            <!-- Admin Dropdown Menu -->
+
             <div id="admin-menu-dropdown" class="hidden absolute top-10 left-0 w-56 bg-white dark:bg-slate-900 backdrop-blur-md rounded-lg shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transform origin-top-left transition-all duration-200 z-50">
                 <?php if (isset($_SESSION['id'])): ?>
                     <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 transition-colors">
@@ -119,8 +111,6 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
             </div>
         </div>
 
-        <!-- Sidebar Header (Logo) -->
-        <!-- Decorative accent top bar (light mode only) -->
         <div class="h-1 w-full bg-gradient-to-r from-tkd-blue via-tkd-red to-tkd-gold dark:opacity-30 flex-shrink-0"></div>
         <div class="p-8 pt-10 flex flex-col items-center justify-center border-b border-slate-200/60 dark:border-slate-800
             [background:linear-gradient(135deg,#f8faff_0%,#fff5f5_100%)] dark:[background:rgba(2,8,23,0.2)] transition-colors">
@@ -133,7 +123,6 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
             </div>
         </div>
 
-        <!-- Navigation Links -->
         <nav class="flex-grow overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
             <a href="<?= base_url('/') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-tkd-red dark:hover:text-tkd-red transition-all group nav-link">
                 <span class="material-icons-outlined text-xl group-hover:text-tkd-red transition-colors">home</span>
@@ -158,7 +147,6 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
             </a>
         </nav>
 
-        <!-- Sidebar Footer: Theme Toggle -->
         <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 transition-colors">
             <div class="flex items-center justify-between px-2">
                 <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
@@ -170,8 +158,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
         </div>
     </aside>
 
-    <!-- Main Content Wrapper -->
     <div class="flex-1 flex flex-col min-h-0 overflow-hidden relative">
-        <!-- Scrollable Content Area -->
+        
         <main class="flex-1 overflow-y-auto no-scrollbar scroll-smooth pt-16 md:pt-0" id="main-scroll">
             

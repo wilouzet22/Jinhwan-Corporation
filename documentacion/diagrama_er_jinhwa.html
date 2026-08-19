@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo Entidad - Relación (Chen) - Jinhwa Corporation</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: #161e2e;
+            --border-color: #273549;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --entity-bg: #1e1b4b;
+            --entity-border: #6366f1;
+            --entity-text: #e0e7ff;
+            --central-entity-bg: #311b92;
+            --central-entity-border: #a855f7;
+            --relation-bg: #064e3b;
+            --relation-border: #10b981;
+            --relation-text: #a7f3d0;
+            --attr-bg: #1e293b;
+            --attr-border: #475569;
+            --attr-pk-border: #f59e0b;
+            --attr-pk-bg: #451a03;
+            --line-color: #3b82f6;
+            --line-highlight: #a855f7;
+            --card-text: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .title-container h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .title-container h1 span {
+            background: linear-gradient(135deg, #c084fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: #334155;
+            border-color: #475569;
+            color: #fff;
+        }
+
+        .search-box {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            width: 180px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #6366f1;
+        }
+
+        .legend {
+            display: flex;
+            gap: 14px;
+            font-size: 0.75rem;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-shape {
+            width: 12px;
+            height: 12px;
+        }
+
+        .shape-rect {
+            background: var(--central-entity-bg);
+            border: 2px solid var(--central-entity-border);
+            border-radius: 2px;
+        }
+
+        .shape-diamond {
+            background: var(--relation-bg);
+            border: 2px solid var(--relation-border);
+            transform: rotate(45deg);
+            width: 9px;
+            height: 9px;
+        }
+
+        .shape-oval {
+            background: var(--attr-bg);
+            border: 1.5px solid var(--attr-border);
+            border-radius: 50%;
+        }
+
+        .shape-pk {
+            background: var(--attr-pk-bg);
+            border: 1.5px solid var(--attr-pk-border);
+            border-radius: 50%;
+        }
+
+        #viewport {
+            flex: 1;
+            width: 100%;
+            height: calc(100vh - 55px);
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #131b2e 0%, #0b0f19 100%);
+        }
+
+        #viewport:active {
+            cursor: grabbing;
+        }
+
+        svg#canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* SVG Styles */
+        .line-connection {
+            stroke: #475569;
+            stroke-width: 2.2;
+            transition: stroke 0.2s;
+            pointer-events: none;
+        }
+
+        .line-connection.rel-line {
+            stroke: #6366f1;
+            stroke-width: 2.5;
+        }
+
+        .line-connection.attr-line {
+            stroke: #334155;
+            stroke-dasharray: 4,4;
+            stroke-width: 1.5;
+        }
+
+        .line-connection.pk-line {
+            stroke: #f59e0b;
+            stroke-dasharray: none;
+            stroke-width: 2;
+        }
+
+        .node-group {
+            cursor: move;
+            transition: opacity 0.25s;
+        }
+
+        .node-group.dimmed {
+            opacity: 0.15;
+        }
+
+        .entity-rect {
+            fill: var(--entity-bg);
+            stroke: var(--entity-border);
+            stroke-width: 2.5;
+            rx: 6px;
+            ry: 6px;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+            transition: stroke 0.2s, stroke-width 0.2s;
+        }
+
+        .entity-rect.central {
+            fill: var(--central-entity-bg);
+            stroke: var(--central-entity-border);
+            stroke-width: 3.5;
+            filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+        }
+
+        .node-group:hover .entity-rect {
+            stroke-width: 3.5;
+            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.7));
+        }
+
+        .entity-text {
+            fill: var(--entity-text);
+            font-size: 14px;
+            font-weight: 700;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+        }
+
+        .entity-text.central {
+            fill: #ffffff;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .relation-diamond {
+            fill: var(--relation-bg);
+            stroke: var(--relation-border);
+            stroke-width: 2.5;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+            transition: stroke 0.2s, stroke-width 0.2s;
+        }
+
+        .node-group:hover .relation-diamond {
+            stroke-width: 3.5;
+            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.7));
+        }
+
+        .relation-text {
+            fill: var(--relation-text);
+            font-size: 11px;
+            font-weight: 600;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+
+        .attr-oval {
+            fill: var(--attr-bg);
+            stroke: var(--attr-border);
+            stroke-width: 1.5;
+            transition: stroke 0.2s, fill 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .attr-oval.pk {
+            fill: var(--attr-pk-bg);
+            stroke: var(--attr-pk-border);
+            stroke-width: 2;
+        }
+
+        .node-group:hover .attr-oval {
+            stroke-width: 2.5;
+            fill: #334155;
+        }
+
+        .attr-text {
+            fill: #cbd5e1;
+            font-size: 10.5px;
+            font-weight: 500;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+        }
+
+        .attr-text.pk {
+            fill: #fbbf24;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .cardinality-text {
+            fill: var(--card-text);
+            font-size: 13px;
+            font-weight: 800;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+            text-shadow: 0 0 6px #000, 0 0 2px #000;
+        }
+
+        .hint-bar {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="title-container">
+            <h1><span>Jinhwa Corporation</span> — Modelo Entidad-Relación (Chen)</h1>
+            <div class="subtitle">Conexiones 100% estables • Sin desconexiones al arrastrar las figuras</div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-shape shape-rect"></div>
+                <span>Entidad Central / Tabla</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-shape shape-diamond"></div>
+                <span>Relación (Rombo 1:1, 1:N)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-shape shape-pk"></div>
+                <span>Atributo Clave (PK)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-shape shape-oval"></div>
+                <span>Atributo (Campo)</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="Buscar entidad o campo..." oninput="onSearch(this.value)">
+            <button class="btn" onclick="toggleAttributes()" id="btnAttr">Ocultar Atributos</button>
+            <button class="btn" onclick="resetLayout()">Restablecer Posiciones</button>
+            <button class="btn" onclick="resetZoom()">Centrar Diagrama</button>
+        </div>
+    </header>
+
+    <div id="viewport">
+        <svg id="canvas">
+            <g id="lines-group"></g>
+            <g id="nodes-group"></g>
+        </svg>
+        <div class="hint-bar">💡 Puedes arrastrar cualquier tabla, rombo o atributo • Las líneas permanecen 100% conectadas en los bordes</div>
+    </div>
+
+    <script>
+        const modelData = {
+            entities: [
+                {
+                    id: "personas", label: "PERSONAS", isCentral: true, x: 1600, y: 1200, w: 180, h: 65,
+                    attributes: [
+                        { name: "id_persona", pk: true, angle: -115, dist: 160 },
+                        { name: "nombre", angle: -125, dist: 240 },
+                        { name: "apellido", angle: -105, dist: 240 },
+                        { name: "num_doc", angle: -75, dist: 160 },
+                        { name: "tipo_documento", angle: -60, dist: 240 },
+                        { name: "telefono", angle: -60, dist: 310 },
+                        { name: "activo", angle: -20, dist: 170 },
+                        { name: "foto_perfil", angle: 15, dist: 170 },
+                        { name: "id_sede", fk: true, angle: 150, dist: 170 }
+                    ]
+                },
+                {
+                    id: "credenciales", label: "CREDENCIALES", x: 1600, y: 550, w: 160, h: 55,
+                    attributes: [
+                        { name: "id_credencial", pk: true, angle: -135, dist: 115 },
+                        { name: "id_persona", fk: true, angle: -90, dist: 115 },
+                        { name: "correo", angle: -45, dist: 115 },
+                        { name: "clave", angle: 0, dist: 115 },
+                        { name: "rol", angle: 45, dist: 115 },
+                        { name: "permisos_extra", angle: 90, dist: 115 }
+                    ]
+                },
+                {
+                    id: "perfil_deportistas", label: "PERFIL_DEPORTISTAS", x: 1050, y: 1550, w: 200, h: 60,
+                    attributes: [
+                        { name: "id_persona", pk: true, fk: true, angle: 180, dist: 140 },
+                        { name: "id_grado", fk: true, angle: 150, dist: 150 },
+                        { name: "id_categoria", fk: true, angle: 210, dist: 150 },
+                        { name: "fecha_n", angle: 90, dist: 130 },
+                        { name: "peso", angle: 60, dist: 130 },
+                        { name: "division", angle: 120, dist: 130 },
+                        { name: "ctgc", angle: 30, dist: 130 },
+                        { name: "eps", angle: -30, dist: 130 },
+                        { name: "rh", angle: -60, dist: 130 }
+                    ]
+                },
+                {
+                    id: "perfil_maestros", label: "PERFIL_MAESTROS", x: 2150, y: 1550, w: 190, h: 60,
+                    attributes: [
+                        { name: "id_persona", pk: true, fk: true, angle: 0, dist: 140 },
+                        { name: "id_grado", fk: true, angle: -30, dist: 140 },
+                        { name: "descripcion_perfil", angle: 30, dist: 140 },
+                        { name: "logros", angle: 60, dist: 140 },
+                        { name: "mostrar_en_web", angle: 90, dist: 140 }
+                    ]
+                },
+                {
+                    id: "sedes", label: "SEDES", x: 900, y: 600, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_sede", pk: true, angle: -135, dist: 120 },
+                        { name: "nombre", angle: -90, dist: 120 },
+                        { name: "direccion", angle: 180, dist: 120 },
+                        { name: "telefono", angle: 135, dist: 120 },
+                        { name: "horario", angle: 90, dist: 120 }
+                    ]
+                },
+                {
+                    id: "eventos", label: "EVENTOS", x: 2350, y: 650, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_evento", pk: true, angle: -45, dist: 120 },
+                        { name: "titulo", angle: 0, dist: 120 },
+                        { name: "descripcion", angle: 45, dist: 120 },
+                        { name: "fecha_inicio", angle: -90, dist: 120 },
+                        { name: "fecha_fin", angle: 90, dist: 120 },
+                        { name: "id_persona", fk: true, angle: -135, dist: 120 }
+                    ]
+                },
+                {
+                    id: "galeria_multimedia", label: "GALERIA_MULTIMEDIA", x: 2500, y: 1150, w: 200, h: 55,
+                    attributes: [
+                        { name: "id_multimedia", pk: true, angle: -45, dist: 130 },
+                        { name: "id_persona", fk: true, angle: 45, dist: 130 },
+                        { name: "url", angle: 0, dist: 130 },
+                        { name: "titulo", angle: -90, dist: 120 },
+                        { name: "descripcion", angle: 90, dist: 120 }
+                    ]
+                },
+                {
+                    id: "noticias", label: "NOTICIAS", x: 2450, y: 1650, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_noticia", pk: true, angle: 0, dist: 125 },
+                        { name: "id_persona", fk: true, angle: 45, dist: 125 },
+                        { name: "titulo", angle: 90, dist: 125 },
+                        { name: "descripcion", angle: 135, dist: 125 },
+                        { name: "contenido", angle: -45, dist: 125 },
+                        { name: "fecha_publicacion", angle: -90, dist: 125 }
+                    ]
+                },
+                {
+                    id: "solicitudes_ascenso", label: "SOLICITUDES_ASCENSO", x: 1600, y: 2000, w: 210, h: 60,
+                    attributes: [
+                        { name: "id_solicitud", pk: true, angle: 135, dist: 140 },
+                        { name: "id_persona_estudiante", fk: true, angle: 160, dist: 140 },
+                        { name: "id_grado_actual", fk: true, angle: 180, dist: 160 },
+                        { name: "id_grado_solicitado", fk: true, angle: -180, dist: 230 },
+                        { name: "id_persona_maestro", fk: true, angle: 0, dist: 160 },
+                        { name: "observaciones", angle: 45, dist: 140 },
+                        { name: "estado", angle: 90, dist: 130 },
+                        { name: "fecha_solicitud", angle: 110, dist: 150 },
+                        { name: "fecha_resolucion", angle: 70, dist: 150 }
+                    ]
+                },
+                {
+                    id: "categorias", label: "CATEGORIAS", x: 450, y: 1750, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_categoria", pk: true, angle: 180, dist: 120 },
+                        { name: "nombre", angle: 135, dist: 120 },
+                        { name: "descripcion", angle: -135, dist: 120 }
+                    ]
+                },
+                {
+                    id: "grados", label: "GRADOS", x: 600, y: 1200, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_grado", pk: true, angle: -90, dist: 115 },
+                        { name: "nombre", angle: 90, dist: 115 }
+                    ]
+                },
+                {
+                    id: "teorias", label: "TEORIAS", x: 200, y: 1200, w: 140, h: 55,
+                    attributes: [
+                        { name: "id_teoria", pk: true, angle: -135, dist: 120 },
+                        { name: "id_grado", fk: true, angle: -90, dist: 120 },
+                        { name: "id_tipo_teoria", fk: true, angle: 180, dist: 120 },
+                        { name: "nombre", angle: 135, dist: 120 },
+                        { name: "contenido", angle: 90, dist: 120 },
+                        { name: "url_video", angle: -45, dist: 120 }
+                    ]
+                },
+                {
+                    id: "tipos_teoria", label: "TIPOS_TEORIA", x: 200, y: 1650, w: 165, h: 55,
+                    attributes: [
+                        { name: "id_tipo_teoria", pk: true, angle: 180, dist: 120 },
+                        { name: "nombre", angle: 135, dist: 120 },
+                        { name: "descripcion", angle: 90, dist: 120 }
+                    ]
+                }
+            ],
+            relationships: [
+                { id: "rel_sedes", name: "Pertenece a", e1: "sedes", e2: "personas", card1: "1", card2: "N", rx: 1250, ry: 900 },
+                { id: "rel_credenciales", name: "Autentica (1:1)", e1: "personas", e2: "credenciales", card1: "1", card2: "1", rx: 1600, ry: 875 },
+                { id: "rel_sub_deportista", name: "Es Deportista", e1: "personas", e2: "perfil_deportistas", card1: "1", card2: "1", rx: 1325, ry: 1375 },
+                { id: "rel_sub_maestro", name: "Es Maestro", e1: "personas", e2: "perfil_maestros", card1: "1", card2: "1", rx: 1875, ry: 1375 },
+                { id: "rel_eventos", name: "Crea / Organiza", e1: "personas", e2: "eventos", card1: "1", card2: "N", rx: 1975, ry: 925 },
+                { id: "rel_galeria", name: "Publica", e1: "personas", e2: "galeria_multimedia", card1: "1", card2: "N", rx: 2050, ry: 1175 },
+                { id: "rel_noticias", name: "Redacta", e1: "personas", e2: "noticias", card1: "1", card2: "N", rx: 2025, ry: 1425 },
+                { id: "rel_solicita", name: "Solicita", e1: "perfil_deportistas", e2: "solicitudes_ascenso", card1: "1", card2: "N", rx: 1325, ry: 1775 },
+                { id: "rel_evalua", name: "Evalúa", e1: "perfil_maestros", e2: "solicitudes_ascenso", card1: "1", card2: "N", rx: 1875, ry: 1775 },
+                { id: "rel_categoria_dep", name: "Clasificado en", e1: "categorias", e2: "perfil_deportistas", card1: "1", card2: "N", rx: 750, ry: 1650 },
+                { id: "rel_grado_dep", name: "Tiene Grado", e1: "grados", e2: "perfil_deportistas", card1: "1", card2: "N", rx: 825, ry: 1375 },
+                { id: "rel_teoria", name: "Requiere", e1: "grados", e2: "teorias", card1: "1", card2: "N", rx: 400, ry: 1200 },
+                { id: "rel_tipo_teoria", name: "Clasifica", e1: "tipos_teoria", e2: "teorias", card1: "1", card2: "N", rx: 200, ry: 1425 }
+            ]
+        };
+
+        let nodes = {};
+        let relationships = {};
+        let showAttributes = true;
+        let scale = 0.55;
+        let panX = 0;
+        let panY = 0;
+        let isViewportDragging = false;
+        let dragTargetNode = null;
+        let dragOffsetX = 0, dragOffsetY = 0;
+        let startPanX = 0, startPanY = 0;
+        let activeSelectedEntity = null;
+
+        const linesGroup = document.getElementById("lines-group");
+        const nodesGroup = document.getElementById("nodes-group");
+        const viewport = document.getElementById("viewport");
+
+        function getRectIntersection(cx, cy, w, h, tx, ty) {
+            const dx = tx - cx;
+            const dy = ty - cy;
+            if (dx === 0 && dy === 0) return { x: cx, y: cy };
+            const hw = w / 2;
+            const hh = h / 2;
+            const scaleX = hw / Math.abs(dx);
+            const scaleY = hh / Math.abs(dy);
+            const s = Math.min(scaleX, scaleY);
+            return { x: cx + dx * s, y: cy + dy * s };
+        }
+
+        function getDiamondIntersection(cx, cy, w, h, tx, ty) {
+            const dx = tx - cx;
+            const dy = ty - cy;
+            if (dx === 0 && dy === 0) return { x: cx, y: cy };
+            const hw = w / 2;
+            const hh = h / 2;
+            const s = 1 / (Math.abs(dx / hw) + Math.abs(dy / hh));
+            return { x: cx + dx * s, y: cy + dy * s };
+        }
+
+        function getEllipseIntersection(cx, cy, rx, ry, tx, ty) {
+            const dx = tx - cx;
+            const dy = ty - cy;
+            if (dx === 0 && dy === 0) return { x: cx, y: cy };
+            const angle = Math.atan2(dy, dx);
+            return { x: cx + rx * Math.cos(angle), y: cy + ry * Math.sin(angle) };
+        }
+
+        function init() {
+            buildNodes();
+            centerViewportOnEntity("miembros");
+            render();
+            setupEvents();
+        }
+
+        function centerViewportOnEntity(entityId) {
+            const target = nodes[entityId] || { x: 1600, y: 1200 };
+            const vRect = viewport.getBoundingClientRect();
+            scale = 0.55;
+            panX = (vRect.width / 2) - (target.x * scale);
+            panY = (vRect.height / 2) - (target.y * scale);
+            updateViewportTransform();
+        }
+
+        function buildNodes() {
+            nodes = {};
+            relationships = {};
+
+            modelData.entities.forEach(ent => {
+                const node = {
+                    id: ent.id,
+                    type: "entity",
+                    label: ent.label,
+                    isCentral: !!ent.isCentral,
+                    x: ent.x,
+                    y: ent.y,
+                    w: ent.w,
+                    h: ent.h,
+                    attributes: []
+                };
+
+                if (ent.attributes) {
+                    ent.attributes.forEach((attr, idx) => {
+                        const radAngle = (attr.angle * Math.PI) / 180;
+                        const ax = ent.x + Math.cos(radAngle) * attr.dist;
+                        const ay = ent.y + Math.sin(radAngle) * attr.dist;
+                        node.attributes.push({
+                            id: `${ent.id}_attr_${idx}`,
+                            name: attr.name,
+                            pk: !!attr.pk,
+                            fk: !!attr.fk,
+                            x: ax,
+                            y: ay,
+                            w: Math.max(90, attr.name.length * 7.5 + (attr.pk ? 20 : 0)),
+                            h: 26
+                        });
+                    });
+                }
+                nodes[ent.id] = node;
+            });
+
+            modelData.relationships.forEach(rel => {
+                relationships[rel.id] = {
+                    ...rel,
+                    x: rel.rx,
+                    y: rel.ry,
+                    w: 110,
+                    h: 46
+                };
+            });
+        }
+
+        function render() {
+            linesGroup.innerHTML = "";
+            nodesGroup.innerHTML = "";
+
+            Object.values(relationships).forEach(rel => {
+                const e1 = nodes[rel.e1];
+                const e2 = nodes[rel.e2];
+                if (!e1 || !e2) return;
+
+                const pE1 = getRectIntersection(e1.x, e1.y, e1.w, e1.h, rel.x, rel.y);
+                const pRel1 = getDiamondIntersection(rel.x, rel.y, rel.w, rel.h, e1.x, e1.y);
+
+                const pRel2 = getDiamondIntersection(rel.x, rel.y, rel.w, rel.h, e2.x, e2.y);
+                const pE2 = getRectIntersection(e2.x, e2.y, e2.w, e2.h, rel.x, rel.y);
+
+                const line1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line1.setAttribute("x1", pE1.x);
+                line1.setAttribute("y1", pE1.y);
+                line1.setAttribute("x2", pRel1.x);
+                line1.setAttribute("y2", pRel1.y);
+                line1.setAttribute("class", "line-connection rel-line");
+                line1.setAttribute("id", `line_${e1.id}_${rel.id}`);
+                linesGroup.appendChild(line1);
+
+                const line2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line2.setAttribute("x1", pRel2.x);
+                line2.setAttribute("y1", pRel2.y);
+                line2.setAttribute("x2", pE2.x);
+                line2.setAttribute("y2", pE2.y);
+                line2.setAttribute("class", "line-connection rel-line");
+                line2.setAttribute("id", `line_${rel.id}_${e2.id}`);
+                linesGroup.appendChild(line2);
+
+                const gRel = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                gRel.setAttribute("class", "node-group");
+                gRel.setAttribute("id", `node_${rel.id}`);
+                gRel.setAttribute("transform", `translate(${rel.x}, ${rel.y})`);
+
+                const dw = rel.w;
+                const dh = rel.h;
+                const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                polygon.setAttribute("points", `0,${-dh/2} ${dw/2},0 0,${dh/2} ${-dw/2},0`);
+                polygon.setAttribute("class", "relation-diamond");
+                gRel.appendChild(polygon);
+
+                const tRel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                tRel.setAttribute("class", "relation-text");
+                tRel.textContent = rel.name;
+                gRel.appendChild(tRel);
+
+                const tCard1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                tCard1.setAttribute("class", "cardinality-text");
+                tCard1.setAttribute("id", `card1_${rel.id}`);
+                tCard1.textContent = rel.card1;
+                linesGroup.appendChild(tCard1);
+
+                const tCard2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                tCard2.setAttribute("class", "cardinality-text");
+                tCard2.setAttribute("id", `card2_${rel.id}`);
+                tCard2.textContent = rel.card2;
+                linesGroup.appendChild(tCard2);
+
+                updateCardinalityPositions(rel);
+
+                makeDraggable(gRel, (nx, ny) => {
+                    rel.x = nx;
+                    rel.y = ny;
+                    updateRelationshipLines(rel);
+                });
+
+                nodesGroup.appendChild(gRel);
+            });
+
+            Object.values(nodes).forEach(ent => {
+                const gEnt = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                gEnt.setAttribute("class", "node-group");
+                gEnt.setAttribute("id", `node_${ent.id}`);
+                gEnt.setAttribute("transform", `translate(${ent.x}, ${ent.y})`);
+
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", -ent.w / 2);
+                rect.setAttribute("y", -ent.h / 2);
+                rect.setAttribute("width", ent.w);
+                rect.setAttribute("height", ent.h);
+                rect.setAttribute("class", `entity-rect ${ent.isCentral ? 'central' : ''}`);
+                gEnt.appendChild(rect);
+
+                const tEnt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                tEnt.setAttribute("class", `entity-text ${ent.isCentral ? 'central' : ''}`);
+                tEnt.textContent = ent.label;
+                gEnt.appendChild(tEnt);
+
+                gEnt.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    highlightEntityNetwork(ent.id);
+                });
+
+                makeDraggable(gEnt, (nx, ny) => {
+                    const dx = nx - ent.x;
+                    const dy = ny - ent.y;
+                    ent.x = nx;
+                    ent.y = ny;
+
+                    ent.attributes.forEach(attr => {
+                        attr.x += dx;
+                        attr.y += dy;
+                        const gAttr = document.getElementById(`node_${attr.id}`);
+                        if (gAttr) gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
+                        updateAttributeLine(ent, attr);
+                    });
+
+                    Object.values(relationships).forEach(rel => {
+                        if (rel.e1 === ent.id || rel.e2 === ent.id) {
+                            updateRelationshipLines(rel);
+                        }
+                    });
+                });
+
+                nodesGroup.appendChild(gEnt);
+
+                if (showAttributes && ent.attributes) {
+                    ent.attributes.forEach(attr => {
+                        const pEntBorder = getRectIntersection(ent.x, ent.y, ent.w, ent.h, attr.x, attr.y);
+                        const pAttrBorder = getEllipseIntersection(attr.x, attr.y, attr.w / 2, attr.h / 2, ent.x, ent.y);
+
+                        const lineAttr = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        lineAttr.setAttribute("x1", pEntBorder.x);
+                        lineAttr.setAttribute("y1", pEntBorder.y);
+                        lineAttr.setAttribute("x2", pAttrBorder.x);
+                        lineAttr.setAttribute("y2", pAttrBorder.y);
+                        lineAttr.setAttribute("class", `line-connection ${attr.pk ? 'pk-line' : 'attr-line'}`);
+                        lineAttr.setAttribute("id", `line_${attr.id}`);
+                        linesGroup.appendChild(lineAttr);
+
+                        const gAttr = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        gAttr.setAttribute("class", "node-group");
+                        gAttr.setAttribute("id", `node_${attr.id}`);
+                        gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
+
+                        const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                        ellipse.setAttribute("cx", 0);
+                        ellipse.setAttribute("cy", 0);
+                        ellipse.setAttribute("rx", attr.w / 2);
+                        ellipse.setAttribute("ry", attr.h / 2);
+                        ellipse.setAttribute("class", `attr-oval ${attr.pk ? 'pk' : ''}`);
+                        gAttr.appendChild(ellipse);
+
+                        const tAttr = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        tAttr.setAttribute("class", `attr-text ${attr.pk ? 'pk' : ''}`);
+                        tAttr.textContent = (attr.pk ? "🔑 " : "") + attr.name;
+                        gAttr.appendChild(tAttr);
+
+                        makeDraggable(gAttr, (ax, ay) => {
+                            attr.x = ax;
+                            attr.y = ay;
+                            updateAttributeLine(ent, attr);
+                        });
+
+                        nodesGroup.appendChild(gAttr);
+                    });
+                }
+            });
+        }
+
+        function updateRelationshipLines(rel) {
+            const e1 = nodes[rel.e1];
+            const e2 = nodes[rel.e2];
+            if (!e1 || !e2) return;
+
+            const pE1 = getRectIntersection(e1.x, e1.y, e1.w, e1.h, rel.x, rel.y);
+            const pRel1 = getDiamondIntersection(rel.x, rel.y, rel.w, rel.h, e1.x, e1.y);
+
+            const pRel2 = getDiamondIntersection(rel.x, rel.y, rel.w, rel.h, e2.x, e2.y);
+            const pE2 = getRectIntersection(e2.x, e2.y, e2.w, e2.h, rel.x, rel.y);
+
+            const line1 = document.getElementById(`line_${e1.id}_${rel.id}`);
+            if (line1) {
+                line1.setAttribute("x1", pE1.x);
+                line1.setAttribute("y1", pE1.y);
+                line1.setAttribute("x2", pRel1.x);
+                line1.setAttribute("y2", pRel1.y);
+            }
+
+            const line2 = document.getElementById(`line_${rel.id}_${e2.id}`);
+            if (line2) {
+                line2.setAttribute("x1", pRel2.x);
+                line2.setAttribute("y1", pRel2.y);
+                line2.setAttribute("x2", pE2.x);
+                line2.setAttribute("y2", pE2.y);
+            }
+
+            updateCardinalityPositions(rel);
+        }
+
+        function updateCardinalityPositions(rel) {
+            const e1 = nodes[rel.e1];
+            const e2 = nodes[rel.e2];
+            if (!e1 || !e2) return;
+
+            const tCard1 = document.getElementById(`card1_${rel.id}`);
+            if (tCard1) {
+                tCard1.setAttribute("x", e1.x * 0.4 + rel.x * 0.6);
+                tCard1.setAttribute("y", (e1.y * 0.4 + rel.y * 0.6) - 12);
+            }
+
+            const tCard2 = document.getElementById(`card2_${rel.id}`);
+            if (tCard2) {
+                tCard2.setAttribute("x", e2.x * 0.4 + rel.x * 0.6);
+                tCard2.setAttribute("y", (e2.y * 0.4 + rel.y * 0.6) - 12);
+            }
+        }
+
+        function updateAttributeLine(ent, attr) {
+            const lineAttr = document.getElementById(`line_${attr.id}`);
+            if (lineAttr) {
+                const pEntBorder = getRectIntersection(ent.x, ent.y, ent.w, ent.h, attr.x, attr.y);
+                const pAttrBorder = getEllipseIntersection(attr.x, attr.y, attr.w / 2, attr.h / 2, ent.x, ent.y);
+                lineAttr.setAttribute("x1", pEntBorder.x);
+                lineAttr.setAttribute("y1", pEntBorder.y);
+                lineAttr.setAttribute("x2", pAttrBorder.x);
+                lineAttr.setAttribute("y2", pAttrBorder.y);
+            }
+        }
+
+        function makeDraggable(element, onDrag) {
+            element.addEventListener("mousedown", (e) => {
+                e.stopPropagation();
+                dragTargetNode = { element, onDrag };
+
+                const CTM = viewport.querySelector("svg").getScreenCTM();
+                const mouseSvgX = (e.clientX - CTM.e) / CTM.a;
+                const mouseSvgY = (e.clientY - CTM.f) / CTM.d;
+
+                const transform = element.getAttribute("transform");
+                const translateMatch = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+
+                if (translateMatch) {
+                    dragOffsetX = mouseSvgX - parseFloat(translateMatch[1]);
+                    dragOffsetY = mouseSvgY - parseFloat(translateMatch[2]);
+                }
+            });
+        }
+
+        function setupEvents() {
+            viewport.addEventListener("mousedown", (e) => {
+                const isNode = e.target.closest(".node-group");
+                if (!isNode) {
+                    isViewportDragging = true;
+                    startPanX = e.clientX - panX;
+                    startPanY = e.clientY - panY;
+                    clearHighlight();
+                }
+            });
+
+            window.addEventListener("mousemove", (e) => {
+                if (isViewportDragging) {
+                    panX = e.clientX - startPanX;
+                    panY = e.clientY - startPanY;
+                    updateViewportTransform();
+                } else if (dragTargetNode) {
+                    const CTM = viewport.querySelector("svg").getScreenCTM();
+                    const mouseSvgX = (e.clientX - CTM.e) / CTM.a;
+                    const mouseSvgY = (e.clientY - CTM.f) / CTM.d;
+
+                    const newX = mouseSvgX - dragOffsetX;
+                    const newY = mouseSvgY - dragOffsetY;
+
+                    dragTargetNode.element.setAttribute("transform", `translate(${newX}, ${newY})`);
+                    dragTargetNode.onDrag(newX, newY);
+                }
+            });
+
+            window.addEventListener("mouseup", () => {
+                isViewportDragging = false;
+                dragTargetNode = null;
+            });
+
+            viewport.addEventListener("wheel", (e) => {
+                e.preventDefault();
+                const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+                const newScale = Math.min(Math.max(0.15, scale * zoomFactor), 2.5);
+
+                if (newScale !== scale) {
+                    const rect = viewport.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+
+                    const svgX = (mouseX - panX) / scale;
+                    const svgY = (mouseY - panY) / scale;
+
+                    scale = newScale;
+                    panX = mouseX - svgX * scale;
+                    panY = mouseY - svgY * scale;
+
+                    updateViewportTransform();
+                }
+            }, { passive: false });
+
+            viewport.addEventListener("dblclick", (e) => {
+                if (!e.target.closest(".node-group")) {
+                    centerViewportOnEntity("miembros");
+                }
+            });
+        }
+
+        function updateViewportTransform() {
+            linesGroup.setAttribute("transform", `translate(${panX}, ${panY}) scale(${scale})`);
+            nodesGroup.setAttribute("transform", `translate(${panX}, ${panY}) scale(${scale})`);
+        }
+
+        function resetZoom() {
+            centerViewportOnEntity("miembros");
+        }
+
+        function resetLayout() {
+            buildNodes();
+            centerViewportOnEntity("miembros");
+            render();
+            clearHighlight();
+        }
+
+        function toggleAttributes() {
+            showAttributes = !showAttributes;
+            document.getElementById("btnAttr").innerText = showAttributes ? "Ocultar Atributos" : "Mostrar Atributos";
+            render();
+        }
+
+        function highlightEntityNetwork(entityId) {
+            if (activeSelectedEntity === entityId) {
+                clearHighlight();
+                return;
+            }
+
+            activeSelectedEntity = entityId;
+
+            const connectedEntities = new Set([entityId]);
+            const connectedRels = new Set();
+            const connectedAttrs = new Set();
+
+            Object.values(relationships).forEach(rel => {
+                if (rel.e1 === entityId || rel.e2 === entityId) {
+                    connectedRels.add(rel.id);
+                    connectedEntities.add(rel.e1);
+                    connectedEntities.add(rel.e2);
+                }
+            });
+
+            const targetEnt = nodes[entityId];
+            if (targetEnt && targetEnt.attributes) {
+                targetEnt.attributes.forEach(attr => connectedAttrs.add(attr.id));
+            }
+
+            document.querySelectorAll(".node-group").forEach(el => {
+                const id = el.id.replace("node_", "");
+                if (connectedEntities.has(id) || connectedRels.has(id) || connectedAttrs.has(id)) {
+                    el.classList.remove("dimmed");
+                } else {
+                    el.classList.add("dimmed");
+                }
+            });
+        }
+
+        function clearHighlight() {
+            activeSelectedEntity = null;
+            document.querySelectorAll(".node-group").forEach(el => el.classList.remove("dimmed"));
+        }
+
+        function onSearch(query) {
+            const q = query.trim().toLowerCase();
+            if (!q) {
+                clearHighlight();
+                return;
+            }
+
+            document.querySelectorAll(".node-group").forEach(el => {
+                const text = el.textContent.toLowerCase();
+                if (text.includes(q)) {
+                    el.classList.remove("dimmed");
+                } else {
+                    el.classList.add("dimmed");
+                }
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

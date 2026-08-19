@@ -1,16 +1,5 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DE ALUMNOS – MAESTRO (AlumnosController)
- * ============================================================
- * Permite al Maestro ver la lista de todos los estudiantes (Deportistas)
- * y proponer ascensos de grado.
- *
- * Acceso: requiere sesión activa + rol de Maestro.
- * Rutas:
- *   GET  /maestro/alumnos  → listar alumnos de todas las sedes
- * ============================================================
- */
+
 namespace App\Controllers\Maestro;
 
 use App\Core\Controller;
@@ -35,13 +24,9 @@ class AlumnosController extends Controller {
         $this->nivelModel   = new Nivel();
     }
 
-    /**
-     * Muestra la lista de deportistas (alumnos) con sus detalles.
-     */
     public function index() {
         $miembros = $this->usuarioModel->getAllWithDetails();
-        
-        // Filtrar para mostrar solo deportistas (estudiantes)
+
         $alumnos = array_filter($miembros, function($m) {
             return $m['rol_id'] === Roles::ESTUDIANTE;
         });

@@ -16,8 +16,7 @@ if (!isset($_SESSION['temp_registro'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
     <link href="<?= asset('styles/output.css') ?>" rel="stylesheet">
-    
-    <!-- Theme Init -->
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -26,7 +25,6 @@ if (!isset($_SESSION['temp_registro'])) {
         }
     </script>
 
-    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
@@ -41,14 +39,12 @@ if (!isset($_SESSION['temp_registro'])) {
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white py-12">
-    
-    <!-- Background Image -->
+
     <div class="fixed inset-0 z-0">
         <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">
         <div class="absolute inset-0 bg-gradient-to-tr from-white/60 dark:from-[#0b0f19]/90 via-white/40 dark:via-[#0b0f19]/80 to-blue-100/50 dark:to-[#111827]/80"></div>
     </div>
 
-    <!-- Register Container -->
     <div class="w-full max-w-2xl m-4 bg-white dark:bg-slate-900/80 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800/80 relative z-10 overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tkd-red via-tkd-gold to-tkd-blue"></div>
 

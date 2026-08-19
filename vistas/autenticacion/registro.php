@@ -22,8 +22,7 @@ if (isset($_GET['error'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
     <link href="<?= asset('styles/output.css') ?>" rel="stylesheet">
-    
-    <!-- Theme Init (prevent FOUC) -->
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -32,7 +31,6 @@ if (isset($_GET['error'])) {
         }
     </script>
 
-    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
@@ -47,25 +45,22 @@ if (isset($_GET['error'])) {
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
 <body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white transition-colors duration-300 py-12">
-    
-    <!-- Background Image with Blur & Premium Glows -->
+
     <div class="fixed inset-0 z-0">
         <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">
         <div class="absolute inset-0 bg-gradient-to-tr from-white/60 dark:from-[#0b0f19]/90 via-white/40 dark:via-[#0b0f19]/80 to-blue-100/50 dark:to-[#111827]/80"></div>
-        <!-- Ambient Light Gradients -->
+        
         <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-tkd-red/5 dark:bg-tkd-red/10 blur-[120px] pointer-events-none animate-pulse-slow"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-tkd-blue/5 dark:bg-tkd-blue/10 blur-[120px] pointer-events-none animate-pulse-slow" style="animation-delay: 1.5s;"></div>
     </div>
 
-    <!-- Back to Site Button -->
     <a href="<?= base_url('/') ?>" class="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700/50 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800/80 transition-all backdrop-blur-sm group shadow-sm">
         <span class="material-icons-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
         <span class="text-xs font-semibold uppercase tracking-wider">Volver</span>
     </a>
 
-    <!-- Register Container -->
     <div class="w-full max-w-2xl m-4 bg-white dark:bg-slate-900/80 backdrop-blur-md rounded-3xl shadow-xl dark:shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-slate-200 dark:border-slate-800/80 animate-fade-in-up relative z-10 overflow-hidden transition-colors duration-300">
-        <!-- Decorative Top Line -->
+        
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-tkd-red via-tkd-gold to-tkd-blue"></div>
 
         <div class="p-6 md:p-8">
@@ -88,23 +83,17 @@ if (isset($_GET['error'])) {
 
             <form class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4" method="POST" action="<?= base_url('/registro/process') ?>">
 
-
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Documento Identidad</label>
                     <input name="num_doc" type="text" required 
                         class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
                 </div>
 
-
-
-
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Correo Electrónico</label>
                     <input name="email" type="email" required 
                         class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300">
                 </div>
-
-
 
                 <div class="md:col-span-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Contraseña (Mín. 6 carc.)</label>
@@ -148,7 +137,6 @@ if (isset($_GET['error'])) {
         </div>
     </div>
 
-    <!-- Modal Terminos y Condiciones -->
     <div id="termsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 rounded-2xl shadow-2xl w-full max-w-lg mx-4 transform scale-95 transition-transform duration-300 overflow-hidden transition-colors" id="modalContent">
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900/80 transition-colors">
@@ -203,7 +191,7 @@ if (isset($_GET['error'])) {
 
         function openModal() {
             modal.classList.remove('hidden');
-            // Timeout to allow the element to render before adding opacity/scale for transition
+            
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modal.classList.add('opacity-100');
@@ -217,13 +205,12 @@ if (isset($_GET['error'])) {
             modal.classList.add('opacity-0');
             modalContent.classList.remove('scale-100');
             modalContent.classList.add('scale-95');
-            // Wait for transition to end
+            
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
         }
 
-        // Close on background click
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 closeModal();

@@ -6,12 +6,12 @@
     <title><?= $page_title ?? 'Jinhwa Corporation' ?></title>
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
     <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
-    <!-- Google Fonts: Oswald (Headings) & Inter (Body) -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Modern Portal Styles */
+        
         body {
             background-color: #0b0f19;
             color: #ffffff;
@@ -34,7 +34,6 @@
             padding: 20px;
         }
 
-        /* Subtle background patterns */
         .portal-container::before {
             content: '';
             position: absolute;
@@ -84,7 +83,6 @@
                         stroke-opacity 0.3s ease;
         }
 
-        /* Actions Section */
         .actions-container {
             display: flex;
             gap: 30px;
@@ -130,7 +128,6 @@
             border-radius: 12px;
         }
 
-        /* SITIO WEB Specific */
         .btn-sitio {
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: #ffffff;
@@ -143,7 +140,7 @@
             left: 5%;
             width: 0;
             height: 2px;
-            background-color: #2563EB; /* TKD Blue */
+            background-color: #2563EB; 
             transition: width 0.4s ease;
         }
 
@@ -157,7 +154,6 @@
             width: 90%;
         }
 
-        /* ACCEDER Specific */
         .btn-acceder {
             border: 1px solid rgba(220, 38, 38, 0.3);
             color: #ffffff;
@@ -171,7 +167,7 @@
             left: 5%;
             width: 0;
             height: 2px;
-            background-color: #DC2626; /* TKD Red */
+            background-color: #DC2626; 
             transition: width 0.4s ease;
         }
 
@@ -252,13 +248,12 @@
         </div>
 
         <div class="actions-container" id="actionsContainer">
-            <!-- SITIO WEB -->
+            
             <a href="<?= base_url('/inicio') ?>" class="portal-btn-group">
                 <div class="btn-main btn-sitio">Sitio Web</div>
                 <div class="btn-subtitle">Explora nuestra esencia</div>
             </a>
 
-            <!-- ACCEDER -->
             <a href="<?= base_url('/login') ?>" class="portal-btn-group">
                 <div class="btn-main btn-acceder">Acceder</div>
                 <div class="btn-subtitle">Acceso exclusivo para la familia Jinhwa</div>
@@ -271,17 +266,14 @@
             const svgElement = document.querySelector('.svg-container svg');
             if (!svgElement) return;
 
-            // Ensure we have correct paths
             const paths = Array.from(svgElement.querySelectorAll('path'));
             const logoWrapper = document.getElementById('logoWrapper');
             const actionsContainer = document.getElementById('actionsContainer');
-            
-            // 1. Get SVG Center
+
             const svgBox = svgElement.getBBox();
             const centerX = svgBox.x + svgBox.width / 2;
             const centerY = svgBox.y + svgBox.height / 2;
 
-            // 2. Prepare Path Data
             const pathData = paths.map((path) => {
                 const length = path.getTotalLength();
                 if (length === 0) return null;
@@ -292,7 +284,7 @@
                 const distance = Math.sqrt(Math.pow(pathCenterX - centerX, 2) + Math.pow(pathCenterY - centerY, 2));
                 
                 let fillColor = path.getAttribute('fill') || window.getComputedStyle(path).fill;
-                // Normalize some colors or defaults
+                
                 if (!fillColor || fillColor === 'none' || fillColor === 'rgba(0, 0, 0, 0)') {
                    fillColor = "#ffffff"; 
                 }
@@ -300,38 +292,32 @@
                 return { path, length, distance, fillColor };
             }).filter(p => p !== null);
 
-            // 3. Sort center-out
             pathData.sort((a, b) => a.distance - b.distance);
 
-            // 4. Set Initial States
             pathData.forEach((item, index) => {
                 const { path, length, fillColor } = item;
                 path.style.strokeDasharray = length;
                 path.style.strokeDashoffset = length;
                 path.style.stroke = fillColor;
                 path.style.fill = fillColor;
-                
-                // Cascade delays: drawing -> filling -> hide stroke
+
                 const seqDelay = index * 0.005;
                 path.style.transitionDelay = `${seqDelay}s, ${seqDelay + 0.5}s, ${seqDelay + 1.0}s`;
             });
 
-            // Trigger reflow
             svgElement.getBoundingClientRect(); 
             svgElement.classList.add('ready');
 
-            // 5. Start Sequence
             setTimeout(() => {
                 pathData.forEach(item => {
                     item.path.style.strokeDashoffset = '0';
                     item.path.style.fillOpacity = '1';
-                    // Hide stroke after filling
+                    
                     setTimeout(() => {
                         item.path.style.strokeOpacity = '0';
                     }, 1200);
                 });
 
-                // 6. Final Transition to buttons
                 setTimeout(() => {
                     logoWrapper.classList.add('minimized');
                     setTimeout(() => {

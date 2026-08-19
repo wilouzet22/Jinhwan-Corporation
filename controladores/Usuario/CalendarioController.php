@@ -1,12 +1,5 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DE CALENDARIO – USUARIOS (CalendarioController)
- * ============================================================
- * Gestiona la visualización del calendario para estudiantes
- * y maestros.
- * ============================================================
- */
+
 namespace App\Controllers\Usuario;
 
 use App\Core\Controller;
@@ -22,11 +15,8 @@ class CalendarioController extends Controller {
         $this->eventoModel = new Evento();
     }
 
-    /**
-     * Muestra la vista del calendario en modo lectura.
-     */
     public function index() {
-        // Obtenemos el rol del usuario para el layout
+        
         $rol = $_SESSION['user_role'] ?? '';
         
         $this->view('usuario/calendario', [
@@ -36,9 +26,6 @@ class CalendarioController extends Controller {
         ]);
     }
 
-    /**
-     * Devuelve los eventos en formato JSON para FullCalendar.
-     */
     public function getEventos() {
         header('Content-Type: application/json');
         $eventos = $this->eventoModel->getAll();

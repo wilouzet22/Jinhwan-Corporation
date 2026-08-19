@@ -1,6 +1,5 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-<!-- FullCalendar CSS -->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 
 <main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300 max-w-5xl">
@@ -17,7 +16,6 @@
     </div>
 </main>
 
-<!-- Modal -->
 <div id="evento-modal" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transition-colors duration-300">
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -73,9 +71,9 @@
             },
             events: '<?= base_url('/admin/calendario/get-eventos') ?>',
             eventClick: function(info) {
-                // Formatting date for datetime-local input
+                
                 let dateStr = info.event.start;
-                // Add timezone offset to keep correct local time in datetime-local input
+                
                 let tzoffset = (new Date()).getTimezoneOffset() * 60000;
                 let localISOTime = (new Date(dateStr - tzoffset)).toISOString().slice(0, 16);
 
@@ -135,7 +133,7 @@
 </script>
 
 <style>
-/* Estilos para adaptar FullCalendar al dark mode */
+
 .dark .fc-theme-standard .fc-scrollgrid { border-color: #1e293b; }
 .dark .fc-theme-standard td, .dark .fc-theme-standard th { border-color: #1e293b; }
 .dark .fc-col-header-cell-cushion, .dark .fc-daygrid-day-number { color: #f8fafc; }

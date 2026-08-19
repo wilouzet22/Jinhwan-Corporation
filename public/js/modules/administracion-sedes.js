@@ -1,4 +1,4 @@
-// Admin sedes Logic
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('sede-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (action === 'edit') {
             modalTitle.innerText = 'Editar Sede';
             idInput.value = data.id;
-            // Map fields manually or ensure input IDs match data keys
+            
             document.getElementById('nombre').value = data.nombre;
             document.getElementById('direccion').value = data.direccion;
             document.getElementById('telefono').value = data.telefono || '';
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Close on click outside
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {

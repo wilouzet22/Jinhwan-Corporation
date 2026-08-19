@@ -2,8 +2,7 @@
 
 <main class="flex-1 p-4 md:p-8 overflow-y-auto transition-colors duration-300">
     <div class="max-w-7xl mx-auto space-y-6">
-        
-        <!-- Header -->
+
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 transition-colors duration-300 shadow-sm">
             <div>
                 <h2 class="text-2xl font-display font-bold text-slate-900 dark:text-white mb-2 transition-colors">Perfiles Públicos</h2>
@@ -11,7 +10,6 @@
             </div>
         </div>
 
-        <!-- Tabla -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden transition-colors duration-300 shadow-sm">
             <div class="overflow-x-auto custom-scrollbar">
                 <table class="w-full text-left border-collapse">
@@ -96,7 +94,6 @@
     </div>
 </main>
 
-<!-- Modal Editar Perfil Público -->
 <div id="modalEditarPerfil" class="fixed inset-0 z-[100] hidden">
     <div class="absolute inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm transition-opacity"></div>
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -112,7 +109,7 @@
                 </div>
 
                 <div class="p-6 space-y-5">
-                    <!-- Toggle Mostrar en Web -->
+                    
                     <div class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors">
                         <div>
                             <p class="font-medium text-slate-800 dark:text-slate-200 transition-colors">Mostrar en Web</p>
@@ -124,7 +121,6 @@
                         </label>
                     </div>
 
-                    <!-- Rol en Web -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Categoría / Rol en Web</label>
                         <select name="rol" id="edit_rol" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-800 dark:text-slate-300 focus:ring-2 focus:ring-tkd-blue focus:border-tkd-blue transition-colors focus:outline-none">
@@ -137,14 +133,12 @@
                         </select>
                     </div>
 
-                    <!-- URL YouTube / Vimeo -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Enlace de YouTube o Vimeo</label>
                         <input type="url" name="url_instagram" id="edit_instagram" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-800 dark:text-slate-300 focus:ring-2 focus:ring-tkd-blue focus:border-tkd-blue transition-colors focus:outline-none" placeholder="https://www.youtube.com/shorts/...">
                         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 transition-colors">Pega el enlace de un YouTube Short, YouTube Video o un video de Vimeo para mostrarlo sin distracciones.</p>
                     </div>
 
-                    <!-- Descripción -->
                     <div>
                         <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 transition-colors">Descripción del Perfil</label>
                         <textarea name="descripcion_perfil" id="edit_descripcion" rows="4" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2.5 text-slate-800 dark:text-slate-300 focus:ring-2 focus:ring-tkd-blue focus:border-tkd-blue transition-colors resize-none focus:outline-none" placeholder="Breve biografía, logros, experiencia..."></textarea>

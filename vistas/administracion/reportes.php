@@ -3,18 +3,16 @@ use App\Config\Roles;
 include __DIR__ . '/../layout/administracion_cabecera.php';
 ?>
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-x-hidden transition-colors duration-300">
 
-        <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 relative z-10 gap-4">
             <div>
                 <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">Reportes y Consultas</h1>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Filtra y analiza los datos de todos los miembros en tiempo real.</p>
             </div>
-            <!-- Contador dinámico -->
+            
             <div class="flex items-center gap-3 bg-tkd-blue/10 dark:bg-tkd-blue/20 border border-tkd-blue/20 dark:border-tkd-blue/30 rounded-xl px-5 py-3">
                 <span class="material-icons-outlined text-tkd-blue text-2xl">groups</span>
                 <div>
@@ -24,7 +22,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             </div>
         </div>
 
-        <!-- Panel de Filtros -->
         <div class="mb-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm transition-colors duration-300 relative z-10">
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2 mr-2">
@@ -33,7 +30,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
 
                 <div class="flex-1 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                    <!-- Búsqueda por nombre -->
+                    
                     <div class="col-span-2 lg:col-span-1 relative">
                         <span class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
                             <span class="material-icons-outlined text-slate-400 text-sm">search</span>
@@ -42,7 +39,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                                class="w-full pl-8 pr-3 py-2 text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
                     </div>
 
-                    <!-- Sede -->
                     <select id="filter-sede" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
                         <option value="all">Todas las Sedes</option>
                         <?php foreach($sedes_list as $sede): ?>
@@ -50,7 +46,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         <?php endforeach; ?>
                     </select>
 
-                    <!-- Cinturón -->
                     <select id="filter-nivel" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
                         <option value="all">Todos los Cinturones</option>
                         <?php foreach($niveles_list as $nivel): ?>
@@ -58,7 +53,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         <?php endforeach; ?>
                     </select>
 
-                    <!-- Rol -->
                     <select id="filter-rol" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
                         <option value="all">Todos los Roles</option>
                         <option value="Administrador">Administrador</option>
@@ -66,7 +60,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                         <option value="Alumno">Alumno</option>
                     </select>
 
-                    <!-- Estado -->
                     <select id="filter-estado" class="w-full text-sm rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-1 focus:ring-tkd-blue transition-colors">
                         <option value="all">Todos los Estados</option>
                         <option value="Activo">Activo</option>
@@ -80,13 +73,11 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </button>
             </div>
 
-            <!-- Filtros activos (badges) -->
             <div id="active-filters" class="flex flex-wrap gap-2 mt-3 hidden"></div>
         </div>
 
-        <!-- Gráficas -->
         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-            <!-- Gráfica de Cinturones -->
+            
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
@@ -104,7 +95,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </div>
             </div>
 
-            <!-- Gráfica de Sedes -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col transition-colors duration-300">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
@@ -123,7 +113,6 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
             </div>
         </div>
 
-        <!-- Tabla de Resultados -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider flex items-center gap-2">
@@ -215,7 +204,7 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <!-- Sin resultados -->
+                
                 <div id="no-results-msg" class="hidden flex flex-col items-center justify-center py-16 text-center">
                     <span class="material-icons-outlined text-5xl text-slate-300 dark:text-slate-700 mb-3">search_off</span>
                     <p class="text-slate-500 dark:text-slate-400 font-medium">No se encontraron miembros con estos filtros.</p>
@@ -340,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateCharts(visibleRows) {
-        // — Cinturones —
+        
         const cinturonMap = {};
         visibleRows.forEach(row => {
             const n = row.dataset.nivel || 'Sin Asignar';
@@ -368,7 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
         chartCEmpty.classList.toggle('hidden', cData.length > 0);
         document.getElementById('chart-cinturones-total').textContent = cData.length > 0 ? `Total: ${cData.reduce((a,b)=>a+b,0)}` : '';
 
-        // — Sedes —
         const sedeMap = {};
         visibleRows.forEach(row => {
             const s = row.dataset.sede || 'Sin Asignar';

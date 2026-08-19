@@ -1,8 +1,6 @@
-// Navigation logic for public site, admin, maestro and estudiante panels
+
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ── Mobile hamburger menu ──────────────────────────────────────────────────
-  // Support multiple sidebar IDs used across different layouts
   const mobileMenuBtn = document.getElementById("mobile-menu-btn");
   const sidebar = (
     document.getElementById("sidebar") ||
@@ -31,16 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
       isOpen ? closeSidebar() : openSidebar();
     });
 
-    // Close when touching the backdrop
     backdrop.addEventListener("click", closeSidebar);
 
-    // Close when navigating to a sidebar link
     sidebar.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", closeSidebar);
     });
   }
 
-  // ── Admin dropdown menu (public site only) ─────────────────────────────────
   const adminToggle   = document.getElementById("admin-menu-toggle");
   const adminDropdown = document.getElementById("admin-menu-dropdown");
 
@@ -50,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
       adminDropdown.classList.toggle("hidden");
     });
 
-    // Close when clicking outside
     document.addEventListener("click", (e) => {
       if (
         !adminDropdown.contains(e.target) &&

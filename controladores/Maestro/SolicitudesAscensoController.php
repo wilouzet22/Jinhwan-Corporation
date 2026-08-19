@@ -1,18 +1,5 @@
 <?php
-/**
- * ============================================================
- * CONTROLADOR DE SOLICITUDES DE ASCENSO – MAESTRO (SolicitudesAscensoController)
- * ============================================================
- * Permite al Maestro proponer ascensos de grado para deportistas.
- * Las solicitudes se guardan en la tabla `solicitudes_ascenso` con estado 'pendiente'.
- * El administrador podrá verlas y aprobarlas/rechazarlas.
- *
- * Acceso: requiere sesión activa + rol de Maestro.
- * Rutas:
- *   GET  /maestro/solicitudes-ascenso         → listar solicitudes del maestro
- *   POST /maestro/solicitudes-ascenso/create  → guardar una nueva propuesta de ascenso
- * ============================================================
- */
+
 namespace App\Controllers\Maestro;
 
 use App\Core\Controller;
@@ -29,31 +16,29 @@ class SolicitudesAscensoController extends Controller {
         Security::verifyMaestro();
     }
 
-    /**
-     * Muestra la lista de solicitudes enviadas por el maestro logueado.
-     */
     public function index() {
         $db = Database::getInstance()->getConnection();
-        $id_maestro = $_SESSION['id'];
+        $id_maestro = (int)$_SESSION['id'];
 
-        // Obtener las solicitudes de este maestro
-        $sql = "SELECT s.id, s.observaciones, s.estado, s.fecha_solicitud, s.fecha_resolucion,
-                       m.nombre as nombre_alumno, m.apellido as apellido_alumno,
+        $sql = "SELECT s.id_solicitud as id, s.observaciones, s.estado, s.fecha_solicitud, s.fecha_resolucion,
+                       p.nombre as nombre_alumno, p.apellido as apellido_alumno,
                        g_act.nombre as grado_actual, g_sol.nombre as grado_solicitado
                 FROM solicitudes_ascenso s
-                JOIN miembros m ON s.id_miembro = m.id_miembro
+                JOIN personas p ON s.id_persona_estudiante = p.id_persona
                 JOIN grados g_act ON s.id_grado_actual = g_act.id_grado
                 JOIN grados g_sol ON s.id_grado_solicitado = g_sol.id_grado
-                WHERE s.id_maestro = ?
-                ORDER BY s.id DESC";
+                WHERE s.id_persona_maestro = ?
+                ORDER BY s.id_solicitud DESC";
 
         $stmt = $db->prepare($sql);
-        $stmt->bind_param("i", $id_maestro);
-        $stmt->execute();
-        $solicitudes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
+        $solicitudes = [];
+        if ($stmt) {
+            $stmt->bind_param("i", $id_maestro);
+            $stmt->execute();
+            $solicitudes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+        }
 
-        // Cargar alumnos y grados para la propuesta múltiple
         $usuarioModel = new Usuario();
         $nivelModel   = new Nivel();
         
@@ -72,13 +57,10 @@ class SolicitudesAscensoController extends Controller {
         ]);
     }
 
-    /**
-     * Registra una nueva solicitud de ascenso de grado.
-     */
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db = Database::getInstance()->getConnection();
-            $id_maestro = $_SESSION['id'];
+            $id_maestro = (int)$_SESSION['id'];
 
             $alumnos_seleccionados = $_POST['alumnos_seleccionados'] ?? [];
             $grados_actuales       = $_POST['grados_actuales'] ?? [];
@@ -90,23 +72,24 @@ class SolicitudesAscensoController extends Controller {
                 return;
             }
 
-            $sql = "INSERT INTO solicitudes_ascenso (id_miembro, id_grado_actual, id_grado_solicitado, id_maestro, observaciones, estado)
+            $sql = "INSERT INTO solicitudes_ascenso (id_persona_estudiante, id_grado_actual, id_grado_solicitado, id_persona_maestro, observaciones, estado)
                     VALUES (?, ?, ?, ?, ?, 'pendiente')";
             $stmt = $db->prepare($sql);
 
-            foreach ($alumnos_seleccionados as $id_miembro) {
-                $id_miembro = intval($id_miembro);
-                $id_grado_actual = intval($grados_actuales[$id_miembro] ?? 0);
-                $id_grado_solicitado = intval($grados_solicitados[$id_miembro] ?? 0);
+            if ($stmt) {
+                foreach ($alumnos_seleccionados as $id_alumno) {
+                    $id_alumno = intval($id_alumno);
+                    $id_grado_actual     = intval($grados_actuales[$id_alumno] ?? 0);
+                    $id_grado_solicitado = intval($grados_solicitados[$id_alumno] ?? 0);
 
-                // Solo insertar si los datos son válidos
-                if ($id_miembro > 0 && $id_grado_actual > 0 && $id_grado_solicitado > 0) {
-                    $stmt->bind_param("iiiis", $id_miembro, $id_grado_actual, $id_grado_solicitado, $id_maestro, $observaciones);
-                    $stmt->execute();
+                    if ($id_alumno > 0 && $id_grado_actual > 0 && $id_grado_solicitado > 0) {
+                        $stmt->bind_param("iiiis", $id_alumno, $id_grado_actual, $id_grado_solicitado, $id_maestro, $observaciones);
+                        $stmt->execute();
+                    }
                 }
+                $stmt->close();
             }
             
-            $stmt->close();
             $this->redirect('/maestro/solicitudes-ascenso?success=1');
         }
     }

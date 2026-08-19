@@ -18,7 +18,6 @@ include $cabecera;
 
 <main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto h-screen custom-scrollbar transition-colors duration-300">
 
-    <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100 transition-colors">Mi Perfil</h1>
@@ -34,8 +33,7 @@ include $cabecera;
     <?php endif; ?>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        <!-- Info Card -->
+
         <div class="lg:col-span-1 space-y-6">
             <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 flex flex-col items-center text-center transition-colors duration-300">
                 <div class="relative group mb-4">
@@ -77,8 +75,7 @@ include $cabecera;
                 </div>
             </div>
         </div>
-        
-        <!-- Edit Form -->
+
         <div class="lg:col-span-2">
             <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div class="p-6 border-b border-slate-200 dark:border-slate-800">
@@ -86,8 +83,7 @@ include $cabecera;
                 </div>
                 
                 <form action="<?= base_url('/usuario/perfil/update') ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
-                    
-                    <!-- Foto de perfil upload -->
+
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Foto de Perfil</label>
                         <div class="flex flex-col sm:flex-row items-center gap-4">
@@ -112,7 +108,6 @@ include $cabecera;
 
                     <hr class="border-slate-200 dark:border-slate-800">
 
-                    <!-- Información Personal -->
                     <div>
                         <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Información Personal</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -146,7 +141,6 @@ include $cabecera;
 
                     <hr class="border-slate-200 dark:border-slate-800">
 
-                    <!-- Información de Contacto -->
                     <div>
                         <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Contacto</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -163,7 +157,6 @@ include $cabecera;
 
                     <hr class="border-slate-200 dark:border-slate-800">
 
-                    <!-- Información Deportiva y de Salud -->
                     <div>
                         <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Salud y Deporte</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -202,7 +195,6 @@ include $cabecera;
 
                     <hr class="border-slate-200 dark:border-slate-800">
 
-                    <!-- Perfil Público Web -->
                     <div>
                         <h3 class="text-sm font-bold text-tkd-blue dark:text-blue-400 uppercase tracking-wider mb-4">Perfil Público Web</h3>
                         <div class="space-y-4">

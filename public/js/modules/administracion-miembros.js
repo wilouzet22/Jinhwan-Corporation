@@ -1,4 +1,4 @@
-// Admin Miembros Logic
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('member-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (action === 'edit') {
             modalTitle.innerText = 'Editar Miembro';
             idInput.value = data.id;
-            
-            // Populate fields
+
             const fields = ['nombre', 'apellido', 'tipo_documento', 'numero_documento', 'fecha_nacimiento', 'telefono', 'correo', 'nivel_id', 'sede_id', 'rol_id'];
             fields.forEach(field => {
                 const input = document.getElementById(field);
@@ -36,8 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.classList.remove('flex');
         }
     };
-    
-    // Close modal on outside click
+
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
@@ -46,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto open modal if requested via URL
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('open') === 'new') {
         openModal('add');

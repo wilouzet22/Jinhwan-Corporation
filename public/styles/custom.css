@@ -1,8 +1,5 @@
-/* ============================================
-   JINHWAN CORPORATION — Premium Styles
-   ============================================ */
 
-/* Fade-in on load */
+
 body {
   opacity: 0;
   animation: fadeIn 0.55s ease-out forwards;
@@ -12,18 +9,12 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ============================================
-   CSS VARIABLES
-   ============================================ */
 :root {
   --tkd-red:  #DC2626;
   --tkd-blue: #2563EB;
   --tkd-gold: #F59E0B;
 }
 
-/* ============================================
-   SCROLLBAR
-   ============================================ */
 ::-webkit-scrollbar { width: 6px; }
 
 html.dark ::-webkit-scrollbar-track { background: #0f172a; }
@@ -36,16 +27,12 @@ html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
 .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #334155 transparent; }
 
-/* ============================================
-   SIDEBAR — LIGHT MODE: vivid gradient
-   ============================================ */
 html:not(.dark) #sidebar {
   background: linear-gradient(175deg, #ffffff 0%, #eef2ff 55%, #fff1f2 100%) !important;
   border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
   box-shadow: 6px 0 32px rgba(99, 102, 241, 0.10) !important;
 }
 
-/* Top rainbow accent bar */
 html:not(.dark) #sidebar::before {
   content: '';
   display: block;
@@ -55,24 +42,18 @@ html:not(.dark) #sidebar::before {
   flex-shrink: 0;
 }
 
-/* Logo area */
 html:not(.dark) #sidebar > div:nth-child(3) {
   background: linear-gradient(135deg, #f0f4ff 0%, #fff5f5 100%) !important;
 }
 
-/* Nav link hover */
 html:not(.dark) .nav-link:hover {
   background: linear-gradient(90deg, rgba(37,99,235,0.10) 0%, transparent 100%) !important;
 }
 
-/* Sidebar footer */
 html:not(.dark) #sidebar .border-t {
   background: linear-gradient(135deg, #eef2ff 0%, #fff1f2 100%) !important;
 }
 
-/* ============================================
-   BODY BACKGROUND — LIGHT MODE
-   ============================================ */
 html:not(.dark) body {
   background: #f0f4ff !important;
   background-image:
@@ -81,12 +62,6 @@ html:not(.dark) body {
   background-attachment: fixed !important;
 }
 
-/* ============================================
-   HERO SLIDER — LIGHT MODE
-   Images fully visible, minimal overlay
-   ============================================ */
-
-/* The light-mode overlay div on each slide */
 html:not(.dark) .slider-item .light-overlay {
   background: linear-gradient(
     100deg,
@@ -96,22 +71,17 @@ html:not(.dark) .slider-item .light-overlay {
   );
 }
 
-/* Slider images: full saturation, no blend modes */
 html:not(.dark) .slider-item img {
   opacity: 1 !important;
   mix-blend-mode: normal !important;
   filter: saturate(1.15) brightness(0.97) !important;
 }
 
-/* Dark overlay (existing dark-mode class) */
 html.dark .slider-item img {
   opacity: 0.45 !important;
   mix-blend-mode: normal !important;
 }
 
-/* ============================================
-   NAV LINKS
-   ============================================ */
 .nav-link {
   position: relative;
   transition: all 0.25s ease;
@@ -133,9 +103,6 @@ html.dark .slider-item img {
   box-shadow: 0 0 10px rgba(220,38,38,0.5);
 }
 
-/* ============================================
-   CARDS — LIGHT MODE POP
-   ============================================ */
 html:not(.dark) .bg-white {
   background: #ffffff !important;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(37,99,235,0.07) !important;
@@ -145,29 +112,19 @@ html:not(.dark) .bg-white:hover {
   transform: translateY(-1px);
 }
 
-/* ============================================
-   SECTIONS — LIGHT MODE GRADIENT BACKGROUNDS
-   ============================================ */
 html:not(.dark) .section-light {
   background: linear-gradient(180deg, #eef2ff 0%, #ffffff 45%, #fff1f2 100%);
 }
 
-/* Override plain slate sections */
 html:not(.dark) section {
   position: relative;
 }
 
-/* ============================================
-   FOOTER — LIGHT MODE
-   ============================================ */
 html:not(.dark) footer {
   background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #fff1f2 100%) !important;
   border-top: 1px solid rgba(37,99,235,0.12) !important;
 }
 
-/* ============================================
-   THEME TOGGLE BUTTON
-   ============================================ */
 html:not(.dark) #theme-toggle {
   background: linear-gradient(135deg, #eff6ff, #fef2f2);
   border: 1px solid rgba(37,99,235,0.18);
@@ -177,9 +134,6 @@ html:not(.dark) #theme-toggle:hover {
   background: linear-gradient(135deg, #dbeafe, #fee2e2);
 }
 
-/* ============================================
-   GLASSMORPHISM
-   ============================================ */
 .glass-panel { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 html.dark  .glass-panel { background: rgba(17,24,39,0.65); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
 html:not(.dark) .glass-panel { background: rgba(255,255,255,0.75); border: 1px solid rgba(37,99,235,0.12); box-shadow: 0 4px 24px rgba(37,99,235,0.10); }
@@ -191,30 +145,18 @@ html:not(.dark) .glass-card { background: rgba(255,255,255,0.80); border: 1px so
 html.dark  .glass-card:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 20px rgba(220,38,38,0.1); }
 html:not(.dark) .glass-card:hover { box-shadow: 0 12px 36px rgba(37,99,235,0.15); }
 
-/* ============================================
-   GLOW UTILITIES
-   ============================================ */
 .glow-red  { box-shadow: 0 0 15px rgba(220,38,38,0.5); }
 .glow-blue { box-shadow: 0 0 15px rgba(37,99,235,0.5); }
 .hover-glow-red:hover { box-shadow: 0 0 25px rgba(220,38,38,0.7); }
 .text-glow-gold { text-shadow: 0 0 10px rgba(245,158,11,0.6); }
 
-/* ============================================
-   ANIMATED GRADIENT TEXT
-   ============================================ */
 .bg-gradient-animate { background-size: 200% auto; animation: gradientShine 5s linear infinite; }
 @keyframes gradientShine { to { background-position: 200% center; } }
 
-/* ============================================
-   RESPONSIVE — MOBILE FIXES
-   ============================================ */
-
-/* Prevent any horizontal overflow on all pages */
 html, body { max-width: 100%; overflow-x: hidden; }
 
-/* Sidebar logo: shrink on small screens */
 @media (max-width: 767px) {
-  /* Public site sidebar: reduce logo area */
+  
   #sidebar > div:nth-child(3) {
     padding: 1.25rem !important;
   }
@@ -223,12 +165,10 @@ html, body { max-width: 100%; overflow-x: hidden; }
     height: 6rem !important;
   }
 
-  /* Admin hamburger dropdown: keep inside viewport */
   #admin-menu-dropdown {
     max-width: calc(100vw - 2rem);
   }
 
-  /* Members cards: always stack vertically on mobile */
   .miembro-card {
     flex-direction: column !important;
   }
@@ -236,34 +176,28 @@ html, body { max-width: 100%; overflow-x: hidden; }
     min-height: 280px !important;
   }
 
-  /* Nosotros identity image: reduce height on mobile */
   .nosotros-identity-img {
     height: 240px !important;
   }
 
-  /* Filter buttons: allow horizontal scroll */
   .filter-scroll-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
   }
 
-  /* Hero slider controls: move to bottom-center on mobile */
   #hero-slider ~ div {
     bottom: 1rem;
     right: 1rem;
   }
 
-  /* Footer grid: already 1-col but ensure no overflow */
   footer .grid {
     grid-template-columns: 1fr !important;
   }
 
-  /* Pilares cards: full width on very small screens */
   .grid.grid-cols-1 { gap: 1rem; }
 }
 
-/* Tablets: ensure sidebar still works */
 @media (min-width: 768px) {
   #sidebar,
   #admin-sidebar,

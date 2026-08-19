@@ -1,44 +1,17 @@
--- phpMyAdmin SQL Dump
--- Database: `jinhwa_corporation`
--- Estructura normalizada y optimizada con separación de personas, credenciales y perfiles especializados
+-- =============================================================================
+-- SCRIPT DE MIGRACIÓN Y NUEVA ESTRUCTURA NORMALIZADA
+-- JINHWA CORPORATION - BASE DE DATOS
+-- =============================================================================
 
+SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-SET FOREIGN_KEY_CHECKS = 0;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
--- --------------------------------------------------------
--- LIMPIEZA DE TABLAS PREVIAS
--- --------------------------------------------------------
-DROP TABLE IF EXISTS `solicitudes_ascenso`;
-DROP TABLE IF EXISTS `galeria_multimedia`;
-DROP TABLE IF EXISTS `noticias`;
-DROP TABLE IF EXISTS `eventos`;
-DROP TABLE IF EXISTS `teorias`;
-DROP TABLE IF EXISTS `tipos_teoria`;
-DROP TABLE IF EXISTS `tipo_de_teoria`;
-DROP TABLE IF EXISTS `teoria`;
-DROP TABLE IF EXISTS `multimedia_galeria`;
-DROP TABLE IF EXISTS `perfil_deportistas`;
-DROP TABLE IF EXISTS `perfil_maestros`;
-DROP TABLE IF EXISTS `credenciales`;
-DROP TABLE IF EXISTS `userlog`;
-DROP TABLE IF EXISTS `miembros`;
-DROP TABLE IF EXISTS `personas`;
-DROP TABLE IF EXISTS `categorias`;
-DROP TABLE IF EXISTS `categoria`;
-DROP TABLE IF EXISTS `grados`;
-DROP TABLE IF EXISTS `sedes`;
-
--- --------------------------------------------------------
--- 1. Tabla: `sedes`
--- --------------------------------------------------------
-CREATE TABLE `sedes` (
+-- -----------------------------------------------------------------------------
+-- 1. TABLA: sedes
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sedes` (
   `id_sede` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
@@ -47,29 +20,29 @@ CREATE TABLE `sedes` (
   PRIMARY KEY (`id_sede`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 2. Tabla: `categorias`
--- --------------------------------------------------------
-CREATE TABLE `categorias` (
+-- -----------------------------------------------------------------------------
+-- 2. TABLA: categorias
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `categorias` (
   `id_categoria` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_categoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 3. Tabla: `grados`
--- --------------------------------------------------------
-CREATE TABLE `grados` (
+-- -----------------------------------------------------------------------------
+-- 3. TABLA: grados
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `grados` (
   `id_grado` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id_grado`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 4. Tabla Base: `personas` (Datos personales y comunes)
--- --------------------------------------------------------
-CREATE TABLE `personas` (
+-- -----------------------------------------------------------------------------
+-- 4. TABLA BASE: personas (Datos personales generales)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `personas` (
   `id_persona` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
@@ -86,10 +59,10 @@ CREATE TABLE `personas` (
   CONSTRAINT `fk_personas_sede` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 5. Tabla: `credenciales` (Login y Autenticación)
--- --------------------------------------------------------
-CREATE TABLE `credenciales` (
+-- -----------------------------------------------------------------------------
+-- 5. TABLA: credenciales (Autenticación y roles de acceso)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `credenciales` (
   `id_credencial` int NOT NULL AUTO_INCREMENT,
   `id_persona` int NOT NULL,
   `correo` varchar(100) NOT NULL,
@@ -103,10 +76,10 @@ CREATE TABLE `credenciales` (
   CONSTRAINT `fk_credenciales_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 6. Tabla: `perfil_deportistas` (Información Deportiva)
--- --------------------------------------------------------
-CREATE TABLE `perfil_deportistas` (
+-- -----------------------------------------------------------------------------
+-- 6. TABLA: perfil_deportistas (Subtipo: Información técnica de Taekwondo)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `perfil_deportistas` (
   `id_persona` int NOT NULL,
   `id_grado` int DEFAULT NULL,
   `id_categoria` int DEFAULT NULL,
@@ -124,10 +97,10 @@ CREATE TABLE `perfil_deportistas` (
   CONSTRAINT `fk_perfil_deportista_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 7. Tabla: `perfil_maestros` (Información Docente/Web)
--- --------------------------------------------------------
-CREATE TABLE `perfil_maestros` (
+-- -----------------------------------------------------------------------------
+-- 7. TABLA: perfil_maestros (Subtipo: Información para docentes y web)
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `perfil_maestros` (
   `id_persona` int NOT NULL,
   `id_grado` int DEFAULT NULL,
   `descripcion_perfil` text,
@@ -139,10 +112,10 @@ CREATE TABLE `perfil_maestros` (
   CONSTRAINT `fk_perfil_maestro_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 8. Tabla: `solicitudes_ascenso`
--- --------------------------------------------------------
-CREATE TABLE `solicitudes_ascenso` (
+-- -----------------------------------------------------------------------------
+-- 8. TABLA: solicitudes_ascenso
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `solicitudes_ascenso` (
   `id_solicitud` int NOT NULL AUTO_INCREMENT,
   `id_persona_estudiante` int NOT NULL,
   `id_grado_actual` int NOT NULL,
@@ -163,10 +136,10 @@ CREATE TABLE `solicitudes_ascenso` (
   CONSTRAINT `fk_solicitud_grado_sol` FOREIGN KEY (`id_grado_solicitado`) REFERENCES `grados` (`id_grado`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 9. Tabla: `eventos`
--- --------------------------------------------------------
-CREATE TABLE `eventos` (
+-- -----------------------------------------------------------------------------
+-- 9. TABLA: eventos
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `eventos` (
   `id_evento` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(150) NOT NULL,
   `descripcion` text,
@@ -178,10 +151,10 @@ CREATE TABLE `eventos` (
   CONSTRAINT `fk_eventos_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 10. Tabla: `noticias`
--- --------------------------------------------------------
-CREATE TABLE `noticias` (
+-- -----------------------------------------------------------------------------
+-- 10. TABLA: noticias
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `noticias` (
   `id_noticia` int NOT NULL AUTO_INCREMENT,
   `id_persona` int DEFAULT NULL,
   `titulo` varchar(150) NOT NULL,
@@ -193,20 +166,20 @@ CREATE TABLE `noticias` (
   CONSTRAINT `fk_noticias_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 11. Tabla: `tipos_teoria`
--- --------------------------------------------------------
-CREATE TABLE `tipos_teoria` (
+-- -----------------------------------------------------------------------------
+-- 11. TABLA: tipos_teoria
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tipos_teoria` (
   `id_tipo_teoria` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `descripcion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_tipo_teoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 12. Tabla: `teorias`
--- --------------------------------------------------------
-CREATE TABLE `teorias` (
+-- -----------------------------------------------------------------------------
+-- 12. TABLA: teorias
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `teorias` (
   `id_teoria` int NOT NULL AUTO_INCREMENT,
   `id_grado` int DEFAULT NULL,
   `id_tipo_teoria` int DEFAULT NULL,
@@ -220,10 +193,10 @@ CREATE TABLE `teorias` (
   CONSTRAINT `fk_teoria_tipo` FOREIGN KEY (`id_tipo_teoria`) REFERENCES `tipos_teoria` (`id_tipo_teoria`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 13. Tabla: `galeria_multimedia`
--- --------------------------------------------------------
-CREATE TABLE `galeria_multimedia` (
+-- -----------------------------------------------------------------------------
+-- 13. TABLA: galeria_multimedia
+-- -----------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `galeria_multimedia` (
   `id_multimedia` int NOT NULL AUTO_INCREMENT,
   `id_persona` int DEFAULT NULL,
   `url` varchar(255) NOT NULL,

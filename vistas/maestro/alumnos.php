@@ -8,7 +8,6 @@
         </div>
     </div>
 
-    <!-- Alumnos Table -->
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left border-collapse">
@@ -38,7 +37,7 @@
                             </td>
                             <?php
                                 $nivel = strtolower($alumno['nombre_nivel'] ?? '');
-                                $beltClass = 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-900/60 dark:text-slate-400 dark:border-slate-800/80'; // Default
+                                $beltClass = 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-900/60 dark:text-slate-400 dark:border-slate-800/80'; 
                                 
                                 if (str_contains($nivel, 'blanco')) {
                                     $beltClass = 'bg-white text-slate-900 border border-slate-300 dark:border-slate-200 shadow-sm';

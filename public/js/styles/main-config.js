@@ -4,12 +4,12 @@ tailwind.config = {
         extend: {
             colors: {
                 tkd: {
-                    red: "#DC2626",    // Passion/Power (Hong)
-                    blue: "#2563EB",   // Calm/Intelligence (Chong)
-                    black: "#0b0f19",  // Deep premium black (updated)
-                    white: "#FFFFFF",  // Purity
-                    gold: "#F59E0B",   // Accent/Medal
-                    gray: "#F3F4F6",   // Light background
+                    red: "#DC2626",    
+                    blue: "#2563EB",   
+                    black: "#0b0f19",  
+                    white: "#FFFFFF",  
+                    gold: "#F59E0B",   
+                    gray: "#F3F4F6",   
                 }
             },
             fontFamily: {

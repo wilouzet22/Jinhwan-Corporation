@@ -1,9 +1,9 @@
 <?php
-// Iniciar sesión si no está iniciada para verificar estado de login
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// En administración, a veces usamos 'usuario' o variables directas de sesión
+
 $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admin';
 $foto_perfil = null;
 
@@ -22,14 +22,13 @@ if (isset($_SESSION['id'])) {
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title><?= $page_title ?? 'Panel de Administración' ?></title>
-    <!-- Google Fonts: Oswald (Headings) & Inter (Body) -->
+    
     <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
-    
-    <!-- Theme Toggle Script (Inline to prevent FOUC) -->
+
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -38,7 +37,6 @@ if (isset($_SESSION['id'])) {
         }
     </script>
 
-    <!-- Tailwind CSS v4 (jsDelivr - sin dependencia de internet CDN de Tailwind) -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
@@ -54,10 +52,9 @@ if (isset($_SESSION['id'])) {
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-blue selection:text-white transition-colors duration-300">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
-    <!-- Mobile Sidebar Backdrop -->
+    
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
-    <!-- Sidebar -->
     <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
@@ -70,7 +67,7 @@ if (isset($_SESSION['id'])) {
         </div>
         <nav class="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
             <ul class="space-y-1">
-                <!-- Principal -->
+                
                 <li>
                     <a href="<?= base_url('/admin/dashboard') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-blue' : '' ?>">dashboard</span>
@@ -173,9 +170,8 @@ if (isset($_SESSION['id'])) {
         </div>
     </aside>
 
-    <!-- Main Content Wrapper -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300">
-        <!-- Top Mobile Header (visible only on mobile) -->
+        
         <header class="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
                  <button id="mobile-menu-btn" class="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">

@@ -1,7 +1,5 @@
-// Student Ascensos Logic
-// Assumes global 'miTeoriaIds' array is defined in the HTML
 
-// Helper to escape HTML and prevent XSS
+
 function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
@@ -12,23 +10,20 @@ function openAscensoModal(data) {
   const modal = document.getElementById("ascenso-modal");
   const modalContent = document.getElementById("modal-content");
 
-  // Populate Data
   document.getElementById("modal-title").textContent = data.titulo;
   document.getElementById("modal-category").textContent =
     data.categoria_nombre || "General";
 
-  // SECURE: Escape HTML to prevent XSS, then convert newlines to <br>
   const safeDescription = escapeHtml(data.descripcion).replace(/\n/g, "<br>");
   document.getElementById("modal-description").innerHTML = safeDescription;
 
-  // Populate Resources
   const resourcesContainer = document.getElementById("modal-resources");
   resourcesContainer.innerHTML = "";
 
   if (!data.recursos) data.recursos = [];
   
   if (data.url_video) {
-      // Check if it's already in the resources to avoid duplicates on multiple clicks
+      
       const hasMainVideo = data.recursos.some(r => r.url === data.url_video);
       if (!hasMainVideo) {
           data.recursos.unshift({
@@ -101,7 +96,6 @@ function openAscensoModal(data) {
       '<p class="text-slate-500 italic">No hay recursos multimedia disponibles para este tema.</p>';
   }
 
-  // Show Modal
   modal.classList.remove("hidden");
   setTimeout(() => {
     modal.classList.remove("opacity-0");
@@ -190,7 +184,7 @@ function toggleMiTeoria(teoriaId) {
     .then((response) => response.json())
     .then((data) => {
       if (data.status === "success") {
-        // Controller returns 'status' not 'success' boolean
+        
         if (data.action === "added") {
           miTeoriaIds.push(teoriaId);
           btn.classList.add("text-tkd-gold");
