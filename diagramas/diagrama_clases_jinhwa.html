@@ -499,47 +499,66 @@
     <script>
         const classesData = [
             {
-                id: "miembro",
-                name: "Miembro",
-                stereotype: "Base Class / Entity",
+                id: "persona",
+                name: "Persona",
+                stereotype: "Base Class / Entity (personas)",
                 type: "base",
                 x: 1350,
                 y: 780,
                 attributes: [
-                    "- id_miembro: int [PK]",
+                    "- id_persona: int [PK]",
                     "- nombre: string",
                     "- apellido: string",
-                    "- peso: decimal",
-                    "- num_doc: string",
                     "- tipo_documento: string",
-                    "- fecha_n: date",
+                    "- num_doc: string",
                     "- telefono: string",
-                    "- activo: boolean",
                     "- id_sede: int [FK]",
-                    "- rol: string",
-                    "- id_grado: int [FK]",
-                    "- id_categoria: int [FK]",
-                    "- descripcion_perfil: text",
-                    "- logros: text",
-                    "- mostrar_en_web: boolean",
-                    "- foto_perfil: string"
+                    "- foto_perfil: string",
+                    "- activo: boolean",
+                    "- created_at: timestamp"
                 ],
                 methods: [
                     "+ registrar(): boolean",
-                    "+ actualizarPerfil(): boolean",
-                    "+ obtenerPorId(id: int): Miembro",
-                    "+ listarMiembros(): List<Miembro>",
-                    "+ cambiarEstado(activo: boolean): boolean"
+                    "+ actualizarDatos(): boolean",
+                    "+ obtenerPorId(id_persona: int): Persona",
+                    "+ listarPersonas(): List<Persona>"
+                ]
+            },
+            {
+                id: "credencial",
+                name: "Credencial",
+                stereotype: "Entity / Auth (credenciales)",
+                type: "normal",
+                x: 1900,
+                y: 780,
+                attributes: [
+                    "- id_credencial: int [PK]",
+                    "- id_persona: int [FK, UNIQUE]",
+                    "- correo: string",
+                    "- clave: string",
+                    "- rol: string",
+                    "- permisos_extra: json",
+                    "- created_at: timestamp"
+                ],
+                methods: [
+                    "+ autenticar(correo, clave): boolean",
+                    "+ cambiarClave(nuevaClave): boolean",
+                    "+ actualizarPermisos(): boolean"
                 ]
             },
             {
                 id: "deportista",
-                name: "Deportista",
-                stereotype: "Subclass",
+                name: "PerfilDeportista",
+                stereotype: "Subclass / Profile (perfil_deportistas)",
                 type: "sub",
                 x: 1800,
                 y: 420,
                 attributes: [
+                    "- id_persona: int [PK, FK]",
+                    "- id_grado: int [FK]",
+                    "- id_categoria: int [FK]",
+                    "- fecha_n: date",
+                    "- peso: decimal",
                     "- division: string",
                     "- ctgc: string",
                     "- eps: string",
@@ -553,24 +572,28 @@
             },
             {
                 id: "maestro",
-                name: "Maestro",
-                stereotype: "Subclass",
+                name: "PerfilMaestro",
+                stereotype: "Subclass / Profile (perfil_maestros)",
                 type: "sub",
                 x: 1350,
                 y: 420,
                 attributes: [
-                    "- permisos_extra: json"
+                    "- id_persona: int [PK, FK]",
+                    "- id_grado: int [FK]",
+                    "- descripcion_perfil: text",
+                    "- logros: text",
+                    "- mostrar_en_web: boolean"
                 ],
                 methods: [
-                    "+ evaluarAscenso(id: int, estado: string): boolean",
-                    "+ consultarAlumnos(): List<Deportista>",
+                    "+ evaluarAscenso(id_solicitud, estado): boolean",
+                    "+ consultarAlumnos(): List<PerfilDeportista>",
                     "+ gestionarTeoria(): boolean"
                 ]
             },
             {
                 id: "administrador",
                 name: "Administrador",
-                stereotype: "Subclass",
+                stereotype: "Subclass / Special Role",
                 type: "sub",
                 x: 900,
                 y: 420,
@@ -579,39 +602,22 @@
                 ],
                 methods: [
                     "+ gestionarSedes(): boolean",
-                    "+ gestionarRegistros(): boolean",
+                    "+ aprobarRegistros(): boolean",
                     "+ generarReportes(): boolean"
-                ]
-            },
-            {
-                id: "userlog",
-                name: "Userlog",
-                stereotype: "Entity / Auth",
-                type: "normal",
-                x: 1900,
-                y: 780,
-                attributes: [
-                    "- id_userlog: int [PK]",
-                    "- id_miembro: int [FK]",
-                    "- correo: string",
-                    "- clave: string"
-                ],
-                methods: [
-                    "+ autenticar(correo, clave): boolean",
-                    "+ cambiarClave(nuevaClave): boolean"
                 ]
             },
             {
                 id: "sede",
                 name: "Sede",
-                stereotype: "Entity / Location",
+                stereotype: "Entity / Location (sedes)",
                 type: "normal",
                 x: 820,
                 y: 780,
                 attributes: [
                     "- id_sede: int [PK]",
                     "- nombre: string",
-                    "- lugar: string",
+                    "- direccion: string",
+                    "- telefono: string",
                     "- horario: string"
                 ],
                 methods: [
@@ -623,7 +629,7 @@
             {
                 id: "categoria",
                 name: "Categoria",
-                stereotype: "Entity / Catalog",
+                stereotype: "Entity / Catalog (categorias)",
                 type: "normal",
                 x: 820,
                 y: 1100,
@@ -639,7 +645,7 @@
             {
                 id: "grado",
                 name: "Grado",
-                stereotype: "Entity / Catalog",
+                stereotype: "Entity / Catalog (grados)",
                 type: "normal",
                 x: 820,
                 y: 1380,
@@ -655,16 +661,16 @@
             {
                 id: "solicitud_ascenso",
                 name: "SolicitudAscenso",
-                stereotype: "Entity / Process",
+                stereotype: "Entity / Process (solicitudes_ascenso)",
                 type: "normal",
                 x: 1350,
                 y: 1380,
                 attributes: [
-                    "- id: int [PK]",
-                    "- id_miembro: int [FK]",
+                    "- id_solicitud: int [PK]",
+                    "- id_persona_estudiante: int [FK]",
                     "- id_grado_actual: int [FK]",
                     "- id_grado_solicitado: int [FK]",
-                    "- id_maestro: int [FK]",
+                    "- id_persona_maestro: int [FK]",
                     "- observaciones: text",
                     "- estado: enum('pendiente','aprobado','rechazado')",
                     "- fecha_solicitud: timestamp",
@@ -673,23 +679,23 @@
                 methods: [
                     "+ crearSolicitud(): boolean",
                     "+ evaluar(estado, obs): boolean",
-                    "+ listarPorMaestro(id_maestro): List"
+                    "+ listarPorMaestro(id_persona_maestro): List"
                 ]
             },
             {
                 id: "evento",
                 name: "Evento",
-                stereotype: "Entity / Content",
+                stereotype: "Entity / Content (eventos)",
                 type: "normal",
                 x: 1900,
                 y: 1100,
                 attributes: [
                     "- id_evento: int [PK]",
-                    "- id_miembro: int [FK]",
                     "- titulo: string",
                     "- descripcion: text",
                     "- fecha_inicio: datetime",
-                    "- fecha_fin: datetime"
+                    "- fecha_fin: datetime",
+                    "- id_persona: int [FK]"
                 ],
                 methods: [
                     "+ crearEvento(): boolean",
@@ -699,13 +705,13 @@
             {
                 id: "noticia",
                 name: "Noticia",
-                stereotype: "Entity / Content",
+                stereotype: "Entity / Content (noticias)",
                 type: "normal",
                 x: 1900,
                 y: 1380,
                 attributes: [
-                    "- id_noticias: int [PK]",
-                    "- id_miembro: int [FK]",
+                    "- id_noticia: int [PK]",
+                    "- id_persona: int [FK]",
                     "- titulo: string",
                     "- descripcion: text",
                     "- contenido: text",
@@ -717,15 +723,15 @@
                 ]
             },
             {
-                id: "multimedia_galeria",
-                name: "MultimediaGaleria",
-                stereotype: "Entity / Content",
+                id: "galeria_multimedia",
+                name: "GaleriaMultimedia",
+                stereotype: "Entity / Content (galeria_multimedia)",
                 type: "normal",
                 x: 1900,
                 y: 1680,
                 attributes: [
                     "- id_multimedia: int [PK]",
-                    "- id_miembro: int [FK]",
+                    "- id_persona: int [FK]",
                     "- url: string",
                     "- titulo: string",
                     "- descripcion: text"
@@ -738,14 +744,14 @@
             {
                 id: "teoria",
                 name: "Teoria",
-                stereotype: "Entity / Learning",
+                stereotype: "Entity / Learning (teorias)",
                 type: "normal",
                 x: 320,
                 y: 1380,
                 attributes: [
                     "- id_teoria: int [PK]",
                     "- id_grado: int [FK]",
-                    "- id_tipo_de_t: int [FK]",
+                    "- id_tipo_teoria: int [FK]",
                     "- nombre: string",
                     "- contenido: text",
                     "- url_video: string"
@@ -756,14 +762,14 @@
                 ]
             },
             {
-                id: "tipo_de_teoria",
+                id: "tipo_teoria",
                 name: "TipoTeoria",
-                stereotype: "Entity / Catalog",
+                stereotype: "Entity / Catalog (tipos_teoria)",
                 type: "normal",
                 x: 320,
                 y: 1680,
                 attributes: [
-                    "- id_tipo_de_t: int [PK]",
+                    "- id_tipo_teoria: int [PK]",
                     "- nombre: string",
                     "- descripcion: string"
                 ],
@@ -774,31 +780,32 @@
         ];
 
         const relationshipsData = [
-            // Herencia (Subclases -> Miembro)
-            { from: "deportista", to: "miembro", type: "inheritance", label: "", multFrom: "", multTo: "" },
-            { from: "maestro", to: "miembro", type: "inheritance", label: "", multFrom: "", multTo: "" },
-            { from: "administrador", to: "miembro", type: "inheritance", label: "", multFrom: "", multTo: "" },
+            // Herencia (Subclases -> Persona)
+            { from: "deportista", to: "persona", type: "inheritance", label: "", multFrom: "", multTo: "" },
+            { from: "maestro", to: "persona", type: "inheritance", label: "", multFrom: "", multTo: "" },
+            { from: "administrador", to: "persona", type: "inheritance", label: "", multFrom: "", multTo: "" },
 
-            // Composición (Miembro posee Userlog)
-            { from: "miembro", to: "userlog", type: "composition", label: "Autenticación", multFrom: "1", multTo: "1" },
+            // Composición (Persona posee Credencial)
+            { from: "persona", to: "credencial", type: "composition", label: "Autenticación (1:1)", multFrom: "1", multTo: "1" },
 
-            // Agregaciones (Sede, Categoria, Grado agrupan Miembros)
-            { from: "sede", to: "miembro", type: "aggregation", label: "Pertenece a", multFrom: "1", multTo: "0..*" },
-            { from: "categoria", to: "miembro", type: "aggregation", label: "Clasificado en", multFrom: "1", multTo: "0..*" },
-            { from: "grado", to: "miembro", type: "aggregation", label: "Tiene Grado", multFrom: "1", multTo: "0..*" },
+            // Agregaciones (Sede agrupa Personas, Categoria y Grado agrupan Deportistas)
+            { from: "sede", to: "persona", type: "aggregation", label: "Pertenece a", multFrom: "1", multTo: "0..*" },
+            { from: "categoria", to: "deportista", type: "aggregation", label: "Clasificado en", multFrom: "1", multTo: "0..*" },
+            { from: "grado", to: "deportista", type: "aggregation", label: "Tiene Grado", multFrom: "1", multTo: "0..*" },
 
             // Procesos & Asociaciones
-            { from: "miembro", to: "solicitud_ascenso", type: "composition", label: "Solicita / Evalúa", multFrom: "1", multTo: "0..*" },
+            { from: "deportista", to: "solicitud_ascenso", type: "association", label: "Solicita Ascenso", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "solicitud_ascenso", type: "association", label: "Evalúa Ascenso", multFrom: "1", multTo: "0..*" },
             { from: "grado", to: "solicitud_ascenso", type: "association", label: "Grado Actual / Solicitado", multFrom: "1", multTo: "0..*" },
 
             // Contenidos
-            { from: "miembro", to: "evento", type: "association", label: "Organiza", multFrom: "1", multTo: "0..*" },
-            { from: "miembro", to: "noticia", type: "association", label: "Publica", multFrom: "1", multTo: "0..*" },
-            { from: "miembro", to: "multimedia_galeria", type: "association", label: "Sube Media", multFrom: "1", multTo: "0..*" },
+            { from: "persona", to: "evento", type: "association", label: "Organiza", multFrom: "1", multTo: "0..*" },
+            { from: "persona", to: "noticia", type: "association", label: "Publica", multFrom: "1", multTo: "0..*" },
+            { from: "persona", to: "galeria_multimedia", type: "association", label: "Sube Media", multFrom: "1", multTo: "0..*" },
 
             // Teoria
             { from: "teoria", to: "grado", type: "association", label: "Requiere", multFrom: "0..*", multTo: "1" },
-            { from: "tipo_de_teoria", to: "teoria", type: "association", label: "Clasifica", multFrom: "1", multTo: "0..*" }
+            { from: "tipo_teoria", to: "teoria", type: "association", label: "Clasifica", multFrom: "1", multTo: "0..*" }
         ];
 
         // State

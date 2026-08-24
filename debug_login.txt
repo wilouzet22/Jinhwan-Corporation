@@ -275,3 +275,22 @@
 2026-08-03 13:46:16 - Admin Success: Rol=Administracion
 2026-08-05 12:16:52 - Login Success: Email=admin@admin.com | Rol=Administracion
 2026-08-05 12:16:52 - Admin Success: Rol=Administracion
+2026-08-19 21:14:00 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-08-19 21:14:00 - Admin Success: Rol=Administracion
+2026-08-19 21:22:14 - Admin Success: Rol=Administracion
+2026-08-19 21:22:54 - Admin Success: Rol=Administracion
+2026-08-19 21:27:31 - Login Success: Email=samugomedo@gmail.com | Rol=Maestros
+2026-08-19 21:27:31 - Maestro Success: Rol=Maestros
+2026-08-19 21:28:10 - Maestro Success: Rol=Maestros
+2026-08-19 21:29:42 - Maestro Success: Rol=Maestros
+2026-08-19 21:33:28 - Login Success: Email=samugomedo@gmail.com | Rol=Maestros
+2026-08-19 21:33:28 - Maestro Success: Rol=Maestros
+2026-08-19 21:33:45 - Maestro Success: Rol=Maestros
+2026-08-19 21:33:52 - Maestro Success: Rol=Maestros
+2026-08-19 21:35:12 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-08-19 21:35:12 - Admin Success: Rol=Administracion
+2026-08-19 21:35:15 - Admin Success: Rol=Administracion
+2026-08-19 21:37:37 - Admin Success: Rol=Administracion
+2026-08-24 21:40:41 - Login Success: Email=admin@admin.com | Rol=Administracion
+2026-08-24 21:40:42 - Admin Success: Rol=Administracion
+2026-08-24 21:40:48 - Admin Success: Rol=Administracion

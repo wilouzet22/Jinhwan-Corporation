@@ -129,29 +129,30 @@ flowchart TD
 
 ```
 Usuario POST /login/process
-  → Buscar correo en userlog JOIN miembros
-  → Verificar contraseña: password_verify() O comparación legacy
-    → Si legacy: migrar silenciosamente a bcrypt (password_hash)
-  → Verificar activo = 1
-  → Security::startSecureSession() → guardar ID, nombre, correo, rol_id
+  → Buscar correo en credenciales JOIN personas
+  → Verificar contraseña: password_verify() con hash bcrypt
+  → Verificar activo = 1 en personas
+  → Security::startSecureSession() → guardar id_persona, nombre, correo, rol
   → Redirigir según rol:
-      rol_id = 1 → /admin/dashboard
-      rol_id = 3 → /estudiante/dashboard
-      otro       → /
+      rol = 'Administracion' → /admin/dashboard
+      rol = 'Maestros'       → /maestro/dashboard
+      rol = 'Deportistas'    → /estudiante/dashboard
+      otro                   → /
 ```
 
 ## Flujo de Registro Público
 
 ```
 Usuario POST /registro/process
-  → INSERT miembros (activo = 0)  ← pendiente de aprobación
-  → INSERT userlog (correo + clave = bcrypt)
+  → INSERT personas (activo = 0)  ← pendiente de aprobación
+  → INSERT credenciales (id_persona, correo, clave = bcrypt, rol = 'Deportistas')
+  → INSERT perfil_deportistas (id_persona, fecha_n, eps, rh, etc.)
   → Redirigir a /login?msg=sent
   
 Admin en /admin/registros
   → Ver solicitudes (activo = 0)
-  → Aprobar: UPDATE miembros SET activo = 1
-  → Rechazar: DELETE userlog + DELETE miembros
+  → Aprobar: UPDATE personas SET activo = 1 WHERE id_persona = ?
+  → Rechazar: DELETE FROM personas WHERE id_persona = ? (ON DELETE CASCADE borra credenciales y perfil)
 ```
 
 ---
@@ -163,9 +164,17 @@ Admin en /admin/registros
 
 | Tabla | Descripción |
 |-------|-------------|
-| `miembros` | Datos personales de todos los miembros del club |
-| `userlog` | Credenciales de acceso (correo + clave bcrypt) |
-| `sedes` | Sedes físicas del club |
-| `grados` | Niveles/cinturones (catálogo) |
-| `teoria` | Contenido teórico de ascensos por grado |
+| `personas` | Datos personales comunes (nombre, apellido, documento, teléfono, sede, foto, activo) |
+| `credenciales` | Credenciales de acceso (correo, clave bcrypt, rol, permisos en formato JSON) |
+| `perfil_deportistas` | Perfil técnico deportivo (grado, categoría, fecha nacimiento, peso, división, EPS, RH) |
+| `perfil_maestros` | Perfil docente de los maestros (descripción, logros, visibilidad en web) |
+| `sedes` | Sedes físicas del club (nombre, dirección, teléfono, horario) |
+| `categorias` | Categorías por edades y modalidad (Pre-benjamín, Cadete, Junior, Mayores, etc.) |
+| `grados` | Niveles y cinturones de Taekwondo (Blanco, Amarillo, Verde, Azul, Rojo, Dan, etc.) |
+| `solicitudes_ascenso` | Solicitudes de ascenso de grado enviadas por deportistas y evaluadas por maestros |
+| `eventos` | Eventos institucionales del club para el calendario |
+| `noticias` | Publicaciones y avisos para el portal público |
+| `tipos_teoria` | Categorización del contenido teórico (General, Poomses, etc.) |
+| `teorias` | Material de estudio teórico y videos instructivos asociados a cada grado |
+| `galeria_multimedia` | Enlaces e imágenes/videos multimedia del club |
 

@@ -57,12 +57,16 @@ if (isset($_SESSION['id'])) {
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
+        <div class="h-1 w-full bg-gradient-to-r from-tkd-purple via-purple-500 to-amber-500"></div>
         <div class="p-6 border-b border-slate-800 flex items-center justify-center">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-10 w-auto object-contain transition-transform group-hover:scale-105 duration-300">
                 <div class="flex flex-col">
                     <h1 class="font-display font-bold text-xl text-white tracking-wider leading-none">JINHWAN</h1>
-                    <span class="text-[10px] font-bold text-tkd-purple tracking-widest uppercase mt-0.5">Panel Instructor</span>
+                    <span class="text-[10px] font-extrabold text-purple-400 tracking-widest uppercase mt-0.5 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                        Panel Instructor
+                    </span>
                 </div>
             </a>
         </div>

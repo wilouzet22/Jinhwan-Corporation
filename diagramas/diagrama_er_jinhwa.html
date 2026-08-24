@@ -395,6 +395,7 @@
                         { name: "telefono", angle: -60, dist: 310 },
                         { name: "activo", angle: -20, dist: 170 },
                         { name: "foto_perfil", angle: 15, dist: 170 },
+                        { name: "created_at", angle: 45, dist: 210 },
                         { name: "id_sede", fk: true, angle: 150, dist: 170 }
                     ]
                 },
@@ -406,7 +407,8 @@
                         { name: "correo", angle: -45, dist: 115 },
                         { name: "clave", angle: 0, dist: 115 },
                         { name: "rol", angle: 45, dist: 115 },
-                        { name: "permisos_extra", angle: 90, dist: 115 }
+                        { name: "permisos_extra", angle: 90, dist: 115 },
+                        { name: "created_at", angle: 135, dist: 115 }
                     ]
                 },
                 {
@@ -590,7 +592,7 @@
 
         function init() {
             buildNodes();
-            centerViewportOnEntity("miembros");
+            centerViewportOnEntity("personas");
             render();
             setupEvents();
         }

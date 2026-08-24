@@ -45,7 +45,8 @@ class Usuario extends Model {
             $nivel_id = !empty($data['nivel_id']) ? (int)$data['nivel_id'] : 1;
 
             // 1. Insertar en tabla base personas
-            $sqlPersona = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, telefono, id_sede, foto_perfil, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
+            $activo = 1;
+            $sqlPersona = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, telefono, id_sede, foto_perfil, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtPersona = $this->db->prepare($sqlPersona);
             $stmtPersona->bind_param("sssssisi",
                 $data['nombre'],
@@ -57,7 +58,6 @@ class Usuario extends Model {
                 $foto_perfil,
                 $activo
             );
-            $activo = 1;
             $stmtPersona->execute();
             $persona_id = $stmtPersona->insert_id;
             $stmtPersona->close();

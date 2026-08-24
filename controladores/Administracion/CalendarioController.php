@@ -32,6 +32,17 @@ class CalendarioController extends Controller {
 
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $fecha = $_POST['fecha'] ?? '';
+            $fechaTimestamp = strtotime($fecha);
+            $todayTimestamp = strtotime(date('Y-m-d 00:00:00'));
+
+            if (!$fechaTimestamp || $fechaTimestamp < $todayTimestamp) {
+                $_SESSION['mensaje'] = 'No se pueden crear eventos para fechas pasadas.';
+                $_SESSION['tipo_mensaje'] = 'error';
+                $this->redirect('/admin/calendario');
+                return;
+            }
+
             $data = [
                 'title'       => $_POST['titulo'],
                 'description' => $_POST['descripcion'] ?? '',
@@ -41,6 +52,8 @@ class CalendarioController extends Controller {
             ];
 
             $this->eventoModel->create($data);
+            $_SESSION['mensaje'] = 'Evento creado exitosamente.';
+            $_SESSION['tipo_mensaje'] = 'success';
             $this->redirect('/admin/calendario');
         }
     }
@@ -48,6 +61,17 @@ class CalendarioController extends Controller {
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
+            $fecha = $_POST['fecha'] ?? '';
+            $fechaTimestamp = strtotime($fecha);
+            $todayTimestamp = strtotime(date('Y-m-d 00:00:00'));
+
+            if (!$fechaTimestamp || $fechaTimestamp < $todayTimestamp) {
+                $_SESSION['mensaje'] = 'No se pueden asignar fechas pasadas a un evento.';
+                $_SESSION['tipo_mensaje'] = 'error';
+                $this->redirect('/admin/calendario');
+                return;
+            }
+
             $data = [
                 'title'       => $_POST['titulo'],
                 'description' => $_POST['descripcion'] ?? '',
@@ -56,6 +80,8 @@ class CalendarioController extends Controller {
             ];
 
             $this->eventoModel->update($id, $data);
+            $_SESSION['mensaje'] = 'Evento actualizado exitosamente.';
+            $_SESSION['tipo_mensaje'] = 'success';
             $this->redirect('/admin/calendario');
         }
     }
@@ -64,6 +90,8 @@ class CalendarioController extends Controller {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $this->eventoModel->delete($id);
+            $_SESSION['mensaje'] = 'Evento eliminado.';
+            $_SESSION['tipo_mensaje'] = 'success';
             $this->redirect('/admin/calendario');
         }
     }

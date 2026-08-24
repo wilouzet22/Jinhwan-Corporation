@@ -55,12 +55,16 @@ if (isset($_SESSION['id'])) {
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <aside id="estudiante-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="p-8 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-colors">
+        <div class="h-1 w-full bg-gradient-to-r from-tkd-blue via-cyan-500 to-emerald-500"></div>
+        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
-                <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppEstudiante" class="h-24 w-auto object-contain mb-3 transition-transform group-hover:scale-105 duration-300">
+                <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppEstudiante" class="h-16 w-auto object-contain mb-2 transition-transform group-hover:scale-105 duration-300">
                 <div class="text-center">
-                    <h1 class="font-bold text-xl text-slate-900 dark:text-white uppercase tracking-widest leading-none transition-colors">JINHWAN</h1>
-                    <span class="text-xs font-semibold text-tkd-blue tracking-[0.1em] uppercase">Portal Alumno</span>
+                    <h1 class="font-bold text-lg text-slate-900 dark:text-white uppercase tracking-widest leading-none transition-colors">JINHWAN</h1>
+                    <span class="text-[10px] font-extrabold text-cyan-600 dark:text-cyan-400 tracking-widest uppercase mt-1 inline-flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                        Portal Alumno
+                    </span>
                 </div>
             </a>
         </div>

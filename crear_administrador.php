@@ -14,9 +14,6 @@ $password = "admin2026";
 $db = Database::getInstance()->getConnection();
 
 $stmtCheck = $db->prepare("SELECT id_credencial FROM credenciales WHERE correo = ? LIMIT 1");
-if (!$stmtCheck) {
-    $stmtCheck = $db->prepare("SELECT id_userlog FROM userlog WHERE correo = ? LIMIT 1");
-}
 $stmtCheck->bind_param("s", $correo);
 $stmtCheck->execute();
 $resCheck = $stmtCheck->get_result();
@@ -26,9 +23,6 @@ if ($resCheck && $resCheck->num_rows > 0) {
 }
 
 $stmtDoc = $db->prepare("SELECT id_persona FROM personas WHERE num_doc = ? LIMIT 1");
-if (!$stmtDoc) {
-    $stmtDoc = $db->prepare("SELECT id_miembro FROM miembros WHERE num_doc = ? LIMIT 1");
-}
 $stmtDoc->bind_param("s", $documento);
 $stmtDoc->execute();
 $resDoc = $stmtDoc->get_result();
@@ -54,13 +48,7 @@ try {
     // Insertar en personas
     $sql = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, id_sede, activo) VALUES (?, ?, ?, 'CC', ?, 1)";
     $stmt = $db->prepare($sql);
-    if (!$stmt) {
-        $sqlLegacy = "INSERT INTO miembros (nombre, apellido, num_doc, rol, activo, id_sede) VALUES (?, ?, ?, ?, 1, ?)";
-        $stmt = $db->prepare($sqlLegacy);
-        $stmt->bind_param("ssssi", $nombre, $apellido, $documento, $rol, $id_sede);
-    } else {
-        $stmt->bind_param("sssi", $nombre, $apellido, $documento, $id_sede);
-    }
+    $stmt->bind_param("sssi", $nombre, $apellido, $documento, $id_sede);
     $stmt->execute();
     $id_persona = $stmt->insert_id;
     $stmt->close();
@@ -69,13 +57,7 @@ try {
     $clave_hash = password_hash($password, PASSWORD_DEFAULT);
     $sqlCred = "INSERT INTO credenciales (id_persona, correo, clave, rol, permisos_extra) VALUES (?, ?, ?, ?, ?)";
     $stmtCred = $db->prepare($sqlCred);
-    if (!$stmtCred) {
-        $sqlLogLegacy = "INSERT INTO userlog (id_miembro, correo, clave) VALUES (?, ?, ?)";
-        $stmtCred = $db->prepare($sqlLogLegacy);
-        $stmtCred->bind_param("iss", $id_persona, $correo, $clave_hash);
-    } else {
-        $stmtCred->bind_param("issss", $id_persona, $correo, $clave_hash, $rol, $permisos);
-    }
+    $stmtCred->bind_param("issss", $id_persona, $correo, $clave_hash, $rol, $permisos);
     $stmtCred->execute();
     $stmtCred->close();
     

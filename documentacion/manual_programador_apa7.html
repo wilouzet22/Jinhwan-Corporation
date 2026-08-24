@@ -1,0 +1,678 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual del Programador - Sistema Jinhwa Corporation (APA 7ma Edición)</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 2.54cm;
+            @top-right {
+                content: counter(page);
+                font-family: "Times New Roman", Times, serif;
+                font-size: 12pt;
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #111111;
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+        }
+
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        /* Portada APA 7 */
+        .cover-page {
+            text-align: center;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 5cm;
+        }
+
+        .cover-title {
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 2cm;
+            line-height: 1.4;
+            max-width: 90%;
+        }
+
+        .cover-subtitle {
+            font-size: 13pt;
+            font-style: italic;
+            margin-bottom: 2.5cm;
+            font-weight: normal;
+        }
+
+        .cover-meta {
+            font-size: 12pt;
+            line-height: 1.8;
+        }
+
+        .cover-meta p {
+            margin: 4px 0;
+        }
+
+        /* Encabezados APA 7 */
+        h1.apa-level-1 {
+            font-size: 14pt;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            color: #000;
+        }
+
+        h2.apa-level-2 {
+            font-size: 13pt;
+            font-weight: bold;
+            text-align: left;
+            margin-top: 1.2em;
+            margin-bottom: 0.6em;
+            color: #000;
+        }
+
+        h3.apa-level-3 {
+            font-size: 12pt;
+            font-weight: bold;
+            font-style: italic;
+            text-align: left;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #000;
+        }
+
+        h4.apa-level-4 {
+            font-size: 12pt;
+            font-weight: bold;
+            margin-top: 0.8em;
+            margin-bottom: 0.3em;
+            text-indent: 1.27cm;
+            display: inline;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1.27cm;
+            margin-top: 0;
+            margin-bottom: 0.8em;
+        }
+
+        .no-indent {
+            text-indent: 0 !important;
+        }
+
+        ul, ol {
+            margin-top: 0;
+            margin-bottom: 0.8em;
+            padding-left: 2.54cm;
+        }
+
+        li {
+            margin-bottom: 0.3em;
+            text-align: justify;
+        }
+
+        /* Tablas APA 7 */
+        .table-container {
+            margin: 1.5em 0;
+            page-break-inside: avoid;
+        }
+
+        .table-number {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 2px;
+            text-indent: 0;
+        }
+
+        .table-title {
+            font-style: italic;
+            font-size: 11pt;
+            margin-bottom: 8px;
+            text-indent: 0;
+        }
+
+        table.apa-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5pt;
+            margin-bottom: 4px;
+        }
+
+        table.apa-table th {
+            border-top: 1.5pt solid #000;
+            border-bottom: 1pt solid #000;
+            padding: 8px 6px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table.apa-table td {
+            padding: 7px 6px;
+            vertical-align: top;
+            border: none;
+        }
+
+        table.apa-table tr:last-child td {
+            border-bottom: 1.5pt solid #000;
+        }
+
+        .table-note {
+            font-size: 9.5pt;
+            font-style: italic;
+            text-indent: 0;
+            margin-top: 4px;
+        }
+
+        .table-note span.note-label {
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* Bloques de código */
+        .code-box {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 9.5pt;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-left: 3pt solid #222;
+            padding: 10px 14px;
+            margin: 1em 0 1em 1.27cm;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.35;
+        }
+
+        /* Figuras APA 7 */
+        .figure-container {
+            margin: 1.5em 0;
+            page-break-inside: avoid;
+            text-align: center;
+        }
+
+        .figure-number {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 2px;
+            text-align: left;
+            text-indent: 0;
+        }
+
+        .figure-title {
+            font-style: italic;
+            font-size: 11pt;
+            margin-bottom: 8px;
+            text-align: left;
+            text-indent: 0;
+        }
+
+        .figure-box {
+            border: 1px solid #ccc;
+            background: #fafafa;
+            padding: 15px;
+            margin-bottom: 6px;
+            text-align: left;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 9.5pt;
+            line-height: 1.4;
+            white-space: pre;
+        }
+
+        .figure-note {
+            font-size: 9.5pt;
+            font-style: italic;
+            text-align: left;
+            text-indent: 0;
+            margin-top: 4px;
+        }
+
+        /* Referencias con sangría francesa */
+        .reference-item {
+            text-indent: -1.27cm;
+            padding-left: 1.27cm;
+            margin-bottom: 0.8em;
+            text-align: justify;
+        }
+
+        /* Tabla de contenidos */
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .toc-dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted #888;
+            margin: 0 6px 4px 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA APA 7 -->
+    <div class="cover-page page-break">
+        <div class="cover-title">
+            MANUAL TÉCNICO Y DEL PROGRAMADOR:<br>
+            ARQUITECTURA, MODELO DE DATOS Y EXTENSIBILIDAD DEL SISTEMA JINHWA CORPORATION
+        </div>
+        <div class="cover-subtitle">
+            Documentación de Ingeniería de Software para el Sistema de Gestión del Club de Taekwondo
+        </div>
+        <div class="cover-meta">
+            <p><strong>Corporación Deportiva Jinhwa Corporation</strong></p>
+            <p>Departamento de Desarrollo e Ingeniería de Software</p>
+            <p>Framework Base: Patrón MVC Nativo en PHP 8.x</p>
+            <p>Agosto de 2026</p>
+        </div>
+    </div>
+
+    <!-- TABLA DE CONTENIDO -->
+    <div class="page-break">
+        <h1 class="apa-level-1">Tabla de Contenidos</h1>
+        <p class="no-indent">A continuación se detallan los módulos y directrices técnicas desarrolladas en el manual del programador:</p>
+        
+        <div class="toc-list">
+            <div class="toc-item"><span>1. Visión General y Pila Tecnológica</span><span class="toc-dots"></span><span>3</span></div>
+            <div class="toc-item"><span>2. Configuración del Entorno de Desarrollo</span><span class="toc-dots"></span><span>3</span></div>
+            <div class="toc-item"><span>3. Estructura y Árbol de Directorios</span><span class="toc-dots"></span><span>4</span></div>
+            <div class="toc-item"><span>4. Arquitectura de Software y Ciclo de Vida HTTP</span><span class="toc-dots"></span><span>5</span></div>
+            <div class="toc-item"><span>5. Capa Núcleo (Core Framework)</span><span class="toc-dots"></span><span>6</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;5.1 Enrutador Central (Router.php)</span><span class="toc-dots"></span><span>6</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;5.2 Controlador Base (Controller.php)</span><span class="toc-dots"></span><span>7</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;5.3 Modelo Base y Singleton de Conexión (Database / Model)</span><span class="toc-dots"></span><span>7</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;5.4 Motor de Seguridad y Sesiones (Security.php)</span><span class="toc-dots"></span><span>8</span></div>
+            <div class="toc-item"><span>6. Esquema de Base de Datos Normalizado</span><span class="toc-dots"></span><span>9</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;6.1 Modelo Relacional y Entidades Principales</span><span class="toc-dots"></span><span>9</span></div>
+            <div class="toc-item"><span>&nbsp;&nbsp;&nbsp;&nbsp;6.2 Integridad Referencial y Reglas de Cascada</span><span class="toc-dots"></span><span>11</span></div>
+            <div class="toc-item"><span>7. Guía Paso a Paso para Nuevos Módulos</span><span class="toc-dots"></span><span>11</span></div>
+            <div class="toc-item"><span>8. Estándares y Convenciones de Codificación</span><span class="toc-dots"></span><span>13</span></div>
+            <div class="toc-item"><span>9. Diagnóstico y Depuración Técnica</span><span class="toc-dots"></span><span>14</span></div>
+            <div class="toc-item"><span>Referencias</span><span class="toc-dots"></span><span>15</span></div>
+        </div>
+    </div>
+
+    <!-- CUERPO DEL MANUAL DEL PROGRAMADOR -->
+    <div>
+        <h1 class="apa-level-1">1. Visión General y Pila Tecnológica</h1>
+        <p>El sistema Jinhwa Corporation ha sido edificado bajo los principios del paradigma de programación orientada a objetos (POO) y el patrón arquitectónico Modelo-Vista-Controlador (MVC), prescindiendo deliberadamente de frameworks de terceros pesados. Esta decisión técnica maximiza el rendimiento de ejecución, garantiza total soberanía sobre la lógica del código y reduce al mínimo la superficie de vulnerabilidades externas.</p>
+
+        <div class="table-container">
+            <div class="table-number">Tabla 1</div>
+            <div class="table-title">Especificación de la Pila Tecnológica del Sistema</div>
+            <table class="apa-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Capa / Dominio</th>
+                        <th style="width: 35%;">Tecnología Principal</th>
+                        <th style="width: 40%;">Función y Alcance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Servidor Web</td>
+                        <td>Apache HTTP Server 2.4+</td>
+                        <td>Reescritura de URLs mediante <code>mod_rewrite</code> y despacho Front Controller.</td>
+                    </tr>
+                    <tr>
+                        <td>Backend Runtime</td>
+                        <td>PHP 8.1+ (Nativo)</td>
+                        <td>Ejecución de controladores, modelos, validaciones y autenticación RBAC.</td>
+                    </tr>
+                    <tr>
+                        <td>Gestor de Base de Datos</td>
+                        <td>MySQL 8.0+ / MariaDB 10.4+</td>
+                        <td>Motor transaccional InnoDB con codificación <code>utf8mb4_unicode_ci</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>HTML5, CSS3, JavaScript ES6</td>
+                        <td>Plantillas modulares y renderizado del lado del servidor.</td>
+                    </tr>
+                    <tr>
+                        <td>Entorno Local</td>
+                        <td>Laragon (Windows)</td>
+                        <td>Suite integrada de servicios para desarrollo y pruebas.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-note"><span class="note-label">Nota.</span> El aplicativo no requiere administradores de dependencias tipo Composer para su operación base.</div>
+        </div>
+
+        <h1 class="apa-level-1">2. Configuración del Entorno de Desarrollo</h1>
+        <p>Para desplegar localmente el entorno de ingeniería se requiere seguir la secuencia de instalación:</p>
+        <ol>
+            <li><strong>Clonación del Repositorio:</strong> Situar la raíz del proyecto en la carpeta pública del servidor web (por ejemplo, <code>c:\laragon\www\jinwha</code>).</li>
+            <li><strong>Aprovisionamiento de Base de Datos:</strong>
+                <div class="code-box">CREATE DATABASE jinhwa_corporation CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE jinhwa_corporation;
+SOURCE c:/laragon/www/jinwha/jinhwa_corporation.sql;</div>
+            </li>
+            <li><strong>Parametrización de Conexión:</strong> Ajustar los atributos del archivo <code>conexion.php</code> (host, usuario, clave y nombre de esquema).</li>
+            <li><strong>Generación de Administrador Inicial:</strong> Ejecutar transitoriamente el script <code>crear_administrador.php</code> para emitir la clave encriptada con Bcrypt.</li>
+        </ol>
+
+        <h1 class="apa-level-1">3. Estructura y Árbol de Directorios</h1>
+        <p>La organización modular del proyecto aísla responsabilidades funcionales, como se aprecia en la Figura 1.</p>
+
+        <div class="figure-container">
+            <div class="figure-number">Figura 1</div>
+            <div class="figure-title">Árbol Estructural de Directorios y Archivos del Proyecto</div>
+            <div class="figure-box">jinwha/
+├── .htaccess                       # Reglas de reescritura Front Controller
+├── index.php                       # Punto de entrada unificado
+├── ruteador.php                    # Tabla de rutas y mapeo de controladores
+├── conexion.php                    # Clase Database (Patrón Singleton MySQLi)
+├── core/                           # Clases fundacionales del framework
+│   ├── Router.php                  # Despachador HTTP REST/Clean URLs
+│   ├── Controller.php              # Clase base de vistas y redirecciones
+│   ├── Model.php                   # Clase base con inyección de conexión
+│   ├── Roles.php                   # Constantes de roles y evaluadores
+│   └── Security.php                # Motor de 6 capas de protección de sesión
+├── controladores/                  # Lógica de aplicación por dominios
+│   ├── Autenticacion/              # Acceso, registro y finalización de perfil
+│   ├── Web/                        # Portal público y páginas informativas
+│   ├── Administracion/             # Gestión de miembros, sedes y configuración
+│   ├── Maestro/                    # Alumnos y solicitudes de examen
+│   ├── Estudiante/                 # Contenido pedagógico e historial
+│   └── Usuario/                    # Módulos comunes (perfil, calendario)
+├── modelos/                        # Entidades con lógica SQL y transaccional
+├── vistas/                         # Plantillas PHP segmentadas por rol
+│   ├── layout/                     # Cabeceras, barras de navegación y pies
+│   ├── web/, administracion/, maestro/, estudiante/, usuario/
+├── storage/                        # Almacenamiento de archivos y multimedia
+└── documentacion/                  # Manuales técnicos y diagramas</div>
+            <div class="figure-note"><span class="note-label">Nota.</span> Toda petición HTTP no estática es canalizada a través de <code>index.php</code>.</div>
+        </div>
+
+        <h1 class="apa-level-1">4. Arquitectura de Software y Ciclo de Vida HTTP</h1>
+        <p>El procesamiento de una solicitud en el sistema Jinhwa Corporation sigue un flujo determinístico, documentado en la Figura 2.</p>
+
+        <div class="figure-container">
+            <div class="figure-number">Figura 2</div>
+            <div class="figure-title">Diagrama de Secuencia del Ciclo de Vida de una Petición HTTP</div>
+            <div class="figure-box">[Navegador Web / Cliente HTTP]
+              │
+              ▼  Petición URL (ej. GET /admin/miembros)
+       [.htaccess (Apache)] ──(Reescritura interna)──► [index.php]
+                                                            │
+                                         (Carga de dependencias y Core)
+                                                            │
+                                                            ▼
+                                                     [ruteador.php]
+                                                            │
+                                                 [Router::dispatch()]
+                                                            │
+                                                            ▼
+                                              [MiembrosController::index()]
+                                                            │
+                                            ┌───────────────┴───────────────┐
+                                            ▼                               ▼
+                                  [Security::verifyAdmin()]        [Modelo Usuario]
+                                  (Valida sesión y rol)             (Consulta SQL)
+                                            │                               │
+                                            └───────────────┬───────────────┘
+                                                            ▼
+                                                [$this->view('admin/miembros')]
+                                                            │
+                                                            ▼
+                                            [Renderizado HTML + CSS + JS]</div>
+            <div class="figure-note"><span class="note-label">Nota.</span> El flujo garantiza que ningún controlador sea instanciado sin pasar por el Router y los filtros de seguridad.</div>
+        </div>
+
+        <h1 class="apa-level-1">5. Capa Núcleo (Core Framework)</h1>
+        <p>El núcleo del aplicativo reside en el espacio de nombres <code>App\Core</code> y <code>App\Config</code>.</p>
+
+        <h2 class="apa-level-2">5.1 Enrutador Central (Router.php)</h2>
+        <p>La clase <code>App\Core\Router</code> indexa las rutas admitidas para verbos <code>GET</code> y <code>POST</code>. Normaliza la ruta URI entrante suprimiendo el subdirectorio base de Laragon y despacha el método correspondiente:</p>
+        
+        <div class="code-box">// Ejemplo de registro en ruteador.php
+$router->get('/admin/miembros', [MiembrosController::class, 'index']);
+$router->post('/admin/miembros/create', [MiembrosController::class, 'store']);</div>
+
+        <h2 class="apa-level-2">5.2 Controlador Base (Controller.php)</h2>
+        <p>Provee los métodos estándar para la renderización de vistas y saltos de redirección:</p>
+        <ul>
+            <li><code>view(string $view, array $data = [])</code>: Aplica <code>extract($data)</code> sobre el vector asociativo e incluye la plantilla ubicada en <code>vistas/{$view}.php</code>.</li>
+            <li><code>redirect(string $url)</code>: Resuelve la ruta base del servidor y emite una cabecera HTTP <code>Location</code> seguida de <code>exit</code>.</li>
+        </ul>
+
+        <h2 class="apa-level-2">5.3 Modelo Base y Singleton de Conexión (Database / Model)</h2>
+        <p>La clase <code>Database</code> encapsula el driver <code>mysqli</code> bajo el patrón Singleton, impidiendo la apertura innecesaria de múltiples conexiones concurrentes:</p>
+
+        <div class="code-box">namespace App\Core;
+use App\Config\Database;
+
+class Model {
+    protected $db;
+    public function __construct() {
+        $this->db = Database::getInstance()->getConnection();
+    }
+}</div>
+
+        <h2 class="apa-level-2">5.4 Motor de Seguridad y Sesiones (Security.php)</h2>
+        <p>La clase <code>App\Core\Security</code> implementa seis capas de protección para mitigar ataques de secuestro de sesión (Session Hijacking), fijación de sesión (Session Fixation) y accesos no autorizados:</p>
+
+        <div class="table-container">
+            <div class="table-number">Tabla 2</div>
+            <div class="table-title">Capas de Protección de Seguridad en Security.php</div>
+            <table class="apa-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Capa</th>
+                        <th style="width: 30%;">Mecanismo</th>
+                        <th style="width: 60%;">Propósito y Comportamiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Verificación de Identidad</td>
+                        <td>Comprueba la existencia de <code>$_SESSION['id']</code>. Si no existe, aborta a <code>/login?error=no_session</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Timeout de Inactividad</td>
+                        <td>Caduca la sesión si transcurren más de 1.800 segundos (30 min) desde la última interacción.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Huella User-Agent</td>
+                        <td>Compara la cabecera <code>HTTP_USER_AGENT</code> original. Si difiere, destruye la sesión por intento de suplantación.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Regeneración de ID</td>
+                        <td>Invoca <code>session_regenerate_id(true)</code> periódicamente cada 30 minutos para mitigar fijación.</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Tiempo Límite Absoluto</td>
+                        <td>Destruye forzosamente cualquier sesión que supere 28.800 segundos (8 horas continuas de uso).</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Autorización por Rol / RBAC</td>
+                        <td>Métodos <code>verifyAdmin()</code>, <code>verifyMaestro()</code> y <code>verifyPermission()</code> para control estricto.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-note"><span class="note-label">Nota.</span> Todos los intentos fallidos son registrados con timestamp en <code>debug_login.txt</code>.</div>
+        </div>
+
+        <h1 class="apa-level-1">6. Esquema de Base de Datos Normalizado</h1>
+        <p>La base de datos se encuentra normalizada en Tercera Forma Normal (3FN), segregando la identidad civil (<code>personas</code>), la seguridad de acceso (<code>credenciales</code>) y los perfiles específicos de rol (<code>perfil_deportistas</code> y <code>perfil_maestros</code>).</p>
+
+        <h2 class="apa-level-2">6.1 Modelo Relacional y Entidades Principales</h2>
+        <p>La Tabla 3 describe las tablas maestras del sistema y sus relaciones cardinales.</p>
+
+        <div class="table-container">
+            <div class="table-number">Tabla 3</div>
+            <div class="table-title">Diccionario de Tablas Centrales de la Base de Datos</div>
+            <table class="apa-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Tabla</th>
+                        <th style="width: 35%;">Llave Primaria y Foráneas</th>
+                        <th style="width: 40%;">Atributos Principales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>personas</code></td>
+                        <td><code>id_persona</code> (PK)<br><code>id_sede</code> (FK &rarr; sedes)</td>
+                        <td>nombre, apellido, num_doc, tipo_documento, telefono, foto_perfil, activo, created_at.</td>
+                    </tr>
+                    <tr>
+                        <td><code>credenciales</code></td>
+                        <td><code>id_credencial</code> (PK)<br><code>id_persona</code> (FK UNIQUE)</td>
+                        <td>correo (UNIQUE), clave (hash Bcrypt), rol (ENUM), permisos_extra (JSON).</td>
+                    </tr>
+                    <tr>
+                        <td><code>perfil_deportistas</code></td>
+                        <td><code>id_perfil</code> (PK)<br><code>id_persona</code> (FK UNIQUE)<br><code>id_grado</code>, <code>id_categoria</code> (FK)</td>
+                        <td>fecha_n, peso, division, ctgc, eps, rh.</td>
+                    </tr>
+                    <tr>
+                        <td><code>perfil_maestros</code></td>
+                        <td><code>id_perfil</code> (PK)<br><code>id_persona</code> (FK UNIQUE)<br><code>id_grado</code> (FK)</td>
+                        <td>descripcion_perfil, logros, mostrar_en_web.</td>
+                    </tr>
+                    <tr>
+                        <td><code>solicitudes_ascenso</code></td>
+                        <td><code>id_solicitud</code> (PK)<br><code>id_deportista</code>, <code>id_maestro</code> (FK)<br><code>id_grado_actual</code>, <code>id_grado_solicitado</code> (FK)</td>
+                        <td>estado (pendiente, aprobado, rechazado), observaciones, fecha_solicitud, fecha_resolucion.</td>
+                    </tr>
+                    <tr>
+                        <td><code>teorias</code></td>
+                        <td><code>id_teoria</code> (PK)<br><code>id_grado</code>, <code>id_tipo_teoria</code> (FK)</td>
+                        <td>nombre, contenido, url_video.</td>
+                    </tr>
+                    <tr>
+                        <td><code>sedes</code>, <code>grados</code>, <code>eventos</code></td>
+                        <td>PKs autoincrementales</td>
+                        <td>Catálogos maestros de sedes físicas, grados marciales y cronograma de eventos.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-note"><span class="note-label">Nota.</span> El esquema completo reside en el archivo <code>jinhwa_corporation.sql</code>.</div>
+        </div>
+
+        <h2 class="apa-level-2">6.2 Integridad Referencial y Reglas de Cascada</h2>
+        <p>Las llaves foráneas ligadas a <code>personas.id_persona</code> están definidas con <code>ON DELETE CASCADE</code> y <code>ON UPDATE CASCADE</code>, garantizando que la supresión de un afiliado limpie automáticamente sus credenciales y su ficha técnica correspondiente.</p>
+
+        <h1 class="apa-level-1">7. Guía Paso a Paso para Nuevos Módulos</h1>
+        <p>Para incorporar una nueva entidad al sistema (por ejemplo, el módulo de <em>Noticias</em>), el desarrollador debe seguir rigurosamente la secuencia de seis pasos:</p>
+
+        <h3 class="apa-level-3">Paso 1: Creación de la Tabla en Base de Datos</h3>
+        <div class="code-box">CREATE TABLE noticias (
+    id_noticia INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    contenido TEXT NOT NULL,
+    publicado TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;</div>
+
+        <h3 class="apa-level-3">Paso 2: Implementación del Modelo (modelos/Noticia.php)</h3>
+        <div class="code-box">&lt;?php
+namespace App\Models;
+use App\Core\Model;
+
+class Noticia extends Model {
+    public function getAll() {
+        $result = $this->db->query("SELECT * FROM noticias ORDER BY created_at DESC");
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    }
+
+    public function create($data) {
+        $stmt = $this->db->prepare("INSERT INTO noticias (titulo, contenido) VALUES (?, ?)");
+        $stmt->bind_param("ss", $data['titulo'], $data['contenido']);
+        return $stmt->execute();
+    }
+}</div>
+
+        <h3 class="apa-level-3">Paso 3: Creación del Controlador (controladores/Administracion/NoticiasController.php)</h3>
+        <div class="code-box">&lt;?php
+namespace App\Controllers\Administracion;
+use App\Core\Controller;
+use App\Core\Security;
+use App\Models\Noticia;
+
+class NoticiasController extends Controller {
+    public function index() {
+        Security::verifySession();
+        Security::verifyAdmin();
+        $noticias = (new Noticia())->getAll();
+        $this->view('administracion/noticias', ['noticias' => $noticias]);
+    }
+}</div>
+
+        <h3 class="apa-level-3">Paso 4: Creación de la Vista (vistas/administracion/noticias.php)</h3>
+        <div class="code-box">&lt;?php require_once __DIR__ . '/../layout/header_admin.php'; ?&gt;
+&lt;div class="container"&gt;
+    &lt;h1&gt;Tablón de Noticias Institucionales&lt;/h1&gt;
+    &lt;?php foreach ($noticias as $item): ?&gt;
+        &lt;article&gt;
+            &lt;h3&gt;&lt;?= htmlspecialchars($item['titulo']) ?&gt;&lt;/h3&gt;
+            &lt;p&gt;&lt;?= nl2br(htmlspecialchars($item['contenido'])) ?&gt;&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;?php endforeach; ?&gt;
+&lt;/div&gt;
+&lt;?php require_once __DIR__ . '/../layout/footer_admin.php'; ?&gt;</div>
+
+        <h3 class="apa-level-3">Paso 5: Registro del Modelo en index.php</h3>
+        <div class="code-box">require_once __DIR__ . '/modelos/Noticia.php';</div>
+
+        <h3 class="apa-level-3">Paso 6: Registro de Rutas en ruteador.php</h3>
+        <div class="code-box">require_once __DIR__ . '/controladores/Administracion/NoticiasController.php';
+use App\Controllers\Administracion\NoticiasController;
+
+$router->get('/admin/noticias', [NoticiasController::class, 'index']);</div>
+
+        <h1 class="apa-level-1">8. Estándares y Convenciones de Codificación</h1>
+        <p>Todos los desarrolladores deben ceñirse a las siguientes directrices:</p>
+        <ul>
+            <li><strong>Prepared Statements Obligatorios:</strong> Toda consulta con parámetros externos debe usar <code>$this->db->prepare()</code> y <code>bind_param()</code>. Queda estrictamente prohibida la concatenación de variables en sentencias SQL.</li>
+            <li><strong>Sanitización de Salidas:</strong> Utilizar <code>htmlspecialchars()</code> en las vistas para mitigar ataques XSS.</li>
+            <li><strong>Nomenclatura:</strong> Clases en <code>PascalCase</code>, métodos y variables en <code>camelCase</code>, tablas y campos en <code>snake_case</code>, y URLs en <code>kebab-case</code>.</li>
+        </ul>
+
+        <h1 class="apa-level-1">9. Diagnóstico y Depuración Técnica</h1>
+        <p>Para la resolución de incidencias en producción o desarrollo:</p>
+        <ul>
+            <li><strong>Trazas de Autenticación:</strong> Inspeccionar el archivo <code>debug_login.txt</code> en la raíz para auditar accesos exitosos o bloqueos de sesión.</li>
+            <li><strong>Errores de Enrutamiento 404:</strong> Confirmar que el módulo <code>mod_rewrite</code> de Apache esté activo y que el archivo <code>.htaccess</code> contenga la regla de Front Controller hacia <code>index.php</code>.</li>
+            <li><strong>Fallo de Vistas:</strong> Asegurar que el nombre de plantilla pasado a <code>$this->view('ruta/archivo')</code> no incluya la extensión <code>.php</code>.</li>
+        </ul>
+
+        <h1 class="apa-level-1">Referencias</h1>
+        <div class="reference-item">
+            American Psychological Association. (2020). <em>Publication manual of the American Psychological Association</em> (7th ed.). https://doi.org/10.1037/0000165-000
+        </div>
+        <div class="reference-item">
+            Freeman, E., & Robson, E. (2020). <em>Head first design patterns: Building extensible and maintainable object-oriented software</em> (2nd ed.). O'Reilly Media.
+        </div>
+        <div class="reference-item">
+            The PHP Group. (2024). <em>PHP manual: MySQL Improved extension (MySQLi)</em>. https://www.php.net/manual/es/book.mysqli.php
+        </div>
+    </div>
+
+</body>
+</html>
