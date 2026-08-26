@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Didáctica: Anatomía de Código PHP y Patrón MVC</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --primary-soft: #eff6ff;
+            --secondary: #0f766e;
+            --secondary-soft: #f0fdfa;
+            --accent: #d97706;
+            --accent-soft: #fffbeb;
+            --purple: #6b21a8;
+            --purple-soft: #faf5ff;
+            --danger: #b91c1c;
+            --danger-soft: #fef2f2;
+            --success: #15803d;
+            --success-soft: #f0fdf4;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --code-bg: #1e293b;
+            --code-text: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--gray-800);
+            background: #ffffff;
+            line-height: 1.6;
+            font-size: 13.5px;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 14mm 14mm 14mm 14mm;
+        }
+
+        @media print {
+            body {
+                background: white;
+                font-size: 11.5px;
+                line-height: 1.45;
+            }
+            .page-break {
+                page-break-before: always;
+                break-before: page;
+            }
+            .avoid-break {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .shadow-box {
+                box-shadow: none !important;
+                border: 1px solid var(--gray-300) !important;
+            }
+            header.cover-header {
+                padding: 25px 20px !important;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Top Action Bar (hidden on print) */
+        .action-bar {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 14px rgba(30, 58, 138, 0.2);
+        }
+
+        .action-bar button {
+            background: white;
+            color: var(--primary);
+            font-weight: 700;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .action-bar button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Cover Header */
+        header.cover-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f766e 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        h1.main-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            opacity: 0.92;
+            max-width: 680px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* Section Headings */
+        h2.section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        h2.section-title .section-num {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        h3.sub-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 20px 0 10px 0;
+        }
+
+        /* Cards & Boxes */
+        .card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .alert-box {
+            border-left: 4px solid var(--primary-light);
+            background: var(--primary-soft);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 14px 0;
+            font-size: 13px;
+        }
+        .alert-box.tip {
+            border-left-color: var(--secondary);
+            background: var(--secondary-soft);
+        }
+        .alert-box.warning {
+            border-left-color: var(--accent);
+            background: var(--accent-soft);
+        }
+        .alert-box.danger {
+            border-left-color: var(--danger);
+            background: var(--danger-soft);
+        }
+
+        /* Token Tags for Sign explanations */
+        .tag-token {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin: 1px 2px;
+            vertical-align: middle;
+        }
+        .token-symbol { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .token-keyword { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+        .token-var { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+        .token-func { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .token-class { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+        .token-const { background: #fae8ff; color: #86198f; border: 1px solid #f5d0fe; }
+
+        /* Tables */
+        table.anatomy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 12.5px;
+        }
+
+        table.anatomy-table th {
+            background: var(--gray-800);
+            color: white;
+            text-align: left;
+            padding: 9px 12px;
+            font-weight: 600;
+            border: 1px solid var(--gray-800);
+        }
+
+        table.anatomy-table td {
+            padding: 8px 12px;
+            border: 1px solid var(--gray-200);
+            vertical-align: top;
+        }
+
+        table.anatomy-table tr:nth-child(even) {
+            background: var(--gray-50);
+        }
+
+        /* Code Display Box */
+        .code-container {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12.5px;
+            line-height: 1.55;
+            margin: 12px 0;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        .code-container .line-num {
+            display: inline-block;
+            width: 28px;
+            color: #64748b;
+            user-select: none;
+            text-align: right;
+            margin-right: 12px;
+        }
+
+        .code-container .c-kw { color: #f43f5e; font-weight: 600; } /* Keywords: class, function, if */
+        .code-container .c-var { color: #38bdf8; font-weight: 500; } /* Variables: $pdo, $email */
+        .code-container .c-str { color: #a3e635; } /* Strings: "txtEmail" */
+        .code-container .c-fn { color: #fbbf24; font-weight: 600; } /* Functions/Methods: prepare, bindParam */
+        .code-container .c-cls { color: #c084fc; font-weight: 600; } /* Class: baseDatos, PDO */
+        .code-container .c-sym { color: #cbd5e1; font-weight: bold; } /* Symbols: ->, ::, =, ; */
+        .code-container .c-cmt { color: #94a3b8; font-style: italic; } /* Comments */
+
+        /* Breakdown Card */
+        .line-breakdown {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-left: 5px solid var(--primary-light);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 14px 0;
+        }
+
+        .line-breakdown .line-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--gray-200);
+        }
+
+        .line-breakdown .line-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .line-breakdown .element-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .line-breakdown .element-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 6px;
+            font-size: 12.5px;
+            line-height: 1.45;
+        }
+
+        .line-breakdown .element-list li::before {
+            content: "➔";
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mini-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .mini-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Concept Visual Diagram */
+        .diagram-box {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .flow-arrow {
+            font-size: 16px;
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-200);
+            text-align: center;
+            color: var(--gray-600);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Action Bar for Printing / PDF Saving -->
+    <div class="action-bar no-print">
+        <div>
+            <strong>📚 Manual de Docencia: Anatomía de Código PHP & MVC</strong>
+            <div style="font-size: 11.5px; opacity: 0.9;">Optimizado para imprimir y exportar a PDF</div>
+        </div>
+        <button onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+    </div>
+
+    <!-- Header / Cover -->
+    <header class="cover-header">
+        <div class="badge-pill">GUÍA DIDÁCTICA Y MANUAL DE REFERENCIA PARA DOCENTES</div>
+        <h1 class="main-title">Anatomía Paso a Paso de Código PHP y Patrón MVC</h1>
+        <p class="subtitle">
+            Explicación exhaustiva, signo por signo, palabra por palabra, función por función y línea por línea del proyecto. Diseñado especialmente para enseñar programación sin dejar dudas a los estudiantes.
+        </p>
+    </header>
+
+    <!-- SECTION 1: EL DICCIONARIO DE SIGNOS Y SÍMBOLOS -->
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">1</span> El Diccionario de Signos y Símbolos de PHP
+        </h2>
+        <p>
+            Cuando los estudiantes inician en PHP, los símbolos suelen ser la mayor fuente de confusión. Esta tabla desglosa cada signo que aparece en el proyecto con su pronunciación, significado y función exacta.
+        </p>
+
+        <table class="anatomy-table avoid-break">
+            <thead>
+                <tr>
+                    <th style="width: 14%;">Signo</th>
+                    <th style="width: 22%;">Nombre Didáctico</th>
+                    <th style="width: 32%;">¿Para qué sirve exactamente?</th>
+                    <th style="width: 32%;">Ejemplo en el Proyecto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tag-token token-symbol">&lt;?php ... ?&gt;</span></td>
+                    <td>Etiquetas de Apertura y Cierre</td>
+                    <td>Le ordenan al servidor web: <em>"A partir de aquí interpreta el texto como código PHP, no como simple texto HTML"</em>.</td>
+                    <td><code>&lt;?php class Usuario { ... } ?&gt;</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">$</span></td>
+                    <td>Símbolo de Dólar (Variable)</td>
+                    <td>Identificador obligatorio de variables. Le indica a PHP que la siguiente palabra es un contenedor en memoria para guardar datos.</td>
+                    <td><code>$email</code>, <code>$nombre</code>, <code>$pdo</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">-&gt;</span></td>
+                    <td>Flecha de Objeto / Instancia</td>
+                    <td>Accede a una propiedad o método de un objeto que <strong>ya fue instanciado</strong> en memoria (<code>$objeto-&gt;metodo()</code>).</td>
+                    <td><code>$pdo-&gt;prepare(...)</code><br><code>$consulta-&gt;execute()</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">::</span></td>
+                    <td>Doble Dos Puntos (Paamayim Nekudotayim)</td>
+                    <td>Operador de resolución de ámbito. Accede a constantes o métodos <strong>estáticos</strong> de una clase <strong>sin instanciarla</strong> (sin usar <code>new</code>).</td>
+                    <td><code>baseDatos::crearInstancia()</code><br><code>PDO::PARAM_STR</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">=&gt;</span></td>
+                    <td>Flecha Doble (Asociación Clave-Valor)</td>
+                    <td>En los <strong>arrays asociativos</strong>, asigna un valor a una clave específica (<code>"clave" =&gt; "valor"</code>).</td>
+                    <td><code>PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">=</span> vs <span class="tag-token token-symbol">==</span> / <span class="tag-token token-symbol">&gt;=</span></td>
+                    <td>Asignación vs Comparación</td>
+                    <td><code>=</code> guarda un dato en una variable.<br><code>==</code> compara si dos valores son iguales.<br><code>&gt;=</code> compara si es mayor o igual.</td>
+                    <td><code>$clave = $_POST["..."]</code> (Guarda)<br><code>if ($numeroRegistros &gt;= 1)</code> (Compara)</td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">;</span></td>
+                    <td>Punto y Coma</td>
+                    <td>Finalizador de instrucción. Le dice a PHP: <em>"Aquí termina esta orden, pasa a la siguiente"</em>. Olvidarlo provoca el famoso <code>Parse error</code>.</td>
+                    <td><code>$nombre = "Juan";</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">.</span></td>
+                    <td>Punto de Concatenación</td>
+                    <td>Une (pega) dos cadenas de texto o una variable con un texto.</td>
+                    <td><code>header("Location: " . URL_BASE)</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">[ ]</span></td>
+                    <td>Corchetes de Array</td>
+                    <td>1. Definen un arreglo: <code>[1, 2, 3]</code>.<br>2. Acceden a la posición o clave de un arreglo: <code>$_POST["correo"]</code>.</td>
+                    <td><code>$_POST["txtEmail"]</code><br><code>$url[0]</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">{ }</span></td>
+                    <td>Llaves de Bloque</td>
+                    <td>Delimitan el cuerpo de clases, funciones, bucles y condicionales (donde empieza y termina el bloque de código).</td>
+                    <td><code>class Usuario { ... }</code><br><code>if(...) { ... }</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">( )</span></td>
+                    <td>Paréntesis de Parámetros/Condición</td>
+                    <td>1. Reciben argumentos en funciones: <code>crear($a, $b)</code>.<br>2. Encierran condiciones en <code>if(...)</code>.</td>
+                    <td><code>if(isset($_POST["login"]))</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">!</span></td>
+                    <td>Signo de Exclamación (Negación Lógica)</td>
+                    <td>Invierte el valor booleano. <em>"NO"</em>. <code>!isset($x)</code> significa <em>"Si NO está definida la variable $x"</em>.</td>
+                    <td><code>if (!isset(self::$instancia))</code></td>
+                </tr>
+                <tr>
+                    <td><span class="tag-token token-symbol">:parametro</span></td>
+                    <td>Dos Puntos en SQL (Marcador de Posición)</td>
+                    <td>Marcador de parámetro nombrado en PDO para evitar Inyecciones SQL. Evita concatenar variables directamente en la consulta.</td>
+                    <td><code>WHERE correo = :correo</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- SECTION 2: PALABRAS CLAVE Y SUPERGLOBALES -->
+    <div class="page-break"></div>
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">2</span> Palabras Clave y Superglobales Fundamentales
+        </h2>
+
+        <div class="grid-2 avoid-break">
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">class</span> & <span class="tag-token token-keyword">function</span></h4>
+                <p><strong>class:</strong> Es el molde o plano para crear objetos. Agrupa variables (propiedades) y acciones (métodos).</p>
+                <p><strong>function:</strong> Define un bloque de código ejecutable que realiza una tarea específica y puede retornar un resultado.</p>
+            </div>
+
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">public</span> vs <span class="tag-token token-keyword">private</span></h4>
+                <p><strong>public:</strong> El método o atributo puede ser accedido y usado desde cualquier parte del programa.</p>
+                <p><strong>private:</strong> Sólo puede ser usado <em>dentro</em> de la misma clase. Oculta detalles internos (Encapsulamiento).</p>
+            </div>
+
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">static</span> & <span class="tag-token token-keyword">self::</span></h4>
+                <p><strong>static:</strong> Pertenece a la clase en sí y no a un objeto individual. No requiere <code>new</code>.</p>
+                <p><strong>self:::</strong> Es la forma en que una clase se refiere a sí misma para acceder a sus miembros estáticos.</p>
+            </div>
+
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">try</span> & <span class="tag-token token-keyword">catch</span></h4>
+                <p>Estructura para manejar errores graves de forma segura. <code>try</code> intenta ejecutar código riesgoso (ej. conectar a la BD) y <code>catch</code> atrapa el error si falla sin tumbar la aplicación.</p>
+            </div>
+
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">include_once</span></h4>
+                <p>Inserta y ejecuta otro archivo PHP dentro del actual. El sufijo <code>_once</code> previene errores asegurando que no se incluya dos veces el mismo archivo.</p>
+            </div>
+
+            <div class="mini-card">
+                <h4><span class="tag-token token-keyword">die()</span></h4>
+                <p>Detiene la ejecución del script PHP de inmediato e imprime un mensaje en pantalla. Se usa en errores críticos irrecuperables.</p>
+            </div>
+        </div>
+
+        <h3 class="sub-title">Las Variables Superglobales de PHP</h3>
+        <div class="alert-box tip avoid-break">
+            <p><strong>¿Qué es una Superglobal?</strong> Son arrays automáticos creados por PHP que están disponibles en cualquier parte del código, sin necesidad de declararlos con <code>global</code>.</p>
+            <ul style="margin-top: 8px; padding-left: 20px;">
+                <li><span class="tag-token token-var">$_POST</span>: Recibe datos enviados de forma oculta desde formularios HTML con método <code>method="POST"</code> (ej. contraseñas, correos).</li>
+                <li><span class="tag-token token-var">$_GET</span>: Recibe datos visibles a través de la barra de direcciones URL (ej. <code>?url=productos/crear&id=5</code>).</li>
+                <li><span class="tag-token token-var">$_SESSION</span>: Almacena información persistente del usuario (como su sesión iniciada) mientras navega por diferentes páginas del sitio.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- SECTION 3: ANATOMÍA DE CONTROLADOR USUARIOS -->
+    <div class="page-break"></div>
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">3</span> Análisis Línea por Línea: <code style="font-size:16px;">controladores/controlador_usuarios.php</code>
+        </h2>
+
+        <p>Este controlador gestiona las peticiones del usuario relacionadas con el registro y la autenticación (Login). Veamos cada línea en detalle.</p>
+
+        <!-- Bloque 1: Inclusiones y Definición de Clase -->
+        <div class="avoid-break">
+            <div class="code-container">
+                <div><span class="line-num">1</span><span class="c-sym">&lt;?php</span></div>
+                <div><span class="line-num">2</span><span class="c-kw">include_once</span> <span class="c-str">"conexion.php"</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">3</span><span class="c-kw">include_once</span> <span class="c-str">"./modelos/usuarios.php"</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">4</span></div>
+                <div><span class="line-num">5</span><span class="c-kw">class</span> <span class="c-cls">ControladorUsuarios</span> <span class="c-sym">{</span></div>
+            </div>
+
+            <div class="line-breakdown">
+                <div class="line-header">
+                    <span class="line-title">Líneas 1 a 5: Importaciones y Cabecera de Clase</span>
+                </div>
+                <ul class="element-list">
+                    <li>
+                        <strong>Línea 1 (<code>&lt;?php</code>):</strong> Abre la sección de código ejecutable de PHP.
+                    </li>
+                    <li>
+                        <strong>Línea 2 (<code>include_once "conexion.php";</code>):</strong>
+                        <span class="tag-token token-keyword">include_once</span> busca el archivo <code>conexion.php</code> y lo carga en memoria. El punto y coma <span class="tag-token token-symbol">;</span> termina la orden. Permite que este controlador pueda usar la clase <code>baseDatos</code>.
+                    </li>
+                    <li>
+                        <strong>Línea 3 (<code>include_once "./modelos/usuarios.php";</code>):</strong>
+                        Importa el modelo <code>Usuario</code> ubicado en la carpeta <code>modelos/</code>. El punto <code>.</code> representa la carpeta actual.
+                    </li>
+                    <li>
+                        <strong>Línea 5 (<code>class ControladorUsuarios {</code>):</strong>
+                        <span class="tag-token token-keyword">class</span> declara una nueva clase. <code>ControladorUsuarios</code> es el nombre de la clase (en convención <em>PascalCase</em>). La llave <span class="tag-token token-symbol">{</span> abre el bloque donde se definirán todos sus métodos (acciones).
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bloque 2: Método Crear -->
+        <div class="avoid-break">
+            <h3 class="sub-title">Método: <code>crear()</code> (Registro de Nuevos Usuarios)</h3>
+            <div class="code-container">
+                <div><span class="line-num">7</span>  <span class="c-kw">public function</span> <span class="c-fn">crear</span><span class="c-sym">(){</span></div>
+                <div><span class="line-num">8</span>      <span class="c-kw">if</span><span class="c-sym">(</span><span class="c-var">$_POST</span><span class="c-sym">){</span></div>
+                <div><span class="line-num">9</span>          <span class="c-var">$perfil</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtperfil"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">10</span>         <span class="c-var">$nombre</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtnombre"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">11</span>         <span class="c-var">$correo</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtEmail"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">12</span>         <span class="c-var">$clave</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtPassword"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">13</span>         <span class="c-cls">Usuario</span><span class="c-sym">::</span><span class="c-fn">crear</span><span class="c-sym">(</span><span class="c-var">$perfil</span><span class="c-sym">,</span> <span class="c-var">$nombre</span><span class="c-sym">,</span> <span class="c-var">$correo</span><span class="c-sym">,</span> <span class="c-var">$clave</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">14</span>         <span class="c-fn">header</span><span class="c-sym">(</span><span class="c-str">"Location: "</span> <span class="c-sym">.</span> <span class="c-const">URL_BASE</span> <span class="c-sym">.</span> <span class="c-str">"paginas/login"</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">15</span>     <span class="c-sym">}</span></div>
+                <div><span class="line-num">16</span>  <span class="c-sym">}</span></div>
+            </div>
+
+            <div class="line-breakdown">
+                <div class="line-header">
+                    <span class="line-title">Explicación Paso a Paso de <code>crear()</code></span>
+                </div>
+                <ul class="element-list">
+                    <li>
+                        <strong>Línea 7 (<code>public function crear(){</code>):</strong>
+                        <span class="tag-token token-keyword">public</span> significa accesible desde afuera; <span class="tag-token token-keyword">function</span> define la función llamada <code>crear</code>; los paréntesis <code>()</code> indican que no recibe argumentos directos al invocarse.
+                    </li>
+                    <li>
+                        <strong>Línea 8 (<code>if($_POST){</code>):</strong>
+                        Evalúa si el arreglo superglobal <span class="tag-token token-var">$_POST</span> contiene información (es decir, si el usuario presionó el botón de enviar del formulario). Si está vacío, se evalúa como falso y no ejecuta el bloque.
+                    </li>
+                    <li>
+                        <strong>Líneas 9 a 12 (<code>$perfil=$_POST["txtperfil"]; ...</code>):</strong>
+                        Extraen los valores de los campos de texto del formulario HTML mediante sus atributos <code>name</code> (<code>"txtperfil"</code>, <code>"txtnombre"</code>, <code>"txtEmail"</code>, <code>"txtPassword"</code>) y los guardan en variables limpias: <code>$perfil</code>, <code>$nombre</code>, <code>$correo</code>, <code>$clave</code>.
+                    </li>
+                    <li>
+                        <strong>Línea 13 (<code>Usuario::crear($perfil, $nombre, $correo, $clave);</code>):</strong>
+                        <span class="tag-token token-class">Usuario</span> es la clase del modelo; los dos puntos dobles <span class="tag-token token-symbol">::</span> indican llamada estática; <span class="tag-token token-func">crear(...)</span> pasa los 4 datos al modelo para que los inserte en la base de datos SQL.
+                    </li>
+                    <li>
+                        <strong>Línea 14 (<code>header("Location: " . URL_BASE . "paginas/login");</code>):</strong>
+                        <span class="tag-token token-func">header()</span> envía una cabecera HTTP al navegador; <code>Location:</code> le ordena al navegador redirigir al usuario; los puntos <span class="tag-token token-symbol">.</span> concatenan la constante <code>URL_BASE</code> con la ruta <code>"paginas/login"</code>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bloque 3: Método Ingreso (Login) -->
+        <div class="page-break"></div>
+        <div class="avoid-break">
+            <h3 class="sub-title">Método: <code>ingreso()</code> (Autenticación y Consulta PDO)</h3>
+            <div class="code-container">
+                <div><span class="line-num">18</span>  <span class="c-kw">public function</span> <span class="c-fn">ingreso</span><span class="c-sym">(){</span></div>
+                <div><span class="line-num">19</span>      <span class="c-kw">if</span><span class="c-sym">(</span><span class="c-fn">isset</span><span class="c-sym">(</span><span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"login"</span><span class="c-sym">])){</span></div>
+                <div><span class="line-num">20</span>          <span class="c-kw">include_once</span><span class="c-sym">(</span><span class="c-str">"./conexion.php"</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">21</span>          <span class="c-var">$email</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtEmail"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">22</span>          <span class="c-var">$password</span> <span class="c-sym">=</span> <span class="c-var">$_POST</span><span class="c-sym">[</span><span class="c-str">"txtPassword"</span><span class="c-sym">];</span></div>
+                <div><span class="line-num">23</span>          <span class="c-var">$pdo</span> <span class="c-sym">=</span> <span class="c-cls">baseDatos</span><span class="c-sym">::</span><span class="c-fn">crearInstancia</span><span class="c-sym">();</span></div>
+                <div><span class="line-num">24</span>          <span class="c-var">$consulta</span> <span class="c-sym">=</span> <span class="c-var">$pdo</span><span class="c-sym">-&gt;</span><span class="c-fn">prepare</span><span class="c-sym">(</span><span class="c-str">"SELECT * FROM usuarios WHERE correo=:correo AND clave=:clave"</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">25</span>          <span class="c-var">$consulta</span><span class="c-sym">-&gt;</span><span class="c-fn">bindParam</span><span class="c-sym">(</span><span class="c-str">"correo"</span><span class="c-sym">,</span> <span class="c-var">$email</span><span class="c-sym">,</span> <span class="c-cls">PDO</span><span class="c-sym">::</span><span class="c-const">PARAM_STR</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">26</span>          <span class="c-var">$consulta</span><span class="c-sym">-&gt;</span><span class="c-fn">bindParam</span><span class="c-sym">(</span><span class="c-str">"clave"</span><span class="c-sym">,</span> <span class="c-var">$password</span><span class="c-sym">,</span> <span class="c-cls">PDO</span><span class="c-sym">::</span><span class="c-const">PARAM_STR</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">27</span>          <span class="c-var">$consulta</span><span class="c-sym">-&gt;</span><span class="c-fn">execute</span><span class="c-sym">();</span></div>
+                <div><span class="line-num">28</span>          <span class="c-var">$registroEncontrado</span> <span class="c-sym">=</span> <span class="c-var">$consulta</span><span class="c-sym">-&gt;</span><span class="c-fn">fetch</span><span class="c-sym">(</span><span class="c-cls">PDO</span><span class="c-sym">::</span><span class="c-const">FETCH_ASSOC</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">29</span>          <span class="c-var">$numeroRegistros</span> <span class="c-sym">=</span> <span class="c-var">$consulta</span><span class="c-sym">-&gt;</span><span class="c-fn">rowCount</span><span class="c-sym">();</span></div>
+                <div><span class="line-num">30</span>          <span class="c-kw">if</span> <span class="c-sym">(</span><span class="c-var">$numeroRegistros</span> <span class="c-sym">&gt;=</span> <span class="c-const">1</span><span class="c-sym">){</span></div>
+                <div><span class="line-num">31</span>              <span class="c-var">$_SESSION</span><span class="c-sym">[</span><span class="c-str">"usuario"</span><span class="c-sym">]</span> <span class="c-sym">=</span> <span class="c-var">$registroEncontrado</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">32</span>              <span class="c-fn">header</span><span class="c-sym">(</span><span class="c-str">"Location: "</span> <span class="c-sym">.</span> <span class="c-const">URL_BASE</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">33</span>          <span class="c-sym">}</span><span class="c-kw">else</span><span class="c-sym">{</span></div>
+                <div><span class="line-num">34</span>              <span class="c-kw">echo</span> <span class="c-str">"USUARIO O CONTRASEÑA INVALIDOS"</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">35</span>          <span class="c-sym">}</span></div>
+                <div><span class="line-num">36</span>      <span class="c-sym">}</span></div>
+                <div><span class="line-num">37</span>  <span class="c-sym">}</span></div>
+            </div>
+
+            <div class="line-breakdown">
+                <div class="line-header">
+                    <span class="line-title">Explicación Detallada de Cada Palabra y Función en <code>ingreso()</code></span>
+                </div>
+                <ul class="element-list">
+                    <li>
+                        <strong>Línea 19 (<code>if(isset($_POST["login"])){</code>):</strong>
+                        <span class="tag-token token-func">isset()</span> es una función nativa que comprueba si una variable <em>está definida y no es nula</em>. Comprueba si el botón de nombre <code>login</code> fue presionado.
+                    </li>
+                    <li>
+                        <strong>Línea 23 (<code>$pdo = baseDatos::crearInstancia();</code>):</strong>
+                        Llama al método estático <span class="tag-token token-func">crearInstancia()</span> de la clase <code>baseDatos</code> y guarda el objeto de conexión activa en la variable <span class="tag-token token-var">$pdo</span>.
+                    </li>
+                    <li>
+                        <strong>Línea 24 (<code>$consulta = $pdo-&gt;prepare("SELECT * FROM usuarios WHERE correo=:correo AND clave=:clave");</code>):</strong>
+                        El operador <span class="tag-token token-symbol">-&gt;</span> llama al método <span class="tag-token token-func">prepare()</span> del objeto PDO. Envía la consulta SQL al motor de base de datos con los marcadores de posición <code>:correo</code> y <code>:clave</code>. Esto compila la consulta y <strong>previene ataques de inyección SQL</strong>.
+                    </li>
+                    <li>
+                        <strong>Líneas 25 y 26 (<code>$consulta-&gt;bindParam("correo", $email, PDO::PARAM_STR);</code>):</strong>
+                        <span class="tag-token token-func">bindParam()</span> vincula la variable PHP <code>$email</code> con el marcador <code>:correo</code>. La constante <span class="tag-token token-const">PDO::PARAM_STR</span> le indica a la base de datos que este valor debe ser tratado estrictamente como una cadena de texto (String), impidiendo que se inyecte código malicioso.
+                    </li>
+                    <li>
+                        <strong>Línea 27 (<code>$consulta-&gt;execute();</code>):</strong>
+                        Ejecuta la consulta preparada en la base de datos con los parámetros ya sustituidos de forma segura.
+                    </li>
+                    <li>
+                        <strong>Línea 28 (<code>$registroEncontrado = $consulta-&gt;fetch(PDO::FETCH_ASSOC);</code>):</strong>
+                        <span class="tag-token token-func">fetch()</span> extrae la fila resultante de la base de datos. <span class="tag-token token-const">PDO::FETCH_ASSOC</span> le indica que devuelva un arreglo asociativo donde las claves sean los nombres de las columnas (ej: <code>$registroEncontrado["nombre"]</code>).
+                    </li>
+                    <li>
+                        <strong>Línea 29 (<code>$numeroRegistros = $consulta-&gt;rowCount();</code>):</strong>
+                        <span class="tag-token token-func">rowCount()</span> cuenta cuántas filas coincidieron con la búsqueda. Si las credenciales son correctas, retornará <code>1</code>.
+                    </li>
+                    <li>
+                        <strong>Líneas 30 a 32 (<code>if ($numeroRegistros &gt;= 1){ $_SESSION["usuario"] = ... }</code>):</strong>
+                        Si se encontró al menos un registro (<code>&gt;= 1</code>), guarda los datos del usuario en la sesión del navegador <span class="tag-token token-var">$_SESSION["usuario"]</span> y lo redirige a la página principal con <span class="tag-token token-func">header()</span>.
+                    </li>
+                    <li>
+                        <strong>Líneas 33 a 35 (<code>else { echo "USUARIO O CONTRASEÑA INVALIDOS"; }</code>):</strong>
+                        Si no coincide ninguna fila, <span class="tag-token token-keyword">echo</span> imprime en pantalla el mensaje de error.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: CONEXIÓN PDO Y PATRÓN SINGLETON -->
+    <div class="page-break"></div>
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">4</span> Análisis de Conexión a Base de Datos y Singleton: <code style="font-size:16px;">conexion.php</code>
+        </h2>
+
+        <p>
+            Este archivo implementa el <strong>Patrón de Diseño Singleton</strong>, el cual garantiza que solo exista <em>una única conexión</em> a la base de datos abierta durante toda la ejecución de la página, ahorrando memoria y conexiones del servidor MySQL.
+        </p>
+
+        <div class="avoid-break">
+            <div class="code-container">
+                <div><span class="line-num">3</span>  <span class="c-kw">class</span> <span class="c-cls">baseDatos</span> <span class="c-sym">{</span></div>
+                <div><span class="line-num">5</span>      <span class="c-kw">private static</span> <span class="c-var">$instancia</span> <span class="c-sym">=</span> <span class="c-const">null</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">11</span>     <span class="c-kw">public static function</span> <span class="c-fn">crearInstancia</span><span class="c-sym">() {</span></div>
+                <div><span class="line-num">13</span>         <span class="c-kw">if</span> <span class="c-sym">(!</span><span class="c-fn">isset</span><span class="c-sym">(</span><span class="c-kw">self</span><span class="c-sym">::</span><span class="c-var">$instancia</span><span class="c-sym">)) {</span></div>
+                <div><span class="line-num">23</span>             <span class="c-var">$dsn</span> <span class="c-sym">=</span> <span class="c-str">"mysql:host={<span class="c-var">$servidor</span>};dbname={<span class="c-var">$baseDatos</span>};charset={<span class="c-var">$charset</span>}"</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">35</span>             <span class="c-kw">try</span> <span class="c-sym">{</span></div>
+                <div><span class="line-num">37</span>                 <span class="c-kw">self</span><span class="c-sym">::</span><span class="c-var">$instancia</span> <span class="c-sym">=</span> <span class="c-kw">new</span> <span class="c-cls">PDO</span><span class="c-sym">(</span><span class="c-var">$dsn</span><span class="c-sym">,</span> <span class="c-var">$usuario</span><span class="c-sym">,</span> <span class="c-var">$password</span><span class="c-sym">,</span> <span class="c-var">$opcionesPDO</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">38</span>             <span class="c-sym">}</span> <span class="c-kw">catch</span> <span class="c-sym">(</span><span class="c-cls">PDOException</span> <span class="c-var">$error</span><span class="c-sym">) {</span></div>
+                <div><span class="line-num">40</span>                 <span class="c-kw">die</span><span class="c-sym">(</span><span class="c-str">"Error al conectar a la base de datos: "</span> <span class="c-sym">.</span> <span class="c-var">$error</span><span class="c-sym">-&gt;</span><span class="c-fn">getMessage</span><span class="c-sym">());</span></div>
+                <div><span class="line-num">41</span>             <span class="c-sym">}</span></div>
+                <div><span class="line-num">42</span>         <span class="c-sym">}</span></div>
+                <div><span class="line-num">45</span>         <span class="c-kw">return self</span><span class="c-sym">::</span><span class="c-var">$instancia</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">46</span>     <span class="c-sym">}</span></div>
+                <div><span class="line-num">47</span>  <span class="c-sym">}</span></div>
+            </div>
+
+            <div class="line-breakdown">
+                <div class="line-header">
+                    <span class="line-title">Desglose de Conceptos Clave de <code>conexion.php</code></span>
+                </div>
+                <ul class="element-list">
+                    <li>
+                        <strong>Línea 5 (<code>private static $instancia = null;</code>):</strong>
+                        <span class="tag-token token-keyword">private</span> impide que cualquiera fuera de la clase modifique la variable directamente. <span class="tag-token token-keyword">static</span> hace que la variable pertenezca a la clase y no se reinicie entre llamadas. Inicializa en <span class="tag-token token-const">null</span> (vacía).
+                    </li>
+                    <li>
+                        <strong>Línea 13 (<code>if (!isset(self::$instancia)) {</code>):</strong>
+                        El signo <span class="tag-token token-symbol">!</span> niega la condición. <span class="tag-token token-keyword">self::</span> accede a la propiedad estática. Significa: <em>"Si la instancia TODAVÍA NO existe, entra a crearla"</em>. Si ya existía, se salta todo y la devuelve de inmediato (Línea 45).
+                    </li>
+                    <li>
+                        <strong>Línea 23 (<code>$dsn = "mysql:host={$servidor};dbname={$baseDatos};charset={$charset}";</code>):</strong>
+                        <strong>DSN</strong> significa <em>Data Source Name</em> (Nombre de Origen de Datos). Es el texto estructurado con el que PDO sabe a qué motor conectarse (<code>mysql</code>), en qué servidor (<code>localhost</code>), a qué base de datos y con qué juego de caracteres (<code>utf8mb4</code> para tildes y eñes).
+                    </li>
+                    <li>
+                        <strong>Línea 37 (<code>self::$instancia = new PDO($dsn, $usuario, $password, $opcionesPDO);</code>):</strong>
+                        <span class="tag-token token-keyword">new</span> instancia un nuevo objeto de la clase nativa <span class="tag-token token-class">PDO</span> (PHP Data Objects) pasándole los 4 parámetros de configuración y lo almacena en la variable estática.
+                    </li>
+                    <li>
+                        <strong>Línea 38 a 40 (<code>catch (PDOException $error) { die(...) }</code>):</strong>
+                        Si la contraseña de MySQL estuviera mal o el servidor apagado, se genera un objeto de excepción <span class="tag-token token-class">PDOException</span> guardado en <code>$error</code>. Con <span class="tag-token token-symbol">-&gt;</span><span class="tag-token token-func">getMessage()</span> extrae la causa del fallo y <span class="tag-token token-keyword">die()</span> detiene el script con un mensaje claro.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: RUTEADOR Y CONTROLADOR FRONTAL -->
+    <div class="page-break"></div>
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">5</span> El Núcleo de la Arquitectura MVC: <code style="font-size:16px;">index.php</code> y <code style="font-size:16px;">ruteador.php</code>
+        </h2>
+
+        <p>
+            El patrón MVC en PHP utiliza un <strong>Front Controller</strong> (Controlador Frontal). Todas las peticiones de los usuarios entran por <code>index.php</code>, el cual analiza la URL y delega la ejecución al <code>ruteador.php</code>.
+        </p>
+
+        <!-- Diagrama del Flujo MVC -->
+        <div class="diagram-box avoid-break">
+            <strong>Flujo de una Petición en el Sistema MVC</strong>
+            <div class="flow-container">
+                <div class="flow-step">1. Navegador<br><small>URL: /usuarios/crear</small></div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">2. index.php<br><small>Limpia y divide URL</small></div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">3. ruteador.php<br><small>Instancia Controlador</small></div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">4. Controlador<br><small>Ejecuta la Acción</small></div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">5. Vista / BD<br><small>Responde al usuario</small></div>
+            </div>
+        </div>
+
+        <div class="avoid-break">
+            <h3 class="sub-title">Análisis de <code>ruteador.php</code></h3>
+            <div class="code-container">
+                <div><span class="line-num">1</span>  <span class="c-sym">&lt;?php</span></div>
+                <div><span class="line-num">2</span>  <span class="c-kw">include_once</span> <span class="c-str">"controladores/controlador_<span class="c-var">$getcontrolador</span>.php"</span><span class="c-sym">;</span></div>
+                <div><span class="line-num">3</span>  <span class="c-var">$controlador</span> <span class="c-sym">=</span> <span class="c-str">"Controlador"</span> <span class="c-sym">.</span> <span class="c-fn">ucfirst</span><span class="c-sym">(</span><span class="c-var">$getcontrolador</span><span class="c-sym">);</span></div>
+                <div><span class="line-num">4</span>  <span class="c-var">$objcontrolador</span> <span class="c-sym">=</span> <span class="c-kw">new</span> <span class="c-var">$controlador</span><span class="c-sym">();</span></div>
+                <div><span class="line-num">5</span>  <span class="c-var">$objcontrolador</span> <span class="c-sym">-&gt;</span> <span class="c-var">$getaccion</span><span class="c-sym">();</span></div>
+                <div><span class="line-num">6</span>  <span class="c-sym">?&gt;</span></div>
+            </div>
+
+            <div class="line-breakdown">
+                <div class="line-header">
+                    <span class="line-title">Magia del Ruteo Dinámico (Línea por Línea)</span>
+                </div>
+                <ul class="element-list">
+                    <li>
+                        <strong>Línea 2 (<code>include_once "controladores/controlador_$getcontrolador.php";</code>):</strong>
+                        PHP reemplaza dinámicamente la variable <code>$getcontrolador</code> dentro de las comillas dobles. Si la variable vale <code>"usuarios"</code>, la ruta resultante es <code>"controladores/controlador_usuarios.php"</code>.
+                    </li>
+                    <li>
+                        <strong>Línea 3 (<code>$controlador = "Controlador" . ucfirst($getcontrolador);</code>):</strong>
+                        <span class="tag-token token-func">ucfirst()</span> (Uppercase First) convierte la primera letra en mayúscula. Si <code>$getcontrolador</code> es <code>"usuarios"</code>, <code>ucfirst("usuarios")</code> devuelve <code>"Usuarios"</code>. Al concatenar con <code>"Controlador"</code>, genera el nombre exacto de la clase: <code>"ControladorUsuarios"</code>.
+                    </li>
+                    <li>
+                        <strong>Línea 4 (<code>$objcontrolador = new $controlador();</code>):</strong>
+                        <strong>Instanciación Dinámica:</strong> PHP permite usar una variable que contenga un string como nombre de clase al usar <code>new</code>. Equivale a escribir <code>new ControladorUsuarios()</code>.
+                    </li>
+                    <li>
+                        <strong>Línea 5 (<code>$objcontrolador->$getaccion();</code>):</strong>
+                        <strong>Invocación Dinámica de Método:</strong> Llama al método cuyo nombre está guardado en la variable <code>$getaccion</code>. Si <code>$getaccion</code> vale <code>"crear"</code>, ejecuta <code>$objcontrolador-&gt;crear()</code>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: PREGUNTAS FRECUENTES Y ERRORES COMUNES DE ESTUDIANTES -->
+    <div class="page-break"></div>
+    <section>
+        <h2 class="section-title">
+            <span class="section-num">6</span> Preguntas Clave y Errores Frecuentes de Estudiantes
+        </h2>
+
+        <div class="card avoid-break">
+            <h4 style="color: var(--primary); margin-bottom: 6px;">❓ ¿Por qué a veces usamos <code>-&gt;</code> y otras veces <code>::</code>?</h4>
+            <p>
+                <strong>Regla de oro para los alumnos:</strong>
+            </p>
+            <ul style="padding-left: 20px; margin: 6px 0;">
+                <li>Usa <span class="tag-token token-symbol">-&gt;</span> cuando tengas un <strong>objeto vivo</strong> creado con <code>new</code> (ej: <code>$pdo-&gt;prepare()</code>, <code>$consulta-&gt;execute()</code>).</li>
+                <li>Usa <span class="tag-token token-symbol">::</span> cuando quieras llamar a una <strong>clase directamente</strong> o a una constante sin crear un objeto (ej: <code>baseDatos::crearInstancia()</code>, <code>PDO::PARAM_STR</code>).</li>
+            </ul>
+        </div>
+
+        <div class="card avoid-break">
+            <h4 style="color: var(--secondary); margin-bottom: 6px;">❓ ¿Por qué no escribir directamente <code>SELECT * FROM usuarios WHERE correo = '$email'</code>?</h4>
+            <p>
+                <strong>Respuesta de Seguridad (Inyección SQL):</strong> Si concatenamos variables directamente en SQL, un usuario malicioso podría escribir en el formulario <code>' OR '1'='1</code> y entrar al sistema sin contraseña.
+            </p>
+            <p>
+                Al usar <span class="tag-token token-func">prepare()</span> y <span class="tag-token token-func">bindParam()</span>, el motor SQL separa la orden de los datos, haciendo imposible que el texto introducido sea interpretado como comandos SQL.
+            </p>
+        </div>
+
+        <div class="card avoid-break">
+            <h4 style="color: var(--purple); margin-bottom: 6px;">❓ ¿Qué diferencia hay entre <code>include</code>, <code>require</code> e <code>include_once</code>?</h4>
+            <table class="anatomy-table" style="margin-top: 8px;">
+                <thead>
+                    <tr>
+                        <th>Instrucción</th>
+                        <th>Si el archivo no existe...</th>
+                        <th>¿Permite duplicados?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>include</code></td>
+                        <td>Muestra advertencia (Warning) y el script continúa.</td>
+                        <td>Sí (puede redefinir clases y dar error).</td>
+                    </tr>
+                    <tr>
+                        <td><code>require</code></td>
+                        <td>Lanza error fatal y detiene el script.</td>
+                        <td>Sí.</td>
+                    </tr>
+                    <tr>
+                        <td><code>include_once</code></td>
+                        <td>Muestra advertencia pero <strong>sólo lo carga una vez</strong>.</td>
+                        <td>No (ignora si ya fue cargado).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert-box warning avoid-break">
+            <strong>Consejo para la clase:</strong> Invita a tus alumnos a revisar los errores en el archivo <code>php_error.log</code> de Laragon cada vez que vean una pantalla blanca o un error 500. El 90% de los errores de principiante son:
+            <ol style="padding-left: 20px; margin-top: 6px;">
+                <li>Olvidar el punto y coma <span class="tag-token token-symbol">;</span> al final de una línea.</li>
+                <li>Escribir mal el nombre de una variable (ej: <code>$correo</code> vs <code>$email</code>).</li>
+                <li>No abrir la sesión con <code>session_start()</code> antes de usar <code>$_SESSION</code>.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Guía Didáctica de Anatomía de Código PHP & Patrón MVC</strong> | Material preparado para enseñanza de programación web.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

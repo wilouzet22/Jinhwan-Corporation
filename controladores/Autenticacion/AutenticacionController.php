@@ -25,7 +25,7 @@ class AutenticacionController extends Controller {
             $db = Database::getInstance()->getConnection();
 
             $sql = "SELECT p.id_persona as id, p.nombre, p.apellido, c.correo, c.clave, c.rol as rol_id,
-                           p.activo, p.foto_perfil, c.permisos_extra
+                    p.activo, p.foto_perfil, c.permisos_extra
                     FROM credenciales c
                     JOIN personas p ON c.id_persona = p.id_persona
                     WHERE c.correo = ? LIMIT 1";
