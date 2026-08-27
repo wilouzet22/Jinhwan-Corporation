@@ -7,7 +7,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Maes
 $foto_perfil = null;
 
 if (isset($_SESSION['id'])) {
-    $user_model = new \App\Models\Usuario();
+    $user_model = new Usuario();
     $logged_user = $user_model->getById($_SESSION['id']);
     if ($logged_user) {
         $nombre_usuario = $logged_user['nombre'] . ' ' . $logged_user['apellido'];
@@ -111,12 +111,12 @@ if (isset($_SESSION['id'])) {
                 </li>
 
                 <?php
-                $hasSedes = \App\Core\Security::hasPermission('sedes');
-                $hasRegistros = \App\Core\Security::hasPermission('registros');
-                $hasAscensosAdmin = \App\Core\Security::hasPermission('ascensos');
-                $hasCalendarioAdmin = \App\Core\Security::hasPermission('calendario');
-                $hasGaleria = \App\Core\Security::hasPermission('galeria');
-                $hasReportes = \App\Core\Security::hasPermission('reportes');
+                $hasSedes = Security::hasPermission('sedes');
+                $hasRegistros = Security::hasPermission('registros');
+                $hasAscensosAdmin = Security::hasPermission('ascensos');
+                $hasCalendarioAdmin = Security::hasPermission('calendario');
+                $hasGaleria = Security::hasPermission('galeria');
+                $hasReportes = Security::hasPermission('reportes');
 
                 if ($hasSedes || $hasRegistros || $hasAscensosAdmin || $hasCalendarioAdmin || $hasGaleria || $hasReportes): 
                 ?>

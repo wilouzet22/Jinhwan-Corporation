@@ -1,13 +1,8 @@
 <?php
 
-namespace App\Controllers\Usuario;
+include_once __DIR__ . '/../../modelos/Usuario.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Config\Database;
-
-class PerfilController extends Controller {
+class UsuarioPerfilController extends Controller {
 
     public function __construct() {
         Security::verifySession();

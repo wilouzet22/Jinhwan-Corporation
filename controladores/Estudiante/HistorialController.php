@@ -1,12 +1,6 @@
 <?php
 
-namespace App\Controllers\Estudiante;
-
-use App\Core\Controller;
-use App\Core\Security;
-use App\Config\Database;
-
-class HistorialController extends Controller {
+class EstudianteHistorialController extends Controller {
 
     public function __construct() {
         Security::verifySession();

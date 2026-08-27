@@ -4,8 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-use App\Config\Roles;
-
 $rol_id = $_SESSION['rol_id'] ?? null;
 $nombre_usuario = $_SESSION['nombre'] ?? 'Usuario';
 $is_admin = $rol_id && Roles::esAdmin($rol_id);

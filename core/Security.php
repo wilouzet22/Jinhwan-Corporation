@@ -1,7 +1,4 @@
 <?php
-namespace App\Core;
-
-use App\Config\Roles;
 
 class Security {
 
@@ -15,8 +12,6 @@ class Security {
         self::initSession();
 
         if (!isset($_SESSION['id'])) {
-            $log = date('Y-m-d H:i:s') . " - Session Fail: Missing ID. Session=" . session_id() . "\n";
-            file_put_contents('debug_login.txt', $log, FILE_APPEND);
             self::redirectLogin('no_session');
         }
 
@@ -65,16 +60,10 @@ class Security {
         $rol_id = $_SESSION['rol_id'] ?? null;
 
         if (!Roles::esAdmin($rol_id)) {
-            $log = date('Y-m-d H:i:s') . " - Admin Fail: Invalid Rol=" . var_export($rol_id, true) . "\n";
-            file_put_contents('debug_login.txt', $log, FILE_APPEND);
-
             $base = self::getBasePath();
             header("Location: " . $base . "/?msg=access_denied");
             exit;
         }
-
-        $log = date('Y-m-d H:i:s') . " - Admin Success: Rol=" . $rol_id . "\n";
-        file_put_contents('debug_login.txt', $log, FILE_APPEND);
     }
 
     public static function hasPermission($permiso) {
@@ -98,9 +87,6 @@ class Security {
     public static function verifyPermission($permiso) {
         self::initSession();
         if (!self::hasPermission($permiso)) {
-            $log = date('Y-m-d H:i:s') . " - Permission Denied: Permiso=" . $permiso . " Rol=" . ($_SESSION['rol_id'] ?? 'null') . "\n";
-            file_put_contents('debug_login.txt', $log, FILE_APPEND);
-
             $base = self::getBasePath();
             header("Location: " . $base . "/?msg=access_denied");
             exit;
@@ -116,16 +102,10 @@ class Security {
                     || $rol_id === Roles::MONITOR;
 
         if (!$tieneAcceso) {
-            $log = date('Y-m-d H:i:s') . " - Maestro Fail: Invalid Rol=" . var_export($rol_id, true) . "\n";
-            file_put_contents('debug_login.txt', $log, FILE_APPEND);
-
             $base = self::getBasePath();
             header("Location: " . $base . "/?msg=access_denied");
             exit;
         }
-
-        $log = date('Y-m-d H:i:s') . " - Maestro Success: Rol=" . $rol_id . "\n";
-        file_put_contents('debug_login.txt', $log, FILE_APPEND);
     }
 
     private static function getBasePath() {

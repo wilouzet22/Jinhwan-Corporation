@@ -1,7 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Model;
 
 class Evento extends Model {
 
@@ -31,7 +28,7 @@ class Evento extends Model {
 
     public function create($data) {
         $fecha_fin = !empty($data['end']) ? $data['end'] : null;
-        $id_persona = $data['id_persona'] ?? ($data['id_miembro'] ?? $_SESSION['id'] ?? 1);
+        $id_persona = $data['id_persona'] ?? ($_SESSION['id'] ?? 1);
         
         $stmt = $this->db->prepare("INSERT INTO eventos (titulo, descripcion, fecha_inicio, fecha_fin, id_persona) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssi", $data['title'], $data['description'], $data['start'], $fecha_fin, $id_persona);

@@ -1,11 +1,8 @@
 <?php
-namespace App\Controllers\Administracion;
 
-use App\Core\Controller;
-use App\Models\MultimediaGaleria;
-use App\Core\Security;
+include_once __DIR__ . '/../../modelos/MultimediaGaleria.php';
 
-class GaleriaController extends Controller {
+class AdminGaleriaController extends Controller {
 
     private $galeriaModel;
 
@@ -20,15 +17,15 @@ class GaleriaController extends Controller {
         $publicaciones = $this->galeriaModel->getAllGeneral();
 
         $this->view('administracion/galeria/index', [
-            'page_title' => 'Gestión de Galería',
-            'current_page' => 'galeria',
+            'page_title'    => 'Gestión de Galería',
+            'current_page'  => 'galeria',
             'publicaciones' => $publicaciones
         ]);
     }
 
     public function crear() {
         $this->view('administracion/galeria/crear', [
-            'page_title' => 'Añadir a Galería',
+            'page_title'   => 'Añadir a Galería',
             'current_page' => 'galeria'
         ]);
     }
@@ -36,7 +33,7 @@ class GaleriaController extends Controller {
     public function store() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $url_instagram = filter_input(INPUT_POST, 'url_instagram', FILTER_SANITIZE_URL);
-            $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_STRING);
+            $descripcion   = trim(strip_tags($_POST['descripcion'] ?? ''));
 
             if ($url_instagram) {
                 if ($this->galeriaModel->insertGeneral($url_instagram, $descripcion)) {
@@ -51,8 +48,7 @@ class GaleriaController extends Controller {
                 $_SESSION['tipo_mensaje'] = "error";
             }
             
-            header('Location: ' . base_url('/admin/galeria'));
-            exit;
+            $this->redirect('/admin/galeria');
         }
     }
 
@@ -69,8 +65,7 @@ class GaleriaController extends Controller {
                     $_SESSION['tipo_mensaje'] = "error";
                 }
             }
-            header('Location: ' . base_url('/admin/galeria'));
-            exit;
+            $this->redirect('/admin/galeria');
         }
     }
 }

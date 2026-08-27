@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Controllers\Web;
+include_once __DIR__ . '/../../modelos/Sede.php';
 
-use App\Core\Controller;
-use App\Models\Sede;
-
-class SedesController extends Controller {
+class WebSedesController extends Controller {
 
     public function index() {
         $sedeModel = new Sede();

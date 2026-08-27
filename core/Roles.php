@@ -1,5 +1,4 @@
 <?php
-namespace App\Config;
 
 class Roles {
     const ADMINISTRADOR = 'Administracion';

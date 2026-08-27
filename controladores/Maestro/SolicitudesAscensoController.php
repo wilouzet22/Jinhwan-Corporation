@@ -1,15 +1,9 @@
 <?php
 
-namespace App\Controllers\Maestro;
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/Nivel.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Config\Database;
-use App\Models\Usuario;
-use App\Models\Nivel;
-use App\Config\Roles;
-
-class SolicitudesAscensoController extends Controller {
+class MaestroSolicitudesAscensoController extends Controller {
 
     public function __construct() {
         Security::verifySession();

@@ -1,79 +1,62 @@
 <?php
-require_once __DIR__ . '/controladores/Web/InicioController.php';
-require_once __DIR__ . '/controladores/Web/SedesController.php';
-require_once __DIR__ . '/controladores/Web/PaginaController.php';
-require_once __DIR__ . '/controladores/Web/MiembrosController.php';
-require_once __DIR__ . '/controladores/Web/GaleriaController.php';
 
-require_once __DIR__ . '/controladores/Administracion/AscensosController.php';
-require_once __DIR__ . '/controladores/Administracion/SedesController.php';
-require_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
-require_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController.php';
-require_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
-require_once __DIR__ . '/controladores/Administracion/DashboardController.php';
-require_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
-require_once __DIR__ . '/controladores/Administracion/ReportesController.php';
-require_once __DIR__ . '/controladores/Administracion/GaleriaController.php';
+include_once __DIR__ . '/controladores/Web/InicioController.php';
+include_once __DIR__ . '/controladores/Web/SedesController.php';
+include_once __DIR__ . '/controladores/Web/PaginaController.php';
+include_once __DIR__ . '/controladores/Web/MiembrosController.php';
+include_once __DIR__ . '/controladores/Web/GaleriaController.php';
+            
+include_once __DIR__ . '/controladores/Administracion/AscensosController.php';
+include_once __DIR__ . '/controladores/Administracion/SedesController.php';
+include_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
+include_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController.php';
+include_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
+include_once __DIR__ . '/controladores/Administracion/DashboardController.php';
+include_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
+include_once __DIR__ . '/controladores/Administracion/ReportesController.php';
+include_once __DIR__ . '/controladores/Administracion/GaleriaController.php';
 
-require_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
+include_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
 
-require_once __DIR__ . '/controladores/Usuario/CalendarioController.php';
-require_once __DIR__ . '/controladores/Usuario/PerfilController.php';
+include_once __DIR__ . '/controladores/Usuario/CalendarioController.php';
+include_once __DIR__ . '/controladores/Usuario/PerfilController.php';
 
-require_once __DIR__ . '/controladores/Estudiante/DashboardController.php';
-require_once __DIR__ . '/controladores/Estudiante/EstudioController.php';
-require_once __DIR__ . '/controladores/Estudiante/HistorialController.php';
+include_once __DIR__ . '/controladores/Estudiante/DashboardController.php';
+include_once __DIR__ . '/controladores/Estudiante/EstudioController.php';
+include_once __DIR__ . '/controladores/Estudiante/HistorialController.php';
 
-require_once __DIR__ . '/controladores/Maestro/DashboardController.php';
-require_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
-require_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
-
-use App\Core\Router;
-use App\Controllers\Web\InicioController;
-use App\Controllers\Web\PaginaController;
-use App\Controllers\Web\MiembrosController as WebMiembrosController;
-use App\Controllers\Web\GaleriaController;
-use App\Controllers\Web\SedesController as WebSedesController;
-use App\Controllers\Administracion\SedesController as AdminSedesController;
-use App\Controllers\Administracion\AscensosController;
-use App\Controllers\Administracion\MiembrosController;
-use App\Controllers\Administracion\PerfilesPublicosController;
-use App\Controllers\Administracion\RegistrosController;
-use App\Controllers\Administracion\DashboardController;
-use App\Controllers\Administracion\CalendarioController as AdminCalendarioController;
-use App\Controllers\Administracion\ReportesController;
-use App\Controllers\Administracion\GaleriaController as AdminGaleriaController;
-use App\Controllers\Autenticacion\AutenticacionController;
-use App\Controllers\Usuario\CalendarioController as UsuarioCalendarioController;
-use App\Controllers\Usuario\PerfilController as SharedPerfilController;
-use App\Controllers\Estudiante\DashboardController as StudentDashboardController;
-use App\Controllers\Estudiante\EstudioController as StudentEstudioController;
-use App\Controllers\Estudiante\HistorialController as StudentHistorialController;
-use App\Controllers\Maestro\DashboardController as MaestroDashboardController;
-use App\Controllers\Maestro\AlumnosController as MaestroAlumnosController;
-use App\Controllers\Maestro\SolicitudesAscensoController as MaestroSolicitudesController;
+include_once __DIR__ . '/controladores/Maestro/DashboardController.php';
+include_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
+include_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
 
 $router = new Router();
 
-$router->get('/', [InicioController::class, 'portal']);
-$router->get('/portal', [InicioController::class, 'portal']);
-$router->get('/inicio', [InicioController::class, 'index']);
-$router->get('/nosotros', [PaginaController::class, 'nosotros']);
+// Rutas Públicas (Web)
+$router->get('/', [WebInicioController::class, 'portal']);
+$router->get('/portal', [WebInicioController::class, 'portal']);
+$router->get('/inicio', [WebInicioController::class, 'index']);
+$router->get('/nosotros', [WebPaginaController::class, 'nosotros']);
 $router->get('/sedes', [WebSedesController::class, 'index']);
 $router->get('/miembros', [WebMiembrosController::class, 'index']);
-$router->get('/galeria', [GaleriaController::class, 'index']);
+$router->get('/galeria', [WebGaleriaController::class, 'index']);
 
-$router->get('/estudiante/dashboard', [StudentDashboardController::class, 'index']);
-$router->get('/estudiante/estudio', [StudentEstudioController::class, 'index']);
-$router->post('/ascensos/toggle', [StudentEstudioController::class, 'toggle']);
-$router->get('/estudiante/historial', [StudentHistorialController::class, 'index']);
-$router->get('/estudiante/perfil', [SharedPerfilController::class, 'index']);
-$router->post('/estudiante/perfil/update', [SharedPerfilController::class, 'update']);
-$router->get('/usuario/perfil', [SharedPerfilController::class, 'index']);
-$router->post('/usuario/perfil/update', [SharedPerfilController::class, 'update']);
-$router->get('/perfil', [SharedPerfilController::class, 'index']);
-$router->post('/perfil/update', [SharedPerfilController::class, 'update']);
+// Rutas Estudiante
+$router->get('/estudiante/dashboard', [EstudianteDashboardController::class, 'index']);
+$router->get('/estudiante/estudio', [EstudianteEstudioController::class, 'index']);
+$router->post('/ascensos/toggle', [EstudianteEstudioController::class, 'toggle']);
+$router->get('/estudiante/historial', [EstudianteHistorialController::class, 'index']);
+$router->get('/estudiante/perfil', [UsuarioPerfilController::class, 'index']);
+$router->post('/estudiante/perfil/update', [UsuarioPerfilController::class, 'update']);
 
+// Rutas Usuario General / Perfil
+$router->get('/usuario/perfil', [UsuarioPerfilController::class, 'index']);
+$router->post('/usuario/perfil/update', [UsuarioPerfilController::class, 'update']);
+$router->get('/perfil', [UsuarioPerfilController::class, 'index']);
+$router->post('/perfil/update', [UsuarioPerfilController::class, 'update']);
+$router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);
+$router->get('/usuario/calendario/get-eventos', [UsuarioCalendarioController::class, 'getEventos']);
+
+// Autenticación y Registro
 $router->get('/login', [AutenticacionController::class, 'loginForm']);
 $router->post('/login/process', [AutenticacionController::class, 'login']);
 $router->get('/logout', [AutenticacionController::class, 'logout']);
@@ -82,31 +65,32 @@ $router->post('/registro/process', [AutenticacionController::class, 'processRegi
 $router->get('/registro/completar', [AutenticacionController::class, 'completarRegistroForm']);
 $router->post('/registro/completar/process', [AutenticacionController::class, 'processCompletarRegistro']);
 
-$router->get('/admin/dashboard', [DashboardController::class, 'index']);
-$router->get('/admin/ascensos', [AscensosController::class, 'index']);
-$router->post('/admin/ascensos/create', [AscensosController::class, 'store']);
-$router->post('/admin/ascensos/update', [AscensosController::class, 'update']);
-$router->post('/admin/ascensos/delete', [AscensosController::class, 'delete']);
+// Administración
+$router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
+$router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
+$router->post('/admin/ascensos/create', [AdminAscensosController::class, 'store']);
+$router->post('/admin/ascensos/update', [AdminAscensosController::class, 'update']);
+$router->post('/admin/ascensos/delete', [AdminAscensosController::class, 'delete']);
 
 $router->get('/admin/sedes', [AdminSedesController::class, 'index']);
 $router->post('/admin/sedes/create', [AdminSedesController::class, 'store']);
 $router->post('/admin/sedes/update', [AdminSedesController::class, 'update']);
 $router->post('/admin/sedes/delete', [AdminSedesController::class, 'delete']);
 
-$router->get('/admin/miembros', [MiembrosController::class, 'index']);
-$router->post('/admin/miembros/create', [MiembrosController::class, 'store']);
-$router->post('/admin/miembros/update', [MiembrosController::class, 'update']);
-$router->post('/admin/miembros/delete', [MiembrosController::class, 'delete']);
-$router->post('/admin/miembros/delete-bulk', [MiembrosController::class, 'deleteBulk']);
+$router->get('/admin/miembros', [AdminMiembrosController::class, 'index']);
+$router->post('/admin/miembros/create', [AdminMiembrosController::class, 'store']);
+$router->post('/admin/miembros/update', [AdminMiembrosController::class, 'update']);
+$router->post('/admin/miembros/delete', [AdminMiembrosController::class, 'delete']);
+$router->post('/admin/miembros/delete-bulk', [AdminMiembrosController::class, 'deleteBulk']);
 
-$router->get('/admin/perfiles-publicos', [PerfilesPublicosController::class, 'index']);
-$router->post('/admin/perfiles-publicos/update', [PerfilesPublicosController::class, 'update']);
+$router->get('/admin/perfiles-publicos', [AdminPerfilesPublicosController::class, 'index']);
+$router->post('/admin/perfiles-publicos/update', [AdminPerfilesPublicosController::class, 'update']);
 
-$router->get('/admin/registros', [RegistrosController::class, 'index']);
-$router->post('/admin/registros/aprobar', [RegistrosController::class, 'aprobar']);
-$router->post('/admin/registros/rechazar', [RegistrosController::class, 'rechazar']);
-$router->post('/admin/registros/aprobar-ascenso', [RegistrosController::class, 'aprobarAscenso']);
-$router->post('/admin/registros/rechazar-ascenso', [RegistrosController::class, 'rechazarAscenso']);
+$router->get('/admin/registros', [AdminRegistrosController::class, 'index']);
+$router->post('/admin/registros/aprobar', [AdminRegistrosController::class, 'aprobar']);
+$router->post('/admin/registros/rechazar', [AdminRegistrosController::class, 'rechazar']);
+$router->post('/admin/registros/aprobar-ascenso', [AdminRegistrosController::class, 'aprobarAscenso']);
+$router->post('/admin/registros/rechazar-ascenso', [AdminRegistrosController::class, 'rechazarAscenso']);
 
 $router->get('/admin/calendario', [AdminCalendarioController::class, 'index']);
 $router->get('/admin/calendario/get-eventos', [AdminCalendarioController::class, 'getEventos']);
@@ -114,20 +98,17 @@ $router->post('/admin/calendario/create', [AdminCalendarioController::class, 'st
 $router->post('/admin/calendario/update', [AdminCalendarioController::class, 'update']);
 $router->post('/admin/calendario/delete', [AdminCalendarioController::class, 'delete']);
 
-$router->get('/admin/reportes', [ReportesController::class, 'index']);
+$router->get('/admin/reportes', [AdminReportesController::class, 'index']);
 
 $router->get('/admin/galeria', [AdminGaleriaController::class, 'index']);
 $router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
 $router->post('/admin/galeria/store', [AdminGaleriaController::class, 'store']);
 $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']);
 
-$router->get('/usuario/calendario', [UsuarioCalendarioController::class, 'index']);
-$router->get('/usuario/calendario/get-eventos', [UsuarioCalendarioController::class, 'getEventos']);
-
+// Maestro / Instructores
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
-$router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesController::class, 'index']);
-$router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesController::class, 'store']);
+$router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesAscensoController::class, 'index']);
+$router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesAscensoController::class, 'store']);
 
 $router->dispatch();
-

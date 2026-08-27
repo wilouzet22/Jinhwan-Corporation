@@ -8,7 +8,7 @@ $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admi
 $foto_perfil = null;
 
 if (isset($_SESSION['id'])) {
-    $user_model = new \App\Models\Usuario();
+    $user_model = new Usuario();
     $logged_user = $user_model->getById($_SESSION['id']);
     if ($logged_user) {
         $nombre_usuario = $logged_user['nombre'] . ' ' . $logged_user['apellido'];

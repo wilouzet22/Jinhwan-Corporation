@@ -1,23 +1,16 @@
 <?php
 
-namespace App\Controllers\Administracion;
- 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Models\Sede;
-use App\Models\Nivel;
-use App\Models\Categoria;
-use App\Config\Roles;
- 
-class MiembrosController extends Controller {
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Nivel.php';
+include_once __DIR__ . '/../../modelos/Categoria.php';
+include_once __DIR__ . '/../../modelos/MultimediaGaleria.php';
+
+class AdminMiembrosController extends Controller {
 
     private $usuarioModel;
-
     private $sedeModel;
-
     private $nivelModel;
-
     private $categoriaModel;
 
     public function __construct() {
@@ -109,9 +102,9 @@ class MiembrosController extends Controller {
             }
  
             $this->usuarioModel->create($data);
-            $newId = \App\Config\Database::getInstance()->getConnection()->insert_id;
+            $newId = Database::getInstance()->getConnection()->insert_id;
             if ($newId > 0 && isset($_POST['url_instagram'])) {
-                $multimediaModel = new \App\Models\MultimediaGaleria();
+                $multimediaModel = new MultimediaGaleria();
                 $multimediaModel->upsert($newId, trim($_POST['url_instagram']));
             }
             $this->redirect('/admin/miembros');
@@ -152,7 +145,6 @@ class MiembrosController extends Controller {
                         mkdir($uploadFileDir, 0755, true);
                     }
                     if (move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
-                        
                         if (!empty($foto_perfil)) {
                             $old_file = $uploadFileDir . $foto_perfil;
                             if (file_exists($old_file)) {
@@ -203,7 +195,7 @@ class MiembrosController extends Controller {
  
             $this->usuarioModel->update($id, $data);
             if (isset($_POST['url_instagram'])) {
-                $multimediaModel = new \App\Models\MultimediaGaleria();
+                $multimediaModel = new MultimediaGaleria();
                 $multimediaModel->upsert($id, trim($_POST['url_instagram']));
             }
             $this->redirect('/admin/miembros');

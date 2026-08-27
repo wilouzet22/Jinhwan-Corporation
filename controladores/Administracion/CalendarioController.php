@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Controllers\Administracion;
+include_once __DIR__ . '/../../modelos/Evento.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Evento;
-
-class CalendarioController extends Controller {
+class AdminCalendarioController extends Controller {
 
     private $eventoModel;
 

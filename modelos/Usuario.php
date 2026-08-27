@@ -1,7 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Model;
 
 class Usuario extends Model {
 
@@ -269,7 +266,7 @@ class Usuario extends Model {
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    public function updatePublicProfile($id, $mostrar_en_web, $descripcion_perfil, $rol) {
+    public function updatePublicProfile($id, $mostrar_en_web, $descripcion_perfil, $rol = null) {
         $sql = "INSERT INTO perfil_maestros (id_persona, descripcion_perfil, mostrar_en_web)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE descripcion_perfil = VALUES(descripcion_perfil), mostrar_en_web = VALUES(mostrar_en_web)";

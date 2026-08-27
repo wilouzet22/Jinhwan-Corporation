@@ -1,19 +1,13 @@
 <?php
 
-namespace App\Controllers\Administracion;
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Nivel.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Models\Sede;
-use App\Models\Nivel;
-
-class ReportesController extends Controller {
+class AdminReportesController extends Controller {
 
     private $usuarioModel;
-
     private $sedeModel;
-
     private $nivelModel;
 
     public function __construct() {

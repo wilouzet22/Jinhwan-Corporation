@@ -1,10 +1,8 @@
 <?php
-namespace App\Controllers\Web;
 
-use App\Core\Controller;
-use App\Models\Usuario;
+include_once __DIR__ . '/../../modelos/Usuario.php';
 
-class MiembrosController extends Controller {
+class WebMiembrosController extends Controller {
 
     public function index() {
         $usuarioModel = new Usuario();
@@ -12,7 +10,7 @@ class MiembrosController extends Controller {
 
         $this->view('web/miembros', [
             'page_title' => 'Nuestros Miembros',
-            'miembros' => $miembros
+            'miembros'   => $miembros
         ]);
     }
 }

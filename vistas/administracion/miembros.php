@@ -1,5 +1,4 @@
 <?php
-use App\Config\Roles;
 include __DIR__ . '/../layout/administracion_cabecera.php'; 
 ?>
 

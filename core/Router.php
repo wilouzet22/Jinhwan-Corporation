@@ -1,5 +1,4 @@
 <?php
-namespace App\Core;
 
 class Router {
 
@@ -36,9 +35,10 @@ class Router {
             $callback = $this->routes[$method][$path];
 
             if (is_array($callback)) {
-                $controller = new $callback[0]();
-                $method = $callback[1];
-                return $controller->$method();
+                $controllerClass = $callback[0];
+                $methodName = $callback[1];
+                $controller = new $controllerClass();
+                return $controller->$methodName();
             }
 
             return call_user_func($callback);

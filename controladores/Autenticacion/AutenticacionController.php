@@ -1,11 +1,6 @@
 <?php
 
-namespace App\Controllers\Autenticacion;
-
-use App\Core\Controller;
-use App\Core\Security;
-use App\Config\Roles;
-use App\Config\Database;
+include_once __DIR__ . '/../../modelos/Sede.php';
 
 class AutenticacionController extends Controller {
 
@@ -63,9 +58,6 @@ class AutenticacionController extends Controller {
 
                     Security::startSecureSession($usuario_data);
 
-                    $log = date('Y-m-d H:i:s') . " - Login Success: Email=" . $email . " | Rol=" . $registro['rol_id'] . "\n";
-                    file_put_contents('debug_login.txt', $log, FILE_APPEND);
-
                     if (Roles::esAdmin($registro['rol_id'])) {
                         $this->redirect('/admin/dashboard');        
                     } elseif (Roles::esMaestro($registro['rol_id'])
@@ -114,6 +106,7 @@ class AutenticacionController extends Controller {
                 $resCheck = $stmtCheck->get_result();
 
                 if ($resCheck && $resCheck->num_rows > 0) {
+                            
                     $this->redirect('/registro?error=already_registered');
                 } else {
                     $clave_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -146,7 +139,7 @@ class AutenticacionController extends Controller {
             $this->redirect('/registro');
         }
 
-        $sedeModel = new \App\Models\Sede();
+        $sedeModel = new Sede();
         $sedes = $sedeModel->getAll();
 
         $this->view('autenticacion/completar_registro', [

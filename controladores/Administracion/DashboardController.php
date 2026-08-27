@@ -1,13 +1,8 @@
 <?php
 
-namespace App\Controllers\Administracion;
+include_once __DIR__ . '/../../modelos/Evento.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Config\Database;
-use App\Models\Evento;
-
-class DashboardController extends Controller {
+class AdminDashboardController extends Controller {
 
     public function __construct() {
         Security::verifySession(); 

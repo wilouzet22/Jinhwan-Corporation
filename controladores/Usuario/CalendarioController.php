@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Controllers\Usuario;
+include_once __DIR__ . '/../../modelos/Evento.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Evento;
-
-class CalendarioController extends Controller {
+class UsuarioCalendarioController extends Controller {
 
     private $eventoModel;
 
@@ -16,16 +12,15 @@ class CalendarioController extends Controller {
     }
 
     public function index() {
-        
-        $rol = $_SESSION['user_role'] ?? '';
-        
+        $rol = $_SESSION['rol_id'] ?? '';
+                    ADMIN
         $this->view('usuario/calendario', [
             'page_title'   => 'Calendario de Eventos',
             'current_page' => 'calendario',
             'rol'          => $rol
         ]);
     }
-
+ 
     public function getEventos() {
         header('Content-Type: application/json');
         $eventos = $this->eventoModel->getAll();

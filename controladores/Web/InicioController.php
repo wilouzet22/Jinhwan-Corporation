@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Controllers\Web;
-
-use App\Core\Controller;
-
-class InicioController extends Controller {
+class WebInicioController extends Controller {
 
     public function index() {
         $this->view('web/inicio', [

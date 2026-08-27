@@ -1,15 +1,10 @@
 <?php
 
-namespace App\Controllers\Maestro;
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Nivel.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Models\Sede;
-use App\Models\Nivel;
-use App\Config\Roles;
-
-class AlumnosController extends Controller {
+class MaestroAlumnosController extends Controller {
 
     private $usuarioModel;
     private $sedeModel;
@@ -35,10 +30,10 @@ class AlumnosController extends Controller {
         $grados = $this->nivelModel->getAll();
 
         $this->view('maestro/alumnos', [
-            'alumnos'     => $alumnos,
-            'sedes_list'  => $sedes,
-            'grados_list' => $grados,
-            'page_title'  => 'Mis Alumnos',
+            'alumnos'      => $alumnos,
+            'sedes_list'   => $sedes,
+            'grados_list'  => $grados,
+            'page_title'   => 'Mis Alumnos',
             'current_page' => 'alumnos'
         ]);
     }

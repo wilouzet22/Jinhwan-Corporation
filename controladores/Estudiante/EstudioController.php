@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Controllers\Estudiante;
+include_once __DIR__ . '/../../modelos/Teoria.php';
+include_once __DIR__ . '/../../modelos/Usuario.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Teoria;
-use App\Models\Usuario;
-
-class EstudioController extends Controller {
+class EstudianteEstudioController extends Controller {
 
     public function __construct() {
         Security::verifySession();
@@ -15,14 +11,11 @@ class EstudioController extends Controller {
 
     public function index() {
         $teoriaModel = new Teoria();
-
         $teorias = $teoriaModel->getAll();
 
         $usuarioModel = new Usuario();
-
-        $estudiante = $usuarioModel->getById($_SESSION['id']);
-
         $usuario_id = $_SESSION['id'];
+        $estudiante = $usuarioModel->getById($usuario_id);
 
         $favorites = $teoriaModel->getFavorites($usuario_id);
 
@@ -48,14 +41,12 @@ class EstudioController extends Controller {
 
     public function toggle() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            
             $input    = json_decode(file_get_contents('php://input'), true);
             $teoria_id = $input['teoriaId'] ?? null;
             $usuario_id = $_SESSION['id'];
 
             if ($teoria_id) {
                 $teoriaModel = new Teoria();
-
                 $result = $teoriaModel->toggleFavorite($usuario_id, $teoria_id);
 
                 header('Content-Type: application/json');

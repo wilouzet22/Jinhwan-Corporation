@@ -20,11 +20,11 @@ include $cabecera;
         <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute right-1/3 -top-12 w-48 h-48 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div name class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
             <div class="space-y-2">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold tracking-wider uppercase border border-blue-500/30">
                     <span class="pulse-dot"></span>
-                    <span>Calendario Académico</span>
+                    <span name=''>Calendario Académico</span>
                 </div>
                 <h1 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-white uppercase">Calendario de Eventos</h1>
                 <p class="text-slate-300 text-sm max-w-xl">Consulta los próximos exámenes de grado, torneos, seminarios y actividades programadas por la academia.</p>

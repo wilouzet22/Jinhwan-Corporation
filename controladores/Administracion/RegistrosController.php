@@ -1,12 +1,6 @@
 <?php
 
-namespace App\Controllers\Administracion;
-
-use App\Core\Controller;
-use App\Core\Security;
-use App\Config\Database;
-
-class RegistrosController extends Controller {
+class AdminRegistrosController extends Controller {
 
     public function __construct() {
         Security::verifySession();
@@ -104,7 +98,7 @@ class RegistrosController extends Controller {
 
                 $db->commit();
                 $this->redirect('/admin/registros?msg=promo_approved');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $db->rollback();
                 $this->redirect('/admin/registros?error=1');
             }

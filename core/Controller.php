@@ -1,5 +1,4 @@
 <?php
-namespace App\Core;
 
 class Controller {
 
@@ -17,7 +16,7 @@ class Controller {
 
     protected function redirect($url) {
         $base = dirname($_SERVER['SCRIPT_NAME']);
-        if ($base === '/') $base = '';
+        if ($base === '/' || $base === '\\') $base = '';
 
         header("Location: " . $base . $url);
         exit;

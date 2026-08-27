@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Controllers\Administracion;
+include_once __DIR__ . '/../../modelos/Teoria.php';
+include_once __DIR__ . '/../../modelos/Nivel.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Teoria;
-use App\Models\Nivel;
-
-class AscensosController extends Controller {
+class AdminAscensosController extends Controller {
 
     private $teoriaModel;
     private $nivelModel;

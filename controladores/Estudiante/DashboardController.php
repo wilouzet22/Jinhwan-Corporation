@@ -1,38 +1,34 @@
 <?php
 
-namespace App\Controllers\Estudiante;
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/Evento.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Config\Roles;
-
-class DashboardController extends Controller {
+class EstudianteDashboardController extends Controller {
 
     public function __construct() {
         Security::verifySession();
 
         $rol = $_SESSION['rol_id'] ?? null;
         if (Roles::esAdmin($rol)) {
-            header('Location: ' . base_url('/admin/dashboard')); exit;
+            $this->redirect('/admin/dashboard');
         }
         if (Roles::esMaestro($rol) || $rol === Roles::PROFESOR || $rol === Roles::MONITOR) {
-            header('Location: ' . base_url('/maestro/dashboard')); exit;
+            $this->redirect('/maestro/dashboard');
         }
     }
 
     public function index() {
         $usuarioModel = new Usuario();
-        $eventoModel = new \App\Models\Evento();
+        $eventoModel  = new Evento();
 
         $estudiante = $usuarioModel->getById($_SESSION['id']); 
 
         $proximos_eventos = $eventoModel->getUpcoming(3);
 
         $this->view('estudiante/dashboard', [
-            'estudiante' => $estudiante,    
+            'estudiante'       => $estudiante,    
             'proximos_eventos' => $proximos_eventos, 
-            'page_title' => 'Portal del Alumno'
+            'page_title'       => 'Portal del Alumno'
         ]);
     }
 }

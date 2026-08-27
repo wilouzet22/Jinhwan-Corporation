@@ -1,12 +1,8 @@
 <?php
 
-namespace App\Controllers\Administracion;
+include_once __DIR__ . '/../../modelos/Sede.php';
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Sede;
-
-class SedesController extends Controller {
+class AdminSedesController extends Controller {
 
     private $sedeModel;
 

@@ -1,12 +1,9 @@
 <?php
-namespace App\Controllers\Administracion;
 
-use App\Core\Controller;
-use App\Core\Security;
-use App\Models\Usuario;
-use App\Models\MultimediaGaleria;
+include_once __DIR__ . '/../../modelos/Usuario.php';
+include_once __DIR__ . '/../../modelos/MultimediaGaleria.php';
 
-class PerfilesPublicosController extends Controller {
+class AdminPerfilesPublicosController extends Controller {
 
     private $usuarioModel;
     private $multimediaModel;
@@ -23,8 +20,8 @@ class PerfilesPublicosController extends Controller {
         $miembros = $this->usuarioModel->getAllWithPublicProfileInfo();
 
         $this->view('administracion/perfiles_publicos', [
-            'miembros'    => $miembros,
-            'page_title'  => 'Perfiles Públicos - Administración',
+            'miembros'     => $miembros,
+            'page_title'   => 'Perfiles Públicos - Administración',
             'current_page' => 'perfiles_publicos'
         ]);
     }
@@ -42,7 +39,6 @@ class PerfilesPublicosController extends Controller {
             if (!empty($url_instagram)) {
                 $this->multimediaModel->upsert($id, $url_instagram);
             } else {
-                
                 $this->multimediaModel->upsert($id, '');
             }
 

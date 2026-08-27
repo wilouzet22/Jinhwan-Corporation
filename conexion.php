@@ -1,7 +1,4 @@
 <?php
-namespace App\Config;
-
-use mysqli;
 
 class Database {
     private static $instance = null;
