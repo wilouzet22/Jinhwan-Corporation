@@ -427,10 +427,6 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                             <label for="division" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">División de Peso</label>
                             <input type="text" name="division" id="division" placeholder="Ej. Minimosca -54kg" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
-                        <div>
-                            <label for="ctgc" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Código CTGC</label>
-                            <input type="text" name="ctgc" id="ctgc" placeholder="Ej. CTGC-12345" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
-                        </div>
                     </div>
                 </div>
 
@@ -775,7 +771,6 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             document.getElementById('rol_id').value = data.rol_id || '<?= Roles::ESTUDIANTE ?>';
             document.getElementById('categoria_id').value = data.categoria_id || '1';
             document.getElementById('division').value = data.division || '';
-            document.getElementById('ctgc').value = data.ctgc || '';
             document.getElementById('peso').value = data.peso || '';
             document.getElementById('eps').value = data.eps || '';
             document.getElementById('rh').value = data.rh || '';

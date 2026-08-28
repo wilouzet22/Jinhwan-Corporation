@@ -213,7 +213,6 @@ CREATE TABLE `perfil_deportistas` (
   `fecha_n` date DEFAULT NULL,
   `peso` decimal(5,2) DEFAULT NULL,
   `division` varchar(100) DEFAULT NULL,
-  `ctgc` varchar(100) DEFAULT NULL,
   `eps` varchar(255) DEFAULT NULL,
   `rh` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id_persona`),
@@ -224,15 +223,15 @@ CREATE TABLE `perfil_deportistas` (
   CONSTRAINT `fk_perfil_deportista_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `perfil_deportistas` (`id_persona`, `id_grado`, `id_categoria`, `fecha_n`, `peso`, `division`, `ctgc`, `eps`, `rh`) VALUES
-(102, 9, 4, '2014-07-06', '38.00', NULL, NULL, 'Sisbén', 'O+'),
-(103, 7, 4, '2016-11-07', '44.60', NULL, NULL, 'N eps', 'O+'),
-(104, 5, 4, '2013-08-13', '45.00', NULL, NULL, 'sisben', 'A+'),
-(105, 8, 6, '2010-08-19', '52.00', NULL, NULL, 'sura', 'O+'),
-(106, 9, 1, '2013-01-18', '37.00', NULL, NULL, 'sura', 'A+'),
-(107, 5, 6, '2010-08-20', '67.70', NULL, NULL, 'savia', 'O+'),
-(108, 9, 4, '2015-04-17', '30.00', NULL, NULL, 'sanita', 'O+'),
-(109, 5, 4, '2015-04-13', '42.30', NULL, NULL, 'sura', 'O+'),
+INSERT INTO `perfil_deportistas` (`id_persona`, `id_grado`, `id_categoria`, `fecha_n`, `peso`, `division`, `eps`, `rh`) VALUES
+(102, 9, 4, '2014-07-06', '38.00', NULL, 'Sisbén', 'O+'),
+(103, 7, 4, '2016-11-07', '44.60', NULL, 'N eps', 'O+'),
+(104, 5, 4, '2013-08-13', '45.00', NULL, 'sisben', 'A+'),
+(105, 8, 6, '2010-08-19', '52.00', NULL, 'sura', 'O+'),
+(106, 9, 1, '2013-01-18', '37.00', NULL, 'sura', 'A+'),
+(107, 5, 6, '2010-08-20', '67.70', NULL, 'savia', 'O+'),
+(108, 9, 4, '2015-04-17', '30.00', NULL, 'sanita', 'O+'),
+(109, 5, 4, '2015-04-13', '42.30', NULL, 'sura', 'O+'),
 (110, 4, 4, '2015-07-02', '44.30', NULL, NULL, 'Sura', 'O+'),
 (111, 1, 6, '2012-03-27', '58.90', NULL, NULL, 'sura', 'O+'),
 (112, 8, 6, '2009-11-12', '70.80', NULL, NULL, 'savia', 'O+'),

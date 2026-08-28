@@ -185,10 +185,6 @@ include $cabecera;
                                     <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">División de Peso</label>
                                     <input type="text" name="division" value="<?= htmlspecialchars($usuario['division'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: Minimosca -54kg">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Código CTGC</label>
-                                    <input type="text" name="ctgc" value="<?= htmlspecialchars($usuario['ctgc'] ?? '') ?>" class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-tkd-blue dark:text-white transition-colors" placeholder="Ej: CTGC-12345">
-                                </div>
                             <?php endif; ?>
                         </div>
                     </div>
