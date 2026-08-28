@@ -240,10 +240,10 @@ class Usuario extends Model {
 
     public function getPublicProfiles() {
         $sql = "SELECT p.id_persona as id, p.nombre, p.apellido,
-                       COALESCE(u.rol, 'Maestros') as rol_id,
+                       COALESCE(u.rol, IF(pm.id_persona IS NOT NULL, 'Maestros', 'Deportistas')) as rol_id,
                        pm.descripcion_perfil, p.foto_perfil, gm.url as instagram_url
                 FROM personas p
-                INNER JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
+                LEFT JOIN perfil_maestros pm ON p.id_persona = pm.id_persona
                 LEFT JOIN credenciales u ON p.id_persona = u.id_persona
                 LEFT JOIN galeria_multimedia gm ON p.id_persona = gm.id_persona
                 WHERE pm.mostrar_en_web = 1 AND p.activo = 1
@@ -272,6 +272,48 @@ class Usuario extends Model {
                 ON DUPLICATE KEY UPDATE descripcion_perfil = VALUES(descripcion_perfil), mostrar_en_web = VALUES(mostrar_en_web)";
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param("isi", $id, $descripcion_perfil, $mostrar_en_web);
-        return $stmt->execute();
+        $res = $stmt->execute();
+        $stmt->close();
+
+        if (!empty($rol)) {
+            $stmtCred = $this->db->prepare("UPDATE credenciales SET rol = ? WHERE id_persona = ?");
+            if ($stmtCred) {
+                $stmtCred->bind_param("si", $rol, $id);
+                $stmtCred->execute();
+                $stmtCred->close();
+            }
+        }
+        return $res;
+    }
+
+    public function togglePublicVisibility($id) {
+        $sql = "INSERT INTO perfil_maestros (id_persona, mostrar_en_web)
+                VALUES (?, 1)
+                ON DUPLICATE KEY UPDATE mostrar_en_web = IF(mostrar_en_web = 1, 0, 1)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $res = $stmt->execute();
+        $stmt->close();
+
+        // Obtener estado actual
+        $check = $this->db->query("SELECT mostrar_en_web FROM perfil_maestros WHERE id_persona = " . (int)$id);
+        $row = $check ? $check->fetch_assoc() : null;
+        return $row ? (int)$row['mostrar_en_web'] : 0;
+    }
+
+    public function setBulkPublicVisibility(array $ids, $visible) {
+        if (empty($ids)) return false;
+        $visible = $visible ? 1 : 0;
+        foreach ($ids as $id) {
+            $id = (int)$id;
+            $sql = "INSERT INTO perfil_maestros (id_persona, mostrar_en_web)
+                    VALUES (?, ?)
+                    ON DUPLICATE KEY UPDATE mostrar_en_web = VALUES(mostrar_en_web)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("ii", $id, $visible);
+            $stmt->execute();
+            $stmt->close();
+        }
+        return true;
     }
 }

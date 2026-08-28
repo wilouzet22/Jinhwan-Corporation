@@ -2,7 +2,7 @@
 
 <section class="relative w-full h-[75vh] sm:h-[85vh] overflow-hidden dark:bg-[#0b0f19] transition-colors duration-300">
     
-    <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #dbeafe 0%, #f0f4ff 40%, #ffe4e6 100%)"></div>
+    <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)"></div>
     
     <div id="hero-slider" class="absolute inset-0">
         
@@ -11,7 +11,7 @@
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
             
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Taekwondo Training" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider.png') ?>"/>
+            <img alt="Taekwondo Training" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider1.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl animate-fade-in-up">
                     <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-red/10 border border-tkd-red/35 text-tkd-red font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
@@ -39,7 +39,7 @@
         <div class="slider-item h-full relative hidden">
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Dojang Interior" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider2.png') ?>"/>
+            <img alt="Dojang Interior" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider2.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl animate-fade-in-up">
                     <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-blue/10 border border-tkd-blue/35 text-tkd-blue font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
@@ -62,7 +62,7 @@
         <div class="slider-item h-full relative hidden">
             <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Taekwondo Action" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider3.png') ?>"/>
+            <img alt="Taekwondo Action" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider3.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl animate-fade-in-up">
                     <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-gold/10 border border-tkd-gold/35 text-tkd-gold font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
@@ -93,13 +93,13 @@
     </div>
 
     <div class="absolute bottom-0 left-0 w-full h-24 z-20 transition-colors duration-300" style="clip-path: polygon(0 100%, 100% 100%, 100% 0);" id="hero-bottom-shape">
-        <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #dbeafe 0%, #ffe4e6 100%)"></div>
+        <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%)"></div>
         <div class="absolute inset-0 hidden dark:block bg-[#0b0f19]"></div>
     </div>
 </section>
 
 <section class="py-24 relative overflow-hidden transition-colors duration-300">
-    <div class="dark:hidden absolute inset-0" style="background: linear-gradient(180deg, #eff6ff 0%, #ffffff 40%, #fff5f5 100%)"></div>
+    <div class="dark:hidden absolute inset-0" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)"></div>
     <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-20">

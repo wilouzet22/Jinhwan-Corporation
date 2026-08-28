@@ -17,6 +17,8 @@ class Database {
         }
 
         $this->connection->set_charset("utf8mb4");
+        $this->connection->query("SET NAMES 'utf8mb4'");
+        $this->connection->query("SET CHARACTER SET utf8mb4");
     }
 
     public static function getInstance() {

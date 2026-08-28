@@ -1,3 +1,4 @@
+
 <?php include __DIR__ . '/../layout/maestro_cabecera.php'; ?>
 
 <main class="flex-grow container mx-auto p-6 lg:p-8 relative overflow-hidden transition-colors duration-300">
@@ -9,7 +10,7 @@
     </div>
 
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto overflow-y-auto max-h-[550px]">
             <table class="w-full text-sm text-left border-collapse">
                 <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
                     <tr>
@@ -18,6 +19,7 @@
                         <th scope="col" class="px-6 py-4">Cinturón Actual</th>
                         <th scope="col" class="px-6 py-4">Sede</th>
                         <th scope="col" class="px-6 py-4">Contacto</th>
+                        <th scope="col" class="px-6 py-4 text-right">Acción</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
@@ -67,6 +69,12 @@
                             <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 font-medium transition-colors">
                                 <div class="text-slate-700 dark:text-slate-300"><?= htmlspecialchars($alumno['telefono'] ?? '') ?></div>
                                 <div class="truncate max-w-[150px]"><?= htmlspecialchars($alumno['correo'] ?? '') ?></div>
+                            </td>
+                            <td class="px-6 py-4 text-right whitespace-nowrap">
+                                <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white border border-purple-200 dark:border-purple-800/50 text-purple-700 dark:text-purple-300 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                                    <span class="material-icons-outlined text-sm">trending_up</span>
+                                    <span>Ascender</span>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

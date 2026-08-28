@@ -1,9 +1,12 @@
 <?php 
-
+$rol = $_SESSION['rol_id'] ?? $rol ?? '';
 $cabecera = __DIR__ . '/../layout/estudiante_cabecera.php';
 $pie = __DIR__ . '/../layout/estudiante_pie.php';
 
-if (isset($rol) && strtolower($rol) === 'maestro') {
+if ($rol === 'Administracion' || (class_exists('Roles') && Roles::esAdmin($rol))) {
+    $cabecera = __DIR__ . '/../layout/administracion_cabecera.php';
+    $pie = __DIR__ . '/../layout/administracion_pie.php';
+} elseif (in_array($rol, ['Maestros', 'Profesores', 'Monitores']) || (class_exists('Roles') && Roles::esMaestro($rol))) {
     $cabecera = __DIR__ . '/../layout/maestro_cabecera.php';
     $pie = __DIR__ . '/../layout/maestro_pie.php';
 }

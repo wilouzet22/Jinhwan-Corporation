@@ -85,6 +85,8 @@ $router->post('/admin/miembros/delete-bulk', [AdminMiembrosController::class, 'd
 
 $router->get('/admin/perfiles-publicos', [AdminPerfilesPublicosController::class, 'index']);
 $router->post('/admin/perfiles-publicos/update', [AdminPerfilesPublicosController::class, 'update']);
+$router->post('/admin/perfiles-publicos/toggle', [AdminPerfilesPublicosController::class, 'toggleVisibility']);
+$router->post('/admin/perfiles-publicos/bulk', [AdminPerfilesPublicosController::class, 'bulkVisibility']);
 
 $router->get('/admin/registros', [AdminRegistrosController::class, 'index']);
 $router->post('/admin/registros/aprobar', [AdminRegistrosController::class, 'aprobar']);

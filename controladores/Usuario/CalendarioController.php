@@ -13,7 +13,7 @@ class UsuarioCalendarioController extends Controller {
 
     public function index() {
         $rol = $_SESSION['rol_id'] ?? '';
-                    ADMIN
+
         $this->view('usuario/calendario', [
             'page_title'   => 'Calendario de Eventos',
             'current_page' => 'calendario',

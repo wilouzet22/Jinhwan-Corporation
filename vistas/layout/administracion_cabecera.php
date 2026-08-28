@@ -95,6 +95,12 @@ if (isset($_SESSION['id'])) {
                         <span class="text-sm font-medium">Solicitudes</span>
                     </a>
                 </li>
+                <li>
+                    <a href="<?= base_url('/admin/perfiles-publicos') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'perfiles_publicos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'perfiles_publicos' ? 'text-tkd-blue' : '' ?>">badge</span>
+                        <span class="text-sm font-medium">Perfiles Públicos</span>
+                    </a>
+                </li>
                 
                 <li>
                     <div class="my-3 border-t border-slate-100 dark:border-slate-800/60"></div>
@@ -127,13 +133,6 @@ if (isset($_SESSION['id'])) {
                 
                 <li>
                     <div class="my-3 border-t border-slate-100 dark:border-slate-800/60"></div>
-                    <span class="px-4 text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1.5 block">Sistema</span>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'reportes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'reportes' ? 'text-tkd-blue' : '' ?>">insights</span>
-                        <span class="text-sm font-medium">Reportes</span>
-                    </a>
                 </li>
                 <li>
                     <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors group">
