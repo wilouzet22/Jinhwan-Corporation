@@ -37,7 +37,6 @@ class UsuarioPerfilController extends Controller {
             $rh = trim($_POST['rh'] ?? '');
             $peso = trim($_POST['peso'] ?? '');
             $division = trim($_POST['division'] ?? '');
-            $ctgc = trim($_POST['ctgc'] ?? '');
             $descripcion_perfil = trim($_POST['descripcion_perfil'] ?? '');
             $logros = trim($_POST['logros'] ?? '');
             $mostrar_en_web = isset($_POST['mostrar_en_web']) ? 1 : 0;
@@ -105,7 +104,6 @@ class UsuarioPerfilController extends Controller {
                 'rh'                 => $rh,
                 'peso'               => $peso,
                 'division'           => $division,
-                'ctgc'               => $ctgc,
                 'descripcion_perfil' => $descripcion_perfil,
                 'logros'             => $logros,
                 'mostrar_en_web'     => $mostrar_en_web,

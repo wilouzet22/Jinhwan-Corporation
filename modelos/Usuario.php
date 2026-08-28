@@ -8,7 +8,7 @@ class Usuario extends Model {
                        COALESCE(pd.id_grado, pm.id_grado) as nivel_id,
                        p.nombre, p.apellido, p.tipo_documento, p.num_doc as numero_documento,
                        p.telefono, p.foto_perfil, p.activo,
-                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.ctgc, pd.eps, pd.rh,
+                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.eps, pd.rh,
                        pd.id_categoria as categoria_id,
                        pm.descripcion_perfil, pm.logros, COALESCE(pm.mostrar_en_web, 0) as mostrar_en_web,
                        u.permisos_extra, u.correo, u.clave,
@@ -91,13 +91,12 @@ class Usuario extends Model {
                 $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
                 $fecha_n = !empty($data['fecha_nacimiento']) ? $data['fecha_nacimiento'] : null;
                 $division = $data['division'] ?? null;
-                $ctgc = $data['ctgc'] ?? null;
                 $eps = $data['eps'] ?? null;
                 $rh = $data['rh'] ?? null;
 
-                $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, ctgc, eps, rh) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, eps, rh) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmtDep = $this->db->prepare($sqlDep);
-                $stmtDep->bind_param("iiisdssss", $persona_id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $ctgc, $eps, $rh);
+                $stmtDep->bind_param("iiisdsss", $persona_id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $eps, $rh);
                 $stmtDep->execute();
                 $stmtDep->close();
             }
@@ -122,29 +121,26 @@ class Usuario extends Model {
             $nivel_id = !empty($data['nivel_id']) ? (int)$data['nivel_id'] : 1;
             $permisos_extra = $data['permisos_extra'] ?? null;
 
-            // 1. Actualizar tabla personas
-            $sqlPersona = "UPDATE personas SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, telefono = ?, id_sede = ?, foto_perfil = COALESCE(?, foto_perfil) WHERE id_persona = ?";
-            $stmtPersona = $this->db->prepare($sqlPersona);
-            $stmtPersona->bind_param("sssssisi",
-                $data['nombre'],
-                $data['apellido'],
-                $num_doc,
-                $tipo_documento,
-                $telefono,
-                $sede_id,
-                $foto_perfil,
-                $id
-            );
+            // 1. Actualizar tabla base personas
+            if ($foto_perfil) {
+                $sqlPersona = "UPDATE personas SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, telefono = ?, id_sede = ?, foto_perfil = ? WHERE id_persona = ?";
+                $stmtPersona = $this->db->prepare($sqlPersona);
+                $stmtPersona->bind_param("sssssisi", $data['nombre'], $data['apellido'], $num_doc, $tipo_documento, $telefono, $sede_id, $foto_perfil, $id);
+            } else {
+                $sqlPersona = "UPDATE personas SET nombre = ?, apellido = ?, num_doc = ?, tipo_documento = ?, telefono = ?, id_sede = ? WHERE id_persona = ?";
+                $stmtPersona = $this->db->prepare($sqlPersona);
+                $stmtPersona->bind_param("sssssii", $data['nombre'], $data['apellido'], $num_doc, $tipo_documento, $telefono, $sede_id, $id);
+            }
             $stmtPersona->execute();
             $stmtPersona->close();
 
-            // 2. Actualizar o insertar en credenciales
-            if (!empty($data['correo'])) {
-                $sqlCred = "INSERT INTO credenciales (id_persona, correo, clave, rol, permisos_extra) 
-                            VALUES (?, ?, '', ?, ?) 
+            // 2. Actualizar o insertar credenciales
+            $correo = !empty($data['correo']) ? $data['correo'] : null;
+            if ($correo) {
+                $sqlCred = "INSERT INTO credenciales (id_persona, correo, rol, permisos_extra) VALUES (?, ?, ?, ?)
                             ON DUPLICATE KEY UPDATE correo = VALUES(correo), rol = VALUES(rol), permisos_extra = VALUES(permisos_extra)";
                 $stmtCred = $this->db->prepare($sqlCred);
-                $stmtCred->bind_param("isss", $id, $data['correo'], $rol, $permisos_extra);
+                $stmtCred->bind_param("isss", $id, $correo, $rol, $permisos_extra);
                 $stmtCred->execute();
                 $stmtCred->close();
             }
@@ -169,15 +165,14 @@ class Usuario extends Model {
             $peso = !empty($data['peso']) ? (float)$data['peso'] : null;
             $fecha_n = !empty($data['fecha_nacimiento']) ? $data['fecha_nacimiento'] : null;
             $division = $data['division'] ?? null;
-            $ctgc = $data['ctgc'] ?? null;
             $eps = $data['eps'] ?? null;
             $rh = $data['rh'] ?? null;
 
-            $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, ctgc, eps, rh)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                       ON DUPLICATE KEY UPDATE id_grado = VALUES(id_grado), id_categoria = VALUES(id_categoria), fecha_n = VALUES(fecha_n), peso = VALUES(peso), division = VALUES(division), ctgc = VALUES(ctgc), eps = VALUES(eps), rh = VALUES(rh)";
+            $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n, peso, division, eps, rh)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                       ON DUPLICATE KEY UPDATE id_grado = VALUES(id_grado), id_categoria = VALUES(id_categoria), fecha_n = VALUES(fecha_n), peso = VALUES(peso), division = VALUES(division), eps = VALUES(eps), rh = VALUES(rh)";
             $stmtDep = $this->db->prepare($sqlDep);
-            $stmtDep->bind_param("iiisdssss", $id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $ctgc, $eps, $rh);
+            $stmtDep->bind_param("iiisdsss", $id, $nivel_id, $categoria_id, $fecha_n, $peso, $division, $eps, $rh);
             $stmtDep->execute();
             $stmtDep->close();
 
@@ -213,7 +208,7 @@ class Usuario extends Model {
                        COALESCE(pd.id_grado, pm.id_grado) as nivel_id,
                        p.nombre, p.apellido, p.tipo_documento, p.num_doc as numero_documento,
                        p.telefono, p.foto_perfil, p.activo,
-                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.ctgc, pd.eps, pd.rh,
+                       pd.fecha_n as fecha_nacimiento, pd.peso, pd.division, pd.eps, pd.rh,
                        pd.id_categoria as categoria_id,
                        pm.descripcion_perfil, pm.logros, COALESCE(pm.mostrar_en_web, 0) as mostrar_en_web,
                        u.permisos_extra, u.correo, u.clave,

@@ -931,32 +931,96 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
         const resetBtn     = document.getElementById('btn-reset-filters');
         const rows         = document.querySelectorAll('.member-row');
 
-        // Configuración de Chart.js
+        // Configuración de Colores y Tramas de Cinturones de Taekwondo
+        const beltColors = {
+            'pinta verde':    { bg: '#dcfce7', stripe: '#22c55e', border: '#16a34a', isPattern: true },
+            'punta verde':    { bg: '#dcfce7', stripe: '#22c55e', border: '#16a34a', isPattern: true },
+            'pinta amarilla': { bg: '#fef9c3', stripe: '#eab308', border: '#ca8a04', isPattern: true },
+            'punta amarilla': { bg: '#fef9c3', stripe: '#eab308', border: '#ca8a04', isPattern: true },
+            'pinta amarillo': { bg: '#fef9c3', stripe: '#eab308', border: '#ca8a04', isPattern: true },
+            'punta amarillo': { bg: '#fef9c3', stripe: '#eab308', border: '#ca8a04', isPattern: true },
+            'pinta azul':     { bg: '#dbeafe', stripe: '#3b82f6', border: '#2563eb', isPattern: true },
+            'punta azul':     { bg: '#dbeafe', stripe: '#3b82f6', border: '#2563eb', isPattern: true },
+            'pinta roja':     { bg: '#fee2e2', stripe: '#ef4444', border: '#dc2626', isPattern: true },
+            'punta roja':     { bg: '#fee2e2', stripe: '#ef4444', border: '#dc2626', isPattern: true },
+            'pinta rojo':     { bg: '#fee2e2', stripe: '#ef4444', border: '#dc2626', isPattern: true },
+            'punta rojo':     { bg: '#fee2e2', stripe: '#ef4444', border: '#dc2626', isPattern: true },
+            'pinta negra':    { bg: '#64748b', stripe: '#1e293b', border: '#475569', isPattern: true },
+            'punta negra':    { bg: '#64748b', stripe: '#1e293b', border: '#475569', isPattern: true },
+            'blanco':         { bg: '#ffffff', border: '#cbd5e1', isPattern: false },
+            'amarillo':       { bg: '#eab308', border: '#ca8a04', isPattern: false },
+            'verde':          { bg: '#22c55e', border: '#16a34a', isPattern: false },
+            'azul':           { bg: '#3b82f6', border: '#2563eb', isPattern: false },
+            'rojo':           { bg: '#ef4444', border: '#dc2626', isPattern: false },
+            'negro':          { bg: '#1e293b', border: '#475569', isPattern: false },
+            'dan':            { bg: '#334155', border: '#1e293b', isPattern: false },
+            'default':        { bg: '#ffffff', border: '#cbd5e1', isPattern: false }
+        };
+
+        function createStripePattern(baseColor, stripeColor) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 14;
+            canvas.height = 14;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = baseColor;
+            ctx.fillRect(0, 0, 14, 14);
+
+            ctx.strokeStyle = stripeColor;
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(-2, 16);
+            ctx.lineTo(16, -2);
+            ctx.stroke();
+            
+            const tempCtx = document.createElement('canvas').getContext('2d');
+            return tempCtx.createPattern(canvas, 'repeat');
+        }
+
         const isDark = document.documentElement.classList.contains('dark');
         const tickColor = isDark ? '#94a3b8' : '#64748b';
+        const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 
         const ctxC = document.getElementById('chart-cinturones').getContext('2d');
         const chartCinturones = new Chart(ctxC, {
             type: 'doughnut',
-            data: { labels: [], datasets: [{ data: [], backgroundColor: ['#f1f5f9', '#eab308', '#22c55e', '#3b82f6', '#ef4444', '#1e293b', '#64748b'] }] },
+            data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2, hoverOffset: 6 }] },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'right', labels: { color: tickColor, font: { size: 9, weight: '600' } } } }
+                cutout: '58%',
+                plugins: { 
+                    legend: { 
+                        position: 'right', 
+                        labels: { 
+                            color: tickColor, 
+                            font: { size: 10, weight: '600' },
+                            padding: 6,
+                            usePointStyle: false
+                        } 
+                    } 
+                }
             }
         });
 
         const ctxS = document.getElementById('chart-sedes').getContext('2d');
         const chartSedes = new Chart(ctxS, {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Miembros', data: [], backgroundColor: '#3b82f6', borderRadius: 6 }] },
+            data: { labels: [], datasets: [{ label: 'Miembros', data: [], backgroundColor: '#3b82f6', borderRadius: 8 }] },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { ticks: { color: tickColor, font: { size: 9 } } },
-                    y: { ticks: { color: tickColor, font: { size: 9 }, stepSize: 1 }, beginAtZero: true }
+                    x: { 
+                        grid: { display: false },
+                        ticks: { color: tickColor, font: { size: 9 }, maxRotation: 20, minRotation: 15 } 
+                    },
+                    y: { 
+                        grid: { color: gridColor },
+                        ticks: { color: tickColor, font: { size: 9 }, stepSize: 3 }, 
+                        beginAtZero: true 
+                    }
                 }
             }
         });
@@ -1011,8 +1075,34 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                 sedeMap[s] = (sedeMap[s] || 0) + 1;
             });
 
-            chartCinturones.data.labels = Object.keys(cintMap);
-            chartCinturones.data.datasets[0].data = Object.values(cintMap);
+            // Ordenar cinturones respetando la jerarquía de grados
+            const cLabels = Object.keys(cintMap);
+            cLabels.sort((a, b) => {
+                let indexA = BELT_ORDER.indexOf(a);
+                let indexB = BELT_ORDER.indexOf(b);
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                return indexA - indexB;
+            });
+
+            const cData = cLabels.map(l => cintMap[l]);
+            const cBg = cLabels.map(l => {
+                const key = Object.keys(beltColors).find(k => l.toLowerCase().includes(k)) || 'default';
+                const item = beltColors[key];
+                if (item.isPattern) {
+                    return createStripePattern(item.bg, item.stripe);
+                }
+                return item.bg;
+            });
+            const cBorder = cLabels.map(l => {
+                const key = Object.keys(beltColors).find(k => l.toLowerCase().includes(k)) || 'default';
+                return beltColors[key].border;
+            });
+
+            chartCinturones.data.labels = cLabels;
+            chartCinturones.data.datasets[0].data = cData;
+            chartCinturones.data.datasets[0].backgroundColor = cBg;
+            chartCinturones.data.datasets[0].borderColor = isDark ? '#0f172a' : '#ffffff';
             chartCinturones.update();
 
             chartSedes.data.labels = Object.keys(sedeMap);
