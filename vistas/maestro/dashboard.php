@@ -95,7 +95,7 @@
                         <span class="material-icons-outlined text-2xl">people</span>
                     </div>
                     <div class="text-left">
-                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-tkd-purple transition-colors">Ver Mis Alumnos</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-tkd-purple transition-colors">Ver Alumnos de Jinhwan</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Consulta deportistas y propone ascensos de grado</p>
                     </div>
                 </a>

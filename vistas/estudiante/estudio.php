@@ -37,6 +37,9 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
         </div>
     </div>
 
+    <!-- React Study Module Tracker -->
+    <div data-react-component="StudyModuleTracker"></div>
+
     <div id="teoria-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <?php foreach ($teorias as $index => $teoria): 
             $beltClass = getBeltColor($teoria['nivel_nombre'] ?? '');

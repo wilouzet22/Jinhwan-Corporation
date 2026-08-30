@@ -7,29 +7,26 @@
     <div id="hero-slider" class="absolute inset-0">
         
         <div class="slider-item active h-full relative">
-            
-            <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
-            
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Taekwondo Training" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider1.jpg') ?>"/>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-10"></div>
+            <img alt="Taekwondo Training" class="w-full h-full object-cover opacity-80 dark:opacity-45" src="<?= asset('img/slider1.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl animate-fade-in-up">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-red/10 border border-tkd-red/35 text-tkd-red font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-tkd-red animate-pulse"></span>
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-rose-600/20 border border-rose-500/40 text-rose-400 font-bold text-xs uppercase tracking-widest mb-6 rounded-full backdrop-blur-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
                         Excelencia Marcial
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-display font-bold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight uppercase">
-                        IMPULSANDO EL <span class="text-transparent bg-clip-text bg-gradient-to-r from-tkd-blue via-blue-400 to-blue-700">FUTURO</span> JUNTOS
+                    <h1 class="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight tracking-tight uppercase drop-shadow-md">
+                        IMPULSANDO EL <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500">FUTURO</span> JUNTOS
                     </h1>
-                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl font-light border-l-2 border-tkd-blue/50 pl-6 leading-relaxed">
+                    <p class="text-lg md:text-xl text-slate-200 mb-8 max-w-2xl font-light border-l-2 border-rose-500/80 pl-6 leading-relaxed">
                         Nuestra organización se dedica a la excelencia, la evolución y la formación de carácter a través del Taekwondo.
                     </p>
                     <div class="flex flex-col sm:flex-row flex-wrap gap-4">
-                        <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-tkd-red text-white font-display font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-red-700 hover:shadow-lg transform hover:-translate-y-0.5">
+                        <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-rose-600/30 transform hover:-translate-y-0.5">
                             Encuentra tu Sede
                         </a>
-                        <a href="<?= base_url('/ascensos') ?>" class="px-8 py-4 border border-slate-400 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-600 dark:hover:border-slate-500 font-display font-bold uppercase tracking-wider rounded-lg transition-all transform hover:-translate-y-0.5 bg-white/50 dark:bg-slate-900/35 backdrop-blur">
-                            Ver Programas
+                        <a href="<?= base_url('/nosotros') ?>" class="px-8 py-4 border border-white/30 text-white hover:bg-white/10 font-display font-bold uppercase tracking-wider rounded-xl transition-all backdrop-blur-md">
+                            Conoce Más
                         </a>
                     </div>
                 </div>
@@ -37,45 +34,43 @@
         </div>
 
         <div class="slider-item h-full relative hidden">
-            <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Dojang Interior" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider2.jpg') ?>"/>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-10"></div>
+            <img alt="Dojang Interior" class="w-full h-full object-cover opacity-80 dark:opacity-45" src="<?= asset('img/slider2.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl animate-fade-in-up">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-blue/10 border border-tkd-blue/35 text-tkd-blue font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-tkd-blue animate-pulse"></span>
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600/20 border border-blue-500/40 text-blue-400 font-bold text-xs uppercase tracking-widest mb-6 rounded-full backdrop-blur-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
                         Disciplina y Honor
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-display font-bold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight uppercase">
-                        FORJANDO <span class="text-transparent bg-clip-text bg-gradient-to-r from-tkd-gold via-amber-400 to-amber-600">CAMPEONES</span>
+                    <h1 class="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight tracking-tight uppercase drop-shadow-md">
+                        FORJANDO <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500">CAMPEONES</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl font-light border-l-2 border-tkd-gold/50 pl-6 leading-relaxed">
+                    <p class="text-lg md:text-xl text-slate-200 mb-8 max-w-2xl font-light border-l-2 border-amber-500/80 pl-6 leading-relaxed">
                         Instalaciones de primer nivel y maestros certificados para guiar tu camino marcial.
                     </p>
-                    <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-tkd-blue text-white font-display font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5">
-                        Conoce Más
+                    <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-600/30 transform hover:-translate-y-0.5">
+                        Conoce Nuestras Sedes
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="slider-item h-full relative hidden">
-            <div class="light-overlay absolute inset-0 z-10 dark:hidden"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/70 to-transparent z-10 hidden dark:block"></div>
-            <img alt="Taekwondo Action" class="w-full h-full object-cover dark:opacity-45" src="<?= asset('img/slider3.jpg') ?>"/>
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent z-10"></div>
+            <img alt="Taekwondo Action" class="w-full h-full object-cover opacity-80 dark:opacity-45" src="<?= asset('img/slider3.jpg') ?>"/>
             <div class="absolute inset-0 z-20 flex items-center container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="max-w-3xl animate-fade-in-up">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-tkd-gold/10 border border-tkd-gold/35 text-tkd-gold font-bold text-xs uppercase tracking-widest mb-6 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-tkd-gold animate-pulse"></span>
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-600/20 border border-amber-500/40 text-amber-400 font-bold text-xs uppercase tracking-widest mb-6 rounded-full backdrop-blur-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                         Espíritu Indomable
                     </div>
-                    <h1 class="text-5xl md:text-7xl font-display font-bold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight uppercase">
-                        SUPERA TUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-tkd-red via-red-400 to-red-700">LÍMITES</span>
+                    <h1 class="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight tracking-tight uppercase drop-shadow-md">
+                        SUPERA TUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-red-400 to-rose-600">LÍMITES</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-2xl font-light border-l-2 border-tkd-red/50 pl-6 leading-relaxed">
+                    <p class="text-lg md:text-xl text-slate-200 mb-8 max-w-2xl font-light border-l-2 border-rose-500/80 pl-6 leading-relaxed">
                         El Taekwondo no es solo un deporte, es un estilo de vida que fortalece cuerpo y mente.
                     </p>
-                    <a href="<?= base_url('/ascensos') ?>" class="px-8 py-4 bg-tkd-gold text-white font-display font-bold uppercase tracking-wider rounded-lg transition-all hover:bg-amber-600 hover:shadow-lg transform hover:-translate-y-0.5">
+                    <a href="<?= base_url('/registro') ?>" class="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-amber-500/30 transform hover:-translate-y-0.5">
                         Únete Hoy
                     </a>
                 </div>
@@ -139,6 +134,26 @@
                 <p class="text-slate-600 dark:text-slate-400 leading-relaxed font-light transition-colors">
                     Únete a una familia unida por el respeto, la colaboración y el deseo mutuo de superación.
                 </p>
+            </div>
+        </div>
+
+        <!-- Martial Arts Highlights & Stats Grid -->
+        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
+                <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-500 font-display mb-1">+15</div>
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Años de Tradición</div>
+            </div>
+            <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
+                <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 font-display mb-1">3</div>
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sedes Principales</div>
+            </div>
+            <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
+                <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-400 font-display mb-1">+200</div>
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Cinturones Negros</div>
+            </div>
+            <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
+                <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400 font-display mb-1">100%</div>
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Maestros Certificados</div>
             </div>
         </div>
     </div>

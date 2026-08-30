@@ -33,7 +33,7 @@ class MaestroAlumnosController extends Controller {
             'alumnos'      => $alumnos,
             'sedes_list'   => $sedes,
             'grados_list'  => $grados,
-            'page_title'   => 'Mis Alumnos',
+            'page_title'   => 'Alumnos de Jinhwan',
             'current_page' => 'alumnos'
         ]);
     }

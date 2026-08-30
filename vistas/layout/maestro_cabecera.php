@@ -22,10 +22,10 @@ if (isset($_SESSION['id'])) {
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title><?= $page_title ?? 'Panel de Maestro/Instructor' ?></title>
     
-    <link rel="stylesheet" href="<?= asset('styles/output.css') ?>">
+    <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
 
     <script>
@@ -36,22 +36,11 @@ if (isset($_SESSION['id'])) {
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-        @custom-variant dark (&:where(.dark, .dark *));
-        @theme {
-            --color-tkd-blue: #2563EB;
-            --color-tkd-red: #DC2626;
-            --color-tkd-gold: #FACC15;
-            --color-tkd-purple: #7C3AED;
-            --color-tkd-purple-hover: #6D28D9;
-            --font-body: Inter, sans-serif;
-            --font-display: Oswald, sans-serif;
-        }
-    </style>
+    <!-- React + TypeScript Bundle CSS only -->
+    <link rel="stylesheet" href="<?= asset('dist/assets/main.css') ?>">
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-tkd-purple selection:text-white transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
@@ -94,7 +83,7 @@ if (isset($_SESSION['id'])) {
                 <li>
                     <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'alumnos' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'alumnos' ? 'text-tkd-purple' : '' ?>">people</span>
-                        <span class="text-sm font-medium">Mis Alumnos</span>
+                        <span class="text-sm font-medium">Alumnos de Jinhwan</span>
                     </a>
                 </li>
                 <li>
@@ -176,33 +165,36 @@ if (isset($_SESSION['id'])) {
 
             </ul>
         </nav>
-        <div class="p-4 border-t border-slate-800 bg-slate-900/50">
-             <div class="flex items-center justify-between mb-3 px-2">
-                 <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tema Visual</span>
-                 <button id="theme-toggle" type="button" class="text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg text-sm p-1.5 transition-colors focus:outline-none">
-                     <span id="theme-toggle-dark-icon" class="hidden material-icons-outlined text-[20px]">light_mode</span>
-                     <span id="theme-toggle-light-icon" class="hidden material-icons-outlined text-[20px]">dark_mode</span>
-                 </button>
-             </div>
-             
-             <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-3 p-2 hover:bg-slate-800 rounded-lg transition-colors group <?= ($current_page ?? '') === 'perfil' ? 'bg-slate-800' : '' ?>">
+        <!-- Footer Compacto del Sidebar -->
+        <div class="p-3 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between gap-2 transition-colors">
+            <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-2.5 min-w-0 flex-1 p-1 rounded-xl hover:bg-slate-800 transition-colors group" title="Mi Perfil">
                 <?php if (!empty($_SESSION['foto_perfil'])): ?>
-                    <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-10 h-10 rounded-lg object-cover shadow-sm shrink-0 border border-slate-700">
+                    <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-slate-700">
                 <?php else: ?>
-                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tkd-purple to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shrink-0">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-tkd-purple to-purple-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
                         <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
                     </div>
                 <?php endif; ?>
-                <div class="text-sm overflow-hidden flex-1">
-                    <p class="font-bold text-white truncate group-hover:text-tkd-purple transition-colors" title="<?= htmlspecialchars($nombre_usuario) ?>"><?= htmlspecialchars($nombre_usuario) ?></p>
-                    <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Instructor</p>
+                <div class="min-w-0 flex-1">
+                    <p class="font-bold text-xs text-white truncate group-hover:text-tkd-purple transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>">
+                        <?= htmlspecialchars($nombre_usuario) ?>
+                    </p>
+                    <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider leading-none mt-0.5">Instructor</p>
                 </div>
-             </a>
-             
-             <a href="<?= base_url('/logout') ?>" class="flex items-center justify-center gap-2 w-full p-2 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-lg transition-colors text-sm font-semibold mt-1" title="Cerrar Sesión">
-                <span class="material-icons-outlined text-lg">logout</span>
-                <span>Cerrar Sesión</span>
-              </a>
+            </a>
+
+            <div class="flex items-center gap-1 shrink-0">
+                <!-- Theme toggle compacto -->
+                <button id="theme-toggle" type="button" class="text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg p-1.5 transition-colors focus:outline-none cursor-pointer" title="Cambiar Tema">
+                    <span id="theme-toggle-dark-icon" class="hidden material-icons-outlined text-lg">light_mode</span>
+                    <span id="theme-toggle-light-icon" class="hidden material-icons-outlined text-lg">dark_mode</span>
+                </button>
+
+                <!-- Cerrar sesión compacto -->
+                <a href="<?= base_url('/logout') ?>" class="text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 rounded-lg p-1.5 transition-colors flex items-center justify-center cursor-pointer" title="Cerrar Sesión">
+                    <span class="material-icons-outlined text-lg">logout</span>
+                </a>
+            </div>
         </div>
     </aside>
 

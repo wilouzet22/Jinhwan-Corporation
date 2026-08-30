@@ -9,13 +9,13 @@
                 Gestión de Ascensos de Grado
             </h1>
             <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-                Postula alumnos para evaluación de cinturón y consulta el estado de las solicitudes enviadas.
+                Proponga, apruebe y genere certificados de ascenso de sus alumnos.
             </p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" onclick="openMultiPromoModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-display font-bold uppercase tracking-wider py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 focus:outline-none shrink-0 cursor-pointer">
                 <span class="material-icons-outlined text-lg">group_add</span>
-                <span>Proponer Ascenso Múltiple</span>
+                <span>Realizar Ascenso Múltiple</span>
             </button>
         </div>
     </div>
@@ -24,7 +24,15 @@
     <?php if (isset($_GET['success'])): ?>
         <div class="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-xl text-emerald-800 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2 shadow-sm">
             <span class="material-icons-outlined text-lg">check_circle</span>
-            ¡Solicitud de ascenso enviada con éxito! Queda a la espera de la aprobación del administrador.
+            ¡Solicitud de ascenso enviada con éxito!
+        </div>
+    <?php elseif (isset($_GET['msg'])): ?>
+        <div class="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-xl text-emerald-800 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2 shadow-sm">
+            <span class="material-icons-outlined text-lg">check_circle</span>
+            <?php
+                if ($_GET['msg'] == 'promo_approved') echo '¡Ascenso de grado aprobado con éxito! El certificado ha sido generado.';
+                elseif ($_GET['msg'] == 'promo_rejected') echo 'La propuesta de ascenso ha sido rechazada.';
+            ?>
         </div>
     <?php elseif (isset($_GET['error'])): ?>
         <div class="mb-6 p-4 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 rounded-xl text-rose-800 dark:text-rose-400 text-sm font-semibold flex items-center gap-2 shadow-sm">
@@ -109,7 +117,7 @@
                                     <td class="px-6 py-3.5 text-right whitespace-nowrap">
                                         <button type="button" onclick='openSinglePromoModal(<?= json_encode($alumno) ?>)' class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white border border-purple-200 dark:border-purple-800/50 text-purple-700 dark:text-purple-300 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer">
                                             <span class="material-icons-outlined text-sm">trending_up</span>
-                                            <span>Proponer Ascenso</span>
+                                            <span>Realizar Ascenso</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -141,12 +149,13 @@
                             <th scope="col" class="px-6 py-4">Observaciones</th>
                             <th scope="col" class="px-6 py-4 text-center">Estado</th>
                             <th scope="col" class="px-6 py-4">Resolución</th>
+                            <th scope="col" class="px-6 py-4 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
                         <?php if (empty($solicitudes)): ?>
                             <tr>
-                                <td colspan="6" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                <td colspan="7" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
                                     <span class="material-icons-outlined text-4xl block mb-2 text-slate-300 dark:text-slate-700">history_toggle_off</span>
                                     No has enviado ninguna solicitud de ascenso de grado todavía.
                                 </td>
@@ -193,6 +202,28 @@
                                     <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                         <?= $s['fecha_resolucion'] ? date('d/m/Y', strtotime($s['fecha_resolucion'])) : '---' ?>
                                     </td>
+                                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                                        <?php if ($s['estado'] === 'pendiente'): ?>
+                                            <div class="flex items-center justify-center gap-2">
+                                                <button onclick="openCertificadoModal(<?= (int)$s['id'] ?>, <?= (int)$s['id_persona_estudiante'] ?>, <?= (int)$s['id_grado_solicitado'] ?>, '<?= htmlspecialchars($s['nombre_alumno']) ?>', '<?= htmlspecialchars($s['apellido_alumno']) ?>', '<?= htmlspecialchars($s['grado_actual']) ?>', '<?= htmlspecialchars($s['grado_solicitado']) ?>')" class="bg-emerald-500 hover:bg-emerald-400 text-white p-2 rounded-xl shadow-md hover:shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Realizar Ascenso">
+                                                    <span class="material-icons-outlined block text-sm">edit_document</span>
+                                                </button>
+                                                <form action="<?= base_url('/maestro/solicitudes-ascenso/rechazar') ?>" method="POST" onsubmit="return confirm('¿Está seguro de rechazar esta propuesta de ascenso?');">
+                                                    <input type="hidden" name="id" value="<?= $s['id'] ?>">
+                                                    <button type="submit" class="bg-red-500 hover:bg-red-400 text-white p-2 rounded-xl shadow-md hover:shadow-red-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Rechazar Propuesta">
+                                                        <span class="material-icons-outlined block text-sm">close</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        <?php elseif ($s['estado'] === 'aprobado'): ?>
+                                            <button onclick="openCertModal(<?= (int)$s['id'] ?>)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all">
+                                                <span class="material-icons-outlined text-sm">workspace_premium</span>
+                                                Ver Certificado
+                                            </button>
+                                        <?php else: ?>
+                                            <span class="text-[11px] text-slate-400 dark:text-slate-600 italic">Rechazado</span>
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -202,6 +233,89 @@
         </div>
     </div>
 </main>
+
+<!-- Modal Documento Certificado para Maestro -->
+<div id="modal-documento-certificado" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeDocumentoModal()"></div>
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-3xl w-full max-h-[92vh] overflow-y-auto transition-colors">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-icons-outlined text-purple-600">edit_document</span>
+                Documento de Certificado de Ascenso
+            </h2>
+            <button onclick="closeDocumentoModal()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+                <span class="material-icons-outlined text-sm">close</span>
+            </button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div class="bg-slate-50 dark:bg-slate-950/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-2">Información del Alumno</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-slate-500 dark:text-slate-400">Nombre:</span>
+                        <span id="doc-nombre" class="font-semibold text-slate-900 dark:text-white ml-2"></span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 dark:text-slate-400">Ascenso:</span>
+                        <span id="doc-ascenso" class="font-semibold text-purple-600 ml-2"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="observaciones-documento" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Observaciones del Certificado</label>
+                <textarea id="observaciones-documento" rows="6" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm p-3 resize-none transition-colors" placeholder="Describa el desempeño del alumno, técnicas demostradas, actitud durante el examen, etc..."></textarea>
+            </div>
+
+            <div id="btn-mejorar-container" class="hidden">
+                <button onclick="mejorarEscritura()" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-sm font-bold uppercase tracking-wider rounded-xl transition-all shadow-md">
+                    <span class="material-icons-outlined">auto_fix_high</span>
+                    Mejorar con IA
+                </button>
+            </div>
+
+            <div id="btn-aprobar-container" class="hidden">
+                <form id="form-aprobar-certificado" action="<?= base_url('/maestro/solicitudes-ascenso/aprobar') ?>" method="POST">
+                    <input type="hidden" name="id" id="form-id">
+                    <input type="hidden" name="id_miembro" id="form-id-miembro">
+                    <input type="hidden" name="id_grado_solicitado" id="form-id-grado">
+                    <input type="hidden" name="observaciones_cert" id="form-observaciones">
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold uppercase tracking-wider rounded-xl transition-all shadow-md">
+                        <span class="material-icons-outlined">check_circle</span>
+                        Aprobar y Generar Certificado
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Certificado -->
+<div id="modal-certificado" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeCertModal()"></div>
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[92vh] overflow-y-auto transition-colors">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-icons-outlined text-rose-600">military_tech</span>
+                Certificado de Ascenso de Grado
+            </h2>
+            <div class="flex items-center gap-2">
+                <button onclick="downloadCertPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm">
+                    <span class="material-icons-outlined text-sm">picture_as_pdf</span>
+                    Descargar PDF
+                </button>
+                <button onclick="closeCertModal()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+                    <span class="material-icons-outlined text-sm">close</span>
+                </button>
+            </div>
+        </div>
+        <div id="cert-content-wrapper" class="p-6">
+            <div class="flex items-center justify-center py-12 text-slate-400">
+                <span class="material-icons-outlined text-4xl animate-spin">refresh</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal Fuera del Main con Alta Prioridad Z-Index -->
 <div id="multiPromoModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -216,9 +330,9 @@
                     <div>
                         <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             <span class="material-icons-outlined text-purple-600">group_add</span>
-                            <span id="modal-title-text">Proponer Ascenso Múltiple</span>
+                            <span id="modal-title-text">Realizar Ascenso Múltiple</span>
                         </h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Selecciona los alumnos que deseas postular y elige su nuevo cinturón.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Selecciona los alumnos que deseas ascender. El sistema seleccionará automáticamente el siguiente cinturón, pero puedes cambiarlo si es superior al actual.</p>
                     </div>
                     <button type="button" onclick="closeMultiPromoModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors focus:outline-none cursor-pointer">
                         <span class="material-icons-outlined">close</span>
@@ -269,11 +383,21 @@
                                         <td class="px-4 py-3">
                                             <select name="grados_solicitados[<?= $alumno['id'] ?>]" id="grado_<?= $alumno['id'] ?>" disabled class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none text-xs p-2.5 disabled:opacity-40 disabled:bg-slate-100 dark:disabled:bg-slate-900 transition-colors">
                                                 <option value="">Seleccione grado a ascender...</option>
-                                                <?php foreach ($grados_list as $grado): ?>
-                                                    <?php if ($grado['id'] != $nivelActualId && $grado['id'] != 20): ?>
-                                                        <option value="<?= $grado['id'] ?>"><?= htmlspecialchars($grado['nombre']) ?></option>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
+                                                <?php
+                                                    $encontroSiguiente = false;
+                                                    foreach ($grados_list as $grado):
+                                                        // Solo mostrar cinturones superiores al actual (no degradación)
+                                                        if ($grado['id'] > $nivelActualId && $grado['id'] != 20):
+                                                ?>
+                                                    <option value="<?= $grado['id'] ?>"
+                                                        <?= (!$encontroSiguiente) ? 'selected' : '' ?>>
+                                                        <?= htmlspecialchars($grado['nombre']) ?>
+                                                    </option>
+                                                <?php
+                                                            $encontroSiguiente = true;
+                                                        endif;
+                                                    endforeach;
+                                                ?>
                                             </select>
                                         </td>
                                     </tr>
@@ -347,23 +471,25 @@
     }
 
     function openSinglePromoModal(alumno) {
-        document.getElementById('modal-title-text').textContent = 'Proponer Ascenso: ' + alumno.nombre + ' ' + alumno.apellido;
-        
+        document.getElementById('modal-title-text').textContent = 'Realizar Ascenso: ' + alumno.nombre + ' ' + alumno.apellido;
+
         const rows = document.querySelectorAll('.promo-row');
         rows.forEach(row => {
             const rowId = row.getAttribute('data-id');
             const cb = row.querySelector('.promo-checkbox');
-            
+
             if (rowId == alumno.id) {
                 row.style.display = '';
                 if (cb) {
                     cb.checked = true;
                     toggleSelect(cb, cb.value);
-                    
-                    // Preseleccionar el siguiente cinturón
+
+                    // Ya está preseleccionado el siguiente cinturón por el PHP
+                    // Solo nos aseguramos de que el select esté habilitado
                     const select = document.getElementById('grado_' + alumno.id);
-                    if (select && select.options.length > 1) {
-                        select.selectedIndex = 1;
+                    if (select) {
+                        select.disabled = false;
+                        select.setAttribute('required', 'required');
                     }
                 }
             } else {
@@ -390,6 +516,11 @@
             select.disabled = false;
             select.setAttribute('required', 'required');
             row.classList.add('bg-purple-50/80', 'dark:bg-purple-950/40');
+
+            // Seleccionar automáticamente el primer cinturón disponible (el siguiente)
+            if (select.options.length > 1) {
+                select.selectedIndex = 1;
+            }
         } else {
             select.disabled = true;
             select.removeAttribute('required');
@@ -445,6 +576,225 @@
         }
         return true;
     }
+
+    function promptObservaciones(id) {
+        const obs = prompt('Observaciones para el certificado (opcional):');
+        if (obs !== null) {
+            document.getElementById('obs-cert-' + id).value = obs;
+            return true;
+        }
+        return false;
+    }
+
+    function openCertificadoModal(id, idMiembro, idGrado, nombre, apellido, gradoActual, gradoSolicitado) {
+        const modal = document.getElementById('modal-documento-certificado');
+        document.getElementById('doc-nombre').textContent = nombre + ' ' + apellido;
+        document.getElementById('doc-ascenso').textContent = gradoActual + ' → ' + gradoSolicitado;
+        document.getElementById('form-id').value = id;
+        document.getElementById('form-id-miembro').value = idMiembro;
+        document.getElementById('form-id-grado').value = idGrado;
+        document.getElementById('observaciones-documento').value = '';
+        document.getElementById('form-observaciones').value = '';
+        document.getElementById('btn-mejorar-container').classList.add('hidden');
+        document.getElementById('btn-aprobar-container').classList.add('hidden');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        // Show improve button when user starts typing
+        document.getElementById('observaciones-documento').addEventListener('input', function() {
+            if (this.value.trim().length > 10) {
+                document.getElementById('btn-mejorar-container').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-mejorar-container').classList.add('hidden');
+            }
+        });
+    }
+
+    function closeDocumentoModal() {
+        const modal = document.getElementById('modal-documento-certificado');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function mejorarEscritura() {
+        const textarea = document.getElementById('observaciones-documento');
+        let texto = textarea.value.trim();
+
+        if (!texto) return;
+
+        // Mejoras gramaticales y de estilo más significativas
+        texto = texto.charAt(0).toUpperCase() + texto.slice(1); // Primera letra mayúscula
+        texto = texto.replace(/\s+/g, ' '); // Eliminar espacios múltiples
+        texto = texto.replace(/([.!?])\s*([a-z])/g, function(match, p1, p2) {
+            return p1 + ' ' + p2.toUpperCase();
+        }); // Mayúscula después de punto
+        texto = texto.replace(/([.!?])\s*$/g, '$1'); // Eliminar espacio final antes de punto
+        if (!texto.endsWith('.')) texto += '.'; // Agregar punto final si no tiene
+
+        // Mejoras extensas para certificados - más profesionales y detalladas
+        const mejorasProfesionales = {
+            // Adjetivos básicos a profesionales
+            'muy buena': 'excepcional',
+            'muy bueno': 'sobresaliente',
+            'buena': 'satisfactoria',
+            'bien': 'adecuadamente',
+            'muy bien': 'sobresalientemente',
+            'excelente': 'destacada',
+            'regular': 'satisfactoria',
+            'mal': 'requiere mejora',
+            'muy mal': 'necesita trabajo significativo',
+
+            // Sujetos informales a formales
+            'chico': 'el alumno',
+            'niño': 'el estudiante',
+            'chica': 'la alumna',
+            'niña': 'la estudiante',
+            'muchacho': 'el practicante',
+            'muchacha': 'la practicante',
+            'el chico': 'el alumno',
+            'la chica': 'la alumna',
+            'los chicos': 'los alumnos',
+            'las chicas': 'las alumnas',
+
+            // Verbos informales a formales
+            'hizo': 'demostró',
+            'logró': 'alcanzó',
+            'pudo': 'logró',
+            'sabía': 'conocía',
+            'estudió': 'preparó',
+            'practicó': 'entrenó',
+            'aprendió': 'adquirió conocimientos',
+            'mejoró': 'progresó',
+
+            // Frases comunes a profesionales
+            'muchas gracias': 'agradecemos su dedicación y esfuerzo',
+            'gracias': 'apreciamos su compromiso',
+            'se esforzó': 'demostró gran dedicación',
+            'trabajó duro': 'se entregó plenamente al entrenamiento',
+            'estuvo atento': 'mantuvo una actitud concentrada',
+            'escuchó bien': 'siguió instrucciones con precisión',
+            'hizo todo bien': 'cumplió satisfactoriamente con todos los requerimientos',
+            'fue un buen examen': 'la evaluación fue satisfactoria',
+            'pasó el examen': 'aprobó la evaluación exitosamente',
+
+            // Términos técnicos de taekwondo
+            'patadas': 'técnicas de patada',
+            'golpes': 'técnicas de golpe',
+            'formas': 'poomsae',
+            'combate': 'kyorugi',
+            'defensa': 'técnicas de defensa personal',
+            'ataque': 'técnicas ofensivas',
+            'katas': 'formas',
+            'pelea': 'combate',
+
+            // Expresiones de tiempo
+            'hoy': 'en la presente evaluación',
+            'ayer': 'en la sesión anterior',
+            'esta semana': 'durante el periodo de entrenamiento semanal',
+            'este mes': 'en el ciclo mensual de formación',
+
+            // Calificativos
+            'rápido': 'con agilidad',
+            'fuerte': 'con potencia',
+            'correcto': 'técnicamente preciso',
+            'perfecto': 'ejecutado con excelencia técnica',
+            'casi perfecto': 'con alta precisión técnica',
+            'algo flojo': 'requiere mayor intensidad en el entrenamiento',
+            'flojo': 'necesita incrementar la intensidad del trabajo',
+            'cansado': 'mostró signos de fatiga que requieren condición física adicional'
+        };
+
+        // Aplicar mejoras profesionales
+        for (const [original, mejorado] of Object.entries(mejorasProfesionales)) {
+            const regex = new RegExp('\\b' + original + '\\b', 'gi');
+            texto = texto.replace(regex, mejorado);
+        }
+
+        // Mejoras estructurales de oraciones
+        texto = texto.replace(/el alumno (.*)\./gi, function(match, p1) {
+            return 'El practicante ' + p1.toLowerCase() + ', demostrando compromiso con su formación.';
+        });
+
+        texto = texto.replace(/el estudiante (.*)\./gi, function(match, p1) {
+            return 'El estudiante ' + p1.toLowerCase() + ', evidenciando progreso en su aprendizaje.';
+        });
+
+        // Agregar conectores profesionales si el texto es corto
+        if (texto.length < 100) {
+            texto = texto.replace(/\.$/, ', evidenciando su dedicación al arte marcial.');
+        }
+
+        // Asegurar formato profesional final
+        if (!texto.includes('practicante') && !texto.includes('estudiante') && !texto.includes('alumno')) {
+            texto = 'El practicante ' + texto.toLowerCase();
+        }
+
+        textarea.value = texto;
+        document.getElementById('form-observaciones').value = texto;
+        document.getElementById('btn-mejorar-container').classList.add('hidden');
+        document.getElementById('btn-aprobar-container').classList.remove('hidden');
+
+        // Mostrar notificación
+        alert('✅ Texto mejorado con redacción profesional y técnica. Ahora puedes aprobar el ascenso.');
+    }
+
+    // Update form observaciones when textarea changes
+    document.getElementById('observaciones-documento').addEventListener('input', function() {
+        document.getElementById('form-observaciones').value = this.value;
+    });
+
+    function openCertModal(idSolicitud) {
+        const modal = document.getElementById('modal-certificado');
+        const wrapper = document.getElementById('cert-content-wrapper');
+
+        // Show loading
+        wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        // Fetch certificate HTML
+        fetch('<?= base_url('/maestro/solicitudes-ascenso/certificado') ?>?id=' + idSolicitud)
+            .then(r => r.text())
+            .then(html => {
+                wrapper.innerHTML = html;
+            })
+            .catch(() => {
+                wrapper.innerHTML = '<p class="text-center text-rose-500 py-8">Error al cargar el certificado.</p>';
+            });
+    }
+
+    function closeCertModal() {
+        const modal = document.getElementById('modal-certificado');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    function downloadCertPDF() {
+        const element = document.getElementById('certificado-contenido');
+        if (!element) return;
+
+        const opt = {
+            margin:       [8, 8, 8, 8],
+            filename:     'certificado-jinhwan.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: false },
+            jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeCertModal();
+    });
 </script>
+
+<!-- html2pdf.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <?php include __DIR__ . '/../layout/maestro_pie.php'; ?>

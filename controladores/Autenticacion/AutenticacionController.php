@@ -4,15 +4,45 @@ include_once __DIR__ . '/../../modelos/Sede.php';
 
 class AutenticacionController extends Controller {
 
+    private function redirectByRole($rol_id) {
+        if (Roles::esAdmin($rol_id)) {
+            $this->redirect('/admin/dashboard');
+        } elseif (Roles::esMaestro($rol_id)
+               || $rol_id == Roles::PROFESOR
+               || $rol_id == Roles::MONITOR) {
+            $this->redirect('/maestro/dashboard');
+        } elseif ($rol_id == Roles::ESTUDIANTE) {
+            $this->redirect('/estudiante/dashboard');
+        } else {
+            $this->redirect('/');
+        }
+    }
+
     public function loginForm() {
+        Security::initSession();
+        if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+            $this->redirectByRole($_SESSION['rol_id'] ?? '');
+            return;
+        }
         $this->view('autenticacion/login');
     }
 
     public function registroForm() {
+        Security::initSession();
+        if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+            $this->redirectByRole($_SESSION['rol_id'] ?? '');
+            return;
+        }
         $this->view('autenticacion/registro');
     }
 
     public function login() {
+        Security::initSession();
+        if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+            $this->redirectByRole($_SESSION['rol_id'] ?? '');
+            return;
+        }
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = strtolower(trim($_POST['email'] ?? ''));
             $clave = $_POST['password'] ?? '';
@@ -84,6 +114,12 @@ class AutenticacionController extends Controller {
     }
 
     public function processRegistro() {
+        Security::initSession();
+        if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+            $this->redirectByRole($_SESSION['rol_id'] ?? '');
+            return;
+        }
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $num_doc  = trim($_POST['num_doc'] ?? '');
             $email    = strtolower(trim($_POST['email'] ?? '')); 

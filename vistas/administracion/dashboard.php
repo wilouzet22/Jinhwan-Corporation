@@ -113,6 +113,15 @@
         </div>
     </div>
 
+    <!-- React Interactive Dashboard Charts -->
+    <div 
+        data-react-component="DashboardCharts"
+        data-props='<?= json_encode([
+            'distribucionGrados' => $distribucion_grados ?? [],
+            'distribucionSedes' => $distribucion_sedes ?? []
+        ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>'
+    ></div>
+
     <!-- Data Tables Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         

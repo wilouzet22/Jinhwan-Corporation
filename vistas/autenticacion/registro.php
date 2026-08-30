@@ -17,11 +17,11 @@ if (isset($_GET['error'])) {
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Registro de Usuario - Jinhwan Corporation</title>
     
+    <link rel="icon" type="image/x-icon" href="<?= asset('img/visual/logo.svg') ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet"/>
-    <link href="<?= asset('styles/output.css') ?>" rel="stylesheet">
 
     <script>
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -31,20 +31,12 @@ if (isset($_GET['error'])) {
         }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-        @custom-variant dark (&:where(.dark, .dark *));
-        @theme {
-            --color-tkd-blue: #2563EB;
-            --color-tkd-red: #DC2626;
-            --color-tkd-gold: #FACC15;
-            --font-body: Inter, sans-serif;
-            --font-display: Oswald, sans-serif;
-        }
-    </style>
+    <!-- React + TypeScript Bundle -->
+    <link rel="stylesheet" href="<?= asset('dist/assets/main.css') ?>">
+    <script type="module" src="<?= asset('dist/assets/main.js') ?>"></script>
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-slate-100 dark:bg-[#0b0f19] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-tkd-red selection:text-white transition-colors duration-300 py-12">
+<body class="bg-slate-100 dark:bg-[#080c16] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-rose-600 selection:text-white transition-colors duration-300 py-12">
 
     <div class="fixed inset-0 z-0">
         <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">

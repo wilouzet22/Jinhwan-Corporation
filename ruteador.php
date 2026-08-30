@@ -45,6 +45,7 @@ $router->get('/estudiante/dashboard', [EstudianteDashboardController::class, 'in
 $router->get('/estudiante/estudio', [EstudianteEstudioController::class, 'index']);
 $router->post('/ascensos/toggle', [EstudianteEstudioController::class, 'toggle']);
 $router->get('/estudiante/historial', [EstudianteHistorialController::class, 'index']);
+$router->get('/estudiante/historial/certificado', [EstudianteHistorialController::class, 'certificado']);
 $router->get('/estudiante/perfil', [UsuarioPerfilController::class, 'index']);
 $router->post('/estudiante/perfil/update', [UsuarioPerfilController::class, 'update']);
 
@@ -91,8 +92,7 @@ $router->post('/admin/perfiles-publicos/bulk', [AdminPerfilesPublicosController:
 $router->get('/admin/registros', [AdminRegistrosController::class, 'index']);
 $router->post('/admin/registros/aprobar', [AdminRegistrosController::class, 'aprobar']);
 $router->post('/admin/registros/rechazar', [AdminRegistrosController::class, 'rechazar']);
-$router->post('/admin/registros/aprobar-ascenso', [AdminRegistrosController::class, 'aprobarAscenso']);
-$router->post('/admin/registros/rechazar-ascenso', [AdminRegistrosController::class, 'rechazarAscenso']);
+$router->get('/admin/certificado-preview', [AdminRegistrosController::class, 'certificadoPreview']);
 
 $router->get('/admin/calendario', [AdminCalendarioController::class, 'index']);
 $router->get('/admin/calendario/get-eventos', [AdminCalendarioController::class, 'getEventos']);
@@ -112,5 +112,8 @@ $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index'])
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesAscensoController::class, 'index']);
 $router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesAscensoController::class, 'store']);
+$router->post('/maestro/solicitudes-ascenso/aprobar', [MaestroSolicitudesAscensoController::class, 'aprobar']);
+$router->post('/maestro/solicitudes-ascenso/rechazar', [MaestroSolicitudesAscensoController::class, 'rechazar']);
+$router->get('/maestro/solicitudes-ascenso/certificado', [MaestroSolicitudesAscensoController::class, 'certificado']);
 
 $router->dispatch();

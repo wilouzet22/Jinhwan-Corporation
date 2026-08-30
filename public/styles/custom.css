@@ -1,10 +1,21 @@
 
 
-body {
-  opacity: 0;
-  animation: fadeIn 0.55s ease-out forwards;
+/* Animación de entrada suave: se ejecuta una sola vez al entrar por primera vez al sitio web */
+html.first-visit-intro body {
+  animation: introFadeIn 0.55s ease-out forwards;
 }
-@keyframes fadeIn {
+
+html.site-visited body {
+  opacity: 1 !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+html.site-visited .slider-item.active .animate-fade-in-up {
+  animation: none !important;
+}
+
+@keyframes introFadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }

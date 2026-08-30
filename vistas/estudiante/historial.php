@@ -3,6 +3,33 @@ $current_page = 'historial';
 include __DIR__ . '/../layout/estudiante_cabecera.php'; 
 ?>
 
+<!-- Modal Certificado -->
+<div id="modal-certificado" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeCertModal()"></div>
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[92vh] overflow-y-auto transition-colors">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-icons-outlined text-rose-600">military_tech</span>
+                Certificado de Ascenso de Grado
+            </h2>
+            <div class="flex items-center gap-2">
+                <button onclick="downloadCertPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm">
+                    <span class="material-icons-outlined text-sm">picture_as_pdf</span>
+                    Descargar PDF
+                </button>
+                <button onclick="closeCertModal()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+                    <span class="material-icons-outlined text-sm">close</span>
+                </button>
+            </div>
+        </div>
+        <div id="cert-content-wrapper" class="p-6">
+            <div class="flex items-center justify-center py-12 text-slate-400">
+                <span class="material-icons-outlined text-4xl animate-spin">refresh</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto h-screen custom-scrollbar transition-colors duration-300">
     
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -70,15 +97,32 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                             </div>
                         <?php endif; ?>
                         
-                        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
-                            <span class="flex items-center gap-1">
-                                <span class="material-icons-outlined text-[14px]">person</span>
-                                Maestro: <?= htmlspecialchars($ascenso['maestro_nombre'] . ' ' . $ascenso['maestro_apellido']) ?>
-                            </span>
-                            <span class="flex items-center gap-1 font-medium">
-                                <span class="material-icons-outlined text-[14px]">event</span>
-                                <?= !empty($ascenso['fecha_resolucion']) ? date('d M, Y', strtotime($ascenso['fecha_resolucion'])) : 'En proceso' ?>
-                            </span>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-500 dark:text-slate-400 mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 gap-3">
+                            <div class="flex items-center gap-3">
+                                <span class="flex items-center gap-1">
+                                    <span class="material-icons-outlined text-[14px]">person</span>
+                                    Maestro: <?= htmlspecialchars($ascenso['maestro_nombre'] . ' ' . $ascenso['maestro_apellido']) ?>
+                                </span>
+                                <span class="flex items-center gap-1 font-medium">
+                                    <span class="material-icons-outlined text-[14px]">event</span>
+                                    <?= !empty($ascenso['fecha_resolucion']) ? date('d M, Y', strtotime($ascenso['fecha_resolucion'])) : 'En proceso' ?>
+                                </span>
+                            </div>
+
+                            <?php if ($ascenso['estado'] === 'aprobado' && !empty($ascenso['id_certificado'])): ?>
+                                <button
+                                    onclick="openCertModal(<?= (int)$ascenso['id'] ?>)"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer">
+                                    <span class="material-icons-outlined text-sm">workspace_premium</span>
+                                    <span>Ver Certificado</span>
+                                    <span class="font-mono text-[10px] opacity-60"><?= htmlspecialchars($ascenso['folio'] ?? '') ?></span>
+                                </button>
+                            <?php elseif ($ascenso['estado'] === 'aprobado'): ?>
+                                <span class="inline-flex items-center gap-1 text-[10px] text-slate-400 dark:text-slate-600 italic">
+                                    <span class="material-icons-outlined text-xs">info</span>
+                                    Certificado en proceso
+                                </span>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -88,4 +132,57 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
     </div>
 </main>
 
+<!-- html2pdf.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function openCertModal(idSolicitud) {
+    const modal = document.getElementById('modal-certificado');
+    const wrapper = document.getElementById('cert-content-wrapper');
+
+    // Show loading
+    wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    // Fetch certificate HTML
+    fetch('<?= base_url('/estudiante/historial/certificado') ?>?id=' + idSolicitud)
+        .then(r => r.text())
+        .then(html => {
+            wrapper.innerHTML = html;
+        })
+        .catch(() => {
+            wrapper.innerHTML = '<p class="text-center text-rose-500 py-8">Error al cargar el certificado.</p>';
+        });
+}
+
+function closeCertModal() {
+    const modal = document.getElementById('modal-certificado');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+function downloadCertPDF() {
+    const element = document.getElementById('certificado-contenido');
+    if (!element) return;
+
+    const opt = {
+        margin:       [8, 8, 8, 8],
+        filename:     'certificado-jinhwan.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCertModal();
+});
+</script>
+
 <?php include __DIR__ . '/../layout/estudiante_pie.php'; ?>
+
