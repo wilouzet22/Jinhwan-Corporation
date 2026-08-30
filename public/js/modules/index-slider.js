@@ -9,15 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlide = 0;
 
     function showSlide(index) {
-        slides.forEach(slide => slide.classList.add('hidden'));
-        slides[index].classList.remove('hidden');
-        
-        const content = slides[index].querySelector('.animate-fade-in-up');
-        if (content) {
-            content.style.animation = 'none';
-            content.offsetHeight; 
-            content.style.animation = null; 
-        }
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.remove('hidden');
+                slide.classList.add('active');
+            } else {
+                slide.classList.add('hidden');
+                slide.classList.remove('active');
+            }
+        });
     }
 
     nextBtn.addEventListener('click', () => {

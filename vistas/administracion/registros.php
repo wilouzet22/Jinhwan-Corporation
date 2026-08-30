@@ -40,7 +40,7 @@
                     <?= count($solicitudes) ?> pendientes
                 </span>
             </div>
-            
+
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden relative z-10 shadow-sm transition-colors duration-300">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -120,93 +120,134 @@
             </div>
         </div>
 
+        <!-- Historial de Movimientos de Ascensos -->
         <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <span class="material-icons-outlined text-purple-600">arrow_upward</span>
-                    Solicitudes de Ascenso (Propuestas de Maestros)
+                    <span class="material-icons-outlined text-purple-600">history</span>
+                    Historial de Movimientos de Ascensos
                 </h2>
                 <span class="px-2.5 py-1 text-xs font-bold bg-purple-50 dark:bg-purple-950/30 text-purple-600 rounded-full">
-                    <?= count($solicitudes_ascenso) ?> pendientes
+                    <?= count($movimientos_ascenso) ?> movimientos
                 </span>
             </div>
-            
+
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden relative z-10 shadow-sm transition-colors duration-300">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 transition-colors">
-                                <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Deportista</th>
-                                <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Propuesto por</th>
-                                <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-center transition-colors">Cambio de Grado</th>
-                                <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Observaciones</th>
-                                <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-center transition-colors">Acciones</th>
+                                <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Deportista</th>
+                                <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Maestro</th>
+                                <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-center transition-colors">Cambio de Grado</th>
+                                <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Observaciones</th>
+                                <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-center transition-colors">Estado</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Fecha</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-center transition-colors">Certificado</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
+                    <?php if (empty($movimientos_ascenso)): ?>
+                        <tr>
+                            <td colspan="7" class="px-6 py-16 text-center">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/85 rounded-full flex items-center justify-center mb-3 text-slate-400 dark:text-slate-500 transition-colors">
+                                        <span class="material-icons-outlined text-3xl">history</span>
+                                    </div>
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium transition-colors">No hay movimientos de ascensos registrados</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($movimientos_ascenso as $m): ?>
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-colors group">
+                                <td class="px-6 py-4">
+                                    <p class="font-bold text-slate-900 dark:text-white transition-colors"><?= htmlspecialchars($m['nombre_alumno'] . ' ' . $m['apellido_alumno']) ?></p>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-1 text-sm font-semibold text-purple-600">
+                                        <span class="material-icons-outlined text-xs">school</span>
+                                        <?= htmlspecialchars($m['nombre_maestro'] . ' ' . $m['apellido_maestro']) ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-center gap-2 text-xs font-bold">
+                                        <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700"><?= htmlspecialchars($m['grado_actual']) ?></span>
+                                        <span class="material-icons-outlined text-slate-400 text-sm">arrow_forward</span>
+                                        <span class="px-2.5 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-450 border border-purple-200 dark:border-purple-800"><?= htmlspecialchars($m['grado_solicitado']) ?></span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-slate-650 dark:text-slate-350 text-xs max-w-[200px] truncate" title="<?= htmlspecialchars($m['observaciones'] ?? '') ?>">
+                                    <?= htmlspecialchars($m['observaciones'] ?? 'Sin observaciones') ?>
+                                </td>
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
+                                    <?php if ($m['estado'] === 'pendiente'): ?>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 uppercase tracking-wider">
+                                            Pendiente
+                                        </span>
+                                    <?php elseif ($m['estado'] === 'aprobado'): ?>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 uppercase tracking-wider">
+                                            Aprobado
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 uppercase tracking-wider">
+                                            Rechazado
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                    <?= date('d/m/Y H:i', strtotime($m['fecha_solicitud'])) ?>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <?php if ($m['estado'] === 'aprobado' && !empty($m['id_certificado'])): ?>
+                                        <button onclick="openAdminCert(<?= (int)$m['id'] ?>)"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all">
+                                            <span class="material-icons-outlined text-sm">workspace_premium</span>
+                                            Ver
+                                        </button>
+                                    <?php elseif ($m['estado'] === 'aprobado'): ?>
+                                        <span class="text-[11px] text-slate-400 dark:text-slate-600 italic">Sin certificado</span>
+                                    <?php else: ?>
+                                        <span class="text-[11px] text-slate-400 dark:text-slate-600 italic">—</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
-                            <?php if (empty($solicitudes_ascenso)): ?>
-                                <tr>
-                                    <td colspan="5" class="px-8 py-16 text-center">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/85 rounded-full flex items-center justify-center mb-3 text-slate-400 dark:text-slate-500 transition-colors">
-                                                <span class="material-icons-outlined text-3xl">inbox</span>
-                                            </div>
-                                            <p class="text-slate-500 dark:text-slate-400 text-sm font-medium transition-colors">No hay propuestas de ascenso pendientes</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php else: ?>
-                                <?php foreach ($solicitudes_ascenso as $s): ?>
-                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-colors group">
-                                        <td class="px-8 py-6">
-                                            <p class="font-bold text-slate-900 dark:text-white transition-colors"><?= htmlspecialchars($s['nombre_alumno'] . ' ' . $s['apellido_alumno']) ?></p>
-                                            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium transition-colors">Solicitado: <?= date('d/m/Y H:i', strtotime($s['fecha_solicitud'])) ?></p>
-                                        </td>
-                                        <td class="px-8 py-6">
-                                            <span class="inline-flex items-center gap-1 text-sm font-semibold text-purple-600">
-                                                <span class="material-icons-outlined text-xs">school</span>
-                                                <?= htmlspecialchars($s['nombre_maestro'] . ' ' . $s['apellido_maestro']) ?>
-                                            </span>
-                                        </td>
-                                        <td class="px-8 py-6">
-                                            <div class="flex items-center justify-center gap-2 text-xs font-bold">
-                                                <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700"><?= htmlspecialchars($s['grado_actual']) ?></span>
-                                                <span class="material-icons-outlined text-slate-450 text-sm">arrow_forward</span>
-                                                <span class="px-2.5 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-450 border border-purple-200 dark:border-purple-800"><?= htmlspecialchars($s['grado_solicitado']) ?></span>
-                                            </div>
-                                        </td>
-                                        <td class="px-8 py-6 text-slate-650 dark:text-slate-350 text-xs max-w-[200px] truncate" title="<?= htmlspecialchars($s['observaciones'] ?? '') ?>">
-                                            <?= htmlspecialchars($s['observaciones'] ?? 'Sin justificación') ?>
-                                        </td>
-                                        <td class="px-8 py-6">
-                                            <div class="flex items-center justify-center gap-3">
-                                                <form action="<?= base_url('/admin/registros/aprobar-ascenso') ?>" method="POST">
-                                                    <input type="hidden" name="id" value="<?= $s['id'] ?>">
-                                                    <input type="hidden" name="id_miembro" value="<?= $s['id_miembro'] ?>">
-                                                    <input type="hidden" name="id_grado_solicitado" value="<?= $s['id_grado_solicitado'] ?>">
-                                                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-white p-2 rounded-xl shadow-md hover:shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Aprobar Ascenso">
-                                                        <span class="material-icons-outlined block text-sm">check</span>
-                                                    </button>
-                                                </form>
-                                                <form action="<?= base_url('/admin/registros/rechazar-ascenso') ?>" method="POST" onsubmit="return confirm('¿Está seguro de rechazar esta propuesta de ascenso?');">
-                                                    <input type="hidden" name="id" value="<?= $s['id'] ?>">
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-400 text-white p-2 rounded-xl shadow-md hover:shadow-red-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Rechazar Propuesta">
-                                                        <span class="material-icons-outlined block text-sm">close</span>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
+    </div>
 
     </div>
 </main>
+
+<!-- Modal Certificado Admin -->
+<div id="modal-cert-admin" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeAdminCert()"></div>
+    <div class="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[92vh] overflow-y-auto">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-icons-outlined text-rose-600">military_tech</span>
+                Certificado de Ascenso de Grado
+            </h2>
+            <div class="flex items-center gap-2">
+                <button onclick="downloadAdminPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm">
+                    <span class="material-icons-outlined text-sm">picture_as_pdf</span>
+                    Descargar PDF
+                </button>
+                <button onclick="closeAdminCert()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+                    <span class="material-icons-outlined text-sm">close</span>
+                </button>
+            </div>
+        </div>
+        <div id="admin-cert-wrapper" class="p-6">
+            <div class="flex items-center justify-center py-12 text-slate-400">
+                <span class="material-icons-outlined text-4xl">hourglass_top</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     @keyframes fade-in {
@@ -217,5 +258,47 @@
         animation: fade-in 0.4s ease-out forwards;
     }
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function promptObservaciones(id, idMiembro, idGrado) {
+    const obs = prompt('Observaciones para el certificado (opcional):');
+    if (obs !== null) {
+        document.getElementById('obs-cert-' + id).value = obs;
+        return true;
+    }
+    return false;
+}
+
+function openAdminCert(idSolicitud) {
+    const modal = document.getElementById('modal-cert-admin');
+    const wrapper = document.getElementById('admin-cert-wrapper');
+    wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    fetch('<?= base_url('/admin/certificado-preview') ?>?id=' + idSolicitud)
+        .then(r => r.text())
+        .then(html => { wrapper.innerHTML = html; })
+        .catch(() => { wrapper.innerHTML = '<p class="text-center text-rose-500 py-8">Error al cargar el certificado.</p>'; });
+}
+function closeAdminCert() {
+    const modal = document.getElementById('modal-cert-admin');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+function downloadAdminPDF() {
+    const element = document.getElementById('certificado-contenido');
+    if (!element) return;
+    html2pdf().set({
+        margin: [8,8,8,8], filename: 'certificado-jinhwan.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+    }).from(element).save();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAdminCert(); });
+</script>
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>

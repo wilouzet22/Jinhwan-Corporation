@@ -10,12 +10,11 @@
         <div class="w-24 h-[3px] bg-gradient-to-r from-tkd-red to-tkd-blue mx-auto rounded-full mb-8"></div>
         <p class="text-center text-slate-600 dark:text-slate-400 mb-16 max-w-2xl mx-auto">Explora nuestros momentos destacados y actividades más recientes a través de nuestra galería de Instagram.</p>
 
+        <!-- React Interactive Gallery Lightbox Viewer -->
+        <div data-react-component="GalleryLightboxViewer" class="mb-16"></div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <?php if (empty($publicaciones)): ?>
-                <div class="col-span-full text-center text-slate-500 dark:text-slate-400 py-12">
-                    Aún no hay publicaciones en la galería.
-                </div>
-            <?php else: ?>
+            <?php if (!empty($publicaciones)): ?>
                 <?php foreach ($publicaciones as $pub): ?>
                      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-xl overflow-hidden flex flex-col transition-all duration-300">
                         <div class="flex-1 w-full flex justify-center bg-slate-50 dark:bg-slate-950/50 pt-4 px-4 overflow-hidden">

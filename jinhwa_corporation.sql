@@ -320,7 +320,28 @@ CREATE TABLE `solicitudes_ascenso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
--- 9. Tabla: `eventos`
+-- 9. Tabla: `certificados_ascenso`
+-- --------------------------------------------------------
+CREATE TABLE `certificados_ascenso` (
+  `id_certificado`   INT          NOT NULL AUTO_INCREMENT,
+  `id_solicitud`     INT          NOT NULL,
+  `id_persona`       INT          NOT NULL,
+  `id_maestro`       INT          NOT NULL,
+  `grado_anterior`   VARCHAR(80)  NOT NULL,
+  `grado_nuevo`      VARCHAR(80)  NOT NULL,
+  `fecha_examen`     DATE         NOT NULL,
+  `observaciones`    TEXT,
+  `folio`            VARCHAR(30)  NOT NULL,
+  `creado_en`        TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_certificado`),
+  UNIQUE KEY `uk_solicitud` (`id_solicitud`),
+  CONSTRAINT `fk_cert_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `solicitudes_ascenso` (`id_solicitud`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cert_persona`   FOREIGN KEY (`id_persona`)   REFERENCES `personas` (`id_persona`) ON DELETE CASCADE,
+  CONSTRAINT `fk_cert_maestro`   FOREIGN KEY (`id_maestro`)   REFERENCES `personas` (`id_persona`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+-- 10. Tabla: `eventos`
 -- --------------------------------------------------------
 CREATE TABLE `eventos` (
   `id_evento` int NOT NULL AUTO_INCREMENT,
@@ -335,7 +356,7 @@ CREATE TABLE `eventos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
--- 10. Tabla: `noticias`
+-- 11. Tabla: `noticias`
 -- --------------------------------------------------------
 CREATE TABLE `noticias` (
   `id_noticia` int NOT NULL AUTO_INCREMENT,
@@ -350,7 +371,7 @@ CREATE TABLE `noticias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
--- 11. Tabla: `tipos_teoria`
+-- 12. Tabla: `tipos_teoria`
 -- --------------------------------------------------------
 CREATE TABLE `tipos_teoria` (
   `id_tipo_teoria` int NOT NULL AUTO_INCREMENT,
@@ -363,7 +384,7 @@ INSERT INTO `tipos_teoria` (`id_tipo_teoria`, `nombre`, `descripcion`) VALUES
 (1, 'General', 'Conceptos fundamentales de Taekwondo');
 
 -- --------------------------------------------------------
--- 12. Tabla: `teorias`
+-- 13. Tabla: `teorias`
 -- --------------------------------------------------------
 CREATE TABLE `teorias` (
   `id_teoria` int NOT NULL AUTO_INCREMENT,

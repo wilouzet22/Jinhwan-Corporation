@@ -204,6 +204,29 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Controles de Paginación (10 por página) -->
+            <div id="pagination-controls" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    Mostrando <span id="page-start-idx" class="font-bold text-slate-800 dark:text-slate-200">1</span> a <span id="page-end-idx" class="font-bold text-slate-800 dark:text-slate-200">10</span> de <span id="total-matching-records" class="font-bold text-slate-800 dark:text-slate-200"><?= count($miembros) ?></span> perfiles
+                </div>
+
+                <div class="flex items-center gap-1.5" id="pagination-buttons">
+                    <button type="button" id="btn-prev-page" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span class="material-icons-outlined text-sm">chevron_left</span>
+                        <span>Anterior</span>
+                    </button>
+                    
+                    <div id="page-number-buttons" class="flex items-center gap-1">
+                        <!-- Botones numéricos generados por JS -->
+                    </div>
+
+                    <button type="button" id="btn-next-page" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span>Siguiente</span>
+                        <span class="material-icons-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -292,16 +315,128 @@
 </form>
 
 <script>
-    // Filtrado en vivo (Buscador, Visibilidad y Rol)
+    // Variables y Paginación (10 por página)
     const searchInput = document.getElementById('filter-search');
     const visibilityFilter = document.getElementById('filter-visibility');
     const roleFilter = document.getElementById('filter-role');
     const rows = document.querySelectorAll('.profile-row');
 
+    let currentPage = 1;
+    const pageSize = 10;
+    let matchingRows = [];
+
+    function renderPagination() {
+        const totalMatching = matchingRows.length;
+        const totalPages = Math.max(1, Math.ceil(totalMatching / pageSize));
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+        const startIdx = totalMatching === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+        const endIdx = Math.min(currentPage * pageSize, totalMatching);
+
+        // Actualizar estadísticas de texto
+        const startEl = document.getElementById('page-start-idx');
+        const endEl = document.getElementById('page-end-idx');
+        const totalEl = document.getElementById('total-matching-records');
+
+        if (startEl) startEl.textContent = startIdx;
+        if (endEl) endEl.textContent = endIdx;
+        if (totalEl) totalEl.textContent = totalMatching;
+
+        // Ocultar todas las filas y mostrar solo la página activa
+        rows.forEach(r => r.style.display = 'none');
+        const pageSlice = matchingRows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        pageSlice.forEach(r => r.style.display = '');
+
+        // Actualizar botones Anterior / Siguiente
+        const btnPrev = document.getElementById('btn-prev-page');
+        const btnNext = document.getElementById('btn-next-page');
+        if (btnPrev) btnPrev.disabled = (currentPage === 1 || totalMatching === 0);
+        if (btnNext) btnNext.disabled = (currentPage === totalPages || totalMatching === 0);
+
+        // Generar botones numéricos de página
+        const pageButtonsContainer = document.getElementById('page-number-buttons');
+        if (pageButtonsContainer) {
+            pageButtonsContainer.innerHTML = '';
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            if (startPage > 1) {
+                pageButtonsContainer.appendChild(createPageBtn(1));
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    pageButtonsContainer.appendChild(dots);
+                }
+            }
+
+            for (let p = startPage; p <= endPage; p++) {
+                pageButtonsContainer.appendChild(createPageBtn(p));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    pageButtonsContainer.appendChild(dots);
+                }
+                pageButtonsContainer.appendChild(createPageBtn(totalPages));
+            }
+        }
+    }
+
+    function createPageBtn(pageNumber) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = pageNumber;
+        const isActive = pageNumber === currentPage;
+        btn.className = `w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+            isActive 
+                ? 'bg-tkd-blue text-white shadow-md scale-105' 
+                : 'border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+        }`;
+        btn.addEventListener('click', () => {
+            currentPage = pageNumber;
+            renderPagination();
+            document.getElementById('profiles-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+        return btn;
+    }
+
+    document.getElementById('btn-prev-page')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPagination();
+            document.getElementById('profiles-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+
+    document.getElementById('btn-next-page')?.addEventListener('click', () => {
+        const totalPages = Math.ceil(matchingRows.length / pageSize) || 1;
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderPagination();
+            document.getElementById('profiles-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+
     function filterProfiles() {
         const query = searchInput.value.toLowerCase().trim();
         const visVal = visibilityFilter.value;
         const roleVal = roleFilter.value;
+
+        matchingRows = [];
 
         rows.forEach(row => {
             const name = row.getAttribute('data-name') || '';
@@ -313,16 +448,28 @@
             const matchesRole = roleVal === 'all' || role === roleVal;
 
             if (matchesQuery && matchesVis && matchesRole) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+                matchingRows.push(row);
             }
         });
+
+        renderPagination();
     }
 
-    searchInput.addEventListener('input', filterProfiles);
-    visibilityFilter.addEventListener('change', filterProfiles);
-    roleFilter.addEventListener('change', filterProfiles);
+    searchInput.addEventListener('input', () => {
+        currentPage = 1;
+        filterProfiles();
+    });
+    visibilityFilter.addEventListener('change', () => {
+        currentPage = 1;
+        filterProfiles();
+    });
+    roleFilter.addEventListener('change', () => {
+        currentPage = 1;
+        filterProfiles();
+    });
+
+    // Inicializar filtrado y paginación
+    filterProfiles();
 
     // Toggle Instantáneo con AJAX
     async function toggleMemberVisibility(memberId, buttonElement) {

@@ -169,22 +169,20 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             </div>
         </div>
 
-        <!-- Tabla de Miembros -->
+        <!-- Tabla de Miembros (Compacta y sin scroll horizontal) -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="overflow-x-auto overflow-y-auto max-h-[580px]">
+            <div class="w-full">
                 <table class="w-full text-sm text-left border-collapse" id="members-table">
-                    <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
+                    <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="px-4 py-3.5 w-10 text-center">
+                            <th scope="col" class="px-3 py-3 w-10 text-center">
                                 <input type="checkbox" id="select-all-checkbox" class="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue bg-white dark:bg-slate-800 cursor-pointer">
                             </th>
-                            <th scope="col" class="px-6 py-3.5">Nombre</th>
-                            <th scope="col" class="px-6 py-3.5">Documento</th>
-                            <th scope="col" class="px-6 py-3.5 text-center">Cinturón</th>
-                            <th scope="col" class="px-6 py-3.5">Sede</th>
-                            <th scope="col" class="px-6 py-3.5 text-center">Rol</th>
-                            <th scope="col" class="px-6 py-3.5">Contacto</th>
-                            <th scope="col" class="px-6 py-3.5 text-right">Acciones</th>
+                            <th scope="col" class="px-4 py-3">Miembro</th>
+                            <th scope="col" class="px-3 py-3 text-center">Cinturón</th>
+                            <th scope="col" class="px-3 py-3">Sede & Contacto</th>
+                            <th scope="col" class="px-3 py-3 text-center">Rol</th>
+                            <th scope="col" class="px-4 py-3 text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="members-tbody">
@@ -200,7 +198,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                                 $nivel = strtolower($miembro['nombre_nivel'] ?? '');
                                 $beltClass = 'bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400'; 
                                 if (str_contains($nivel, 'blanco')) {
-                                    $beltClass = 'bg-white text-slate-900 border border-slate-300 dark:border-slate-600 shadow-sm';
+                                    $beltClass = 'bg-white text-slate-900 border border-slate-300 dark:border-slate-600 shadow-xs';
                                 } elseif (str_contains($nivel, 'amarillo')) {
                                     $beltClass = 'bg-yellow-50 text-yellow-800 border border-yellow-300 dark:bg-yellow-950/50 dark:text-yellow-400';
                                 } elseif (str_contains($nivel, 'verde')) {
@@ -210,10 +208,10 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                                 } elseif (str_contains($nivel, 'rojo')) {
                                     $beltClass = 'bg-red-50 text-red-800 border border-red-300 dark:bg-red-950/50 dark:text-red-400';
                                 } elseif (str_contains($nivel, 'negro') || str_contains($nivel, 'dan')) {
-                                    $beltClass = 'bg-slate-900 text-white border border-slate-900 dark:bg-slate-950 dark:border-slate-700 shadow-md';
+                                    $beltClass = 'bg-slate-900 text-amber-400 border border-amber-500/40 dark:bg-slate-950 dark:border-amber-500/50 shadow-xs';
                                 }
                             ?>
-                            <tr class="member-row hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all" 
+                            <tr class="member-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all" 
                                 data-id="<?= $miembro['id'] ?>"
                                 data-nombre="<?= htmlspecialchars(strtolower($miembro['nombre'] . ' ' . $miembro['apellido'])) ?>"
                                 data-doc="<?= htmlspecialchars($miembro['numero_documento'] ?? '') ?>"
@@ -222,47 +220,53 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                                 data-rol="<?= $rolNombre ?>"
                                 data-estado="<?= $miembro['activo'] == 1 ? 'Activo' : 'Pendiente' ?>">
                                 
-                                <td class="px-4 py-3.5 text-center">
+                                <td class="px-3 py-2.5 text-center">
                                     <input type="checkbox" name="member-checkbox" value="<?= $miembro['id'] ?>"
                                            class="member-checkbox h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue bg-white dark:bg-slate-800 cursor-pointer">
                                 </td>
 
-                                <td class="px-6 py-3.5 font-semibold whitespace-nowrap">
-                                    <div class="flex items-center gap-3">
+                                <!-- Miembro (Avatar + Nombre + Documento) -->
+                                <td class="px-4 py-2.5 font-semibold">
+                                    <div class="flex items-center gap-2.5">
                                         <?php if (!empty($miembro['foto_perfil'])): ?>
-                                            <img src="<?= base_url('/public/uploads/perfiles/' . $miembro['foto_perfil']) ?>" class="w-9 h-9 rounded-full object-cover shadow-sm shrink-0 border border-slate-200 dark:border-slate-700">
+                                            <img src="<?= base_url('/public/uploads/perfiles/' . $miembro['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shadow-xs shrink-0 border border-slate-200 dark:border-slate-700">
                                         <?php else: ?>
-                                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-rose-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                                                 <?= strtoupper(substr($miembro['nombre'] ?? 'U', 0, 1)) ?>
                                             </div>
                                         <?php endif; ?>
-                                        <div>
-                                            <div class="text-slate-900 dark:text-white font-bold">
+                                        <div class="min-w-0">
+                                            <div class="text-slate-900 dark:text-white font-bold text-sm truncate leading-tight">
                                                 <?= htmlspecialchars($miembro['nombre'] ?? '') . ' ' . htmlspecialchars($miembro['apellido'] ?? '') ?>
+                                            </div>
+                                            <div class="text-[11px] text-slate-500 dark:text-slate-400 font-normal flex items-center gap-1 mt-0.5">
+                                                <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1 py-0.2 rounded text-[10px] text-slate-500 dark:text-slate-400"><?= htmlspecialchars($miembro['tipo_documento'] ?? 'CC') ?></span>
+                                                <span><?= htmlspecialchars($miembro['numero_documento'] ?? 'S/D') ?></span>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
 
-                                <td class="px-6 py-3.5 text-slate-600 dark:text-slate-300 text-xs">
-                                    <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 rounded text-slate-500 dark:text-slate-400 mr-1 text-[10px]"><?= htmlspecialchars($miembro['tipo_documento'] ?? 'CC') ?></span>
-                                    <?= htmlspecialchars($miembro['numero_documento'] ?? '') ?>
-                                </td>
-
-                                <td class="px-6 py-3.5 text-center whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider <?= $beltClass ?>">
+                                <!-- Cinturón -->
+                                <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider <?= $beltClass ?>">
                                         <?= htmlspecialchars($miembro['nombre_nivel'] ?? 'Sin Asignar') ?>
                                     </span>
                                 </td>
 
-                                <td class="px-6 py-3.5 text-slate-600 dark:text-slate-300 text-xs">
-                                    <div class="flex items-center gap-1">
-                                        <span class="material-icons-outlined text-sm text-tkd-blue">place</span>
-                                        <span><?= htmlspecialchars($miembro['nombre_sede'] ?? 'Sin Asignar') ?></span>
+                                <!-- Sede & Contacto -->
+                                <td class="px-3 py-2.5 text-xs">
+                                    <div class="flex items-center gap-1 text-slate-800 dark:text-slate-200 font-medium">
+                                        <span class="material-icons-outlined text-sm text-tkd-blue shrink-0">place</span>
+                                        <span class="truncate"><?= htmlspecialchars($miembro['nombre_sede'] ?? 'Sin Asignar') ?></span>
+                                    </div>
+                                    <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5" title="<?= htmlspecialchars($miembro['correo'] ?? '') ?>">
+                                        <?= htmlspecialchars($miembro['telefono'] ? $miembro['telefono'] : ($miembro['correo'] ?? '-')) ?>
                                     </div>
                                 </td>
 
-                                <td class="px-6 py-3.5 text-center whitespace-nowrap">
+                                <!-- Rol -->
+                                <td class="px-3 py-2.5 text-center whitespace-nowrap">
                                     <?php switch($miembro['rol_id']): 
                                         case Roles::ADMINISTRADOR: ?>
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/30">Administrador</span>
@@ -275,28 +279,24 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                                      <?php endswitch; ?>
                                 </td>
 
-                                <td class="px-6 py-3.5 text-xs text-slate-500 dark:text-slate-400">
-                                    <div class="text-slate-700 dark:text-slate-300 font-medium"><?= htmlspecialchars($miembro['telefono'] ?? '-') ?></div>
-                                    <div class="truncate max-w-[140px]" title="<?= htmlspecialchars($miembro['correo'] ?? '') ?>"><?= htmlspecialchars($miembro['correo'] ?? '') ?></div>
-                                </td>
-
-                                <td class="px-6 py-3.5 text-right whitespace-nowrap">
+                                <!-- Acciones -->
+                                <td class="px-4 py-2.5 text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-1">
                                         <!-- Ver Detalle -->
                                         <button type="button" onclick='openDetailModal(<?= json_encode($miembro) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all focus:outline-none cursor-pointer" title="Ver Detalle">
-                                            <span class="material-icons-outlined text-lg">visibility</span>
+                                            <span class="material-icons-outlined text-base">visibility</span>
                                         </button>
                                         
                                         <!-- Editar -->
                                         <button type="button" onclick='openModal("edit", <?= json_encode($miembro) ?>)' class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all focus:outline-none cursor-pointer" title="Editar">
-                                            <span class="material-icons-outlined text-lg">edit</span>
+                                            <span class="material-icons-outlined text-base">edit</span>
                                         </button>
                                         
                                         <!-- Eliminar -->
                                         <form action="<?= base_url('/admin/miembros/delete') ?>" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar a este miembro?');">
                                             <input type="hidden" name="id" value="<?= $miembro['id'] ?>">
                                             <button type="submit" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all focus:outline-none cursor-pointer" title="Eliminar">
-                                                <span class="material-icons-outlined text-lg">delete</span>
+                                                <span class="material-icons-outlined text-base">delete</span>
                                             </button>
                                         </form>
                                     </div>
@@ -305,6 +305,29 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Controles de Paginación (10 por página) -->
+            <div id="pagination-controls" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    Mostrando <span id="page-start-idx" class="font-bold text-slate-800 dark:text-slate-200">1</span> a <span id="page-end-idx" class="font-bold text-slate-800 dark:text-slate-200">10</span> de <span id="total-matching-records" class="font-bold text-slate-800 dark:text-slate-200"><?= count($miembros) ?></span> miembros
+                </div>
+
+                <div class="flex items-center gap-1.5" id="pagination-buttons">
+                    <button type="button" id="btn-prev-page" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span class="material-icons-outlined text-sm">chevron_left</span>
+                        <span>Anterior</span>
+                    </button>
+                    
+                    <div id="page-number-buttons" class="flex items-center gap-1">
+                        <!-- Botones numéricos generados por JS -->
+                    </div>
+
+                    <button type="button" id="btn-next-page" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span>Siguiente</span>
+                        <span class="material-icons-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1020,6 +1043,128 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             }
         });
 
+        // Orden jerárquico de cinturones
+        const BELT_ORDER = [
+            'Blanco', 'Punta Amarilla', 'Pinta Amarilla', 'Amarillo', 
+            'Punta Verde', 'Pinta Verde', 'Verde', 
+            'Punta Azul', 'Pinta Azul', 'Azul', 
+            'Punta Roja', 'Pinta Roja', 'Rojo', 
+            'Punta Negra', 'Pinta Negra', 'Negro 1er Dan', 'Negro 2do Dan', 
+            'Negro 3er Dan', 'Negro 4to Dan', 'Negro 5to Dan', 'Negro 6to Dan', 
+            'Negro 7mo Dan', 'Negro 8vo Dan', 'Negro 9no Dan', 'Dan', 'Negro'
+        ];
+
+        // Variables de Paginación (10 por página)
+        let currentPage = 1;
+        const pageSize = 10;
+        let matchingRows = [];
+
+        function renderPagination() {
+            const totalMatching = matchingRows.length;
+            const totalPages = Math.max(1, Math.ceil(totalMatching / pageSize));
+
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+            if (currentPage < 1) {
+                currentPage = 1;
+            }
+
+            const startIdx = totalMatching === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+            const endIdx = Math.min(currentPage * pageSize, totalMatching);
+
+            // Actualizar indicadores de texto
+            const startEl = document.getElementById('page-start-idx');
+            const endEl = document.getElementById('page-end-idx');
+            const totalEl = document.getElementById('total-matching-records');
+
+            if (startEl) startEl.textContent = startIdx;
+            if (endEl) endEl.textContent = endIdx;
+            if (totalEl) totalEl.textContent = totalMatching;
+
+            // Ocultar todas las filas y mostrar solo las de la página actual
+            rows.forEach(r => r.style.display = 'none');
+            const pageSlice = matchingRows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+            pageSlice.forEach(r => r.style.display = '');
+
+            // Actualizar estado de botones Anterior / Siguiente
+            const btnPrev = document.getElementById('btn-prev-page');
+            const btnNext = document.getElementById('btn-next-page');
+            if (btnPrev) btnPrev.disabled = (currentPage === 1 || totalMatching === 0);
+            if (btnNext) btnNext.disabled = (currentPage === totalPages || totalMatching === 0);
+
+            // Generar botones numéricos
+            const pageButtonsContainer = document.getElementById('page-number-buttons');
+            if (pageButtonsContainer) {
+                pageButtonsContainer.innerHTML = '';
+                
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
+
+                if (startPage > 1) {
+                    pageButtonsContainer.appendChild(createPageBtn(1));
+                    if (startPage > 2) {
+                        const dots = document.createElement('span');
+                        dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                        dots.textContent = '...';
+                        pageButtonsContainer.appendChild(dots);
+                    }
+                }
+
+                for (let p = startPage; p <= endPage; p++) {
+                    pageButtonsContainer.appendChild(createPageBtn(p));
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        const dots = document.createElement('span');
+                        dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                        dots.textContent = '...';
+                        pageButtonsContainer.appendChild(dots);
+                    }
+                    pageButtonsContainer.appendChild(createPageBtn(totalPages));
+                }
+            }
+        }
+
+        function createPageBtn(pageNumber) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = pageNumber;
+            const isActive = pageNumber === currentPage;
+            btn.className = `w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                isActive 
+                    ? 'bg-tkd-blue text-white shadow-md scale-105' 
+                    : 'border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }`;
+            btn.addEventListener('click', () => {
+                currentPage = pageNumber;
+                renderPagination();
+                document.getElementById('members-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+            return btn;
+        }
+
+        document.getElementById('btn-prev-page')?.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPagination();
+                document.getElementById('members-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        document.getElementById('btn-next-page')?.addEventListener('click', () => {
+            const totalPages = Math.ceil(matchingRows.length / pageSize) || 1;
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPagination();
+                document.getElementById('members-table')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
         function filterMembers() {
             const query = searchInput.value.toLowerCase().trim();
             const sede  = sedeSelect.value;
@@ -1027,7 +1172,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             const rol   = rolSelect.value;
             const estado= estadoSelect.value;
 
-            let visibleRows = [];
+            matchingRows = [];
 
             rows.forEach(r => {
                 const rNombre = r.getAttribute('data-nombre') || '';
@@ -1044,10 +1189,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                 const matchesEstado= estado === 'all' || rEstado === estado;
 
                 if (matchesQuery && matchesSede && matchesNivel && matchesRol && matchesEstado) {
-                    r.style.display = '';
-                    visibleRows.push(r);
-                } else {
-                    r.style.display = 'none';
+                    matchingRows.push(r);
                 }
             });
 
@@ -1055,8 +1197,11 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             const isFiltered = query || sede !== 'all' || nivel !== 'all' || rol !== 'all' || estado !== 'all';
             resetBtn.classList.toggle('hidden', !isFiltered);
 
-            // Update charts
-            updateCharts(visibleRows);
+            // Renderizar la página actual con el resultado de filtros
+            renderPagination();
+
+            // Update charts con el total de filas filtradas
+            updateCharts(matchingRows);
         }
 
         function updateCharts(visibleRows) {
@@ -1105,11 +1250,26 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             chartSedes.update();
         }
 
-        searchInput.addEventListener('input', filterMembers);
-        sedeSelect.addEventListener('change', filterMembers);
-        nivelSelect.addEventListener('change', filterMembers);
-        rolSelect.addEventListener('change', filterMembers);
-        estadoSelect.addEventListener('change', filterMembers);
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            filterMembers();
+        });
+        sedeSelect.addEventListener('change', () => {
+            currentPage = 1;
+            filterMembers();
+        });
+        nivelSelect.addEventListener('change', () => {
+            currentPage = 1;
+            filterMembers();
+        });
+        rolSelect.addEventListener('change', () => {
+            currentPage = 1;
+            filterMembers();
+        });
+        estadoSelect.addEventListener('change', () => {
+            currentPage = 1;
+            filterMembers();
+        });
 
         resetBtn.addEventListener('click', () => {
             searchInput.value = '';
@@ -1117,6 +1277,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             nivelSelect.value = 'all';
             rolSelect.value = 'all';
             estadoSelect.value = 'all';
+            currentPage = 1;
             filterMembers();
         });
 
