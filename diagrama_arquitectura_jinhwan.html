@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Flujo de Información - Jinhwan Corporation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Diapositiva Principal de Presentación */
+        .presentation-page {
+            background-color: #ffffff;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            width: 100%;
+            max-width: 1250px;
+            border: 1px solid #94a3b8;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 30px 40px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar Documento PDF */
+        .doc-top-bar {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 4px 20px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        /* Encabezado Institucional Jinhwan */
+        .header-brand {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .brand-title-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #0a2540, #1e40af);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(30, 64, 175, 0.25);
+        }
+
+        .brand-name {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #0a2540;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .brand-sub {
+            font-size: 0.72rem;
+            color: #64748b;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .doc-meta {
+            text-align: right;
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* Leyenda de Simbología (Top Right) */
+        .legend-box {
+            position: absolute;
+            top: 85px;
+            right: 40px;
+            border: 1.5px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 10px;
+            padding: 12px 16px;
+            width: 215px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            z-index: 10;
+        }
+
+        .legend-title {
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #0f172a;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 4px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 7px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .symbol-pill { width: 30px; height: 15px; border-radius: 10px; background: #dcfce7; border: 1.5px solid #16a34a; }
+        .symbol-process { width: 30px; height: 15px; border-radius: 4px; background: #ffffff; border: 1.5px solid #64748b; }
+        .symbol-io { width: 30px; height: 15px; background: #f3e8ff; border: 1.5px solid #8b5cf6; transform: skewX(-15deg); }
+        .symbol-decision { width: 16px; height: 16px; background: #fef9c3; border: 1.5px solid #ca8a04; transform: rotate(45deg); margin-left: 6px; }
+
+        .symbol-line-solid { width: 30px; height: 2px; background: #475569; position: relative; }
+        .symbol-line-solid::after { content: ''; position: absolute; right: 0; top: -3px; border-left: 5px solid #475569; border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+        .symbol-line-dashed { width: 30px; height: 0; border-top: 2px dashed #16a34a; }
+
+        /* SVG Flowchart Container */
+        .flow-svg-container {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Estilos SVG */
+        .st-pill { fill: #dcfce7; stroke: #16a34a; stroke-width: 2px; rx: 15px; }
+        .st-process { fill: #ffffff; stroke: #64748b; stroke-width: 2px; rx: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.04)); }
+        .st-io { fill: #f3e8ff; stroke: #8b5cf6; stroke-width: 2px; }
+        .st-decision { fill: #fef9c3; stroke: #ca8a04; stroke-width: 2px; }
+        .st-module-card { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5px; rx: 8px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05)); }
+        .st-auto-update { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2px; rx: 10px; stroke-dasharray: 5; }
+
+        .txt-title { font-size: 11px; font-weight: 800; fill: #0f172a; text-anchor: middle; text-transform: uppercase; }
+        .txt-desc { font-size: 9px; font-weight: 500; fill: #475569; text-anchor: middle; }
+        .txt-tag-no { font-size: 10px; font-weight: 800; fill: #dc2626; text-anchor: middle; }
+        .txt-tag-yes { font-size: 10px; font-weight: 800; fill: #16a34a; text-anchor: middle; }
+
+        .footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="presentation-page">
+
+        <!-- Barra Superior Documento -->
+        <div class="doc-top-bar">
+            <span>📄 Diagrama_de_flujo_Jinhwan_Corporation.pdf</span>
+        </div>
+
+        <!-- Encabezado Institucional Jinhwan -->
+        <div class="header-brand">
+            <div class="brand-title-box">
+                <div class="brand-icon">🥋</div>
+                <div>
+                    <div class="brand-name">JINHWAN CORPORATION</div>
+                    <div class="brand-sub">PLATAFORMA WEB DE GESTIÓN INTEGRAL DE TAEKWONDO</div>
+                </div>
+            </div>
+
+            <div class="doc-meta">
+                <div>DIAGRAMA DE FLUJO DE INFORMACIÓN (DFD)</div>
+                <div style="color: #94a3b8; font-weight: 500;">DOCUMENTACIÓN OFICIAL DE ARQUITECTURA</div>
+            </div>
+        </div>
+
+        <!-- Cuadro de Leyenda (Top Right) -->
+        <div class="legend-box">
+            <div class="legend-title">LEYENDA</div>
+            <div class="legend-row"><div class="symbol-pill"></div><span>Inicio / Fin</span></div>
+            <div class="legend-row"><div class="symbol-process"></div><span>Proceso del Sistema</span></div>
+            <div class="legend-row"><div class="symbol-io"></div><span>Entrada / Salida de datos</span></div>
+            <div class="legend-row"><div class="symbol-decision"></div><span>Decisión de Control</span></div>
+            <div class="legend-row"><div class="symbol-line-solid"></div><span>Flujo de navegación</span></div>
+            <div class="legend-row"><div class="symbol-line-dashed"></div><span>Persistencia automática (MySQL)</span></div>
+        </div>
+
+        <!-- SVG Canvas Matematicamente Corregido -->
+        <div class="flow-svg-container">
+            <svg viewBox="0 0 1150 990">
+
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+                    </marker>
+                    <marker id="arrow-dashed" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/>
+                    </marker>
+                </defs>
+
+                <!-- ========================================================= -->
+                <!-- LÍNEAS DE FLUJO SVG (SINO SOLAPAMIENTOS)                  -->
+                <!-- ========================================================= -->
+
+                <!-- Inicio -> Inicio de Sesión -->
+                <path d="M 520 40 L 520 70" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Inicio de Sesión -> Decisión 1 -->
+                <path d="M 520 125 L 520 150" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Decisión 1 (NO) -> Registro -->
+                <path d="M 460 185 L 340 185" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <rect x="390" y="168" width="28" height="15" rx="3" fill="#fee2e2"/>
+                <text x="404" y="179" class="txt-tag-no">NO</text>
+
+                <!-- Registro -> Autenticación -->
+                <path d="M 250 210 L 250 275 L 400 275" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Decisión 1 (SÍ) -> Autenticación -->
+                <path d="M 580 185 L 650 185 L 650 275 L 640 275" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <rect x="600" y="168" width="26" height="15" rx="3" fill="#dcfce7"/>
+                <text x="613" y="179" class="txt-tag-yes">SÍ</text>
+
+                <!-- Autenticación -> Decisión 2 -->
+                <path d="M 520 305 L 520 325" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Decisión 2 (NO) -> Reintento Login -->
+                <path d="M 455 360 L 140 360 L 140 97 L 400 97" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <rect x="385" y="343" width="28" height="15" rx="3" fill="#fee2e2"/>
+                <text x="399" y="354" class="txt-tag-no">NO</text>
+
+                <!-- Decisión 2 (SÍ) -> Dashboard Principal -->
+                <path d="M 520 395 L 520 425" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <rect x="532" y="402" width="26" height="15" rx="3" fill="#dcfce7"/>
+                <text x="545" y="413" class="txt-tag-yes">SÍ</text>
+
+                <!-- Dashboard -> 5 Módulos Especializados -->
+                <path d="M 520 485 L 520 510" stroke="#475569" stroke-width="2" fill="none" />
+                <path d="M 120 510 L 920 510" stroke="#475569" stroke-width="2" fill="none" />
+
+                <!-- Bajadas a Módulos -->
+                <path d="M 120 510 L 120 535" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <path d="M 320 510 L 320 535" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <path d="M 520 510 L 520 535" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <path d="M 720 510 L 720 535" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+                <path d="M 920 510 L 920 535" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Líneas Punteadas hacia MySQL -->
+                <path d="M 120 670 L 120 695 L 520 695 L 520 710" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4" fill="none" marker-end="url(#arrow-dashed)" />
+                <path d="M 320 670 L 320 695 L 520 695" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4" fill="none" />
+                <path d="M 520 670 L 520 695" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4" fill="none" />
+                <path d="M 720 670 L 720 695 L 520 695" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4" fill="none" />
+                <path d="M 920 670 L 920 695 L 520 695" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4" fill="none" />
+
+                <!-- Persistencia -> Cerrar Sesión -->
+                <path d="M 520 775 L 520 805" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Cerrar Sesión -> Mensaje Salida -->
+                <path d="M 520 855 L 520 875" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+                <!-- Mensaje Salida -> Fin -->
+                <path d="M 520 915 L 520 935" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+
+                <!-- ========================================================= -->
+                <!-- NODOS SVG MATEMÁTICAMENTE CORREGIDOS                       -->
+                <!-- ========================================================= -->
+
+                <!-- 1. INICIO -->
+                <rect x="430" y="10" width="180" height="30" class="st-pill" />
+                <text x="520" y="29" class="txt-title" style="fill: #15803d;">INICIO (Portal Jinhwan)</text>
+
+                <!-- 2. INICIO DE SESIÓN -->
+                <rect x="400" y="70" width="240" height="55" class="st-process" />
+                <text x="520" y="92" class="txt-title">INICIO DE SESIÓN</text>
+                <text x="520" y="110" class="txt-desc">El usuario ingresa sus credenciales (Correo / Clave)</text>
+
+                <!-- 3. DECISIÓN 1: ¿El usuario tiene cuenta? -->
+                <polygon points="520,150 580,185 520,220 460,185" class="st-decision" />
+                <text x="520" y="182" class="txt-title" style="font-size: 9.5px;">¿El usuario</text>
+                <text x="520" y="194" class="txt-title" style="font-size: 9.5px;">tiene cuenta?</text>
+
+                <!-- 4. REGISTRO (Entrada/Salida - Paralelogramo Morado) -->
+                <polygon points="180,160 340,160 320,210 160,210" class="st-io" />
+                <text x="250" y="180" class="txt-title" style="fill: #6b21a8; font-size: 10.5px;">REGISTRO DE DEPORTISTA</text>
+                <text x="250" y="195" class="txt-desc">El alumno registra sus datos personales</text>
+
+                <!-- 5. AUTENTICACIÓN & CONTROL RBAC -->
+                <rect x="400" y="245" width="240" height="60" class="st-process" />
+                <text x="520" y="268" class="txt-title" style="font-size: 11px;">AUTENTICACIÓN & CONTROL RBAC</text>
+                <text x="520" y="288" class="txt-desc">Validación BCrypt y permisos JSON en BD</text>
+
+                <!-- 6. DECISIÓN 2: ¿Credenciales válidas? -->
+                <polygon points="520,325 585,360 520,395 455,360" class="st-decision" />
+                <text x="520" y="357" class="txt-title" style="font-size: 9.5px;">¿Credenciales</text>
+                <text x="520" y="369" class="txt-title" style="font-size: 9.5px;">válidas?</text>
+
+                <!-- 7. DASHBOARD PRINCIPAL -->
+                <rect x="330" y="425" width="380" height="60" class="st-process" style="stroke: #1e40af; stroke-width: 2px;" />
+                <text x="520" y="448" class="txt-title" style="fill: #1e40af; font-size: 11.5px;">DASHBOARD PRINCIPAL (JINHWAN CORP)</text>
+                <text x="520" y="468" class="txt-desc">Vista general, perfil, grado actual y menú según rol</text>
+
+                <!-- 8. MÓDULOS DE JINHWAN (5 TARJETAS) -->
+
+                <!-- Módulo 1: ESTUDIO TEÓRICO -->
+                <g>
+                    <rect x="40" y="535" width="160" height="135" class="st-module-card" />
+                    <circle cx="120" cy="565" r="16" fill="#dbeafe" />
+                    <text x="120" y="571" font-size="16" text-anchor="middle">🥋</text>
+                    <text x="120" y="595" class="txt-title" style="font-size: 10px;">MÓDULO ESTUDIO</text>
+                    <text x="120" y="615" class="txt-desc" style="font-size: 8.5px;">• Teoría por cinturón</text>
+                    <text x="120" y="628" class="txt-desc" style="font-size: 8.5px;">• Videos instructivos</text>
+                    <text x="120" y="641" class="txt-desc" style="font-size: 8.5px;">• Evaluación de avance</text>
+                </g>
+
+                <!-- Módulo 2: SOLICITUDES DE ASCENSO -->
+                <g>
+                    <rect x="240" y="535" width="160" height="135" class="st-module-card" />
+                    <circle cx="320" cy="565" r="16" fill="#f3e8ff" />
+                    <text x="320" y="571" font-size="16" text-anchor="middle">📋</text>
+                    <text x="320" y="595" class="txt-title" style="font-size: 10px;">SOLICITUDES ASCENSO</text>
+                    <text x="320" y="615" class="txt-desc" style="font-size: 8.5px;">• Evaluación del Maestro</text>
+                    <text x="320" y="628" class="txt-desc" style="font-size: 8.5px;">• Registro de examen</text>
+                    <text x="320" y="641" class="txt-desc" style="font-size: 8.5px;">• Aprobación / Rechazo</text>
+                </g>
+
+                <!-- Módulo 3: EMISIÓN DE CERTIFICADOS PDF -->
+                <g>
+                    <rect x="440" y="535" width="160" height="135" class="st-module-card" />
+                    <circle cx="520" cy="565" r="16" fill="#fef3c7" />
+                    <text x="520" y="571" font-size="16" text-anchor="middle">📜</text>
+                    <text x="520" y="595" class="txt-title" style="font-size: 10px;">CERTIFICADOS & FOLIO</text>
+                    <text x="520" y="615" class="txt-desc" style="font-size: 8.5px;">• Folio JH-YYYY-XXXX</text>
+                    <text x="520" y="628" class="txt-desc" style="font-size: 8.5px;">• Visor modal oficial</text>
+                    <text x="520" y="641" class="txt-desc" style="font-size: 8.5px;">• Descarga PDF vectorial</text>
+                </g>
+
+                <!-- Módulo 4: GESTIÓN DE SEDES Y EVENTOS -->
+                <g>
+                    <rect x="640" y="535" width="160" height="135" class="st-module-card" />
+                    <circle cx="720" cy="565" r="16" fill="#e0e7ff" />
+                    <text x="720" y="571" font-size="16" text-anchor="middle">🏢</text>
+                    <text x="720" y="595" class="txt-title" style="font-size: 10px;">SEDES Y EVENTOS</text>
+                    <text x="720" y="615" class="txt-desc" style="font-size: 8.5px;">• Sedes institucionales</text>
+                    <text x="720" y="628" class="txt-desc" style="font-size: 8.5px;">• Calendario de torneos</text>
+                    <text x="720" y="641" class="txt-desc" style="font-size: 8.5px;">• Galería multimedia</text>
+                </g>
+
+                <!-- Módulo 5: CONSOLA ADMINISTRATIVA GENERAL -->
+                <g>
+                    <rect x="840" y="535" width="160" height="135" class="st-module-card" />
+                    <circle cx="920" cy="565" r="16" fill="#dcfce7" />
+                    <text x="920" y="571" font-size="16" text-anchor="middle">⚙️</text>
+                    <text x="920" y="595" class="txt-title" style="font-size: 10px;">CONSOLA ADMIN</text>
+                    <text x="920" y="615" class="txt-desc" style="font-size: 8.5px;">• CRUD de Miembros</text>
+                    <text x="920" y="628" class="txt-desc" style="font-size: 8.5px;">• Permisos JSON granulares</text>
+                    <text x="920" y="641" class="txt-desc" style="font-size: 8.5px;">• Auditoría de movimientos</text>
+                </g>
+
+
+                <!-- 9. PERSISTENCIA AUTOMÁTICA EN BASE DE DATOS MYSQL -->
+                <rect x="340" y="710" width="360" height="65" class="st-auto-update" />
+                <text x="375" y="747" font-size="20">🔄</text>
+                <text x="530" y="737" class="txt-title" style="fill: #15803d; font-size: 11px;">PERSISTENCIA AUTOMÁTICA EN MYSQL</text>
+                <text x="530" y="757" class="txt-desc">Actualización en tiempo real en BD (jinhwa_corporation)</text>
+
+
+                <!-- 10. CERRAR SESIÓN -->
+                <rect x="400" y="805" width="240" height="50" class="st-process" />
+                <text x="520" y="827" class="txt-title">CERRAR SESIÓN</text>
+                <text x="520" y="843" class="txt-desc">El usuario decide cerrar sesión en el sistema</text>
+
+
+                <!-- 11. MENSAJE DE SALIDA (Entrada/Salida - Paralelogramo) -->
+                <polygon points="330,875 710,875 690,915 310,915" class="st-io" />
+                <text x="510" y="893" class="txt-title" style="fill: #6b21a8; font-size: 10.5px;">"Sesión finalizada correctamente"</text>
+                <text x="510" y="905" class="txt-desc">Confirmación y destrucción de $_SESSION PHP</text>
+
+
+                <!-- 12. FIN -->
+                <rect x="430" y="935" width="180" height="30" class="st-pill" />
+                <text x="520" y="954" class="txt-title" style="fill: #15803d;">FIN (Sesión cerrada / Portal)</text>
+
+            </svg>
+        </div>
+
+        <!-- Pie de página -->
+        <div class="footer-bar">
+            <span>Jinhwan Corporation • Sistema Integral de Gestión Técnica de Taekwondo</span>
+            <span>Documentación Oficial de Arquitectura</span>
+        </div>
+
+    </div>
+
+</body>
+</html>
