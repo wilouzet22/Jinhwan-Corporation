@@ -2,97 +2,88 @@
 // Este archivo es llamado como include dentro de un modal.
 // Espera recibir $cert = array con datos del certificado.
 if (!isset($cert) || empty($cert)) return;
+
 $foto_url = !empty($cert['foto_perfil'])
     ? base_url('/public/uploads/perfiles/' . $cert['foto_perfil'])
     : asset('img/visual/logo.svg');
+
 $fecha_formateada = !empty($cert['fecha_examen'])
-    ? date('d \\de F \\de Y', strtotime($cert['fecha_examen']))
-    : date('d \\de F \\de Y');
+    ? date('d \de F \de Y', strtotime($cert['fecha_examen']))
+    : date('d \de F \de Y');
+
+$nombre_alumno = htmlspecialchars($cert['alumno_nombre'] ?? 'Estudiante');
+$folio = htmlspecialchars($cert['folio'] ?? '');
+$grado_anterior = htmlspecialchars($cert['grado_anterior'] ?? '');
+$grado_nuevo = htmlspecialchars($cert['grado_nuevo'] ?? '');
+$observaciones = trim((string)($cert['observaciones'] ?? ''));
+$director = htmlspecialchars($cert['maestro_nombre'] ?? 'Director del Club');
+$profesor = htmlspecialchars($cert['maestro_nombre'] ?? 'Profesor');
+$plantilla_url = asset('img/visual/diploma_base.png');
 ?>
-<div id="certificado-contenido" class="bg-white text-slate-900 font-sans p-0 rounded-2xl overflow-hidden" style="width:680px; max-width:100%; font-family: Georgia, serif;">
+<div id="certificado-contenido" style="width:min(860px, calc(100vw - 2rem)); max-width:100%; margin:0 auto; position:relative; font-family: Georgia, serif; color:#111827; background:#f8f8f8; border:12px solid #111827; border-radius:18px; overflow:hidden; box-shadow:0 20px 50px rgba(15,23,42,.08);">
+    <div style="position:relative; width:100%; min-height:1180px; background-image:url('<?= $plantilla_url ?>'); background-size:cover; background-position:center; background-repeat:no-repeat; box-sizing:border-box; padding:56px 54px 48px;">
 
-    <!-- Franja superior -->
-    <div style="background: linear-gradient(135deg,#1e293b 0%,#0f172a 100%); padding:28px 36px; display:flex; align-items:center; justify-content:space-between;">
-        <div style="display:flex; align-items:center; gap:16px;">
-            <img src="<?= asset('img/visual/logo.svg') ?>" alt="Logo" style="width:64px; height:64px; object-fit:contain;">
-            <div>
-                <div style="color:#ffffff; font-size:22px; font-weight:800; letter-spacing:4px; font-family:sans-serif; text-transform:uppercase;">JINHWAN</div>
-                <div style="color:#dc2626; font-size:12px; font-weight:700; letter-spacing:3px; font-family:sans-serif; text-transform:uppercase;">CORPORATION</div>
+        <div style="position:absolute; inset:0; background:rgba(255,255,255,0.02);"></div>
+
+        <div style="position:relative; z-index:2;">
+
+            <!-- El nombre del alumno va sobre el área en blanco que deja la plantilla -->
+            <div style="text-align:center; margin-top:265px; font-size:48px; line-height:1.15; font-family:'Segoe Print','Bradley Hand',cursive; color:#111827; font-weight:600; letter-spacing:0.5px; text-shadow:0 0 1px rgba(17,24,39,0.2);">
+                <?= $nombre_alumno ?>
             </div>
-        </div>
-        <div style="text-align:right;">
-            <div style="color:#94a3b8; font-size:10px; font-family:sans-serif; text-transform:uppercase; letter-spacing:1px;">Folio de Grado</div>
-            <div style="color:#f59e0b; font-size:18px; font-weight:800; font-family:monospace;"><?= htmlspecialchars($cert['folio']) ?></div>
-            <div style="color:#64748b; font-size:10px; font-family:sans-serif; margin-top:2px;"><?= $fecha_formateada ?></div>
-        </div>
-    </div>
 
-    <!-- Título -->
-    <div style="background:#dc2626; padding:14px 36px; text-align:center;">
-        <div style="color:#fff; font-size:13px; font-weight:700; letter-spacing:5px; text-transform:uppercase; font-family:sans-serif;">Certificado de Ascenso de Grado en Taekwondo</div>
-    </div>
+            <!-- El grado nuevo se superpone sobre el placeholder "T1" de la imagen -->
+            <div style="text-align:center; margin-top:28px; font-size:96px; line-height:0.9; letter-spacing:2px; font-family:'Segoe UI', sans-serif; font-weight:800; color:rgba(15,23,42,0.55); text-transform:uppercase;">
+                <?= $grado_nuevo ?>
+            </div>
 
-    <!-- Cuerpo -->
-    <div style="padding:28px 36px 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:26px; padding:0 18px;">
+                <div style="text-align:left; width:36%;">
+                    <div style="font-size:18px; font-style:italic; color:#111827; font-family:Georgia, serif; margin-bottom:12px;"><?= $fecha_formateada ?></div>
+                    <div style="border-bottom:2px solid #111827; width:100%; height:0; margin-bottom:8px;"></div>
+                    <div style="font-size:13px; color:#111827; font-family:Georgia, serif; text-transform:uppercase; letter-spacing:1px;">
+                        <?= $director ?>
+                    </div>
+                    <div style="font-size:18px; font-style:italic; color:#111827; font-family:Georgia, serif; margin-top:6px;">
+                        Director del club
+                    </div>
+                </div>
 
-        <!-- Alumno -->
-        <div style="display:flex; align-items:center; gap:20px; margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid #e2e8f0;">
-            <img src="<?= $foto_url ?>" alt="Foto" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid #dc2626;">
-            <div>
-                <div style="font-size:11px; color:#64748b; text-transform:uppercase; letter-spacing:1px; font-family:sans-serif; margin-bottom:3px;">Deportista</div>
-                <div style="font-size:20px; font-weight:700; color:#0f172a;"><?= htmlspecialchars($cert['alumno_nombre']) ?></div>
-                <div style="font-size:12px; color:#475569; margin-top:4px; font-family:sans-serif;">
-                    <span style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:4px; padding:1px 6px; font-size:10px; font-weight:700; margin-right:4px;">CC</span>
-                    <?= htmlspecialchars($cert['num_doc'] ?? '-') ?>
-                    <?php if (!empty($cert['nombre_sede'])): ?>
-                        &nbsp;&nbsp;•&nbsp;&nbsp;Sede: <?= htmlspecialchars($cert['nombre_sede']) ?>
-                    <?php endif; ?>
+                <div style="text-align:center; width:30%; padding-bottom:12px;">
+                    <div style="display:inline-flex; align-items:center; justify-content:center; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.75); border:3px solid #111827; box-shadow:0 0 0 8px rgba(17,24,39,0.04);">
+                        <img src="<?= $foto_url ?>" alt="Foto del estudiante" style="width:90px; height:90px; object-fit:cover; border-radius:50%; border:2px solid rgba(17,24,39,.15);">
+                    </div>
+                </div>
+
+                <div style="text-align:right; width:36%;">
+                    <div style="font-size:18px; font-style:italic; color:#111827; font-family:Georgia, serif; margin-bottom:12px;"><?= $fecha_formateada ?></div>
+                    <div style="border-bottom:2px solid #111827; width:100%; height:0; margin-bottom:8px;"></div>
+                    <div style="font-size:13px; color:#111827; font-family:Georgia, serif; text-transform:uppercase; letter-spacing:1px;">
+                        <?= $profesor ?>
+                    </div>
+                    <div style="font-size:18px; font-style:italic; color:#111827; font-family:Georgia, serif; margin-top:6px;">
+                        Profesor encargado
+                    </div>
+                </div>
+            </div>
+
+            <?php if (!empty($observaciones)): ?>
+                <div style="margin-top:30px; text-align:center; font-size:15px; line-height:1.5; font-style:italic; color:#1f2937; font-family:Georgia, serif; padding:0 70px;">
+                    “<?= htmlspecialchars($observaciones) ?>”
+                </div>
+            <?php endif; ?>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:34px; padding:0 34px;">
+                <div style="text-align:center; width:48%;">
+                    <div style="font-size:16px; font-style:italic; color:#111827; font-family:Georgia, serif; margin-bottom:6px;">Folio</div>
+                    <div style="font-size:18px; font-weight:700; letter-spacing:2px; color:#111827; font-family:monospace;"><?= $folio ?></div>
+                </div>
+                <div style="text-align:center; width:48%;">
+                    <div style="display:inline-block; border-top:2px solid #111827; padding-top:12px; min-width:220px; text-align:center; font-size:18px; font-weight:700; letter-spacing:2px; color:#111827; font-family:Georgia, serif; text-transform:uppercase;">
+                        <?= $grado_anterior ?> → <?= $grado_nuevo ?>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Ascenso -->
-        <div style="text-align:center; margin-bottom:24px; padding:20px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;">
-            <div style="font-size:10px; color:#64748b; text-transform:uppercase; letter-spacing:2px; font-family:sans-serif; margin-bottom:12px;">Ascenso de Cinturón</div>
-            <div style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap;">
-                <div style="background:#1e293b; color:#ffffff; padding:10px 20px; border-radius:8px; font-size:14px; font-weight:700; letter-spacing:1px; font-family:sans-serif;">
-                    <?= htmlspecialchars($cert['grado_anterior']) ?>
-                </div>
-                <div style="font-size:24px; color:#dc2626;">&#8594;</div>
-                <div style="background:#dc2626; color:#ffffff; padding:10px 20px; border-radius:8px; font-size:14px; font-weight:700; letter-spacing:1px; font-family:sans-serif;">
-                    <?= htmlspecialchars($cert['grado_nuevo']) ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- Observaciones -->
-        <?php if (!empty($cert['observaciones'])): ?>
-        <div style="margin-bottom:24px; padding:14px 16px; background:#fffbeb; border:1px solid #fde68a; border-radius:10px;">
-            <div style="font-size:10px; color:#92400e; text-transform:uppercase; letter-spacing:1px; font-family:sans-serif; font-weight:700; margin-bottom:6px;">Observaciones del Evaluador</div>
-            <div style="font-size:13px; color:#451a03; font-style:italic;">"<?= htmlspecialchars($cert['observaciones']) ?>"</div>
-        </div>
-        <?php endif; ?>
-
-        <!-- Firmas -->
-        <div style="display:flex; justify-content:space-around; padding-top:20px; border-top:1px solid #e2e8f0; margin-top:8px;">
-            <div style="text-align:center; flex:1;">
-                <div style="border-top:1px solid #94a3b8; padding-top:8px; margin-top:32px; margin-bottom:4px;"></div>
-                <div style="font-size:12px; font-weight:700; color:#1e293b; font-family:sans-serif;"><?= htmlspecialchars($cert['maestro_nombre'] ?? 'Maestro Evaluador') ?></div>
-                <div style="font-size:10px; color:#64748b; font-family:sans-serif;">Maestro Evaluador</div>
-            </div>
-            <div style="flex:0 0 40px;"></div>
-            <div style="text-align:center; flex:1;">
-                <div style="border-top:1px solid #94a3b8; padding-top:8px; margin-top:32px; margin-bottom:4px;"></div>
-                <div style="font-size:12px; font-weight:700; color:#1e293b; font-family:sans-serif;">Jinhwan Corporation</div>
-                <div style="font-size:10px; color:#64748b; font-family:sans-serif;">Dirección Nacional</div>
-            </div>
-        </div>
     </div>
-
-    <!-- Franja inferior -->
-    <div style="background:#0f172a; padding:10px 36px; display:flex; align-items:center; justify-content:space-between;">
-        <div style="color:#475569; font-size:9px; font-family:sans-serif; letter-spacing:1px; text-transform:uppercase;">Corporación Jinhwan de Taekwondo — Documento Oficial</div>
-        <div style="color:#334155; font-size:9px; font-family:monospace;"><?= htmlspecialchars($cert['folio']) ?></div>
-    </div>
-
 </div>

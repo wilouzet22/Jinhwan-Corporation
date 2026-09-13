@@ -1,0 +1,72 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "tag:#cerebro",
+      "color": {
+        "a": 1,
+        "rgb": 11032055
+      }
+    },
+    {
+      "query": "tag:#frontend",
+      "color": {
+        "a": 1,
+        "rgb": 3718648
+      }
+    },
+    {
+      "query": "tag:#backend",
+      "color": {
+        "a": 1,
+        "rgb": 8489976
+      }
+    },
+    {
+      "query": "tag:#database",
+      "color": {
+        "a": 1,
+        "rgb": 3462041
+      }
+    },
+    {
+      "query": "tag:#seguridad",
+      "color": {
+        "a": 1,
+        "rgb": 16007006
+      }
+    },
+    {
+      "query": "tag:#flujo",
+      "color": {
+        "a": 1,
+        "rgb": 16096779
+      }
+    },
+    {
+      "query": "tag:#estado",
+      "color": {
+        "a": 1,
+        "rgb": 4906624
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.35,
+  "lineSizeMultiplier": 1.25,
+  "collapse-forces": false,
+  "centerStrength": 0.5,
+  "repelStrength": 12,
+  "linkStrength": 1,
+  "linkDistance": 180,
+  "scale": 1,
+  "close": false
+}
