@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/conexion.php';
+require_once __DIR__ . '/config/conexion.php';
 require_once __DIR__ . '/helpers/url_helper.php';
 
 require_once __DIR__ . '/core/Roles.php';
