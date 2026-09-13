@@ -7,7 +7,7 @@ class Database {
     private $host = '127.0.0.1';
     private $user = 'if0_42216592';
     private $pass = 'IfK0M0n94NKpHQq';
-    private $name = 'if0_42216592_jinhwa';
+    private $name = 'if0_42216592_jinhwa_corporation';
 
     private function __construct() {
         $this->connection = new mysqli($this->host, $this->user, $this->pass, $this->name);
