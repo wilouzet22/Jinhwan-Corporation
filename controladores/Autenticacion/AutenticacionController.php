@@ -1,6 +1,8 @@
 <?php
 
 include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Grupo.php';
+include_once __DIR__ . '/../../modelos/Usuario.php';
 
 class AutenticacionController extends Controller {
 
@@ -47,16 +49,32 @@ class AutenticacionController extends Controller {
             $email = strtolower(trim($_POST['email'] ?? ''));
             $clave = $_POST['password'] ?? '';
 
+            if (empty($email) || empty($clave)) {
+                $this->redirect('/login?error=empty');
+                return;
+            }
+
             $db = Database::getInstance()->getConnection();
 
-            $sql = "SELECT p.id_persona as id, p.nombre, p.apellido, c.correo, c.clave, c.rol as rol_id,
-                    p.activo, p.foto_perfil, c.permisos_extra
-                    FROM credenciales c
-                    JOIN personas p ON c.id_persona = p.id_persona
-                    WHERE c.correo = ? LIMIT 1";
+            $sql = "
+            SELECT id_administrador as id, nombre, apellido, correo, clave, 'Administracion' as rol_id,
+                   activo, foto_perfil, permisos_extra
+            FROM administrador
+            WHERE correo = ?
+            UNION ALL
+            SELECT id_maestro as id, nombre, apellido, correo, clave, 'Maestros' as rol_id,
+                   activo, foto_perfil, permisos_extra
+            FROM maestro
+            WHERE correo = ?
+            UNION ALL
+            SELECT id_estudiante as id, nombre, apellido, correo, clave, 'Deportistas' as rol_id,
+                   activo, foto_perfil, NULL as permisos_extra
+            FROM estudiante
+            WHERE correo = ?
+            LIMIT 1";
 
             $stmt = $db->prepare($sql);
-            $stmt->bind_param("s", $email);
+            $stmt->bind_param("sss", $email, $email, $email);
             $stmt->execute();
             $resultado = $stmt->get_result();
 
@@ -67,14 +85,14 @@ class AutenticacionController extends Controller {
 
                     if ((int)$registro['activo'] === 0) {
                         $this->redirect('/login?error=pending');
+                        return;
                     }
 
+                    // Actualizar contraseña a hash seguro si era texto plano
                     if (!password_verify($clave, $registro['clave'])) {
                         $nuevo_hash = password_hash($clave, PASSWORD_DEFAULT);
-                        $stmtUpdate = $db->prepare("UPDATE credenciales SET clave = ? WHERE id_persona = ?");
-                        $stmtUpdate->bind_param("si", $nuevo_hash, $registro['id']);
-                        $stmtUpdate->execute();
-                        $stmtUpdate->close();
+                        $usuarioModel = new Usuario();
+                        $usuarioModel->updatePassword((int)$registro['id'], $nuevo_hash, $registro['rol_id']);
                     }
 
                     $usuario_data = [
@@ -125,40 +143,40 @@ class AutenticacionController extends Controller {
             $email    = strtolower(trim($_POST['email'] ?? '')); 
             $password = $_POST['password'] ?? '';
 
+            if (empty($num_doc) || empty($email) || empty($password)) {
+                $this->redirect('/registro?error=empty');
+                return;
+            }
+
             $db = Database::getInstance()->getConnection();
 
-            $stmt = $db->prepare("SELECT id_persona, activo FROM personas WHERE num_doc = ? LIMIT 1");
+            // Verificar si el estudiante ya existe registrado por su documento
+            $stmt = $db->prepare("SELECT id_estudiante, correo, clave, activo FROM estudiante WHERE num_doc = ? LIMIT 1");
             $stmt->bind_param("s", $num_doc);
             $stmt->execute();
             $resultado = $stmt->get_result();
 
             if ($resultado && $resultado->num_rows > 0) {
-                $persona = $resultado->fetch_assoc();
-                $id_persona = $persona['id_persona'];
+                $estudiante = $resultado->fetch_assoc();
 
-                $stmtCheck = $db->prepare("SELECT id_credencial FROM credenciales WHERE id_persona = ? LIMIT 1");
-                $stmtCheck->bind_param("i", $id_persona);
-                $stmtCheck->execute();
-                $resCheck = $stmtCheck->get_result();
-
-                if ($resCheck && $resCheck->num_rows > 0) {
-                            
+                // Si ya tiene clave registrada
+                if (!empty($estudiante['clave'])) {
                     $this->redirect('/registro?error=already_registered');
                 } else {
+                    // Si existe en base pero no ha activado clave
                     $clave_hash = password_hash($password, PASSWORD_DEFAULT);
-                    $rol_defecto = Roles::ESTUDIANTE;
-                    $stmt_log = $db->prepare("INSERT INTO credenciales (id_persona, correo, clave, rol) VALUES (?, ?, ?, ?)");
-                    $stmt_log->bind_param("isss", $id_persona, $email, $clave_hash, $rol_defecto);
+                    $stmtUpdate = $db->prepare("UPDATE estudiante SET correo = ?, clave = ? WHERE id_estudiante = ?");
+                    $stmtUpdate->bind_param("ssi", $email, $clave_hash, $estudiante['id_estudiante']);
 
-                    if ($stmt_log->execute()) {
+                    if ($stmtUpdate->execute()) {
                         $this->redirect('/login?msg=sent');
                     } else {
                         $this->redirect('/registro?error=db_error');
                     }
-                    $stmt_log->close();
+                    $stmtUpdate->close();
                 }
-                $stmtCheck->close();
             } else {
+                // Nuevo practicante: guardar temporal y pedir datos complementarios
                 $_SESSION['temp_registro'] = [
                     'num_doc' => $num_doc,
                     'email'   => $email,
@@ -173,13 +191,17 @@ class AutenticacionController extends Controller {
     public function completarRegistroForm() {
         if (!isset($_SESSION['temp_registro'])) {
             $this->redirect('/registro');
+            return;
         }
 
-        $sedeModel = new Sede();
-        $sedes = $sedeModel->getAll();
+        $sedeModel  = new Sede();
+        $sedes      = $sedeModel->getAll();
+        $grupoModel = new Grupo();
+        $grupos     = $grupoModel->getAll();
 
         $this->view('autenticacion/completar_registro', [
-            'sedes' => $sedes
+            'sedes'  => $sedes,
+            'grupos' => $grupos
         ]);
     }
 
@@ -189,45 +211,42 @@ class AutenticacionController extends Controller {
             
             $nombre = trim($_POST['nombre'] ?? '');
             $apellido = trim($_POST['apellido'] ?? '');
-            $fecha_nacimiento = $_POST['fecha_nacimiento'] ?? null;
+            $fecha_nacimiento = !empty($_POST['fecha_nacimiento']) ? $_POST['fecha_nacimiento'] : null;
             $telefono = trim($_POST['telefono'] ?? '');
             $sede_id = !empty($_POST['sede_id']) ? (int)$_POST['sede_id'] : null;
+            $id_grupo = !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : null;
             
             $db = Database::getInstance()->getConnection();
-            $db->begin_transaction();
 
-            try {
-                // 1. Insertar en personas
-                $sql = "INSERT INTO personas (nombre, apellido, num_doc, tipo_documento, telefono, id_sede, activo) VALUES (?, ?, ?, 'TI', ?, ?, 0)";
-                $stmt = $db->prepare($sql);
-                $stmt->bind_param("ssssi", $nombre, $apellido, $temp['num_doc'], $telefono, $sede_id);
-                $stmt->execute();
-                $id_persona = $stmt->insert_id;
-                $stmt->close();
+            // Si no se eligió grupo explícito pero sí sede, elegir primer grupo de esa sede
+            if (!$id_grupo && $sede_id) {
+                $checkG = $db->query("SELECT id_grupo FROM grupos WHERE id_sede = $sede_id LIMIT 1");
+                if ($checkG && $rG = $checkG->fetch_assoc()) {
+                    $id_grupo = (int)$rG['id_grupo'];
+                }
+            }
+            if (!$id_grupo) $id_grupo = 1; // Grupo A por defecto
 
-                // 2. Insertar en perfil_deportistas
-                $sqlDep = "INSERT INTO perfil_deportistas (id_persona, id_grado, id_categoria, fecha_n) VALUES (?, 1, 1, ?)";
-                $stmtDep = $db->prepare($sqlDep);
-                $stmtDep->bind_param("is", $id_persona, $fecha_nacimiento);
-                $stmtDep->execute();
-                $stmtDep->close();
+            // Maestro del grupo
+            $id_maestro = null;
+            $checkM = $db->query("SELECT id_maestro FROM grupos WHERE id_grupo = $id_grupo LIMIT 1");
+            if ($checkM && $rM = $checkM->fetch_assoc()) {
+                $id_maestro = !empty($rM['id_maestro']) ? (int)$rM['id_maestro'] : null;
+            }
 
-                // 3. Insertar en credenciales
-                $clave_hash = password_hash($temp['password'], PASSWORD_DEFAULT);
-                $rol_defecto = Roles::ESTUDIANTE;
-                $stmt_log = $db->prepare("INSERT INTO credenciales (id_persona, correo, clave, rol) VALUES (?, ?, ?, ?)");
-                $stmt_log->bind_param("isss", $id_persona, $temp['email'], $clave_hash, $rol_defecto);
-                $stmt_log->execute();
-                $stmt_log->close();
+            $clave_hash = password_hash($temp['password'], PASSWORD_DEFAULT);
+            $tipo_doc = 'TI';
+            $activo = 0; // Pendiente de aprobación por la administración
 
-                $db->commit();
+            $stmt = $db->prepare("INSERT INTO estudiante (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo) VALUES (1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("iisssssssssi", $id_grupo, $id_maestro, $nombre, $apellido, $tipo_doc, $temp['num_doc'], $telefono, $fecha_nacimiento, $temp['email'], $clave_hash, $activo);
 
+            if ($stmt->execute()) {
                 unset($_SESSION['temp_registro']);
-
+                $stmt->close();
                 $this->redirect('/login?msg=sent');
-
-            } catch (\Exception $e) {
-                $db->rollback();
+            } else {
+                $stmt->close();
                 $this->redirect('/registro?error=db_error');
             }
         }

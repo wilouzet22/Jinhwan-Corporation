@@ -14,45 +14,49 @@ class AdminDashboardController extends Controller {
 
         $stats = [];
 
-        $res = $db->query("SELECT COUNT(*) as total FROM personas");
+        // Total miembros (alumnos + maestros)
+        $res = $db->query("SELECT (SELECT COUNT(*) FROM estudiante) + (SELECT COUNT(*) FROM maestro) as total");
         $stats['total_miembros'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        $res = $db->query("SELECT COUNT(*) as total FROM personas WHERE activo = 1");
+        // Miembros activos
+        $res = $db->query("SELECT (SELECT COUNT(*) FROM estudiante WHERE activo = 1) + (SELECT COUNT(*) FROM maestro WHERE activo = 1) as total");
         $stats['activos'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        $res = $db->query("SELECT COUNT(*) as total FROM personas WHERE activo = 0");
+        // Alumnos pendientes de aprobación
+        $res = $db->query("SELECT COUNT(*) as total FROM estudiante WHERE activo = 0");
         $stats['pendientes'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        $res = $db->query("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE estado = 'pendiente'");
+        // Certificados emitidos
+        $res = $db->query("SELECT COUNT(*) as total FROM certificados_ascenso");
         $stats['pendientes_ascenso'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
+        // Total sedes
         $res = $db->query("SELECT COUNT(*) as total FROM sedes");
         $stats['total_sedes'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
         // Distribución de grados de deportistas activos
-        $sqlGrados = "SELECT g.nombre, COUNT(pd.id_persona) as cantidad
+        $sqlGrados = "SELECT g.nombre, COUNT(e.id_estudiante) as cantidad
                       FROM grados g
-                      LEFT JOIN perfil_deportistas pd ON g.id_grado = pd.id_grado
-                      LEFT JOIN personas p ON pd.id_persona = p.id_persona AND p.activo = 1
+                      LEFT JOIN estudiante e ON g.id_grado = e.id_grado AND e.activo = 1
                       GROUP BY g.id_grado, g.nombre
                       ORDER BY g.id_grado ASC";
         $resGrados = $db->query($sqlGrados);
         $distribucion_grados = $resGrados ? $resGrados->fetch_all(MYSQLI_ASSOC) : [];
 
-        // Distribución por sedes
-        $sqlSedes = "SELECT s.nombre, COUNT(p.id_persona) as cantidad
+        // Distribución por sedes (a través de grupos)
+        $sqlSedes = "SELECT s.nombre, COUNT(e.id_estudiante) as cantidad
                      FROM sedes s
-                     LEFT JOIN personas p ON s.id_sede = p.id_sede AND p.activo = 1
+                     LEFT JOIN grupos gr ON s.id_sede = gr.id_sede
+                     LEFT JOIN estudiante e ON gr.id_grupo = e.id_grupo AND e.activo = 1
                      GROUP BY s.id_sede, s.nombre
                      ORDER BY s.id_sede ASC";
         $resSedes = $db->query($sqlSedes);
         $distribucion_sedes = $resSedes ? $resSedes->fetch_all(MYSQLI_ASSOC) : [];
 
         // Últimos miembros registrados
-        $sqlUltimos = "SELECT p.nombre, p.apellido, pd.fecha_n as fecha, p.activo
-                       FROM personas p
-                       LEFT JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
-                       ORDER BY p.id_persona DESC LIMIT 5";
+        $sqlUltimos = "SELECT e.nombre, e.apellido, e.created_at as fecha, e.activo
+                       FROM estudiante e
+                       ORDER BY e.id_estudiante DESC LIMIT 5";
         $resUltimos = $db->query($sqlUltimos);
         $ultimos_miembros = $resUltimos ? $resUltimos->fetch_all(MYSQLI_ASSOC) : [];
 

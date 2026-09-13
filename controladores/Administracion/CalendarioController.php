@@ -43,8 +43,12 @@ class AdminCalendarioController extends Controller {
                 'title'       => $_POST['titulo'],
                 'description' => $_POST['descripcion'] ?? '',
                 'start'       => $_POST['fecha'],
-                'end'         => null,
-                'id_persona'  => $_SESSION['id']
+                'end'         => !empty($_POST['fecha_fin']) ? $_POST['fecha_fin'] : null,
+                'id_maestro'  => !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null,
+                'id_sede'     => !empty($_POST['id_sede']) ? (int)$_POST['id_sede'] : null,
+                'tipo'        => $_POST['tipo'] ?? 'entrenamiento',
+                'color'       => $_POST['color'] ?? '#3b82f6',
+                'todo_dia'    => isset($_POST['todo_dia']) ? 1 : 0
             ];
 
             $this->eventoModel->create($data);
@@ -72,7 +76,10 @@ class AdminCalendarioController extends Controller {
                 'title'       => $_POST['titulo'],
                 'description' => $_POST['descripcion'] ?? '',
                 'start'       => $_POST['fecha'],
-                'end'         => null
+                'end'         => !empty($_POST['fecha_fin']) ? $_POST['fecha_fin'] : null,
+                'id_sede'     => !empty($_POST['id_sede']) ? (int)$_POST['id_sede'] : null,
+                'tipo'        => $_POST['tipo'] ?? 'entrenamiento',
+                'color'       => $_POST['color'] ?? '#3b82f6'
             ];
 
             $this->eventoModel->update($id, $data);

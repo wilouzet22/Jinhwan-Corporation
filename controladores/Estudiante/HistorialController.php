@@ -10,25 +10,26 @@ class EstudianteHistorialController extends Controller {
 
     public function index() {
         $db = Database::getInstance()->getConnection();
-        $id_persona = (int)$_SESSION['id'];
+        $id_estudiante = (int)$_SESSION['id'];
 
-        $sql = "SELECT s.id_solicitud as id, s.observaciones, s.estado, s.fecha_solicitud, s.fecha_resolucion,
-                       g_act.nombre as grado_actual, g_sol.nombre as grado_solicitado,
+        $sql = "SELECT c.id_certificado as id, c.observaciones, 'aprobado' as estado,
+                       c.creado_en as fecha_solicitud, c.fecha_examen as fecha_resolucion,
+                       c.grado_anterior as grado_actual, c.grado_nuevo as grado_solicitado,
                        m.nombre as maestro_nombre, m.apellido as maestro_apellido,
                        c.id_certificado, c.folio, c.fecha_examen, c.grado_anterior, c.grado_nuevo
-                FROM solicitudes_ascenso s
-                JOIN grados g_act ON s.id_grado_actual = g_act.id_grado
-                JOIN grados g_sol ON s.id_grado_solicitado = g_sol.id_grado
-                LEFT JOIN personas m ON s.id_persona_maestro = m.id_persona
-                LEFT JOIN certificados_ascenso c ON c.id_solicitud = s.id_solicitud
-                WHERE s.id_persona_estudiante = ?
-                ORDER BY s.id_solicitud DESC";
+                FROM certificados_ascenso c
+                LEFT JOIN maestro m ON c.id_maestro = m.id_maestro
+                WHERE c.id_estudiante = ?
+                ORDER BY c.creado_en DESC";
 
         $stmt = $db->prepare($sql);
-        $stmt->bind_param("i", $id_persona);
-        $stmt->execute();
-        $ascensos = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
+        $ascensos = [];
+        if ($stmt) {
+            $stmt->bind_param("i", $id_estudiante);
+            $stmt->execute();
+            $ascensos = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+        }
 
         $this->view('estudiante/historial', [
             'ascensos'     => $ascensos,
@@ -41,15 +42,15 @@ class EstudianteHistorialController extends Controller {
     public function certificado() {
         Security::verifySession();
 
-        $id_solicitud = intval($_GET['id'] ?? 0);
-        if ($id_solicitud <= 0) {
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
             http_response_code(400);
             echo '<p class="text-center text-rose-500 py-8">Solicitud inválida.</p>';
             return;
         }
 
         $certModel = new Certificado();
-        $cert = $certModel->getBySolicitud($id_solicitud);
+        $cert = $certModel->getById($id);
 
         if (!$cert) {
             http_response_code(404);
@@ -58,7 +59,7 @@ class EstudianteHistorialController extends Controller {
         }
 
         // Sólo puede ver su propio certificado
-        if ((int)$cert['id_persona'] !== (int)$_SESSION['id']) {
+        if ((int)$cert['id_estudiante'] !== (int)$_SESSION['id']) {
             http_response_code(403);
             echo '<p class="text-center text-rose-500 py-8">Acceso denegado.</p>';
             return;

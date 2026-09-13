@@ -4,10 +4,10 @@ class Database {
     private static $instance = null;
     private $connection;
 
-    private $host = 'localhost';
-    private $user = 'root';
-    private $pass = '';
-    private $name = 'jinhwa_corporation';
+    private $host = 'sql113.infinityfree.com';
+    private $user = 'if0_42216592';
+    private $pass = 'IfK0M0n94NKpHQq';
+    private $name = 'if0_42216592_jinhwa';
 
     private function __construct() {
         $this->connection = new mysqli($this->host, $this->user, $this->pass, $this->name);

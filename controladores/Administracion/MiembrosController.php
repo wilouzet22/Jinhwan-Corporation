@@ -2,6 +2,7 @@
 
 include_once __DIR__ . '/../../modelos/Usuario.php';
 include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Grupo.php';
 include_once __DIR__ . '/../../modelos/Nivel.php';
 include_once __DIR__ . '/../../modelos/Categoria.php';
 include_once __DIR__ . '/../../modelos/MultimediaGaleria.php';
@@ -10,6 +11,7 @@ class AdminMiembrosController extends Controller {
 
     private $usuarioModel;
     private $sedeModel;
+    private $grupoModel;
     private $nivelModel;
     private $categoriaModel;
 
@@ -19,6 +21,7 @@ class AdminMiembrosController extends Controller {
 
         $this->usuarioModel   = new Usuario();
         $this->sedeModel      = new Sede();
+        $this->grupoModel     = new Grupo();
         $this->nivelModel     = new Nivel();
         $this->categoriaModel = new Categoria();
     }
@@ -26,12 +29,14 @@ class AdminMiembrosController extends Controller {
     public function index() {
         $miembros   = $this->usuarioModel->getAllWithDetails(); 
         $sedes      = $this->sedeModel->getAll();              
+        $grupos     = $this->grupoModel->getAll();
         $niveles    = $this->nivelModel->getAll();             
         $categorias = $this->categoriaModel->getAll();          
  
         $this->view('administracion/miembros', [
             'miembros'       => $miembros,
             'sedes_list'     => $sedes,
+            'grupos_list'    => $grupos,
             'niveles_list'   => $niveles,
             'categorias_list'=> $categorias,
             'page_title'     => 'Administración de Miembros',
@@ -74,7 +79,8 @@ class AdminMiembrosController extends Controller {
                 'telefono'          => $_POST['telefono'],
                 'correo'            => $_POST['correo'],
                 'rol_id'            => $_POST['rol_id'] ?? Roles::ESTUDIANTE,
-                'sede_id'           => $_POST['sede_id'],
+                'sede_id'           => $_POST['sede_id'] ?? null,
+                'id_grupo'          => !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : null,
                 'categoria_id'      => $_POST['categoria_id'] ?? 1,
                 'peso'              => $_POST['peso'] ?? null,
                 'division'          => $_POST['division'] ?? null,
@@ -165,7 +171,8 @@ class AdminMiembrosController extends Controller {
                 'telefono'          => $_POST['telefono'],
                 'correo'            => $_POST['correo'],
                 'rol_id'            => $_POST['rol_id'],
-                'sede_id'           => $_POST['sede_id'],
+                'sede_id'           => $_POST['sede_id'] ?? null,
+                'id_grupo'          => !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : null,
                 'categoria_id'      => $_POST['categoria_id'] ?? 1,
                 'peso'              => $_POST['peso'] ?? null,
                 'division'          => $_POST['division'] ?? null,

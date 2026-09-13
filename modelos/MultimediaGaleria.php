@@ -2,55 +2,64 @@
 
 class MultimediaGaleria extends Model {
 
-    public function getByMiembroId($id_persona) {
-        $sql = "SELECT * FROM galeria_multimedia WHERE id_persona = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("i", $id_persona);
+    public function getByMaestroId($id_maestro) {
+        $stmt = $this->db->prepare("SELECT * FROM galeria_multimedia WHERE id_maestro = ? AND tipo = 'instagram' LIMIT 1");
+        $stmt->bind_param("i", $id_maestro);
         $stmt->execute();
         $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
+        $row = $result ? $result->fetch_assoc() : null;
         $stmt->close();
         return $row;
     }
 
-    public function upsert($id_persona, $url) {
-        $existente = $this->getByMiembroId($id_persona);
+    /** Compatibilidad con llamadas antiguas que usaban getByMiembroId */
+    public function getByMiembroId($id_persona) {
+        return $this->getByMaestroId($id_persona);
+    }
+
+    public function upsertInstagram($id_maestro, $url) {
+        $existente = $this->getByMaestroId($id_maestro);
         
         if ($existente) {
-            $sql = "UPDATE galeria_multimedia SET url = ? WHERE id_persona = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("si", $url, $id_persona);
+            $stmt = $this->db->prepare("UPDATE galeria_multimedia SET url = ? WHERE id_multimedia = ?");
+            $stmt->bind_param("si", $url, $existente['id_multimedia']);
             $res = $stmt->execute();
             $stmt->close();
             return $res;
         } else {
-            $sql = "INSERT INTO galeria_multimedia (id_persona, url) VALUES (?, ?)";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("is", $id_persona, $url);
+            $titulo = "Instagram Perfil";
+            $tipo = "instagram";
+            $stmt = $this->db->prepare("INSERT INTO galeria_multimedia (id_maestro, titulo, url, tipo) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("isss", $id_maestro, $titulo, $url, $tipo);
             $res = $stmt->execute();
             $stmt->close();
             return $res;
         }
     }
 
+    public function upsert($id_persona, $url) {
+        return $this->upsertInstagram($id_persona, $url);
+    }
+
     public function getAllGeneral() {
-        $sql = "SELECT * FROM galeria_multimedia WHERE id_persona IS NULL ORDER BY id_multimedia DESC";
+        $sql = "SELECT gm.*, CONCAT(m.nombre, ' ', m.apellido) as maestro_nombre
+                FROM galeria_multimedia gm
+                LEFT JOIN maestro m ON gm.id_maestro = m.id_maestro
+                ORDER BY gm.id_multimedia DESC";
         $stmt = $this->db->query($sql);
         return $stmt ? $stmt->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    public function insertGeneral($url_instagram, $descripcion) {
-        $sql = "INSERT INTO galeria_multimedia (url, descripcion) VALUES (?, ?)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bind_param("ss", $url_instagram, $descripcion);
+    public function insertGeneral($url, $descripcion, $titulo = 'Publicación en Galería', $tipo = 'instagram', $id_maestro = null) {
+        $stmt = $this->db->prepare("INSERT INTO galeria_multimedia (id_maestro, titulo, descripcion, tipo, url) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("issss", $id_maestro, $titulo, $descripcion, $tipo, $url);
         $res = $stmt->execute();
         $stmt->close();
         return $res;
     }
 
     public function delete($id_multimedia) {
-        $sql = "DELETE FROM galeria_multimedia WHERE id_multimedia = ?";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->db->prepare("DELETE FROM galeria_multimedia WHERE id_multimedia = ?");
         $stmt->bind_param("i", $id_multimedia);
         $res = $stmt->execute();
         $stmt->close();

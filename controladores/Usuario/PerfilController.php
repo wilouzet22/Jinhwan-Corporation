@@ -127,12 +127,7 @@ class UsuarioPerfilController extends Controller {
 
             if (!empty($clave_nueva) && $clave_nueva === $clave_confirmar) {
                 $clave_hash = password_hash($clave_nueva, PASSWORD_DEFAULT);
-                $stmt = $db->prepare("UPDATE credenciales SET clave = ? WHERE id_persona = ?");
-                if ($stmt) {
-                    $stmt->bind_param("si", $clave_hash, $id_miembro);
-                    $stmt->execute();
-                    $stmt->close();
-                }
+                $usuarioModel->updatePassword((int)$id_miembro, $clave_hash, $usuarioActual['rol_id'] ?? null);
             }
 
             $this->redirect('/usuario/perfil?msg=updated');

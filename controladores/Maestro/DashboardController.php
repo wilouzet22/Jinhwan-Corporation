@@ -15,32 +15,25 @@ class MaestroDashboardController extends Controller {
 
         $stats = [];
 
-        // Total alumnos activos (perfil_deportistas con persona activa)
-        $res = $db->query("SELECT COUNT(*) as total 
-                           FROM perfil_deportistas pd
-                           JOIN personas p ON pd.id_persona = p.id_persona
-                           WHERE p.activo = 1");
+        // Total alumnos activos
+        $res = $db->query("SELECT COUNT(*) as total FROM estudiante WHERE activo = 1");
         $stats['total_alumnos'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Solicitudes pendientes de este maestro
-        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_persona_maestro = ? AND estado = 'pendiente'");
-        $stmt->bind_param("i", $id_maestro);
-        $stmt->execute();
-        $stats['solicitudes_pendientes'] = (int)$stmt->get_result()->fetch_assoc()['total'];
-        $stmt->close();
-
-        // Solicitudes aprobadas de este maestro
-        $stmt = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_ascenso WHERE id_persona_maestro = ? AND estado = 'aprobado'");
+        // Certificados emitidos por este maestro
+        $stmt = $db->prepare("SELECT COUNT(*) as total FROM certificados_ascenso WHERE id_maestro = ?");
         $stmt->bind_param("i", $id_maestro);
         $stmt->execute();
         $stats['solicitudes_aprobadas'] = (int)$stmt->get_result()->fetch_assoc()['total'];
         $stmt->close();
 
+        // Solicitudes pendientes de activación en el sistema
+        $resPend = $db->query("SELECT COUNT(*) as total FROM estudiante WHERE activo = 0");
+        $stats['solicitudes_pendientes'] = $resPend ? (int)$resPend->fetch_assoc()['total'] : 0;
+
         // Distribución de grados de alumnos
-        $sqlGrados = "SELECT g.nombre, COUNT(pd.id_persona) as cantidad
+        $sqlGrados = "SELECT g.nombre, COUNT(e.id_estudiante) as cantidad
                       FROM grados g
-                      LEFT JOIN perfil_deportistas pd ON g.id_grado = pd.id_grado
-                      LEFT JOIN personas p ON pd.id_persona = p.id_persona AND p.activo = 1
+                      LEFT JOIN estudiante e ON g.id_grado = e.id_grado AND e.activo = 1
                       GROUP BY g.id_grado, g.nombre
                       ORDER BY g.id_grado ASC";
                       
@@ -48,10 +41,9 @@ class MaestroDashboardController extends Controller {
         $distribucion_grados = $resGrados ? $resGrados->fetch_all(MYSQLI_ASSOC) : [];
 
         // Últimos 5 alumnos registrados
-        $sqlUltimos = "SELECT p.nombre, p.apellido, pd.fecha_n as fecha, p.activo
-                       FROM personas p
-                       JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
-                       ORDER BY p.id_persona DESC LIMIT 5";
+        $sqlUltimos = "SELECT e.nombre, e.apellido, e.created_at as fecha, e.activo
+                       FROM estudiante e
+                       ORDER BY e.id_estudiante DESC LIMIT 5";
         $resUltimos = $db->query($sqlUltimos);
         $ultimos_alumnos = $resUltimos ? $resUltimos->fetch_all(MYSQLI_ASSOC) : [];
 

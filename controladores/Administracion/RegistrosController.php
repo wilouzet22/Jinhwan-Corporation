@@ -12,30 +12,27 @@ class AdminRegistrosController extends Controller {
     public function index() {
         $db = Database::getInstance()->getConnection();
 
-        $sql = "SELECT p.id_persona as id, p.nombre, p.apellido, p.num_doc, p.telefono, c.correo, pd.fecha_n
-                FROM personas p
-                JOIN credenciales c ON p.id_persona = c.id_persona
-                LEFT JOIN perfil_deportistas pd ON p.id_persona = pd.id_persona
-                WHERE p.activo = 0
-                ORDER BY p.id_persona DESC";
+        // Practicantes pendientes de activación
+        $sql = "SELECT e.id_estudiante as id, e.nombre, e.apellido, e.num_doc, e.telefono, e.correo, e.fecha_nacimiento
+                FROM estudiante e
+                WHERE e.activo = 0
+                ORDER BY e.id_estudiante DESC";
 
         $result = $db->query($sql);
         $solicitudes = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
-        // Historial completo de movimientos de ascensos (todos los estados)
-        $sqlMovimientos = "SELECT s.id_solicitud as id, s.estado, s.fecha_solicitud, s.fecha_resolucion, s.observaciones,
-                                p.nombre as nombre_alumno, p.apellido as apellido_alumno,
-                                g_act.nombre as grado_actual, g_sol.nombre as grado_solicitado,
-                                maest.nombre as nombre_maestro, maest.apellido as apellido_maestro,
-                                c.folio, c.id_certificado
-                         FROM solicitudes_ascenso s
-                         JOIN personas p ON s.id_persona_estudiante = p.id_persona
-                         JOIN grados g_act ON s.id_grado_actual = g_act.id_grado
-                         JOIN grados g_sol ON s.id_grado_solicitado = g_sol.id_grado
-                         JOIN personas maest ON s.id_persona_maestro = maest.id_persona
-                         LEFT JOIN certificados_ascenso c ON c.id_solicitud = s.id_solicitud
-                         ORDER BY s.fecha_solicitud DESC
-                         LIMIT 50";
+        // Historial de certificados de ascensos emitidos
+        $sqlMovimientos = "SELECT c.id_certificado as id, 'aprobado' as estado, c.creado_en as fecha_solicitud, c.fecha_examen as fecha_resolucion,
+                                  c.observaciones,
+                                  e.nombre as nombre_alumno, e.apellido as apellido_alumno,
+                                  c.grado_anterior as grado_actual, c.grado_nuevo as grado_solicitado,
+                                  m.nombre as nombre_maestro, m.apellido as apellido_maestro,
+                                  c.folio, c.id_certificado
+                           FROM certificados_ascenso c
+                           JOIN estudiante e ON c.id_estudiante = e.id_estudiante
+                           LEFT JOIN maestro m ON c.id_maestro = m.id_maestro
+                           ORDER BY c.creado_en DESC
+                           LIMIT 50";
         $resultMovimientos = $db->query($sqlMovimientos);
         $movimientos_ascenso = $resultMovimientos ? $resultMovimientos->fetch_all(MYSQLI_ASSOC) : [];
 
@@ -52,7 +49,7 @@ class AdminRegistrosController extends Controller {
             $id = intval($_POST['id']);
             $db = Database::getInstance()->getConnection();
 
-            $stmt = $db->prepare("UPDATE personas SET activo = 1 WHERE id_persona = ?");
+            $stmt = $db->prepare("UPDATE estudiante SET activo = 1 WHERE id_estudiante = ?");
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute()) {
@@ -69,7 +66,7 @@ class AdminRegistrosController extends Controller {
             $id = intval($_POST['id']);
             $db = Database::getInstance()->getConnection();
 
-            $stmt = $db->prepare("DELETE FROM personas WHERE id_persona = ?");
+            $stmt = $db->prepare("DELETE FROM estudiante WHERE id_estudiante = ?");
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute()) {
@@ -83,77 +80,54 @@ class AdminRegistrosController extends Controller {
 
     public function aprobarAscenso() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_solicitud        = intval($_POST['id']);
-            $id_miembro          = intval($_POST['id_miembro']);
-            $id_grado_solicitado = intval($_POST['id_grado_solicitado']);
+            $id_miembro          = intval($_POST['id_miembro'] ?? 0);
+            $id_grado_solicitado = intval($_POST['id_grado_solicitado'] ?? 0);
+            $observaciones_cert  = trim($_POST['observaciones_cert'] ?? '');
+            $id_maestro          = intval($_POST['id_maestro'] ?? 150);
 
             $db = Database::getInstance()->getConnection();
-            $db->begin_transaction();
 
-            try {
-                // 1. Marcar solicitud como aprobada
-                $stmt1 = $db->prepare("UPDATE solicitudes_ascenso SET estado = 'aprobado', fecha_resolucion = CURRENT_TIMESTAMP WHERE id_solicitud = ?");
-                $stmt1->bind_param("i", $id_solicitud);
-                $stmt1->execute();
-                $stmt1->close();
+            // Obtener datos actuales del estudiante
+            $stmtEst = $db->prepare("SELECT e.id_grado, g.nombre as grado_actual, e.id_maestro FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
+            $stmtEst->bind_param("i", $id_miembro);
+            $stmtEst->execute();
+            $estData = $stmtEst->get_result()->fetch_assoc();
+            $stmtEst->close();
 
-                // 2. Actualizar grado del estudiante
-                $stmt2 = $db->prepare("UPDATE perfil_deportistas SET id_grado = ? WHERE id_persona = ?");
-                $stmt2->bind_param("ii", $id_grado_solicitado, $id_miembro);
-                $stmt2->execute();
-                $stmt2->close();
+            // Grado nuevo
+            $stmtG = $db->prepare("SELECT nombre FROM grados WHERE id_grado = ? LIMIT 1");
+            $stmtG->bind_param("i", $id_grado_solicitado);
+            $stmtG->execute();
+            $gRow = $stmtG->get_result()->fetch_assoc();
+            $stmtG->close();
 
-                // 3. Obtener datos de la solicitud para el certificado
-                $stmtInfo = $db->prepare(
-                    "SELECT s.id_persona_maestro, g_act.nombre AS grado_anterior, g_sol.nombre AS grado_nuevo"
-                  . " FROM solicitudes_ascenso s"
-                  . " JOIN grados g_act ON s.id_grado_actual = g_act.id_grado"
-                  . " JOIN grados g_sol ON s.id_grado_solicitado = g_sol.id_grado"
-                  . " WHERE s.id_solicitud = ? LIMIT 1"
-                );
-                $stmtInfo->bind_param("i", $id_solicitud);
-                $stmtInfo->execute();
-                $infoRow = $stmtInfo->get_result()->fetch_assoc();
-                $stmtInfo->close();
+            if ($estData && $gRow) {
+                $maestroFinal = !empty($estData['id_maestro']) ? (int)$estData['id_maestro'] : $id_maestro;
+                $certModel = new Certificado();
+                $ok = $certModel->create([
+                    'id_estudiante'  => $id_miembro,
+                    'id_maestro'     => $maestroFinal,
+                    'grado_anterior' => $estData['grado_actual'] ?? 'Blanco',
+                    'grado_nuevo'    => $gRow['nombre'],
+                    'id_grado_nuevo' => $id_grado_solicitado,
+                    'fecha_examen'   => date('Y-m-d'),
+                    'observaciones'  => $observaciones_cert,
+                    'folio'          => Certificado::generarFolio()
+                ]);
 
-                // 4. Crear certificado de ascenso
-                if ($infoRow) {
-                    $certModel = new Certificado();
-                    $certModel->create([
-                        'id_solicitud'  => $id_solicitud,
-                        'id_persona'    => $id_miembro,
-                        'id_maestro'    => $infoRow['id_persona_maestro'],
-                        'grado_anterior'=> $infoRow['grado_anterior'],
-                        'grado_nuevo'   => $infoRow['grado_nuevo'],
-                        'fecha_examen'  => date('Y-m-d'),
-                        'observaciones' => $_POST['observaciones_cert'] ?? '',
-                        'folio'         => Certificado::generarFolio()
-                    ]);
+                if ($ok) {
+                    $this->redirect('/admin/registros?msg=promo_approved');
+                    return;
                 }
-
-                $db->commit();
-                $this->redirect('/admin/registros?msg=promo_approved');
-            } catch (Exception $e) {
-                $db->rollback();
-                $this->redirect('/admin/registros?error=1');
             }
+
+            $this->redirect('/admin/registros?error=1');
         }
     }
 
     public function rechazarAscenso() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id_solicitud = intval($_POST['id']);
-            $db = Database::getInstance()->getConnection();
-
-            $stmt = $db->prepare("UPDATE solicitudes_ascenso SET estado = 'rechazado', fecha_resolucion = CURRENT_TIMESTAMP WHERE id_solicitud = ?");
-            $stmt->bind_param("i", $id_solicitud);
-
-            if ($stmt->execute()) {
-                $this->redirect('/admin/registros?msg=promo_rejected');
-            } else {
-                $this->redirect('/admin/registros?error=1');
-            }
-            $stmt->close();
+            $this->redirect('/admin/registros?msg=promo_rejected');
         }
     }
 
@@ -162,15 +136,15 @@ class AdminRegistrosController extends Controller {
         Security::verifySession();
         Security::verifyPermission('registros');
 
-        $id_solicitud = intval($_GET['id'] ?? 0);
-        if ($id_solicitud <= 0) {
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
             http_response_code(400);
             echo '<p class="text-center text-rose-500 py-8">Solicitud inválida.</p>';
             return;
         }
 
         $certModel = new Certificado();
-        $cert = $certModel->getBySolicitud($id_solicitud);
+        $cert = $certModel->getById($id);
 
         if (!$cert) {
             http_response_code(404);

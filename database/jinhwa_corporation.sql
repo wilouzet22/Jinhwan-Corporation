@@ -334,7 +334,7 @@ INSERT INTO `estudiante` (`id_estudiante`, `id_grado`, `id_categoria`, `id_grupo
 
 CREATE TABLE `eventos` (
   `id_evento` int NOT NULL,
-  `id_maestro` int NOT NULL,
+  `id_maestro` int DEFAULT NULL,
   `id_sede` int DEFAULT NULL,
   `titulo` varchar(150) NOT NULL,
   `descripcion` text,
@@ -610,7 +610,7 @@ ALTER TABLE `estudiante`
 -- Constraints for table `eventos`
 --
 ALTER TABLE `eventos`
-  ADD CONSTRAINT `fk_eventos_maestro` FOREIGN KEY (`id_maestro`) REFERENCES `maestro` (`id_maestro`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_eventos_maestro` FOREIGN KEY (`id_maestro`) REFERENCES `maestro` (`id_maestro`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_eventos_sede` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
