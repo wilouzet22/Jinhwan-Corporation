@@ -3,7 +3,7 @@ name: Deploy to InfinityFree
 on:
   push:
     branches:
-      - main  # Si tu rama principal se llama 'master', cámbialo aquí
+      - main
 
 jobs:
   web-deploy:
@@ -20,3 +20,16 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /htdocs/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/database/**
+            **/docs/**
+            **/scratch/**
+            **/src/**
+            **/storage/uploads/**
+            package.json
+            package-lock.json
+            tsconfig.json
+            vite.config.ts
