@@ -26,23 +26,14 @@ $plantilla_url = asset('img/visual/diploma_base.png');
         <div style="position:absolute; inset:0; background:rgba(255,255,255,0.02);"></div>
 
         <div style="position:relative; z-index:2;">
-            <div style="text-align:center; margin-top:8px;">
-                <div style="font-size:24px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:#111827; font-family:sans-serif;">Club de Taekwondo</div>
-                <div style="font-size:58px; line-height:1.1; font-style:italic; font-family:'Segoe Script','Brush Script MT',cursive; margin-top:10px; color:#111827;">Certifica que</div>
-            </div>
 
-            <div style="text-align:center; margin-top:20px; font-size:54px; line-height:1.1; font-family:'Segoe Print','Bradley Hand',cursive; color:#111827; font-weight:600; letter-spacing:0.5px; text-shadow:0 0 1px rgba(17,24,39,0.2);">
+            <!-- El nombre del alumno va sobre el área en blanco que deja la plantilla -->
+            <div style="text-align:center; margin-top:265px; font-size:48px; line-height:1.15; font-family:'Segoe Print','Bradley Hand',cursive; color:#111827; font-weight:600; letter-spacing:0.5px; text-shadow:0 0 1px rgba(17,24,39,0.2);">
                 <?= $nombre_alumno ?>
             </div>
 
-            <div style="text-align:center; margin-top:42px; font-size:26px; line-height:1.3; color:#111827; font-style:italic; font-family:Georgia, serif;">
-                aprobó el examen reglamentario para<br>
-                Ascenso de grado, según lo requerido por el<br>
-                Programa de esta institución, por lo cual se<br>
-                acredita como:
-            </div>
-
-            <div style="text-align:center; margin-top:30px; font-size:104px; line-height:0.9; letter-spacing:2px; font-family:'Segoe UI', sans-serif; font-weight:800; color:rgba(15,23,42,0.5); text-transform:uppercase;">
+            <!-- El grado nuevo se superpone sobre el placeholder "T1" de la imagen -->
+            <div style="text-align:center; margin-top:28px; font-size:96px; line-height:0.9; letter-spacing:2px; font-family:'Segoe UI', sans-serif; font-weight:800; color:rgba(15,23,42,0.55); text-transform:uppercase;">
                 <?= $grado_nuevo ?>
             </div>
 
