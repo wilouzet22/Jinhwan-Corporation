@@ -1,11 +1,13 @@
+Options -Indexes
 RewriteEngine On
+RewriteBase /
 
 # ── ELIMINAR BARRA FINAL ──────────────────────────────────────────
 # Si la URL termina en '/' pero NO es un directorio real del servidor,
 # se redirige permanentemente (301) a la misma URL sin la barra final.
 # Ejemplo: /sedes/ → /sedes
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/$ $1 [L,R=301]
+RewriteRule ^(.*)/$ /$1 [L,R=301]
 
 # ── FRONT CONTROLLER ─────────────────────────────────────────────
 # Si la URL solicitada NO corresponde a un directorio real (-d)
