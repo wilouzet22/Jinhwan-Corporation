@@ -1,64 +1,53 @@
 <?php
-echo "<h2>Diagnóstico del servidor</h2>";
-echo "<p><strong>PHP Version:</strong> " . phpversion() . "</p>";
-echo "<p><strong>Server:</strong> " . ($_SERVER['SERVER_SOFTWARE'] ?? 'N/A') . "</p>";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Verificar si mysqli está habilitado
-echo "<p><strong>mysqli disponible:</strong> ";
+echo "<h2>Test completo</h2>";
+echo "<b>PHP:</b> " . phpversion() . "<br>";
+
+// Test mysqli
+echo "<b>mysqli:</b> " . (extension_loaded('mysqli') ? '✅' : '❌') . "<br>";
+
+// Test conexión
 if (extension_loaded('mysqli')) {
-    echo "✅ Sí";
-} else {
-    echo "❌ NO - mysqli no está habilitado";
-}
-echo "</p>";
+    mysqli_report(MYSQLI_REPORT_OFF);
 
-// Verificar si PDO MySQL está disponible
-echo "<p><strong>PDO MySQL disponible:</strong> ";
-if (extension_loaded('pdo_mysql')) {
-    echo "✅ Sí";
-} else {
-    echo "❌ No";
-}
-echo "</p>";
-
-// Test conexión con @ para suprimir warnings
-$host = 'sql113.infinityfree.com';
-$user = 'if0_42216592';
-$pass = 'IfK0M0n94NKpHQq';
-$name = 'if0_42216592_jinhwa';
-
-echo "<h3>Test de conexión BD:</h3>";
-
-if (!extension_loaded('mysqli')) {
-    echo "<p style='color:red'>❌ No se puede conectar: mysqli no está cargado.</p>";
-} else {
-    mysqli_report(MYSQLI_REPORT_OFF); // No lanzar excepciones
-    $conn = @new mysqli($host, $user, $pass, $name);
-
-    if ($conn->connect_errno) {
-        echo "<p style='color:red'>❌ Error " . $conn->connect_errno . ": " . $conn->connect_error . "</p>";
-        echo "<p>Intentando con 'localhost'...</p>";
-
-        // Intentar con localhost
-        $conn2 = @new mysqli('localhost', $user, $pass, $name);
-        if ($conn2->connect_errno) {
-            echo "<p style='color:red'>❌ localhost también falló: " . $conn2->connect_error . "</p>";
-        } else {
-            echo "<p style='color:green'>✅ ¡Conectado con <strong>localhost</strong>! Usa ese host.</p>";
-            $conn2->close();
-        }
+    // Probar 127.0.0.1
+    $c = @new mysqli('127.0.0.1', 'if0_42216592', 'IfK0M0n94NKpHQq', 'if0_42216592_jinhwa');
+    if ($c->connect_errno) {
+        echo "<b style='color:red'>❌ 127.0.0.1 falla:</b> " . $c->connect_error . "<br>";
     } else {
-        echo "<p style='color:green'>✅ BD Conectada correctamente con <strong>$host</strong></p>";
-
-        // Verificar tablas
-        $tablas = ['administrador', 'maestro', 'estudiante', 'grupos', 'grados'];
-        foreach ($tablas as $tabla) {
-            $res = $conn->query("SHOW TABLES LIKE '$tabla'");
-            $existe = ($res && $res->num_rows > 0) ? "✅" : "❌ FALTA";
-            echo "<p>$existe Tabla <strong>$tabla</strong></p>";
+        echo "<b style='color:green'>✅ 127.0.0.1 funciona!</b><br>";
+        // Tablas
+        foreach (['administrador','maestro','estudiante','grupos','grados'] as $t) {
+            $r = $c->query("SHOW TABLES LIKE '$t'");
+            echo ($r && $r->num_rows > 0 ? "✅" : "❌") . " $t<br>";
         }
-        $conn->close();
+        $c->close();
+    }
+
+    // Probar sql113
+    $c2 = @new mysqli('sql113.infinityfree.com', 'if0_42216592', 'IfK0M0n94NKpHQq', 'if0_42216592_jinhwa');
+    if ($c2->connect_errno) {
+        echo "<b style='color:red'>❌ sql113 falla:</b> " . $c2->connect_error . "<br>";
+    } else {
+        echo "<b style='color:green'>✅ sql113 funciona!</b><br>";
+        $c2->close();
     }
 }
 
-echo "<hr><p style='color:orange'><strong>⚠️ Elimina este archivo cuando termines.</strong></p>";
+// Test include del proyecto
+echo "<hr><b>Test de includes:</b><br>";
+$archivos = [
+    'config/conexion.php',
+    'core/Roles.php',
+    'core/Security.php',
+    'core/Model.php',
+    'core/Controller.php',
+    'core/Router.php',
+];
+foreach ($archivos as $f) {
+    echo file_exists(__DIR__ . '/' . $f) ? "✅ $f<br>" : "❌ FALTA: $f<br>";
+}
+
+echo "<hr><p style='color:orange'><b>Elimina este archivo después.</b></p>";
