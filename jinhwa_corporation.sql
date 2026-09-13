@@ -1,68 +1,65 @@
 -- phpMyAdmin SQL Dump
--- Database: `jinhwa_corporation`
--- Estructura normalizada y optimizada con separación de personas, credenciales y perfiles especializados
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Sep 13, 2026 at 09:32 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-SET FOREIGN_KEY_CHECKS = 0;
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
--- --------------------------------------------------------
--- LIMPIEZA DE TABLAS Y VISTAS PREVIAS
--- --------------------------------------------------------
-DROP TABLE IF EXISTS `solicitudes_ascenso`;
-DROP TABLE IF EXISTS `galeria_multimedia`;
-DROP TABLE IF EXISTS `noticias`;
-DROP TABLE IF EXISTS `eventos`;
-DROP TABLE IF EXISTS `teorias`;
-DROP TABLE IF EXISTS `tipos_teoria`;
-DROP TABLE IF EXISTS `tipo_de_teoria`;
-DROP TABLE IF EXISTS `teoria`;
-DROP TABLE IF EXISTS `multimedia_galeria`;
-DROP TABLE IF EXISTS `perfil_deportistas`;
-DROP TABLE IF EXISTS `perfil_maestros`;
-DROP TABLE IF EXISTS `credenciales`;
-DROP TABLE IF EXISTS `userlog`;
-DROP TABLE IF EXISTS `miembros`;
-DROP TABLE IF EXISTS `personas`;
-DROP TABLE IF EXISTS `categorias`;
-DROP TABLE IF EXISTS `categoria`;
-DROP TABLE IF EXISTS `grados`;
-DROP TABLE IF EXISTS `sedes`;
+--
+-- Database: `jinhwa_corporation`
+--
 
 -- --------------------------------------------------------
 
--- --------------------------------------------------------
--- 1. Tabla: `sedes`
--- --------------------------------------------------------
-CREATE TABLE `sedes` (
-  `id_sede` int NOT NULL AUTO_INCREMENT,
+--
+-- Table structure for table `administrador`
+--
+
+CREATE TABLE `administrador` (
+  `id_administrador` int NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `direccion` varchar(255) DEFAULT NULL,
-  `telefono` varchar(50) DEFAULT NULL,
-  `horario` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id_sede`)
+  `apellido` varchar(100) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `clave` varchar(255) NOT NULL,
+  `permisos_extra` json DEFAULT NULL,
+  `activo` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `sedes` (`id_sede`, `nombre`, `direccion`, `telefono`, `horario`) VALUES
-(1, 'Sede San Cristóbal', 'Cl. 62 #131-80, Nazaret, San Cristóbal, Medellín, Antioquia', '3206641361', 'Lun - Vie: 4:00 PM - 8:00 PM'),
-(2, 'Sede Principal Santa Mónica Campo Alegre', 'Cl 38 #9255, Belencito, Medellín, La América, Medellín, Antioquia', '3206641361', 'Lun - Sáb: 3:00 PM - 9:00 PM'),
-(3, 'Sede Itagüí', 'Cra. 59 #70-349, Alicate, Itagüí, Antioquia', '3042243561', 'Mar - Sáb: 4:00 PM - 8:00 PM');
+--
+-- Dumping data for table `administrador`
+--
+
+INSERT INTO `administrador` (`id_administrador`, `nombre`, `apellido`, `correo`, `clave`, `permisos_extra`, `activo`, `created_at`) VALUES
+(1, 'Administrador', 'General', 'admin@admin.com', '$2y$10$45YUeh7Y/t9J99i86uA1Fud5ekOo1FMdYaVD1vZkGy5zN5GQCWP9a', '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05');
 
 -- --------------------------------------------------------
--- 2. Tabla: `categorias`
--- --------------------------------------------------------
+
+--
+-- Table structure for table `categorias`
+--
+
 CREATE TABLE `categorias` (
-  `id_categoria` int NOT NULL AUTO_INCREMENT,
+  `id_categoria` int NOT NULL,
   `nombre` varchar(50) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id_categoria`)
+  `descripcion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `categorias`
+--
 
 INSERT INTO `categorias` (`id_categoria`, `nombre`, `descripcion`) VALUES
 (1, 'Ninguno', 'Sin categoría asignada'),
@@ -76,13 +73,165 @@ INSERT INTO `categorias` (`id_categoria`, `nombre`, `descripcion`) VALUES
 (9, 'Poomsae', 'Modalidad de formas (técnica)');
 
 -- --------------------------------------------------------
--- 3. Tabla: `grados`
--- --------------------------------------------------------
-CREATE TABLE `grados` (
-  `id_grado` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_grado`)
+
+--
+-- Table structure for table `certificados_ascenso`
+--
+
+CREATE TABLE `certificados_ascenso` (
+  `id_certificado` int NOT NULL,
+  `id_estudiante` int NOT NULL,
+  `id_maestro` int NOT NULL,
+  `grado_anterior` varchar(80) NOT NULL,
+  `grado_nuevo` varchar(80) NOT NULL,
+  `fecha_examen` date NOT NULL,
+  `observaciones` text,
+  `folio` varchar(30) NOT NULL,
+  `creado_en` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `certificados_ascenso`
+--
+
+INSERT INTO `certificados_ascenso` (`id_certificado`, `id_estudiante`, `id_maestro`, `grado_anterior`, `grado_nuevo`, `fecha_examen`, `observaciones`, `folio`, `creado_en`) VALUES
+(1, 148, 150, 'Azul', 'Pinta Rojo', '2026-08-29', 'El practicante buen despeño tiene muy buana tecnica de pateo pero tiene que mejorar en las poomseas tiene un cardio muy bajo debe mejorar eso no sabe combatir peor lo intenta y tiene muy buen compañerismo.', 'JH-2026-0001', '2026-08-29 18:19:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `estudiante`
+--
+
+CREATE TABLE `estudiante` (
+  `id_estudiante` int NOT NULL,
+  `id_grado` int DEFAULT NULL,
+  `id_categoria` int DEFAULT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
+  `tipo_documento` varchar(50) DEFAULT 'TI',
+  `num_doc` varchar(100) DEFAULT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `id_sede` int DEFAULT NULL,
+  `foto_perfil` varchar(255) DEFAULT NULL,
+  `fecha_n` date DEFAULT NULL,
+  `peso` decimal(5,2) DEFAULT NULL,
+  `division` varchar(100) DEFAULT NULL,
+  `eps` varchar(255) DEFAULT NULL,
+  `rh` varchar(100) DEFAULT NULL,
+  `correo` varchar(100) DEFAULT NULL,
+  `clave` varchar(255) DEFAULT NULL,
+  `activo` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `estudiante`
+--
+
+INSERT INTO `estudiante` (`id_estudiante`, `id_grado`, `id_categoria`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `id_sede`, `foto_perfil`, `fecha_n`, `peso`, `division`, `eps`, `rh`, `correo`, `clave`, `activo`, `created_at`) VALUES
+(101, 11, 1, 'Jean Karlo', 'García León', 'TI', '1192466428', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(102, 9, 4, 'Samuel', 'Velásquez Sánchez', 'TI', '1023647991', '', 2, NULL, '2014-07-06', '38.00', NULL, 'Sisbén', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(103, 7, 4, 'Daniel Andrés', 'Montoya Calle', 'TI', '1021940897', '', 2, NULL, '2016-11-07', '44.60', NULL, 'N eps', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(104, 5, 4, 'Miguel Ángel', 'Bautista Monroy', 'TI', '1195214019', '', 2, NULL, '2013-08-13', '45.00', NULL, 'sisben', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(105, 8, 6, 'Daniel', 'Pérez Sanmartín', 'TI', '1020226169', '', 2, NULL, '2010-08-19', '52.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(106, 9, 1, 'Juan Camilo', 'Martínez Sanmartín', 'TI', '1020229154', '', 2, NULL, '2013-01-18', '37.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(107, 5, 6, 'Salome', 'Taborda Blando', 'TI', '1020226181', '', 2, NULL, '2010-08-20', '67.70', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(108, 9, 4, 'Matías', 'García León', 'TI', '1033265504', '', 2, NULL, '2015-04-17', '30.00', NULL, 'sanita', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(109, 5, 4, 'Juan Pablo', 'Betancourt Ospina', 'TI', '1017265346', '', 2, NULL, '2015-04-13', '42.30', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(110, 4, 4, 'Juan Camilo', 'Vega O', 'TI', '1021937647', '', 2, NULL, '2015-07-02', '44.30', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(111, 1, 6, 'Danna Sofia', 'Alfonso', 'TI', '1011405201', '', 2, NULL, '2012-03-27', '58.90', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(112, 8, 6, 'Samir Enrique', 'Nava Martínez', 'TI', '7235701', '', 1, NULL, '2009-11-12', '70.80', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(113, 7, 6, 'Matías', 'Ochoa García', 'TI', '1025661867', '', 1, NULL, '2009-06-03', '53.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(114, 7, 4, 'Maximiliano', 'Carvajal Ruiz', 'TI', '10376553567', '', 1, NULL, '2014-12-06', '40.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(115, 6, 6, 'Sofia', 'Medina Castrillon', 'TI', '1027741702', '', 2, NULL, '2010-01-26', '56.40', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(116, 3, 1, 'Dylan Andrés', 'Gaviria Alvarez', 'TI', '1233898589', '', 2, NULL, '2016-05-21', '27.80', NULL, 'Mutual', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(117, 3, 4, 'Santiago Andres', 'Hernandez Torres', 'TI', '1103755101', '', 2, NULL, '2015-08-25', '27.00', NULL, 'militar', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(118, 3, 4, 'Smith', 'Méndez Alvarez', 'TI', '1032059029', '', 1, NULL, '2016-07-02', '34.20', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(119, 9, 6, 'Aaron David', 'Loaiza Monroy', 'TI', '1422730', '', 2, NULL, '2010-09-14', '63.30', NULL, 'sura', 'O-', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(120, 11, 1, 'Anderson Steven', 'Loaiza Quintero', 'CC', '1033426095', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(121, 11, 1, 'Nicolás', 'Osorio Valencia', 'TI', '1054875293', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(122, 9, 4, 'Jerónimo', 'Osorio Valencia', 'TI', '1054882227', '', 2, NULL, '2013-10-22', '45.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(123, 11, 1, 'Juan David', 'Orrego Ossa', 'CC', '1020419153', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(124, 9, 1, 'Sara', 'Ríos Daza', 'CC', '1022152029', '', 2, NULL, '2010-09-06', '49.00', NULL, 'ponal', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(125, 4, 1, 'Ana Sofía', 'Hurtado Ocampo', 'TI', '1036259874', '', 3, NULL, '2011-05-19', '68.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(126, 9, 1, 'José Ignacio', 'Marín Vásquez', 'TI', '1232598434', '', 2, NULL, '2014-01-04', '36.80', NULL, 'Total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(127, 9, 1, 'Marcelo Gabriel', 'Marín Vázquez', 'TI', '1232598435', '', 2, NULL, '2010-09-08', '51.00', NULL, 'Total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(128, 7, 6, 'Juan Camilo', 'García Barba', 'TI', '1023637476', '', 1, NULL, '2009-06-03', '89.00', NULL, 'Savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(129, 9, 6, 'Samuel Cano', 'Pulgarin', 'TI', '1033491933', '', 2, NULL, '2009-05-14', '55.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(130, 1, 6, 'Hillary', 'Gómez García', 'TI', '119246017', '', 2, NULL, '2011-11-03', '45.50', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(131, 11, 6, 'Diego Fernando', 'Salcedo Bonza', 'TI', '1096807375', '', 2, NULL, '2011-03-04', '60.00', NULL, 'Sanita', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(132, 1, 4, 'Rubiangelys Sofía', 'Camacho Figueroa', 'TI', '6164279', '', 2, NULL, '2013-11-17', '50.00', NULL, 'Savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(133, 1, 1, 'Jeziel Abrahán', 'Ruiz Figueroa', 'TI', '1087754585', '', 2, NULL, '2020-05-26', '19.00', NULL, 'savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(134, 1, 1, 'Juan José', 'Diosa Ospina', 'TI', '1013464771', '', 2, NULL, '2013-02-22', '57.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(135, 9, 6, 'Kevin Andrés', 'Herrera', 'TI', '1037126322', '', 2, NULL, '2010-11-16', '63.00', NULL, 'total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(136, 9, 6, 'Samuel', 'Mejía Villa', 'TI', '1088302615', '', 2, NULL, '2010-07-29', '63.00', NULL, 'Sura', 'O-', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(137, 9, 2, 'Emanuel', 'Alcaraz Ocampo', 'TI', '1011519226', '', 2, NULL, '2017-11-12', '43.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(138, 2, 7, 'Ana Sofía', 'Flórez Guzmán', 'TI', '1020224629', '', 1, NULL, '2008-06-13', '56.00', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(139, 8, 1, 'Samuel', 'Valencia Tabares', 'TI', '1192467492', '', 2, NULL, '2012-03-08', '40.80', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(140, 9, 7, 'Sarah Sofía', 'Triviño Saavedra', 'TI', '1094911412', '', 2, NULL, '2008-02-19', '57.00', NULL, 'suri', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(141, 5, 6, 'Ana Sofía', 'Quiroz Puerta', 'TI', '1021927403', '', 2, NULL, '2009-07-02', '60.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(142, 4, 1, 'Ismael', 'Arboleda Gutiérrez', 'TI', '1020123545', '', 2, NULL, '2015-05-20', '39.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(143, 9, 6, 'Valeria', 'Matiz Escudero', 'TI', '1028141323', '', 2, NULL, '2008-11-13', '63.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(144, 7, 6, 'Mariana', 'Giraldo Rincon', 'TI', '1027809885', '', 2, NULL, '2011-03-12', '36.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(145, 4, 6, 'Jimena', 'Velásquez Ospina', 'TI', '1011594301', '', 1, NULL, '2009-01-12', '70.00', NULL, 'nueva', NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(146, 9, 1, 'Luciana', 'Pino Monsalve', 'TI', '1020122879', '', 2, NULL, '2014-09-16', '0.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(147, 9, 4, 'Gabriela', 'Almenares Fonegra', 'TI', '1020120658', '', 2, NULL, '2012-02-23', '47.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05'),
+(148, 8, 1, 'Ana Sofia', 'Sánchez Agudelo', 'TI', '1011222665', '', 2, NULL, '2013-01-27', '60.00', NULL, 'Policía', NULL, NULL, NULL, 1, '2026-08-29 17:59:05'),
+(153, 1, 1, 'Mateo', 'Ríos', 'TI', '10000002', '', 2, NULL, NULL, NULL, NULL, NULL, NULL, 'estudiante@jinhwan.com', '$2y$10$T7OWSqUPLN2lIqOAaJTQsuW1oDhHYcs/cJrPg0b2q1tjIWVYNWIYu', 1, '2026-08-29 17:59:05'),
+(154, 7, 5, 'maria jose', 'gomez londoño', 'TI', '1013462218', '3246783188', 1, NULL, '2010-11-11', '60.00', '-65', 'Sura', 'O+', 'samugomedo0@gmail.com', '$2y$10$lp.U80H.P2fdX5qJKbU8/upbxvDswylhNls8z8RZgBaUp0cgRSyNK', 1, '2026-09-06 01:21:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `eventos`
+--
+
+CREATE TABLE `eventos` (
+  `id_evento` int NOT NULL,
+  `titulo` varchar(150) NOT NULL,
+  `descripcion` text,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `id_maestro` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `galeria_multimedia`
+--
+
+CREATE TABLE `galeria_multimedia` (
+  `id_multimedia` int NOT NULL,
+  `id_persona` int DEFAULT NULL,
+  `url` varchar(255) NOT NULL,
+  `titulo` varchar(100) DEFAULT NULL,
+  `descripcion` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `galeria_multimedia`
+--
+
+INSERT INTO `galeria_multimedia` (`id_multimedia`, `id_persona`, `url`, `titulo`, `descripcion`) VALUES
+(3, 119, 'https://www.youtube.com/watch?v=5ZXHQDD2ITs', NULL, NULL),
+(4, 154, '', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grados`
+--
+
+CREATE TABLE `grados` (
+  `id_grado` int NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `grados`
+--
 
 INSERT INTO `grados` (`id_grado`, `nombre`) VALUES
 (1, 'Blanco'),
@@ -107,320 +256,274 @@ INSERT INTO `grados` (`id_grado`, `nombre`) VALUES
 (20, 'Ninguno');
 
 -- --------------------------------------------------------
--- 4. Tabla Base: `personas` (Datos personales y comunes)
--- --------------------------------------------------------
-CREATE TABLE `personas` (
-  `id_persona` int NOT NULL AUTO_INCREMENT,
+
+--
+-- Table structure for table `maestro`
+--
+
+CREATE TABLE `maestro` (
+  `id_maestro` int NOT NULL,
+  `id_grado` int DEFAULT NULL,
   `nombre` varchar(100) NOT NULL,
   `apellido` varchar(100) NOT NULL,
-  `tipo_documento` varchar(50) DEFAULT 'TI',
+  `tipo_documento` varchar(50) DEFAULT 'CC',
   `num_doc` varchar(100) DEFAULT NULL,
   `telefono` varchar(50) DEFAULT NULL,
   `id_sede` int DEFAULT NULL,
   `foto_perfil` varchar(255) DEFAULT NULL,
-  `activo` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_persona`),
-  KEY `idx_personas_sede` (`id_sede`),
-  KEY `idx_personas_num_doc` (`num_doc`),
-  CONSTRAINT `fk_personas_sede` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `personas` (`id_persona`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `id_sede`, `foto_perfil`, `activo`) VALUES
-(101, 'Jean Karlo', 'García León', 'TI', '1192466428', '', 2, NULL, 1),
-(102, 'Samuel', 'Velásquez Sánchez', 'TI', '1023647991', '', 2, NULL, 1),
-(103, 'Daniel Andrés', 'Montoya Calle', 'TI', '1021940897', '', 2, NULL, 1),
-(104, 'Miguel Ángel', 'Bautista Monroy', 'TI', '1195214019', '', 2, NULL, 1),
-(105, 'Daniel', 'Pérez Sanmartín', 'TI', '1020226169', '', 2, NULL, 1),
-(106, 'Juan Camilo', 'Martínez Sanmartín', 'TI', '1020229154', '', 2, NULL, 1),
-(107, 'Salome', 'Taborda Blando', 'TI', '1020226181', '', 2, NULL, 1),
-(108, 'Matías', 'García León', 'TI', '1033265504', '', 2, NULL, 1),
-(109, 'Juan Pablo', 'Betancourt Ospina', 'TI', '1017265346', '', 2, NULL, 1),
-(110, 'Juan Camilo', 'Vega O', 'TI', '1021937647', '', 2, NULL, 1),
-(111, 'Danna Sofia', 'Alfonso', 'TI', '1011405201', '', 2, NULL, 1),
-(112, 'Samir Enrique', 'Nava Martínez', 'TI', '7235701', '', 1, NULL, 1),
-(113, 'Matías', 'Ochoa García', 'TI', '1025661867', '', 1, NULL, 1),
-(114, 'Maximiliano', 'Carvajal Ruiz', 'TI', '10376553567', '', 1, NULL, 1),
-(115, 'Sofia', 'Medina Castrillon', 'TI', '1027741702', '', 2, NULL, 1),
-(116, 'Dylan Andrés', 'Gaviria Alvarez', 'TI', '1233898589', '', 2, NULL, 1),
-(117, 'Santiago Andres', 'Hernandez Torres', 'TI', '1103755101', '', 2, NULL, 1),
-(118, 'Smith', 'Méndez Alvarez', 'TI', '1032059029', '', 1, NULL, 1),
-(119, 'Aaron David', 'Loaiza Monroy', 'TI', '1422730', '', 2, NULL, 1),
-(120, 'Anderson Steven', 'Loaiza Quintero', 'CC', '1033426095', '', 2, NULL, 1),
-(121, 'Nicolás', 'Osorio Valencia', 'TI', '1054875293', '', 2, NULL, 1),
-(122, 'Jerónimo', 'Osorio Valencia', 'TI', '1054882227', '', 2, NULL, 1),
-(123, 'Juan David', 'Orrego Ossa', 'CC', '1020419153', '', 2, NULL, 1),
-(124, 'Sara', 'Ríos Daza', 'CC', '1022152029', '', 2, NULL, 1),
-(125, 'Ana Sofía', 'Hurtado Ocampo', 'TI', '1036259874', '', 3, NULL, 1),
-(126, 'José Ignacio', 'Marín Vásquez', 'TI', '1232598434', '', 2, NULL, 1),
-(127, 'Marcelo Gabriel', 'Marín Vázquez', 'TI', '1232598435', '', 2, NULL, 1),
-(128, 'Juan Camilo', 'García Barba', 'TI', '1023637476', '', 1, NULL, 1),
-(129, 'Samuel Cano', 'Pulgarin', 'TI', '1033491933', '', 2, NULL, 1),
-(130, 'Hillary', 'Gómez García', 'TI', '119246017', '', 2, NULL, 1),
-(131, 'Diego Fernando', 'Salcedo Bonza', 'TI', '1096807375', '', 2, NULL, 1),
-(132, 'Rubiangelys Sofía', 'Camacho Figueroa', 'TI', '6164279', '', 2, NULL, 1),
-(133, 'Jeziel Abrahán', 'Ruiz Figueroa', 'TI', '1087754585', '', 2, NULL, 1),
-(134, 'Juan José', 'Diosa Ospina', 'TI', '1013464771', '', 2, NULL, 1),
-(135, 'Kevin Andrés', 'Herrera', 'TI', '1037126322', '', 2, NULL, 1),
-(136, 'Samuel', 'Mejía Villa', 'TI', '1088302615', '', 2, NULL, 1),
-(137, 'Emanuel', 'Alcaraz Ocampo', 'TI', '1011519226', '', 2, NULL, 1),
-(138, 'Ana Sofía', 'Flórez Guzmán', 'TI', '1020224629', '', 1, NULL, 1),
-(139, 'Samuel', 'Valencia Tabares', 'TI', '1192467492', '', 2, NULL, 1),
-(140, 'Sarah Sofía', 'Triviño Saavedra', 'TI', '1094911412', '', 2, NULL, 1),
-(141, 'Ana Sofía', 'Quiroz Puerta', 'TI', '1021927403', '', 2, NULL, 1),
-(142, 'Ismael', 'Arboleda Gutiérrez', 'TI', '1020123545', '', 2, NULL, 1),
-(143, 'Valeria', 'Matiz Escudero', 'TI', '1028141323', '', 2, NULL, 1),
-(144, 'Mariana', 'Giraldo Rincon', 'TI', '1027809885', '', 2, NULL, 1),
-(145, 'Jimena', 'Velásquez Ospina', 'TI', '1011594301', '', 1, NULL, 1),
-(146, 'Luciana', 'Pino Monsalve', 'TI', '1020122879', '', 2, NULL, 1),
-(147, 'Gabriela', 'Almenares Fonegra', 'TI', '1020120658', '', 2, NULL, 1),
-(148, 'Ana Sofia', 'Sánchez Agudelo', 'TI', '1011222665', '', 2, NULL, 1),
-(149, 'Administrador', 'General', 'CC', '99999999', '', 2, NULL, 1),
-(150, 'Samuel', 'Gómez', 'TI', '1013462218', '3246783188', 1, '606e99e11b6916d3ccf18632109d0667.jpg', 1),
-(152, 'Carlos', 'Mendoza', 'CC', '10000001', '', 2, NULL, 1),
-(153, 'Mateo', 'Ríos', 'TI', '10000002', '', 2, NULL, 1);
-
--- --------------------------------------------------------
--- 5. Tabla: `credenciales` (Login y Autenticación)
--- --------------------------------------------------------
-CREATE TABLE `credenciales` (
-  `id_credencial` int NOT NULL AUTO_INCREMENT,
-  `id_persona` int NOT NULL,
-  `correo` varchar(100) NOT NULL,
-  `clave` varchar(255) NOT NULL,
-  `rol` varchar(50) NOT NULL DEFAULT 'Deportistas',
-  `permisos_extra` json DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_credencial`),
-  UNIQUE KEY `uk_credenciales_persona` (`id_persona`),
-  UNIQUE KEY `uk_credenciales_correo` (`correo`),
-  CONSTRAINT `fk_credenciales_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `credenciales` (`id_credencial`, `id_persona`, `correo`, `clave`, `rol`, `permisos_extra`) VALUES
-(12, 149, 'admin@admin.com', '$2y$10$45YUeh7Y/t9J99i86uA1Fud5ekOo1FMdYaVD1vZkGy5zN5GQCWP9a', 'Administracion', '{\"sedes\":true,\"registros\":true,\"ascensos\":true,\"calendario\":true,\"galeria\":true,\"reportes\":true}'),
-(14, 150, 'samugomedo@gmail.com', '$2y$10$7MwlMj3DwkcViNNvF1rscugFN4Cko0.OzeysQGMJL34cSm2qmX.le', 'Maestros', '{\"sedes\":false,\"registros\":false,\"ascensos\":false,\"calendario\":false,\"galeria\":false,\"reportes\":false}'),
-(17, 152, 'maestro@jinhwan.com', '$2y$10$Tn44kYfa6/Jacswrc8IR8unk0GpBthtGDc3iHK1JZfWbeSJHf8nG.', 'Maestros', '{\"sedes\":true,\"registros\":true,\"ascensos\":true,\"calendario\":true,\"galeria\":true,\"reportes\":true}'),
-(18, 153, 'estudiante@jinhwan.com', '$2y$10$T7OWSqUPLN2lIqOAaJTQsuW1oDhHYcs/cJrPg0b2q1tjIWVYNWIYu', 'Deportistas', NULL);
-
--- --------------------------------------------------------
--- 6. Tabla: `perfil_deportistas` (Información Deportiva)
--- --------------------------------------------------------
-CREATE TABLE `perfil_deportistas` (
-  `id_persona` int NOT NULL,
-  `id_grado` int DEFAULT NULL,
-  `id_categoria` int DEFAULT NULL,
-  `fecha_n` date DEFAULT NULL,
-  `peso` decimal(5,2) DEFAULT NULL,
-  `division` varchar(100) DEFAULT NULL,
-  `eps` varchar(255) DEFAULT NULL,
-  `rh` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id_persona`),
-  KEY `idx_deportista_grado` (`id_grado`),
-  KEY `idx_deportista_categoria` (`id_categoria`),
-  CONSTRAINT `fk_perfil_deportista_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_perfil_deportista_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_perfil_deportista_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `perfil_deportistas` (`id_persona`, `id_grado`, `id_categoria`, `fecha_n`, `peso`, `division`, `eps`, `rh`) VALUES
-(102, 9, 4, '2014-07-06', '38.00', NULL, 'Sisbén', 'O+'),
-(103, 7, 4, '2016-11-07', '44.60', NULL, 'N eps', 'O+'),
-(104, 5, 4, '2013-08-13', '45.00', NULL, 'sisben', 'A+'),
-(105, 8, 6, '2010-08-19', '52.00', NULL, 'sura', 'O+'),
-(106, 9, 1, '2013-01-18', '37.00', NULL, 'sura', 'A+'),
-(107, 5, 6, '2010-08-20', '67.70', NULL, 'savia', 'O+'),
-(108, 9, 4, '2015-04-17', '30.00', NULL, 'sanita', 'O+'),
-(109, 5, 4, '2015-04-13', '42.30', NULL, 'sura', 'O+'),
-(110, 4, 4, '2015-07-02', '44.30', NULL, 'Sura', 'O+'),
-(111, 1, 6, '2012-03-27', '58.90', NULL, 'sura', 'O+'),
-(112, 8, 6, '2009-11-12', '70.80', NULL, 'savia', 'O+'),
-(113, 7, 6, '2010-12-07', '53.00', NULL, 'Sura', 'O+'),
-(114, 7, 4, '2014-12-06', '40.00', NULL, 'Sura', 'O+'),
-(115, 7, 6, '2010-01-26', '56.40', NULL, 'Sura', 'O+'),
-(116, 6, 1, '2016-05-21', '27.80', NULL, 'Mutual', 'A+'),
-(117, 3, 4, '2015-08-25', '27.00', NULL, 'militar', 'O+'),
-(118, 3, 4, '2016-07-02', '34.20', NULL, 'sura', 'A+'),
-(119, 9, 6, '2010-09-14', '63.30', NULL, 'sura', 'O-'),
-(122, 9, 4, '2013-10-22', '45.00', NULL, 'sura', 'O+'),
-(124, 9, 1, '2010-09-06', '49.00', NULL, 'ponal', 'O+'),
-(125, 4, 1, '2011-05-19', '68.00', NULL, 'sura', 'O+'),
-(126, 9, 1, '2014-01-04', '36.80', NULL, 'Total', 'O+'),
-(127, 9, 1, '2010-09-08', '51.00', NULL, 'Total', 'O+'),
-(128, 7, 6, '2009-06-03', '89.00', NULL, 'Savia', 'A+'),
-(129, 9, 6, '2009-05-14', '55.00', NULL, 'sura', 'O+'),
-(130, 1, 6, '2011-11-03', '45.50', NULL, 'sura', 'A-'),
-(131, 11, 6, '2011-03-04', '60.00', NULL, 'Sanita', 'O+'),
-(132, 1, 4, '2013-11-17', '50.00', NULL, 'Savia', 'A+'),
-(133, 1, 1, '2020-05-26', '19.00', NULL, 'savia', 'A+'),
-(134, 1, 1, '2013-02-22', '57.00', NULL, 'Sura', 'O+'),
-(135, 9, 6, '2010-11-16', '63.00', NULL, 'total', 'O+'),
-(136, 9, 6, '2010-07-29', '63.00', NULL, 'Sura', 'O-'),
-(137, 9, 2, '2017-11-12', '43.00', NULL, 'Sura', 'A+'),
-(138, 2, 7, '2008-06-13', '56.00', NULL, 'sura', 'A-'),
-(139, 8, 1, '2012-03-08', '40.80', NULL, 'Sura', 'O+'),
-(140, 9, 7, '2008-02-19', '57.00', NULL, 'suri', 'O+'),
-(141, 5, 6, '2009-07-02', '60.00', NULL, 'Sura', 'A+'),
-(142, 4, 1, '2015-05-20', '39.00', NULL, 'Sura', 'A+'),
-(143, 9, 6, '2008-11-13', '63.00', NULL, 'sura', 'A+'),
-(144, 7, 6, '2011-03-12', '36.00', NULL, 'sura', 'A+'),
-(145, 4, 6, '2009-01-12', '70.00', NULL, 'nueva', NULL),
-(146, 9, 1, '2014-09-16', '0.00', NULL, 'sura', 'O+'),
-(147, 9, 4, '2012-02-23', '47.00', NULL, 'sura', 'O+'),
-(148, 7, 1, '2013-01-27', '60.00', NULL, 'Policía', NULL),
-(150, 11, 7, '2008-11-14', '74.00', '-80', 'sanita', 'A+'),
-(153, 1, 1, NULL, NULL, NULL, NULL, NULL);
-
--- --------------------------------------------------------
--- 7. Tabla: `perfil_maestros` (Información Docente/Web)
--- --------------------------------------------------------
-CREATE TABLE `perfil_maestros` (
-  `id_persona` int NOT NULL,
-  `id_grado` int DEFAULT NULL,
   `descripcion_perfil` text,
   `logros` text,
   `mostrar_en_web` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id_persona`),
-  KEY `idx_maestro_grado` (`id_grado`),
-  CONSTRAINT `fk_perfil_maestro_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_perfil_maestro_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE
+  `correo` varchar(100) NOT NULL,
+  `clave` varchar(255) NOT NULL,
+  `permisos_extra` json DEFAULT NULL,
+  `activo` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `perfil_maestros` (`id_persona`, `id_grado`, `descripcion_perfil`, `logros`, `mostrar_en_web`) VALUES
-(101, 11, NULL, NULL, 0),
-(119, 9, '', NULL, 1),
-(120, 11, NULL, NULL, 0),
-(121, 11, NULL, NULL, 0),
-(123, 11, NULL, NULL, 0),
-(150, 11, 'Profesor de Taekwondo federado y creador de la plataforma', 'Campeón olímpico', 1),
-(152, 11, 'Maestro principal de la sede', 'Cinturón Negro 1 Dan', 0);
+--
+-- Dumping data for table `maestro`
+--
+
+INSERT INTO `maestro` (`id_maestro`, `id_grado`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `id_sede`, `foto_perfil`, `descripcion_perfil`, `logros`, `mostrar_en_web`, `correo`, `clave`, `permisos_extra`, `activo`, `created_at`) VALUES
+(150, 11, 'Samuel', 'Gómez', 'TI', '1013462218', '3246783188', 1, '606e99e11b6916d3ccf18632109d0667.jpg', 'Profesor de Taekwondo federado y creador de la plataforma', 'Campeón olímpico', 0, 'samugomedo@gmail.com', '$2y$10$7MwlMj3DwkcViNNvF1rscugFN4Cko0.OzeysQGMJL34cSm2qmX.le', '{\"sedes\": false, \"galeria\": false, \"ascensos\": false, \"reportes\": false, \"registros\": false, \"calendario\": false}', 1, '2026-08-29 17:59:05'),
+(152, 11, 'Carlos', 'Mendoza', 'CC', '10000001', '', 2, NULL, 'Maestro principal de la sede', 'Cinturón Negro 1 Dan', 0, 'maestro@jinhwan.com', '$2y$10$Tn44kYfa6/Jacswrc8IR8unk0GpBthtGDc3iHK1JZfWbeSJHf8nG.', '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05');
 
 -- --------------------------------------------------------
--- 8. Tabla: `solicitudes_ascenso`
--- --------------------------------------------------------
-CREATE TABLE `solicitudes_ascenso` (
-  `id_solicitud` int NOT NULL AUTO_INCREMENT,
-  `id_persona_estudiante` int NOT NULL,
-  `id_grado_actual` int NOT NULL,
-  `id_grado_solicitado` int NOT NULL,
-  `id_persona_maestro` int NOT NULL,
-  `observaciones` text,
-  `estado` enum('pendiente','aprobado','rechazado') NOT NULL DEFAULT 'pendiente',
-  `fecha_solicitud` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_resolucion` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id_solicitud`),
-  KEY `idx_solicitud_estudiante` (`id_persona_estudiante`),
-  KEY `idx_solicitud_maestro` (`id_persona_maestro`),
-  KEY `idx_solicitud_grado_actual` (`id_grado_actual`),
-  KEY `idx_solicitud_grado_solicitado` (`id_grado_solicitado`),
-  CONSTRAINT `fk_solicitud_estudiante` FOREIGN KEY (`id_persona_estudiante`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_solicitud_maestro` FOREIGN KEY (`id_persona_maestro`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_solicitud_grado_act` FOREIGN KEY (`id_grado_actual`) REFERENCES `grados` (`id_grado`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `fk_solicitud_grado_sol` FOREIGN KEY (`id_grado_solicitado`) REFERENCES `grados` (`id_grado`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
--- 9. Tabla: `certificados_ascenso`
--- --------------------------------------------------------
-CREATE TABLE `certificados_ascenso` (
-  `id_certificado`   INT          NOT NULL AUTO_INCREMENT,
-  `id_solicitud`     INT          NOT NULL,
-  `id_persona`       INT          NOT NULL,
-  `id_maestro`       INT          NOT NULL,
-  `grado_anterior`   VARCHAR(80)  NOT NULL,
-  `grado_nuevo`      VARCHAR(80)  NOT NULL,
-  `fecha_examen`     DATE         NOT NULL,
-  `observaciones`    TEXT,
-  `folio`            VARCHAR(30)  NOT NULL,
-  `creado_en`        TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_certificado`),
-  UNIQUE KEY `uk_solicitud` (`id_solicitud`),
-  CONSTRAINT `fk_cert_solicitud` FOREIGN KEY (`id_solicitud`) REFERENCES `solicitudes_ascenso` (`id_solicitud`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cert_persona`   FOREIGN KEY (`id_persona`)   REFERENCES `personas` (`id_persona`) ON DELETE CASCADE,
-  CONSTRAINT `fk_cert_maestro`   FOREIGN KEY (`id_maestro`)   REFERENCES `personas` (`id_persona`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+--
+-- Table structure for table `sedes`
+--
 
--- --------------------------------------------------------
--- 10. Tabla: `eventos`
--- --------------------------------------------------------
-CREATE TABLE `eventos` (
-  `id_evento` int NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(150) NOT NULL,
-  `descripcion` text,
-  `fecha_inicio` datetime NOT NULL,
-  `fecha_fin` datetime DEFAULT NULL,
-  `id_persona` int NOT NULL,
-  PRIMARY KEY (`id_evento`),
-  KEY `idx_eventos_persona` (`id_persona`),
-  CONSTRAINT `fk_eventos_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
--- 11. Tabla: `noticias`
--- --------------------------------------------------------
-CREATE TABLE `noticias` (
-  `id_noticia` int NOT NULL AUTO_INCREMENT,
-  `id_persona` int DEFAULT NULL,
-  `titulo` varchar(150) NOT NULL,
-  `descripcion` text,
-  `contenido` text,
-  `fecha_publicacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_noticia`),
-  KEY `idx_noticias_persona` (`id_persona`),
-  CONSTRAINT `fk_noticias_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
--- 12. Tabla: `tipos_teoria`
--- --------------------------------------------------------
-CREATE TABLE `tipos_teoria` (
-  `id_tipo_teoria` int NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sedes` (
+  `id_sede` int NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id_tipo_teoria`)
+  `direccion` varchar(255) DEFAULT NULL,
+  `telefono` varchar(50) DEFAULT NULL,
+  `horario` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `tipos_teoria` (`id_tipo_teoria`, `nombre`, `descripcion`) VALUES
-(1, 'General', 'Conceptos fundamentales de Taekwondo');
+--
+-- Dumping data for table `sedes`
+--
+
+INSERT INTO `sedes` (`id_sede`, `nombre`, `direccion`, `telefono`, `horario`) VALUES
+(1, 'Sede San Cristóbal', 'Cl. 62 #131-80, Nazaret, San Cristóbal, Medellín, Antioquia', '3206641361', 'Lun - Vie: 4:00 PM - 8:00 PM'),
+(2, 'Sede Principal Santa Mónica Campo Alegre', 'Cl 38 #9255, Belencito, Medellín, La América, Medellín, Antioquia', '3206641361', 'Lun - Sáb: 3:00 PM - 9:00 PM'),
+(3, 'Sede Itagüí', 'Cra. 59 #70-349, Alicate, Itagüí, Antioquia', '3042243561', 'Mar - Sáb: 4:00 PM - 8:00 PM');
 
 -- --------------------------------------------------------
--- 13. Tabla: `teorias`
--- --------------------------------------------------------
+
+--
+-- Table structure for table `teorias`
+--
+
 CREATE TABLE `teorias` (
-  `id_teoria` int NOT NULL AUTO_INCREMENT,
+  `id_teoria` int NOT NULL,
   `id_grado` int DEFAULT NULL,
   `id_tipo_teoria` int DEFAULT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `contenido` text,
-  `url_video` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id_teoria`),
-  KEY `idx_teoria_grado` (`id_grado`),
-  KEY `idx_teoria_tipo` (`id_tipo_teoria`),
-  CONSTRAINT `fk_teoria_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk_teoria_tipo` FOREIGN KEY (`id_tipo_teoria`) REFERENCES `tipos_teoria` (`id_tipo_teoria`) ON DELETE SET NULL ON UPDATE CASCADE
+  `url_video` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
--- 13. Tabla: `galeria_multimedia`
--- --------------------------------------------------------
-CREATE TABLE `galeria_multimedia` (
-  `id_multimedia` int NOT NULL AUTO_INCREMENT,
-  `id_persona` int DEFAULT NULL,
-  `url` varchar(255) NOT NULL,
-  `titulo` varchar(100) DEFAULT NULL,
-  `descripcion` text,
-  PRIMARY KEY (`id_multimedia`),
-  KEY `idx_galeria_persona` (`id_persona`),
-  CONSTRAINT `fk_galeria_persona` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`) ON DELETE CASCADE ON UPDATE CASCADE
+
+--
+-- Table structure for table `tipos_teoria`
+--
+
+CREATE TABLE `tipos_teoria` (
+  `id_tipo_teoria` int NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `galeria_multimedia` (`id_multimedia`, `id_persona`, `url`, `titulo`, `descripcion`) VALUES
-(3, 119, 'https://www.youtube.com/watch?v=5ZXHQDD2ITs', NULL, NULL);
+--
+-- Dumping data for table `tipos_teoria`
+--
 
--- =============================================================================
--- FINALIZACIÓN Y COMPROMISO DE TRANSACCIÓN
--- =============================================================================
-SET FOREIGN_KEY_CHECKS = 1;
+INSERT INTO `tipos_teoria` (`id_tipo_teoria`, `nombre`, `descripcion`) VALUES
+(1, 'General', 'Conceptos fundamentales de Taekwondo');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `administrador`
+--
+ALTER TABLE `administrador`
+  ADD PRIMARY KEY (`id_administrador`),
+  ADD UNIQUE KEY `uk_admin_correo` (`correo`);
+
+--
+-- Indexes for table `categorias`
+--
+ALTER TABLE `categorias`
+  ADD PRIMARY KEY (`id_categoria`);
+
+--
+-- Indexes for table `certificados_ascenso`
+--
+ALTER TABLE `certificados_ascenso`
+  ADD PRIMARY KEY (`id_certificado`),
+  ADD KEY `fk_cert_estudiante` (`id_estudiante`),
+  ADD KEY `fk_cert_maestro` (`id_maestro`);
+
+--
+-- Indexes for table `estudiante`
+--
+ALTER TABLE `estudiante`
+  ADD PRIMARY KEY (`id_estudiante`),
+  ADD KEY `idx_estudiante_grado` (`id_grado`),
+  ADD KEY `idx_estudiante_categoria` (`id_categoria`),
+  ADD KEY `idx_estudiante_sede` (`id_sede`);
+
+--
+-- Indexes for table `eventos`
+--
+ALTER TABLE `eventos`
+  ADD PRIMARY KEY (`id_evento`),
+  ADD KEY `idx_eventos_maestro` (`id_maestro`);
+
+--
+-- Indexes for table `galeria_multimedia`
+--
+ALTER TABLE `galeria_multimedia`
+  ADD PRIMARY KEY (`id_multimedia`);
+
+--
+-- Indexes for table `grados`
+--
+ALTER TABLE `grados`
+  ADD PRIMARY KEY (`id_grado`);
+
+--
+-- Indexes for table `maestro`
+--
+ALTER TABLE `maestro`
+  ADD PRIMARY KEY (`id_maestro`),
+  ADD UNIQUE KEY `uk_maestro_correo` (`correo`),
+  ADD KEY `idx_maestro_grado` (`id_grado`),
+  ADD KEY `idx_maestro_sede` (`id_sede`);
+
+--
+-- Indexes for table `sedes`
+--
+ALTER TABLE `sedes`
+  ADD PRIMARY KEY (`id_sede`);
+
+--
+-- Indexes for table `teorias`
+--
+ALTER TABLE `teorias`
+  ADD PRIMARY KEY (`id_teoria`),
+  ADD KEY `idx_teoria_grado` (`id_grado`),
+  ADD KEY `idx_teoria_tipo` (`id_tipo_teoria`);
+
+--
+-- Indexes for table `tipos_teoria`
+--
+ALTER TABLE `tipos_teoria`
+  ADD PRIMARY KEY (`id_tipo_teoria`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `administrador`
+--
+ALTER TABLE `administrador`
+  MODIFY `id_administrador` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `categorias`
+--
+ALTER TABLE `categorias`
+  MODIFY `id_categoria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `certificados_ascenso`
+--
+ALTER TABLE `certificados_ascenso`
+  MODIFY `id_certificado` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `eventos`
+--
+ALTER TABLE `eventos`
+  MODIFY `id_evento` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `galeria_multimedia`
+--
+ALTER TABLE `galeria_multimedia`
+  MODIFY `id_multimedia` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `grados`
+--
+ALTER TABLE `grados`
+  MODIFY `id_grado` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `sedes`
+--
+ALTER TABLE `sedes`
+  MODIFY `id_sede` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `teorias`
+--
+ALTER TABLE `teorias`
+  MODIFY `id_teoria` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tipos_teoria`
+--
+ALTER TABLE `tipos_teoria`
+  MODIFY `id_tipo_teoria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `certificados_ascenso`
+--
+ALTER TABLE `certificados_ascenso`
+  ADD CONSTRAINT `fk_cert_estudiante` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiante` (`id_estudiante`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_cert_maestro` FOREIGN KEY (`id_maestro`) REFERENCES `maestro` (`id_maestro`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `estudiante`
+--
+ALTER TABLE `estudiante`
+  ADD CONSTRAINT `fk_estudiante_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id_categoria`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_estudiante_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_estudiante_sede` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `eventos`
+--
+ALTER TABLE `eventos`
+  ADD CONSTRAINT `fk_eventos_maestro` FOREIGN KEY (`id_maestro`) REFERENCES `maestro` (`id_maestro`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `maestro`
+--
+ALTER TABLE `maestro`
+  ADD CONSTRAINT `fk_maestro_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_maestro_sede` FOREIGN KEY (`id_sede`) REFERENCES `sedes` (`id_sede`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `teorias`
+--
+ALTER TABLE `teorias`
+  ADD CONSTRAINT `fk_teoria_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_teoria_tipo` FOREIGN KEY (`id_tipo_teoria`) REFERENCES `tipos_teoria` (`id_tipo_teoria`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
