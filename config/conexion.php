@@ -4,7 +4,7 @@ class Database {
     private static $instance = null;
     private $connection;
 
-    private $host = '127.0.0.1';
+    private $host = 'sql113.infinityfree.com';
     private $user = 'if0_42216592';
     private $pass = 'IfK0M0n94NKpHQq';
     private $name = 'if0_42216592_jinhwa_corporation';
