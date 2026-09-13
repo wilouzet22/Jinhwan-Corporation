@@ -9,6 +9,9 @@ include_once __DIR__ . '/controladores/Web/GaleriaController.php';
 include_once __DIR__ . '/controladores/Administracion/AscensosController.php';
 include_once __DIR__ . '/controladores/Administracion/SedesController.php';
 include_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
+include_once __DIR__ . '/controladores/Administracion/EstudiantesController.php';
+include_once __DIR__ . '/controladores/Administracion/MaestrosController.php';
+include_once __DIR__ . '/controladores/Administracion/GruposController.php';
 include_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController.php';
 include_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
 include_once __DIR__ . '/controladores/Administracion/DashboardController.php';
@@ -83,6 +86,22 @@ $router->post('/admin/miembros/create', [AdminMiembrosController::class, 'store'
 $router->post('/admin/miembros/update', [AdminMiembrosController::class, 'update']);
 $router->post('/admin/miembros/delete', [AdminMiembrosController::class, 'delete']);
 $router->post('/admin/miembros/delete-bulk', [AdminMiembrosController::class, 'deleteBulk']);
+
+$router->get('/admin/estudiantes', [AdminEstudiantesController::class, 'index']);
+$router->post('/admin/estudiantes/create', [AdminEstudiantesController::class, 'store']);
+$router->post('/admin/estudiantes/update', [AdminEstudiantesController::class, 'update']);
+$router->post('/admin/estudiantes/delete', [AdminEstudiantesController::class, 'delete']);
+$router->post('/admin/estudiantes/delete-bulk', [AdminEstudiantesController::class, 'deleteBulk']);
+
+$router->get('/admin/maestros', [AdminMaestrosController::class, 'index']);
+$router->post('/admin/maestros/create', [AdminMaestrosController::class, 'store']);
+$router->post('/admin/maestros/update', [AdminMaestrosController::class, 'update']);
+$router->post('/admin/maestros/delete', [AdminMaestrosController::class, 'delete']);
+
+$router->get('/admin/grupos', [AdminGruposController::class, 'index']);
+$router->post('/admin/grupos/create', [AdminGruposController::class, 'store']);
+$router->post('/admin/grupos/update', [AdminGruposController::class, 'update']);
+$router->post('/admin/grupos/delete', [AdminGruposController::class, 'delete']);
 
 $router->get('/admin/perfiles-publicos', [AdminPerfilesPublicosController::class, 'index']);
 $router->post('/admin/perfiles-publicos/update', [AdminPerfilesPublicosController::class, 'update']);

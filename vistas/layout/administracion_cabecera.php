@@ -60,72 +60,121 @@ if (isset($_SESSION['id'])) {
                 </div>
             </a>
         </div>
+        <?php
+            $cp = $current_page ?? '';
+            $gh_pages = ['estudiantes','miembros','maestros','registros','perfiles_publicos','grupos'];
+            $ac_pages = ['ascensos','sedes','calendario','galeria'];
+            $gh_open = in_array($cp, $gh_pages);
+            $ac_open = in_array($cp, $ac_pages);
+        ?>
         <nav class="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
             <ul class="space-y-1">
-                
+
+                <!-- Dashboard -->
                 <li>
-                    <a href="<?= base_url('/admin/dashboard') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-blue' : '' ?>">dashboard</span>
+                    <a href="<?= base_url('/admin/dashboard') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= $cp === 'dashboard' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110">dashboard</span>
                         <span class="text-sm font-medium">Dashboard</span>
                     </a>
                 </li>
-                
-                <li>
-                    <div class="my-3 border-t border-slate-100 dark:border-slate-800/60"></div>
-                    <span class="px-4 text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1.5 block">Gestión Humana</span>
+
+                <!-- ══ GESTIÓN HUMANA (dropdown) ══ -->
+                <li class="mt-2">
+                    <div class="my-2 border-t border-slate-100 dark:border-slate-800/60"></div>
+                    <button onclick="toggleMenu('menu-gh', 'arrow-gh')"
+                        class="w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors cursor-pointer
+                               <?= $gh_open ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <div class="flex items-center gap-2">
+                            <span class="material-icons-outlined text-base">manage_accounts</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest">Gestión Humana</span>
+                        </div>
+                        <span id="arrow-gh" class="material-icons-outlined text-base transition-transform duration-200 <?= $gh_open ? 'rotate-180' : '' ?>">expand_more</span>
+                    </button>
+                    <ul id="menu-gh" class="mt-1 ml-2 space-y-0.5 overflow-hidden transition-all duration-300 <?= $gh_open ? '' : 'hidden' ?>">
+                        <li>
+                            <a href="<?= base_url('/admin/estudiantes') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= in_array($cp, ['estudiantes', 'miembros']) ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">school</span>
+                                <span class="text-sm font-medium">Estudiantes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/maestros') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'maestros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">sports_martial_arts</span>
+                                <span class="text-sm font-medium">Maestros</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/grupos') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'grupos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">groups</span>
+                                <span class="text-sm font-medium">Grupos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'registros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">how_to_reg</span>
+                                <span class="text-sm font-medium">Solicitudes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/perfiles-publicos') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'perfiles_publicos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">badge</span>
+                                <span class="text-sm font-medium">Perfiles Públicos</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="<?= base_url('/admin/miembros') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'miembros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'miembros' ? 'text-tkd-blue' : '' ?>">people</span>
-                        <span class="text-sm font-medium">Miembros</span>
+
+                <!-- ══ ACADEMIA Y CONTENIDOS (dropdown) ══ -->
+                <li class="mt-2">
+                    <div class="my-2 border-t border-slate-100 dark:border-slate-800/60"></div>
+                    <button onclick="toggleMenu('menu-ac', 'arrow-ac')"
+                        class="w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors cursor-pointer
+                               <?= $ac_open ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <div class="flex items-center gap-2">
+                            <span class="material-icons-outlined text-base">school</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest">Academia y Contenidos</span>
+                        </div>
+                        <span id="arrow-ac" class="material-icons-outlined text-base transition-transform duration-200 <?= $ac_open ? 'rotate-180' : '' ?>">expand_more</span>
+                    </button>
+                    <ul id="menu-ac" class="mt-1 ml-2 space-y-0.5 overflow-hidden transition-all duration-300 <?= $ac_open ? '' : 'hidden' ?>">
+                        <li>
+                            <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">auto_stories</span>
+                                <span class="text-sm font-medium">Temarios (Teoría)</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'sedes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">place</span>
+                                <span class="text-sm font-medium">Sedes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'calendario' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">event</span>
+                                <span class="text-sm font-medium">Calendario</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'galeria' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">collections</span>
+                                <span class="text-sm font-medium">Galería</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- ══ REPORTES ══ -->
+                <li class="mt-2">
+                    <div class="my-2 border-t border-slate-100 dark:border-slate-800/60"></div>
+                    <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= $cp === 'reportes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110">bar_chart</span>
+                        <span class="text-sm font-medium">Reportes</span>
                     </a>
                 </li>
+
                 <li>
-                    <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'registros' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'registros' ? 'text-tkd-blue' : '' ?>">how_to_reg</span>
-                        <span class="text-sm font-medium">Solicitudes</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/perfiles-publicos') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'perfiles_publicos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'perfiles_publicos' ? 'text-tkd-blue' : '' ?>">badge</span>
-                        <span class="text-sm font-medium">Perfiles Públicos</span>
-                    </a>
-                </li>
-                
-                <li>
-                    <div class="my-3 border-t border-slate-100 dark:border-slate-800/60"></div>
-                    <span class="px-4 text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1.5 block">Academia y Contenidos</span>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-blue' : '' ?>">auto_stories</span>
-                        <span class="text-sm font-medium">Temarios (Teoría)</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-blue' : '' ?>">place</span>
-                        <span class="text-sm font-medium">Sedes</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-tkd-blue' : '' ?>">event</span>
-                        <span class="text-sm font-medium">Calendario</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= ($current_page ?? '') === 'galeria' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'galeria' ? 'text-tkd-blue' : '' ?>">collections</span>
-                        <span class="text-sm font-medium">Galería</span>
-                    </a>
-                </li>
-                
-                <li>
-                    <div class="my-3 border-t border-slate-100 dark:border-slate-800/60"></div>
-                </li>
-                <li>
+                    <div class="my-2 border-t border-slate-100 dark:border-slate-800/60"></div>
                     <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors group">
                         <span class="material-icons-outlined text-xl group-hover:text-tkd-blue transition-colors">public</span>
                         <span class="font-medium text-sm">Volver al Sitio</span>
@@ -134,6 +183,15 @@ if (isset($_SESSION['id'])) {
 
             </ul>
         </nav>
+        <script>
+        function toggleMenu(menuId, arrowId) {
+            const menu = document.getElementById(menuId);
+            const arrow = document.getElementById(arrowId);
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden', !isHidden);
+            arrow.classList.toggle('rotate-180', isHidden);
+        }
+        </script>
         <!-- Footer Compacto del Sidebar -->
         <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 flex items-center justify-between gap-2 transition-colors">
             <a href="<?= base_url('/usuario/perfil') ?>" class="flex items-center gap-2.5 min-w-0 flex-1 p-1 rounded-xl hover:bg-slate-200/60 dark:hover:bg-slate-800/60 transition-colors group" title="Mi Perfil">
