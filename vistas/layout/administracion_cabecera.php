@@ -62,8 +62,8 @@ if (isset($_SESSION['id'])) {
         </div>
         <?php
             $cp = $current_page ?? '';
-            $gh_pages = ['estudiantes','miembros','maestros','registros','perfiles_publicos','grupos'];
-            $ac_pages = ['ascensos','sedes','calendario','galeria'];
+            $gh_pages = ['estudiantes','miembros','maestros','registros','perfiles_publicos','grupos','ascensos'];
+            $ac_pages = ['teoria','sedes','calendario','galeria'];
             $gh_open = in_array($cp, $gh_pages);
             $ac_open = in_array($cp, $ac_pages);
         ?>
@@ -121,6 +121,12 @@ if (isset($_SESSION['id'])) {
                                 <span class="text-sm font-medium">Perfiles Públicos</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">military_tech</span>
+                                <span class="text-sm font-medium">Ascensos</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -138,7 +144,7 @@ if (isset($_SESSION['id'])) {
                     </button>
                     <ul id="menu-ac" class="mt-1 ml-2 space-y-0.5 overflow-hidden transition-all duration-300 <?= $ac_open ? '' : 'hidden' ?>">
                         <li>
-                            <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'ascensos' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                            <a href="<?= base_url('/admin/teoria') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'teoria' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                                 <span class="material-icons-outlined text-lg">auto_stories</span>
                                 <span class="text-sm font-medium">Temarios (Teoría)</span>
                             </a>

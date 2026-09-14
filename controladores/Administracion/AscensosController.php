@@ -1,66 +1,106 @@
 <?php
 
-include_once __DIR__ . '/../../modelos/Teoria.php';
+include_once __DIR__ . '/../../modelos/Usuario.php';
 include_once __DIR__ . '/../../modelos/Nivel.php';
+include_once __DIR__ . '/../../modelos/Certificado.php';
+include_once __DIR__ . '/../../modelos/Sede.php';
+include_once __DIR__ . '/../../modelos/Grupo.php';
 
 class AdminAscensosController extends Controller {
 
-    private $teoriaModel;
+    private $usuarioModel;
     private $nivelModel;
+    private $certModel;
+    private $sedeModel;
+    private $grupoModel;
 
     public function __construct() {
-        Security::verifyPermission('ascensos'); 
+        Security::verifySession();
+        Security::verifyPermission('ascensos');
 
-        $this->teoriaModel = new Teoria();
-        $this->nivelModel  = new Nivel();
+        $this->usuarioModel = new Usuario();
+        $this->nivelModel   = new Nivel();
+        $this->certModel    = new Certificado();
+        $this->sedeModel    = new Sede();
+        $this->grupoModel   = new Grupo();
     }
 
     public function index() {
-        $teorias = $this->teoriaModel->getAll(); 
-        $niveles = $this->nivelModel->getAll();  
+        $db = Database::getInstance()->getConnection();
+
+        // Obtener alumnos con detalles
+        $miembros = $this->usuarioModel->getAllWithDetails();
+        $alumnos = array_values(array_filter($miembros, function($m) {
+            return $m['rol_id'] === Roles::ESTUDIANTE && (int)$m['activo'] === 1;
+        }));
+
+        $grados_list = $this->nivelModel->getAll();
+        $sedes_list  = $this->sedeModel->getAll();
+        $grupos_list = $this->grupoModel->getAll();
+
+        // Historial de ascensos realizados
+        $sql = "SELECT c.id_certificado as id, c.grado_anterior, c.grado_nuevo,
+                       c.fecha_examen, c.folio, c.observaciones, c.creado_en,
+                       CONCAT(e.nombre, ' ', e.apellido) as nombre_alumno,
+                       e.foto_perfil,
+                       COALESCE(CONCAT(m.nombre, ' ', m.apellido), 'Administrador') as nombre_maestro
+                FROM certificados_ascenso c
+                JOIN estudiante e ON c.id_estudiante = e.id_estudiante
+                LEFT JOIN maestro m ON c.id_maestro = m.id_maestro
+                ORDER BY c.creado_en DESC
+                LIMIT 50";
+        $res = $db->query($sql);
+        $historial = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 
         $this->view('administracion/ascensos', [
-            'teorias'      => $teorias,
-            'niveles'      => $niveles,
-            'page_title'   => 'Administración de Teoría y Ascensos',
+            'alumnos'      => $alumnos,
+            'grados_list'  => $grados_list,
+            'sedes_list'   => $sedes_list,
+            'grupos_list'  => $grupos_list,
+            'historial'    => $historial,
+            'page_title'   => 'Ascensos de Alumnos',
             'current_page' => 'ascensos'
         ]);
     }
 
     public function store() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'titulo'      => $_POST['titulo'] ?? '',
-                'descripcion' => $_POST['descripcion'] ?? '',
-                'url_video'   => $_POST['url'] ?? '',    
-                'nivel_id'    => $_POST['nivel_id'] ?? 1
-            ];
-
-            $this->teoriaModel->create($data);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('/admin/ascensos');
+            return;
         }
-    }
 
-    public function update() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = (int)$_POST['id'];
-            $data = [
-                'titulo'      => $_POST['titulo'] ?? '',
-                'descripcion' => $_POST['descripcion'] ?? '',
-                'url_video'   => $_POST['url'] ?? '',
-                'nivel_id'    => $_POST['nivel_id'] ?? 1
-            ];
+        $id_alumno          = (int)($_POST['id_alumno'] ?? 0);
+        $id_grado_nuevo     = (int)($_POST['id_grado_nuevo'] ?? 0);
+        $grado_anterior     = trim($_POST['grado_anterior'] ?? '');
+        $fecha_examen       = $_POST['fecha_examen'] ?? date('Y-m-d');
+        $observaciones      = trim($_POST['observaciones'] ?? '');
 
-            $this->teoriaModel->update($id, $data);
-            $this->redirect('/admin/ascensos');
+        if ($id_alumno <= 0 || $id_grado_nuevo <= 0) {
+            $this->redirect('/admin/ascensos?error=datos_invalidos');
+            return;
         }
-    }
 
-    public function delete() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = (int)$_POST['id'];
-            $this->teoriaModel->delete($id);
-            $this->redirect('/admin/ascensos');
+        // Obtener nombre del nuevo grado
+        $grados = $this->nivelModel->getAll();
+        $gradosMap = [];
+        foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
+        $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
+
+        $ok = $this->certModel->create([
+            'id_estudiante'  => $id_alumno,
+            'id_maestro'     => null,
+            'grado_anterior' => $grado_anterior,
+            'grado_nuevo'    => $grado_nuevo,
+            'id_grado_nuevo' => $id_grado_nuevo,
+            'fecha_examen'   => $fecha_examen,
+            'observaciones'  => $observaciones,
+            'folio'          => Certificado::generarFolio(),
+        ]);
+
+        if ($ok) {
+            $this->redirect('/admin/ascensos?success=1');
+        } else {
+            $this->redirect('/admin/ascensos?error=fallo');
         }
     }
 }

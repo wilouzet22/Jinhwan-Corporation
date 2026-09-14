@@ -8,6 +8,7 @@ include_once __DIR__ . '/controladores/Web/MiembrosController.php';
 include_once __DIR__ . '/controladores/Web/GaleriaController.php';
             
 include_once __DIR__ . '/controladores/Administracion/AscensosController.php';
+include_once __DIR__ . '/controladores/Administracion/TeoriaController.php';
 include_once __DIR__ . '/controladores/Administracion/SedesController.php';
 include_once __DIR__ . '/controladores/Administracion/MiembrosController.php';
 include_once __DIR__ . '/controladores/Administracion/EstudiantesController.php';
@@ -30,7 +31,6 @@ include_once __DIR__ . '/controladores/Estudiante/HistorialController.php';
 
 include_once __DIR__ . '/controladores/Maestro/DashboardController.php';
 include_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
-include_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
 
 $router = new Router();
 
@@ -73,9 +73,12 @@ $router->post('/registro/completar/process', [AutenticacionController::class, 'p
 // Administración
 $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 $router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
-$router->post('/admin/ascensos/create', [AdminAscensosController::class, 'store']);
-$router->post('/admin/ascensos/update', [AdminAscensosController::class, 'update']);
-$router->post('/admin/ascensos/delete', [AdminAscensosController::class, 'delete']);
+$router->post('/admin/ascensos/store', [AdminAscensosController::class, 'store']);
+
+$router->get('/admin/teoria', [AdminTeoriaController::class, 'index']);
+$router->post('/admin/teoria/create', [AdminTeoriaController::class, 'store']);
+$router->post('/admin/teoria/update', [AdminTeoriaController::class, 'update']);
+$router->post('/admin/teoria/delete', [AdminTeoriaController::class, 'delete']);
 
 $router->get('/admin/sedes', [AdminSedesController::class, 'index']);
 $router->post('/admin/sedes/create', [AdminSedesController::class, 'store']);
@@ -129,10 +132,5 @@ $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/alumnos/{id}', [MaestroAlumnosController::class, 'show']);
-$router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesAscensoController::class, 'index']);
-$router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesAscensoController::class, 'store']);
-$router->post('/maestro/solicitudes-ascenso/aprobar', [MaestroSolicitudesAscensoController::class, 'aprobar']);
-$router->post('/maestro/solicitudes-ascenso/rechazar', [MaestroSolicitudesAscensoController::class, 'rechazar']);
-$router->get('/maestro/solicitudes-ascenso/certificado', [MaestroSolicitudesAscensoController::class, 'certificado']);
 
 $router->dispatch();

@@ -87,12 +87,6 @@ if (isset($_SESSION['id'])) {
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'solicitudes_ascenso' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'solicitudes_ascenso' ? 'text-tkd-purple' : '' ?>">timeline</span>
-                        <span class="text-sm font-medium">Solicitudes Ascenso</span>
-                    </a>
-                </li>
-                <li>
                     <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-tkd-purple' : '' ?>">event</span>
                         <span class="text-sm font-medium">Calendario</span>
@@ -133,7 +127,7 @@ if (isset($_SESSION['id'])) {
                 <li>
                     <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-purple' : '' ?>">military_tech</span>
-                        <span class="text-sm font-medium">Aprobar Ascensos</span>
+                        <span class="text-sm font-medium">Ascensos</span>
                     </a>
                 </li>
                 <?php endif; ?>
