@@ -20,8 +20,18 @@
                         <?php endif; ?>
                         <span class="text-xs text-gray-400">• Instructor: <?php echo htmlspecialchars($cronograma['maestro_nombre'] ?? 'N/A'); ?></span>
                     </div>
+<?php
+$diasEspanol = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+$mesesEspanol = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+$tsCronograma = strtotime($cronograma['fecha']);
+$diaSemanaStr = $diasEspanol[date('w', $tsCronograma)];
+$diaNumStr = date('j', $tsCronograma);
+$mesStr = $mesesEspanol[(int)date('n', $tsCronograma)];
+$anioStr = date('Y', $tsCronograma);
+$fechaTextoCompleto = "$diaSemanaStr, $diaNumStr de $mesStr de $anioStr";
+?>
                     <h1 class="text-2xl font-bold text-gray-800">
-                        Sesión del <?php echo date('d/m/Y', strtotime($cronograma['fecha'])); ?>
+                        Sesión del <?php echo $fechaTextoCompleto; ?>
                     </h1>
                 </div>
             </div>

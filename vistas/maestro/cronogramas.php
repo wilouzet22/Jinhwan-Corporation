@@ -47,6 +47,19 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+<?php
+function fechaEspanolCompleta($fechaStr) {
+    $dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    $meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    $ts = strtotime($fechaStr);
+    $diaSemana = $dias[date('w', $ts)];
+    $dia = date('j', $ts);
+    $mes = $meses[(int)date('n', $ts)];
+    $anio = date('Y', $ts);
+    return ['dia_semana' => $diaSemana, 'fecha_completa' => "$diaSemana, $dia de $mes de $anio", 'corta' => "$dia/$mes/$anio"];
+}
+?>
+
                     <?php if (empty($cronogramas)): ?>
                         <tr>
                             <td colspan="5" class="py-8 text-center text-gray-400">
@@ -55,14 +68,19 @@
                             </td>
                         </tr>
                     <?php else: ?>
-                        <?php foreach ($cronogramas as $c): ?>
+                        <?php foreach ($cronogramas as $c): 
+                            $fInfo = fechaEspanolCompleta($c['fecha']);
+                        ?>
                             <tr class="hover:bg-gray-50 transition item-cronograma"
                                 data-grupo="<?php echo htmlspecialchars($c['id_grupo']); ?>"
-                                data-text="<?php echo htmlspecialchars(strtolower(($c['objetivo'] ?? '') . ' ' . ($c['observaciones'] ?? '') . ' ' . ($c['maestro_nombre'] ?? ''))); ?>">
-                                <td class="py-3 px-4 font-semibold text-gray-900 whitespace-nowrap">
+                                data-text="<?php echo htmlspecialchars(strtolower(($c['objetivo'] ?? '') . ' ' . ($c['observaciones'] ?? '') . ' ' . ($c['maestro_nombre'] ?? '') . ' ' . $fInfo['fecha_completa'])); ?>">
+                                <td class="py-3 px-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
-                                        <span class="material-icons-outlined text-purple-600 text-sm">calendar_today</span>
-                                        <?php echo date('d/m/Y', strtotime($c['fecha'])); ?>
+                                        <span class="p-1.5 bg-purple-50 text-purple-700 rounded-lg material-icons-outlined text-sm">calendar_today</span>
+                                        <div>
+                                            <span class="font-bold text-gray-900 block text-sm"><?php echo $fInfo['dia_semana']; ?></span>
+                                            <span class="text-xs text-gray-500 font-medium"><?php echo $fInfo['fecha_completa']; ?></span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="py-3 px-4">
@@ -114,22 +132,49 @@
             </button>
         </div>
         <form method="POST" action="<?php echo base_url('maestro/cronogramas/create'); ?>" class="p-6 space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Grupo *</label>
-                    <select name="id_grupo" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
-                        <option value="">Seleccione grupo...</option>
-                        <?php foreach ($grupos as $g): ?>
-                            <option value="<?php echo $g['id_grupo']; ?>">
-                                <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Grupo *</label>
+                <select name="id_grupo" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                    <option value="">Seleccione grupo...</option>
+                    <?php foreach ($grupos as $g): ?>
+                        <option value="<?php echo $g['id_grupo']; ?>">
+                            <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- Selector de Día de la Semana con Fecha Exacta -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Día de la Clase (Seleccionar en la semana)</label>
+                    <div class="flex items-center gap-1 text-xs">
+                        <button type="button" onclick="cambiarSemana(-1)" class="p-1 text-gray-500 hover:text-purple-600 hover:bg-white rounded transition" title="Semana anterior">
+                            <span class="material-icons-outlined text-sm">chevron_left</span>
+                        </button>
+                        <span id="semana-rango-label" class="font-medium text-gray-600 px-1">Semana actual</span>
+                        <button type="button" onclick="cambiarSemana(1)" class="p-1 text-gray-500 hover:text-purple-600 hover:bg-white rounded transition" title="Semana siguiente">
+                            <span class="material-icons-outlined text-sm">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de la Clase *</label>
-                    <input type="date" name="fecha" required value="<?php echo date('Y-m-d'); ?>"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+
+                <!-- Botones para cada día de la semana -->
+                <div class="grid grid-cols-7 gap-1.5 text-center mb-3" id="contenedor-dias-semana">
+                    <!-- Rellenado por JS: Lunes a Domingo con su fecha calculada -->
+                </div>
+
+                <!-- Input oculto o sincronizado con la fecha exacta YYYY-MM-DD -->
+                <div class="flex items-center justify-between pt-2 border-t border-gray-200 text-xs">
+                    <div class="flex items-center gap-1.5 text-purple-700 font-semibold">
+                        <span class="material-icons-outlined text-sm">event</span>
+                        <span id="label-fecha-seleccionada">Selecciona un día</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <span class="text-gray-400">O ingresa fecha:</span>
+                        <input type="date" id="input-fecha-modal" name="fecha" required value="<?php echo date('Y-m-d'); ?>"
+                               class="px-2 py-1 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:ring-1 focus:ring-purple-500">
+                    </div>
                 </div>
             </div>
             <div>
@@ -157,11 +202,145 @@
 <script>
 function openModal(id) {
     document.getElementById(id).classList.remove('hidden');
+    if (id === 'modal-nuevo-cronograma') {
+        renderizarDiasSemana();
+    }
 }
 function closeModal(id) {
     document.getElementById(id).classList.add('hidden');
 }
 
+// --- Selector Interactivo de Días de la Semana ---
+let offsetSemanas = 0;
+let fechaSeleccionada = document.getElementById('input-fecha-modal').value || new Date().toISOString().split('T')[0];
+
+const nombresDias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const nombresDiasCompletos = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+function obtenerLunesDeSemana(offset) {
+    const hoy = new Date();
+    const diaSemana = hoy.getDay(); // 0 es Domingo, 1 es Lunes
+    const diff = (diaSemana === 0 ? -6 : 1) - diaSemana; // Llevar a Lunes
+    const lunes = new Date(hoy);
+    lunes.setDate(hoy.getDate() + diff + (offset * 7));
+    lunes.setHours(0, 0, 0, 0);
+    return lunes;
+}
+
+function formatearFechaISO(d) {
+    const anio = d.getFullYear();
+    const mes = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    return `${anio}-${mes}-${dia}`;
+}
+
+function cambiarSemana(delta) {
+    offsetSemanas += delta;
+    renderizarDiasSemana();
+}
+
+function seleccionarDia(fechaISO) {
+    fechaSeleccionada = fechaISO;
+    document.getElementById('input-fecha-modal').value = fechaISO;
+    actualizarLabelFecha();
+    renderizarDiasSemana();
+}
+
+function actualizarLabelFecha() {
+    if (!fechaSeleccionada) return;
+    const partes = fechaSeleccionada.split('-');
+    const fechaObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+    const diaSemIndex = (fechaObj.getDay() + 6) % 7; // Lunes = 0, Domingo = 6
+    const nombreDia = nombresDiasCompletos[diaSemIndex];
+    const numDia = partes[2];
+    const mes = nombresMeses[parseInt(partes[1]) - 1];
+    const anio = partes[0];
+
+    const label = document.getElementById('label-fecha-seleccionada');
+    if (label) {
+        label.innerText = `${nombreDia}, ${numDia} de ${mes} de ${anio}`;
+    }
+}
+
+function renderizarDiasSemana() {
+    const lunes = obtenerLunesDeSemana(offsetSemanas);
+    const contenedor = document.getElementById('contenedor-dias-semana');
+    if (!contenedor) return;
+
+    contenedor.innerHTML = '';
+
+    const domingo = new Date(lunes);
+    domingo.setDate(lunes.getDate() + 6);
+
+    const rangoLabel = document.getElementById('semana-rango-label');
+    if (rangoLabel) {
+        if (offsetSemanas === 0) {
+            rangoLabel.innerText = 'Semana actual';
+        } else if (offsetSemanas === 1) {
+            rangoLabel.innerText = 'Próxima semana';
+        } else if (offsetSemanas === -1) {
+            rangoLabel.innerText = 'Semana pasada';
+        } else {
+            rangoLabel.innerText = `${lunes.getDate()} ${nombresMeses[lunes.getMonth()].slice(0,3)} - ${domingo.getDate()} ${nombresMeses[domingo.getMonth()].slice(0,3)}`;
+        }
+    }
+
+    const hoyISO = formatearFechaISO(new Date());
+
+    for (let i = 0; i < 7; i++) {
+        const diaActual = new Date(lunes);
+        diaActual.setDate(lunes.getDate() + i);
+        const iso = formatearFechaISO(diaActual);
+        const esSeleccionado = (iso === fechaSeleccionada);
+        const esHoy = (iso === hoyISO);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => seleccionarDia(iso);
+
+        let clases = 'p-2 rounded-lg text-xs flex flex-col items-center justify-center transition border ';
+        if (esSeleccionado) {
+            clases += 'bg-purple-600 text-white font-bold border-purple-700 shadow-sm scale-105';
+        } else if (esHoy) {
+            clases += 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 font-semibold';
+        } else {
+            clases += 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100';
+        }
+
+        btn.className = clases;
+        btn.innerHTML = `
+            <span class="text-[10px] uppercase font-bold tracking-tight opacity-90">${nombresDias[i]}</span>
+            <span class="text-sm font-extrabold mt-0.5">${diaActual.getDate()}</span>
+        `;
+        contenedor.appendChild(btn);
+    }
+
+    actualizarLabelFecha();
+}
+
+// Sincronización cuando se cambia el input type="date" manualmente
+const inputFechaModal = document.getElementById('input-fecha-modal');
+if (inputFechaModal) {
+    inputFechaModal.addEventListener('change', function() {
+        if (this.value) {
+            fechaSeleccionada = this.value;
+            // Ajustar offset si la fecha seleccionada no está en la semana mostrada
+            const fechaObj = new Date(this.value + 'T00:00:00');
+            const hoyLunes = obtenerLunesDeSemana(0);
+            const diffDias = Math.floor((fechaObj - hoyLunes) / (1000 * 60 * 60 * 24));
+            offsetSemanas = Math.floor(diffDias / 7);
+            renderizarDiasSemana();
+        }
+    });
+}
+
+// Inicializar al cargar
+document.addEventListener('DOMContentLoaded', () => {
+    renderizarDiasSemana();
+});
+
+// --- Filtros de búsqueda en la tabla ---
 const filterSearch = document.getElementById('filter-search');
 const filterGrupo = document.getElementById('filter-grupo');
 const itemsCronograma = document.querySelectorAll('.item-cronograma');
@@ -181,8 +360,8 @@ function filtrarCronogramas() {
     });
 }
 
-filterSearch.addEventListener('input', filtrarCronogramas);
-filterGrupo.addEventListener('change', filtrarCronogramas);
+if (filterSearch) filterSearch.addEventListener('input', filtrarCronogramas);
+if (filterGrupo) filterGrupo.addEventListener('change', filtrarCronogramas);
 </script>
 
 <?php require_once __DIR__ . '/../layout/maestro_pie.php'; ?>
