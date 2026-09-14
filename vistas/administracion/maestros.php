@@ -6,7 +6,7 @@ $total_activos = count(array_filter($maestros, fn($m) => ($m['activo'] ?? 0) == 
 $total_inactivos = $total_maestros - $total_activos;
 ?>
 
-<main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
+<main class="flex-grow w-full px-4 py-6 sm:px-6 relative transition-colors duration-300">
     <div class="space-y-6">
         
         <!-- Encabezado y Acciones -->
@@ -93,17 +93,17 @@ $total_inactivos = $total_maestros - $total_activos;
 
         <!-- Tabla de Maestros -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="w-full overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse" id="teachers-table">
+            <div class="w-full">
+                <table class="w-full text-sm text-left border-collapse table-fixed" id="teachers-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="px-4 py-3">Maestro / Instructor</th>
-                            <th scope="col" class="px-3 py-3">Sede Principal</th>
-                            <th scope="col" class="px-3 py-3">Contacto</th>
-                            <th scope="col" class="px-3 py-3">Permisos Extra</th>
-                            <th scope="col" class="px-3 py-3 text-center">Web</th>
-                            <th scope="col" class="px-3 py-3 text-center">Estado</th>
-                            <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                            <th scope="col" class="w-[28%] px-2 py-3">Maestro / Instructor</th>
+                            <th scope="col" class="w-[18%] px-2 py-3">Sede Principal</th>
+                            <th scope="col" class="w-[18%] px-2 py-3">Contacto</th>
+                            <th scope="col" class="w-[15%] px-2 py-3">Permisos</th>
+                            <th scope="col" class="w-[6%] min-w-[45px] px-1 py-3 text-center">Web</th>
+                            <th scope="col" class="w-[7%] min-w-[65px] px-1 py-3 text-center">Estado</th>
+                            <th scope="col" class="w-[8%] min-w-[82px] px-2 py-3 text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="teachers-tbody">
@@ -117,6 +117,7 @@ $total_inactivos = $total_maestros - $total_activos;
                             <?php foreach ($maestros as $m): ?>
                                 <?php 
                                     $permisos = json_decode($m['permisos_extra'] ?? '{}', true) ?: [];
+                                    $sedeCorta = str_replace(['Sede Principal ', 'Sede '], '', $m['sede_nombre'] ?? 'Sin Asignar');
                                 ?>
                                 <tr class="teacher-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all" 
                                     data-id="<?= $m['id_maestro'] ?>"
@@ -126,100 +127,100 @@ $total_inactivos = $total_maestros - $total_activos;
                                     data-estado="<?= ($m['activo'] ?? 0) == 1 ? 'Activo' : 'Inactivo' ?>">
                                     
                                     <!-- Maestro (Avatar + Nombre + Doc) -->
-                                    <td class="px-4 py-2.5 font-semibold">
-                                        <div class="flex items-center gap-2.5">
+                                    <td class="px-2 py-2 font-semibold">
+                                        <div class="flex items-center gap-2 min-w-0">
                                             <?php if (!empty($m['foto_perfil'])): ?>
-                                                <img src="<?= base_url('/public/uploads/perfiles/' . $m['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shadow-xs shrink-0 border border-slate-200 dark:border-slate-700">
+                                                <img src="<?= base_url('/public/uploads/perfiles/' . $m['foto_perfil']) ?>" class="w-7 h-7 rounded-full object-cover shadow-xs shrink-0 border border-slate-200 dark:border-slate-700">
                                             <?php else: ?>
-                                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                                                     <?= strtoupper(substr($m['nombre'] ?? 'M', 0, 1)) ?>
                                                 </div>
                                             <?php endif; ?>
-                                            <div class="min-w-0">
-                                                <div class="text-slate-900 dark:text-white font-bold text-sm truncate leading-tight">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="text-slate-900 dark:text-white font-bold text-xs truncate leading-tight" title="<?= htmlspecialchars($m['nombre'] . ' ' . $m['apellido']) ?>">
                                                     <?= htmlspecialchars($m['nombre'] ?? '') . ' ' . htmlspecialchars($m['apellido'] ?? '') ?>
                                                 </div>
-                                                <div class="text-[11px] text-slate-500 dark:text-slate-400 font-normal flex items-center gap-1 mt-0.5">
-                                                    <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1 py-0.2 rounded text-[10px]"><?= htmlspecialchars($m['tipo_documento'] ?? 'CC') ?></span>
-                                                    <span><?= htmlspecialchars($m['num_doc'] ?? 'S/D') ?></span>
+                                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-normal flex items-center gap-1 mt-0.5 truncate">
+                                                    <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1 rounded text-[9px] shrink-0"><?= htmlspecialchars($m['tipo_documento'] ?? 'CC') ?></span>
+                                                    <span class="truncate"><?= htmlspecialchars($m['num_doc'] ?? 'S/D') ?></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
 
                                     <!-- Sede -->
-                                    <td class="px-3 py-2.5 text-xs">
-                                        <div class="flex items-center gap-1 font-bold text-slate-800 dark:text-slate-200">
-                                            <span class="material-icons-outlined text-xs text-tkd-blue">place</span>
-                                            <span><?= htmlspecialchars($m['sede_nombre'] ?? 'Sin Asignar') ?></span>
+                                    <td class="px-2 py-2 text-xs min-w-0">
+                                        <div class="flex items-center gap-1 font-bold text-slate-800 dark:text-slate-200 truncate" title="<?= htmlspecialchars($m['sede_nombre'] ?? '') ?>">
+                                            <span class="material-icons-outlined text-xs text-tkd-blue shrink-0">place</span>
+                                            <span class="truncate"><?= htmlspecialchars($sedeCorta) ?></span>
                                         </div>
                                     </td>
 
                                     <!-- Contacto -->
-                                    <td class="px-3 py-2.5 text-xs">
-                                        <div class="text-slate-800 dark:text-slate-300 font-medium"><?= htmlspecialchars($m['telefono'] ?? '-') ?></div>
-                                        <div class="text-[11px] text-slate-400 truncate mt-0.5"><?= htmlspecialchars($m['correo'] ?? '-') ?></div>
+                                    <td class="px-2 py-2 text-xs min-w-0">
+                                        <div class="text-slate-800 dark:text-slate-300 font-medium text-[11px] truncate" title="<?= htmlspecialchars($m['telefono'] ?? '-') ?>"><?= htmlspecialchars($m['telefono'] ?? '-') ?></div>
+                                        <div class="text-[10px] text-slate-400 truncate mt-0.5" title="<?= htmlspecialchars($m['correo'] ?? '-') ?>"><?= htmlspecialchars($m['correo'] ?? '-') ?></div>
                                     </td>
 
                                     <!-- Permisos Extra -->
-                                    <td class="px-3 py-2.5 text-xs">
+                                    <td class="px-2 py-2 text-xs min-w-0">
                                         <div class="flex flex-wrap gap-1">
                                             <?php foreach ($permisos as $permKey => $hasPerm): ?>
                                                 <?php if ($hasPerm): ?>
-                                                    <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40">
+                                                    <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40">
                                                         <?= htmlspecialchars($permKey) ?>
                                                     </span>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
                                             <?php if (!array_filter($permisos)): ?>
-                                                <span class="text-slate-400 text-[11px]">Básicos</span>
+                                                <span class="text-slate-400 text-[10px]">Básicos</span>
                                             <?php endif; ?>
                                         </div>
                                     </td>
 
                                     <!-- Web -->
-                                    <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                    <td class="px-1 py-2 text-center whitespace-nowrap">
                                         <?php if (($m['mostrar_en_web'] ?? 0) == 1): ?>
-                                            <span class="inline-flex items-center gap-1 text-[11px] text-emerald-600 font-bold">
+                                            <span class="inline-flex items-center gap-0.5 text-[10px] text-emerald-600 font-bold">
                                                 <span class="material-icons-outlined text-sm">visibility</span> Sí
                                             </span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center gap-1 text-[11px] text-slate-400">
+                                            <span class="inline-flex items-center gap-0.5 text-[10px] text-slate-400">
                                                 <span class="material-icons-outlined text-sm">visibility_off</span> No
                                             </span>
                                         <?php endif; ?>
                                     </td>
 
                                     <!-- Estado -->
-                                    <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                    <td class="px-1 py-2 text-center whitespace-nowrap">
                                         <?php if (($m['activo'] ?? 0) == 1): ?>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/30">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/30">
                                                 Activo
                                             </span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/30">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/30">
                                                 Inactivo
                                             </span>
                                         <?php endif; ?>
                                     </td>
 
                                     <!-- Acciones -->
-                                    <td class="px-4 py-2.5 text-right whitespace-nowrap">
-                                        <div class="flex items-center justify-end gap-1">
+                                    <td class="px-2 py-2 text-right whitespace-nowrap">
+                                        <div class="flex items-center justify-end gap-0.5">
                                             <!-- Ver Detalle -->
-                                            <button type="button" onclick='openDetailModal(<?= json_encode($m) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Ver Detalle">
+                                            <button type="button" onclick='openDetailModal(<?= json_encode($m) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Ver Detalle">
                                                 <span class="material-icons-outlined text-base">visibility</span>
                                             </button>
                                             
                                             <!-- Editar -->
-                                            <button type="button" onclick='openModal("edit", <?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Editar">
+                                            <button type="button" onclick='openModal("edit", <?= json_encode($m) ?>)' class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Editar">
                                                 <span class="material-icons-outlined text-base">edit</span>
                                             </button>
                                             
                                             <!-- Eliminar -->
                                             <form action="<?= base_url('/admin/maestros/delete') ?>" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar a este maestro?');">
                                                 <input type="hidden" name="id" value="<?= $m['id_maestro'] ?>">
-                                                <button type="submit" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all cursor-pointer" title="Eliminar">
+                                                <button type="submit" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 p-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all cursor-pointer" title="Eliminar">
                                                     <span class="material-icons-outlined text-base">delete</span>
                                                 </button>
                                             </form>

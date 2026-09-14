@@ -6,7 +6,7 @@ $total_activos = count(array_filter($estudiantes, fn($e) => ($e['activo'] ?? 0) 
 $total_inactivos = $total_estudiantes - $total_activos;
 ?>
 
-<main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
+<main class="flex-grow w-full px-4 py-6 sm:px-6 relative transition-colors duration-300">
     <div class="space-y-6">
         
         <!-- Encabezado y Botones de Acción -->
@@ -125,19 +125,19 @@ $total_inactivos = $total_estudiantes - $total_activos;
 
         <!-- Tabla de Estudiantes -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="w-full overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse" id="students-table">
+            <div class="w-full">
+                <table class="w-full text-sm text-left border-collapse table-fixed" id="students-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="px-3 py-3 w-10 text-center">
+                            <th scope="col" class="w-8 px-1 py-3 text-center">
                                 <input type="checkbox" id="select-all-checkbox" class="h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue bg-white dark:bg-slate-800 cursor-pointer">
                             </th>
-                            <th scope="col" class="px-4 py-3">Estudiante</th>
-                            <th scope="col" class="px-3 py-3 text-center">Grado / Cinturón</th>
-                            <th scope="col" class="px-3 py-3">Grupo & Sede</th>
-                            <th scope="col" class="px-3 py-3">Contacto</th>
-                            <th scope="col" class="px-3 py-3 text-center">Estado</th>
-                            <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                            <th scope="col" class="w-[28%] px-2 py-3">Estudiante</th>
+                            <th scope="col" class="w-[12%] min-w-[70px] px-1 py-3 text-center">Grado</th>
+                            <th scope="col" class="w-[23%] px-2 py-3">Grupo & Sede</th>
+                            <th scope="col" class="w-[15%] px-2 py-3">Contacto</th>
+                            <th scope="col" class="w-[10%] min-w-[65px] px-1 py-3 text-center">Estado</th>
+                            <th scope="col" class="w-[12%] min-w-[82px] px-2 py-3 text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="students-tbody">
@@ -165,6 +165,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                                     } elseif (str_contains($grado, 'negro') || str_contains($grado, 'dan')) {
                                         $beltClass = 'bg-slate-900 text-amber-400 border border-amber-500/40 dark:bg-slate-950 dark:border-amber-500/50';
                                     }
+                                    $sedeCorta = str_replace(['Sede Principal ', 'Sede '], '', $est['sede_nombre'] ?? 'Sin Asignar');
                                 ?>
                                 <tr class="student-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all" 
                                     data-id="<?= $est['id'] ?>"
@@ -175,87 +176,94 @@ $total_inactivos = $total_estudiantes - $total_activos;
                                     data-grupo="<?= htmlspecialchars($est['grupo_nombre'] ?? 'Sin Asignar') ?>"
                                     data-estado="<?= ($est['activo'] ?? 0) == 1 ? 'Activo' : 'Inactivo' ?>">
                                     
-                                    <td class="px-3 py-2.5 text-center">
+                                    <td class="px-1 py-2 text-center">
                                         <input type="checkbox" name="student-checkbox" value="<?= $est['id'] ?>"
                                                class="student-checkbox h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue bg-white dark:bg-slate-800 cursor-pointer">
                                     </td>
 
                                     <!-- Estudiante (Avatar + Nombre + Doc) -->
-                                    <td class="px-4 py-2.5 font-semibold">
-                                        <div class="flex items-center gap-2.5">
+                                    <td class="px-2 py-2 font-semibold">
+                                        <div class="flex items-center gap-2 min-w-0">
                                             <?php if (!empty($est['foto_perfil'])): ?>
-                                                <img src="<?= base_url('/public/uploads/perfiles/' . $est['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shadow-xs shrink-0 border border-slate-200 dark:border-slate-700">
+                                                <img src="<?= base_url('/public/uploads/perfiles/' . $est['foto_perfil']) ?>" class="w-7 h-7 rounded-full object-cover shadow-xs shrink-0 border border-slate-200 dark:border-slate-700">
                                             <?php else: ?>
-                                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                                                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
                                                     <?= strtoupper(substr($est['nombre'] ?? 'E', 0, 1)) ?>
                                                 </div>
                                             <?php endif; ?>
-                                            <div class="min-w-0">
-                                                <div class="text-slate-900 dark:text-white font-bold text-sm truncate leading-tight">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="text-slate-900 dark:text-white font-bold text-xs truncate leading-tight" title="<?= htmlspecialchars($est['nombre'] . ' ' . $est['apellido']) ?>">
                                                     <?= htmlspecialchars($est['nombre'] ?? '') . ' ' . htmlspecialchars($est['apellido'] ?? '') ?>
                                                 </div>
-                                                <div class="text-[11px] text-slate-500 dark:text-slate-400 font-normal flex items-center gap-1 mt-0.5">
-                                                    <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1 py-0.2 rounded text-[10px]"><?= htmlspecialchars($est['tipo_documento'] ?? 'TI') ?></span>
-                                                    <span><?= htmlspecialchars($est['numero_documento'] ?? 'S/D') ?></span>
+                                                <div class="text-[10px] text-slate-500 dark:text-slate-400 font-normal flex items-center gap-1 mt-0.5 truncate">
+                                                    <span class="font-mono bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-1 rounded text-[9px] shrink-0"><?= htmlspecialchars($est['tipo_documento'] ?? 'TI') ?></span>
+                                                    <span class="truncate"><?= htmlspecialchars($est['numero_documento'] ?? 'S/D') ?></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
 
                                     <!-- Grado -->
-                                    <td class="px-3 py-2.5 text-center whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider <?= $beltClass ?>">
+                                    <td class="px-1 py-2 text-center whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider <?= $beltClass ?>">
                                             <?= htmlspecialchars($est['grado_nombre'] ?? 'Sin Asignar') ?>
                                         </span>
                                     </td>
 
                                     <!-- Grupo & Sede -->
-                                    <td class="px-3 py-2.5 text-xs">
-                                        <div class="font-bold text-slate-800 dark:text-slate-200">
+                                    <td class="px-2 py-2 text-xs min-w-0">
+                                        <div class="font-bold text-slate-800 dark:text-slate-200 truncate leading-tight" title="<?= htmlspecialchars($est['grupo_nombre'] ?? 'Sin Grupo') ?>">
                                             <?= htmlspecialchars($est['grupo_nombre'] ?? 'Sin Grupo') ?>
                                         </div>
-                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                                            <span class="material-icons-outlined text-xs text-tkd-blue">place</span>
-                                            <span class="truncate"><?= htmlspecialchars($est['sede_nombre'] ?? 'Sin Sede') ?></span>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate" title="<?= htmlspecialchars($est['sede_nombre'] ?? '') ?>">
+                                            <span class="material-icons-outlined text-xs text-tkd-blue shrink-0">place</span>
+                                            <span class="truncate"><?= htmlspecialchars($sedeCorta) ?></span>
                                         </div>
                                     </td>
 
                                     <!-- Contacto -->
-                                    <td class="px-3 py-2.5 text-xs">
-                                        <div class="text-slate-800 dark:text-slate-300 font-medium"><?= htmlspecialchars($est['telefono'] ?? '-') ?></div>
-                                        <div class="text-[11px] text-slate-400 truncate mt-0.5"><?= htmlspecialchars($est['correo'] ?? '-') ?></div>
+                                    <td class="px-2 py-2 text-xs min-w-0">
+                                        <?php if (!empty($est['telefono'])): ?>
+                                            <div class="text-slate-800 dark:text-slate-300 font-medium truncate text-[11px]"><?= htmlspecialchars($est['telefono']) ?></div>
+                                        <?php endif; ?>
+                                        <?php if (!empty($est['correo'])): ?>
+                                            <div class="text-[10px] text-slate-400 truncate" title="<?= htmlspecialchars($est['correo']) ?>"><?= htmlspecialchars($est['correo']) ?></div>
+                                        <?php endif; ?>
+                                        <?php if (empty($est['telefono']) && empty($est['correo'])): ?>
+                                            <span class="text-slate-400">-</span>
+                                        <?php endif; ?>
                                     </td>
 
                                     <!-- Estado -->
-                                    <td class="px-3 py-2.5 text-center whitespace-nowrap">
+                                    <td class="px-1 py-2 text-center whitespace-nowrap">
                                         <?php if (($est['activo'] ?? 0) == 1): ?>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/30">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/30">
                                                 Activo
                                             </span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/30">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/30">
                                                 Inactivo
                                             </span>
                                         <?php endif; ?>
                                     </td>
 
                                     <!-- Acciones -->
-                                    <td class="px-4 py-2.5 text-right whitespace-nowrap">
-                                        <div class="flex items-center justify-end gap-1">
+                                    <td class="px-2 py-2 text-right whitespace-nowrap">
+                                        <div class="flex items-center justify-end gap-0.5">
                                             <!-- Ver Detalle -->
-                                            <button type="button" onclick='openDetailModal(<?= json_encode($est) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Ver Detalle">
+                                            <button type="button" onclick='openDetailModal(<?= json_encode($est) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Ver Detalle">
                                                 <span class="material-icons-outlined text-base">visibility</span>
                                             </button>
                                             
                                             <!-- Editar -->
-                                            <button type="button" onclick='openModal("edit", <?= json_encode($est) ?>)' class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Editar">
+                                            <button type="button" onclick='openModal("edit", <?= json_encode($est) ?>)' class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Editar">
                                                 <span class="material-icons-outlined text-base">edit</span>
                                             </button>
                                             
                                             <!-- Eliminar -->
                                             <form action="<?= base_url('/admin/estudiantes/delete') ?>" method="POST" class="inline-block" onsubmit="return confirm('¿Estás seguro de eliminar a este estudiante?');">
                                                 <input type="hidden" name="id" value="<?= $est['id'] ?>">
-                                                <button type="submit" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all cursor-pointer" title="Eliminar">
+                                                <button type="submit" class="text-rose-500 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 p-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all cursor-pointer" title="Eliminar">
                                                     <span class="material-icons-outlined text-base">delete</span>
                                                 </button>
                                             </form>
