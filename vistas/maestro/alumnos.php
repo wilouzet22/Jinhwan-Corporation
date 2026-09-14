@@ -55,6 +55,16 @@
                 </select>
                 <?php endif; ?>
 
+                <!-- Filtro Grupo -->
+                <?php if (!empty($grupos_list)): ?>
+                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors">
+                    <option value="all">Todos los Grupos</option>
+                    <?php foreach($grupos_list as $grupo): ?>
+                        <option value="<?= htmlspecialchars($grupo['nombre']) ?>"><?= htmlspecialchars($grupo['nombre']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+
                 <!-- Botón Reset -->
                 <button id="btn-reset-filters" class="hidden text-xs text-rose-500 hover:text-rose-700 font-bold px-2 py-1 transition-colors focus:outline-none cursor-pointer">
                     ✕ Limpiar Filtros
@@ -99,7 +109,8 @@
                                     data-nombre="<?= htmlspecialchars(strtolower($alumno['nombre'] . ' ' . $alumno['apellido'])) ?>"
                                     data-doc="<?= htmlspecialchars($alumno['numero_documento'] ?? '') ?>"
                                     data-sede="<?= htmlspecialchars($alumno['nombre_sede'] ?? 'Sin Asignar') ?>"
-                                    data-cinturon="<?= htmlspecialchars($alumno['nombre_nivel'] ?? 'Sin Asignar') ?>">
+                                    data-cinturon="<?= htmlspecialchars($alumno['nombre_nivel'] ?? 'Sin Asignar') ?>"
+                                    data-grupo="<?= htmlspecialchars($alumno['nombre_grupo'] ?? '') ?>">
                                     
                                     <!-- Alumno (Avatar + Nombre + Documento) -->
                                     <td class="px-4 py-2.5 font-semibold">
@@ -193,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('alumno-search');
     const sedeFilter   = document.getElementById('filter-sede');
     const cinturonFilter = document.getElementById('filter-cinturon');
+    const grupoFilter  = document.getElementById('filter-grupo');
     const resetBtn    = document.getElementById('btn-reset-filters');
     const rows        = document.querySelectorAll('.alumno-row');
 
@@ -306,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = (searchInput?.value || '').toLowerCase().trim();
         const sede  = sedeFilter ? sedeFilter.value : 'all';
         const cinturon = cinturonFilter ? cinturonFilter.value : 'all';
+        const grupo = grupoFilter ? grupoFilter.value : 'all';
 
         matchingRows = [];
 
@@ -314,18 +327,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const rDoc      = r.getAttribute('data-doc') || '';
             const rSede     = r.getAttribute('data-sede') || '';
             const rCinturon = r.getAttribute('data-cinturon') || '';
+            const rGrupo    = r.getAttribute('data-grupo') || '';
 
             const matchesQuery = !query || rNombre.includes(query) || rDoc.includes(query);
             const matchesSede  = sede === 'all' || rSede === sede;
             const matchesCinturon = cinturon === 'all' || rCinturon === cinturon;
+            const matchesGrupo = grupo === 'all' || rGrupo === grupo;
 
-            if (matchesQuery && matchesSede && matchesCinturon) {
+            if (matchesQuery && matchesSede && matchesCinturon && matchesGrupo) {
                 matchingRows.push(r);
             }
         });
 
         if (resetBtn) {
-            const isFiltered = query || sede !== 'all' || cinturon !== 'all';
+            const isFiltered = query || sede !== 'all' || cinturon !== 'all' || grupo !== 'all';
             resetBtn.classList.toggle('hidden', !isFiltered);
         }
 
@@ -347,10 +362,16 @@ document.addEventListener('DOMContentLoaded', () => {
         filterAlumnos();
     });
 
+    grupoFilter?.addEventListener('change', () => {
+        currentPage = 1;
+        filterAlumnos();
+    });
+
     resetBtn?.addEventListener('click', () => {
         if (searchInput) searchInput.value = '';
         if (sedeFilter) sedeFilter.value = 'all';
         if (cinturonFilter) cinturonFilter.value = 'all';
+        if (grupoFilter) grupoFilter.value = 'all';
         currentPage = 1;
         filterAlumnos();
     });
