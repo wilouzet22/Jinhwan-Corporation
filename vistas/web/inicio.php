@@ -22,8 +22,8 @@
                         Nuestra organización se dedica a la excelencia, la evolución y la formación de carácter a través del Taekwondo.
                     </p>
                     <div class="flex flex-col sm:flex-row flex-wrap gap-4">
-                        <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-rose-600/30 transform hover:-translate-y-0.5">
-                            Encuentra tu Sede
+                        <a href="<?= base_url('/grupos') ?>" class="px-8 py-4 bg-rose-600 hover:bg-rose-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-rose-600/30 transform hover:-translate-y-0.5">
+                            Nuestros Grupos
                         </a>
                         <a href="<?= base_url('/nosotros') ?>" class="px-8 py-4 border border-white/30 text-white hover:bg-white/10 font-display font-bold uppercase tracking-wider rounded-xl transition-all backdrop-blur-md">
                             Conoce Más
@@ -48,8 +48,8 @@
                     <p class="text-lg md:text-xl text-slate-200 mb-8 max-w-2xl font-light border-l-2 border-amber-500/80 pl-6 leading-relaxed">
                         Instalaciones de primer nivel y maestros certificados para guiar tu camino marcial.
                     </p>
-                    <a href="<?= base_url('/sedes') ?>" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-600/30 transform hover:-translate-y-0.5">
-                        Conoce Nuestras Sedes
+                    <a href="<?= base_url('/grupos') ?>" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-display font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-blue-600/30 transform hover:-translate-y-0.5">
+                        Conoce Nuestros Grupos
                     </a>
                 </div>
             </div>

@@ -122,9 +122,9 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="material-icons-outlined text-xl group-hover:text-rose-600 transition-colors">home</span>
                 <span class="font-display tracking-wide uppercase">Inicio</span>
             </a>
-            <a href="<?= base_url('/sedes') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-blue-600 dark:hover:text-blue-400 transition-all group nav-link font-semibold">
-                <span class="material-icons-outlined text-blue-600 group-hover:scale-110 transition-transform">location_on</span>
-                <span class="font-display tracking-wider uppercase">Sedes</span>
+            <a href="<?= base_url('/grupos') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-blue-600 dark:hover:text-blue-400 transition-all group nav-link font-semibold">
+                <span class="material-icons-outlined text-blue-600 group-hover:scale-110 transition-transform">groups</span>
+                <span class="font-display tracking-wider uppercase">Grupos</span>
             </a>
 
             <a href="<?= base_url('/nosotros') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-rose-600 dark:hover:text-rose-400 transition-all group nav-link font-semibold">

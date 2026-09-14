@@ -2,6 +2,7 @@
 
 include_once __DIR__ . '/controladores/Web/InicioController.php';
 include_once __DIR__ . '/controladores/Web/SedesController.php';
+include_once __DIR__ . '/controladores/Web/GruposController.php';
 include_once __DIR__ . '/controladores/Web/PaginaController.php';
 include_once __DIR__ . '/controladores/Web/MiembrosController.php';
 include_once __DIR__ . '/controladores/Web/GaleriaController.php';
@@ -39,6 +40,7 @@ $router->get('/portal', [WebInicioController::class, 'portal']);
 $router->get('/inicio', [WebInicioController::class, 'index']);
 $router->get('/nosotros', [WebPaginaController::class, 'nosotros']);
 $router->get('/sedes', [WebSedesController::class, 'index']);
+$router->get('/grupos', [WebGruposController::class, 'index']);
 $router->get('/miembros', [WebMiembrosController::class, 'index']);
 $router->get('/galeria', [WebGaleriaController::class, 'index']);
 
