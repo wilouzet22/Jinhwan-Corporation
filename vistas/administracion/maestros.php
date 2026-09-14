@@ -342,9 +342,6 @@ $total_inactivos = $total_maestros - $total_activos;
                         <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700 dark:text-slate-300">
                             <input type="checkbox" name="permiso_galeria" id="perm-galeria" class="rounded text-purple-600"> Galería
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700 dark:text-slate-300">
-                            <input type="checkbox" name="permiso_reportes" id="perm-reportes" class="rounded text-purple-600"> Reportes
-                        </label>
                     </div>
                 </div>
 
@@ -456,7 +453,6 @@ function openModal(mode, data = null) {
         document.getElementById('perm-ascensos').checked = !!permisos.ascensos;
         document.getElementById('perm-calendario').checked = !!permisos.calendario;
         document.getElementById('perm-galeria').checked = !!permisos.galeria;
-        document.getElementById('perm-reportes').checked = !!permisos.reportes;
 
         claveHint.classList.remove('hidden');
     } else {
