@@ -87,6 +87,18 @@ if (isset($_SESSION['id'])) {
                     </a>
                 </li>
                 <li>
+                    <a href="<?= base_url('/maestro/cronogramas') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'cronogramas' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'cronogramas' ? 'text-tkd-purple' : '' ?>">event_note</span>
+                        <span class="text-sm font-medium">Cronogramas de Clase</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= base_url('/maestro/ejercicios') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ejercicios' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ejercicios' ? 'text-tkd-purple' : '' ?>">fitness_center</span>
+                        <span class="text-sm font-medium">Biblioteca Ejercicios</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-tkd-purple/20 text-white font-semibold' : 'text-slate-400 hover:bg-slate-800 hover:text-white' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-tkd-purple' : '' ?>">event</span>
                         <span class="text-sm font-medium">Calendario</span>

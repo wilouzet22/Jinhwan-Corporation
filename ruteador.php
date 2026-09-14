@@ -31,6 +31,8 @@ include_once __DIR__ . '/controladores/Estudiante/HistorialController.php';
 
 include_once __DIR__ . '/controladores/Maestro/DashboardController.php';
 include_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
+include_once __DIR__ . '/controladores/Maestro/EjerciciosController.php';
+include_once __DIR__ . '/controladores/Maestro/CronogramasController.php';
 
 $router = new Router();
 
@@ -132,5 +134,19 @@ $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/alumnos/{id}', [MaestroAlumnosController::class, 'show']);
+
+// Biblioteca de Ejercicios
+$router->get('/maestro/ejercicios', [MaestroEjerciciosController::class, 'index']);
+$router->post('/maestro/ejercicios/create', [MaestroEjerciciosController::class, 'store']);
+$router->post('/maestro/ejercicios/update', [MaestroEjerciciosController::class, 'update']);
+$router->post('/maestro/ejercicios/delete', [MaestroEjerciciosController::class, 'delete']);
+
+// Cronogramas de Clase
+$router->get('/maestro/cronogramas', [MaestroCronogramasController::class, 'index']);
+$router->post('/maestro/cronogramas/create', [MaestroCronogramasController::class, 'store']);
+$router->get('/maestro/cronogramas/{id}', [MaestroCronogramasController::class, 'show']);
+$router->post('/maestro/cronogramas/delete', [MaestroCronogramasController::class, 'delete']);
+$router->post('/maestro/cronogramas/ejercicio/add', [MaestroCronogramasController::class, 'addEjercicio']);
+$router->post('/maestro/cronogramas/ejercicio/remove', [MaestroCronogramasController::class, 'removeEjercicio']);
 
 $router->dispatch();
