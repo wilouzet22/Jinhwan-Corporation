@@ -32,8 +32,8 @@ class AdminEstudiantesController extends Controller {
         // Solo estudiantes
         $sql = "SELECT e.id_estudiante as id, e.nombre, e.apellido, e.correo, e.telefono,
                        e.num_doc as numero_documento, e.tipo_documento, e.fecha_nacimiento,
-                       e.foto_perfil, e.activo, e.mostrar_en_web,
-                       e.peso, e.division, e.eps, e.rh, e.descripcion_perfil, e.logros,
+                       e.foto_perfil, e.activo,
+                       e.peso, e.division, e.eps, e.rh,
                        g.nombre as grupo_nombre, g.id_grupo,
                        gr.nombre as grado_nombre, gr.id_grado,
                        c.nombre as categoria_nombre,
@@ -90,13 +90,10 @@ class AdminEstudiantesController extends Controller {
             $id_grupo  = !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : 1;
             $id_grado  = !empty($_POST['nivel_id']) ? (int)$_POST['nivel_id'] : 1;
             $id_cat    = !empty($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 1;
-            $peso      = $_POST['peso'] ?? null;
+            $peso      = !empty($_POST['peso']) ? $_POST['peso'] : null;
             $division  = $_POST['division'] ?? null;
             $eps       = $_POST['eps'] ?? null;
             $rh        = $_POST['rh'] ?? null;
-            $desc      = $_POST['descripcion_perfil'] ?? null;
-            $logros    = $_POST['logros'] ?? null;
-            $web       = isset($_POST['mostrar_en_web']) ? 1 : 0;
             $activo    = isset($_POST['activo']) ? 1 : 0;
             $clave     = !empty($_POST['clave']) ? password_hash($_POST['clave'], PASSWORD_DEFAULT) : password_hash('jinhwa2024', PASSWORD_DEFAULT);
 
@@ -105,16 +102,15 @@ class AdminEstudiantesController extends Controller {
             $rm = $db->query("SELECT id_maestro FROM grupos WHERE id_grupo = $id_grupo LIMIT 1");
             if ($rm && $r = $rm->fetch_assoc()) $id_maestro = $r['id_maestro'] ?: null;
 
-            $stmt = $db->prepare("INSERT INTO estudiante (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo, peso, division, eps, rh, descripcion_perfil, logros, mostrar_en_web, foto_perfil)
-                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("iiiiisssssssissssssii",
+            $stmt = $db->prepare("INSERT INTO estudiante (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo, peso, division, eps, rh, foto_perfil)
+                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stmt->bind_param("iiiiisssssssisssss",
                 $id_grado, $id_cat, $id_grupo, $id_maestro,
                 $nombre, $apellido, $tipo_doc, $num_doc,
                 $telefono, $fnac, $correo, $clave, $activo,
-                $peso, $division, $eps, $rh, $desc, $logros, $web, $foto_perfil
+                $peso, $division, $eps, $rh, $foto_perfil
             );
             $stmt->execute();
-            $newId = $db->insert_id;
             $stmt->close();
 
             if ($newId > 0 && !empty($_POST['url_instagram'])) {
@@ -165,13 +161,10 @@ class AdminEstudiantesController extends Controller {
             $id_grupo = !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : 1;
             $id_grado = !empty($_POST['nivel_id']) ? (int)$_POST['nivel_id'] : 1;
             $id_cat   = !empty($_POST['categoria_id']) ? (int)$_POST['categoria_id'] : 1;
-            $peso     = $_POST['peso'] ?? null;
+            $peso     = !empty($_POST['peso']) ? $_POST['peso'] : null;
             $division = $_POST['division'] ?? null;
             $eps      = $_POST['eps'] ?? null;
             $rh       = $_POST['rh'] ?? null;
-            $desc     = $_POST['descripcion_perfil'] ?? null;
-            $logros   = $_POST['logros'] ?? null;
-            $web      = isset($_POST['mostrar_en_web']) ? 1 : 0;
             $activo   = isset($_POST['activo']) ? 1 : 0;
 
             // Obtener maestro del grupo
@@ -181,14 +174,13 @@ class AdminEstudiantesController extends Controller {
 
             $stmt = $db->prepare("UPDATE estudiante SET id_grado=?, id_categoria=?, id_grupo=?, id_maestro=?,
                                   nombre=?, apellido=?, tipo_documento=?, num_doc=?, telefono=?, fecha_nacimiento=?,
-                                  correo=?, activo=?, peso=?, division=?, eps=?, rh=?, descripcion_perfil=?,
-                                  logros=?, mostrar_en_web=?, foto_perfil=?
+                                  correo=?, activo=?, peso=?, division=?, eps=?, rh=?, foto_perfil=?
                                   WHERE id_estudiante=?");
-            $stmt->bind_param("iiiiissssssissssssiii",
+            $stmt->bind_param("iiiiissssssisssssi",
                 $id_grado, $id_cat, $id_grupo, $id_maestro,
                 $nombre, $apellido, $tipo_doc, $num_doc,
                 $telefono, $fnac, $correo, $activo,
-                $peso, $division, $eps, $rh, $desc, $logros, $web, $foto_perfil, $id
+                $peso, $division, $eps, $rh, $foto_perfil, $id
             );
             $stmt->execute();
             $stmt->close();

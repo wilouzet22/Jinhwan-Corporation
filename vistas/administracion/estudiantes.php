@@ -409,10 +409,6 @@ $total_inactivos = $total_estudiantes - $total_activos;
                         <input type="checkbox" name="activo" id="modal-activo" value="1" checked class="w-4 h-4 rounded text-tkd-blue">
                         <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Activo en la Academia</span>
                     </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="mostrar_en_web" id="modal-web" value="1" class="w-4 h-4 rounded text-tkd-blue">
-                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Mostrar en Perfil Público Web</span>
-                    </label>
                 </div>
 
             </div>
@@ -562,14 +558,12 @@ function openModal(mode, data = null) {
         document.getElementById('modal-eps').value = data.eps || '';
         document.getElementById('modal-rh').value = data.rh || '';
         document.getElementById('modal-activo').checked = data.activo == 1;
-        document.getElementById('modal-web').checked = data.mostrar_en_web == 1;
         claveHint.classList.remove('hidden');
     } else {
         title.textContent = 'Nuevo Estudiante';
         form.action = '<?= base_url('/admin/estudiantes/create') ?>';
         document.getElementById('modal-id').value = '';
         document.getElementById('modal-activo').checked = true;
-        document.getElementById('modal-web').checked = false;
         claveHint.classList.add('hidden');
     }
 

@@ -260,7 +260,7 @@ $total_inactivos = $total_maestros - $total_activos;
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Tipo Doc.</label>
                         <select name="tipo_documento" id="modal-tipo-doc" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none">
@@ -273,10 +273,6 @@ $total_inactivos = $total_maestros - $total_activos;
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">N° Documento *</label>
                         <input type="text" name="numero_documento" id="modal-num-doc" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Fecha Nacimiento</label>
-                        <input type="date" name="fecha_nacimiento" id="modal-fnac" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none">
                     </div>
                 </div>
 
@@ -434,7 +430,6 @@ function openModal(mode, data = null) {
         document.getElementById('modal-apellido').value = data.apellido || '';
         document.getElementById('modal-tipo-doc').value = data.tipo_documento || 'CC';
         document.getElementById('modal-num-doc').value = data.num_doc || '';
-        document.getElementById('modal-fnac').value = data.fecha_nacimiento || '';
         document.getElementById('modal-correo').value = data.correo || '';
         document.getElementById('modal-telefono').value = data.telefono || '';
         if (data.id_sede) document.getElementById('modal-id-sede').value = data.id_sede;

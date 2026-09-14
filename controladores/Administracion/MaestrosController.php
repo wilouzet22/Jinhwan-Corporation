@@ -21,7 +21,7 @@ class AdminMaestrosController extends Controller {
         $db = Database::getInstance()->getConnection();
 
         $sql = "SELECT m.id_maestro as id, m.nombre, m.apellido, m.correo, m.telefono,
-                       m.num_doc, m.tipo_documento, m.fecha_nacimiento,
+                       m.num_doc, m.tipo_documento,
                        m.foto_perfil, m.activo, m.permisos_extra,
                        m.descripcion_perfil, m.logros, m.mostrar_en_web,
                        s.nombre as sede_nombre, s.id_sede,
@@ -69,7 +69,6 @@ class AdminMaestrosController extends Controller {
                 'ascensos'   => isset($_POST['permiso_ascensos']),
                 'calendario' => isset($_POST['permiso_calendario']),
                 'galeria'    => isset($_POST['permiso_galeria']),
-                'reportes'   => isset($_POST['permiso_reportes']),
             ]);
 
             $nombre   = $_POST['nombre'] ?? '';
@@ -78,7 +77,6 @@ class AdminMaestrosController extends Controller {
             $num_doc  = $_POST['numero_documento'] ?? '';
             $correo   = strtolower(trim($_POST['correo'] ?? ''));
             $telefono = $_POST['telefono'] ?? null;
-            $fnac     = !empty($_POST['fecha_nacimiento']) ? $_POST['fecha_nacimiento'] : null;
             $id_sede  = !empty($_POST['id_sede']) ? (int)$_POST['id_sede'] : null;
             $desc     = $_POST['descripcion_perfil'] ?? null;
             $logros   = $_POST['logros'] ?? null;
@@ -86,11 +84,11 @@ class AdminMaestrosController extends Controller {
             $activo   = isset($_POST['activo']) ? 1 : 1;
             $clave    = !empty($_POST['clave']) ? password_hash($_POST['clave'], PASSWORD_DEFAULT) : password_hash('jinhwa2024', PASSWORD_DEFAULT);
 
-            $stmt = $db->prepare("INSERT INTO maestro (id_sede, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo, permisos_extra, descripcion_perfil, logros, mostrar_en_web, foto_perfil)
-                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("issssssssisssis",
+            $stmt = $db->prepare("INSERT INTO maestro (id_sede, nombre, apellido, tipo_documento, num_doc, telefono, correo, clave, activo, permisos_extra, descripcion_perfil, logros, mostrar_en_web, foto_perfil)
+                                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stmt->bind_param("isssssssisssis",
                 $id_sede, $nombre, $apellido, $tipo_doc, $num_doc,
-                $telefono, $fnac, $correo, $clave, $activo,
+                $telefono, $correo, $clave, $activo,
                 $permisos, $desc, $logros, $web, $foto_perfil
             );
             $stmt->execute();
@@ -134,7 +132,6 @@ class AdminMaestrosController extends Controller {
                 'ascensos'   => isset($_POST['permiso_ascensos']),
                 'calendario' => isset($_POST['permiso_calendario']),
                 'galeria'    => isset($_POST['permiso_galeria']),
-                'reportes'   => isset($_POST['permiso_reportes']),
             ]);
 
             $nombre   = $_POST['nombre'] ?? '';
@@ -143,17 +140,16 @@ class AdminMaestrosController extends Controller {
             $num_doc  = $_POST['numero_documento'] ?? '';
             $correo   = strtolower(trim($_POST['correo'] ?? ''));
             $telefono = $_POST['telefono'] ?? null;
-            $fnac     = !empty($_POST['fecha_nacimiento']) ? $_POST['fecha_nacimiento'] : null;
             $id_sede  = !empty($_POST['id_sede']) ? (int)$_POST['id_sede'] : null;
             $desc     = $_POST['descripcion_perfil'] ?? null;
             $logros   = $_POST['logros'] ?? null;
             $web      = isset($_POST['mostrar_en_web']) ? 1 : 0;
             $activo   = isset($_POST['activo']) ? 1 : 0;
 
-            $stmt = $db->prepare("UPDATE maestro SET id_sede=?, nombre=?, apellido=?, tipo_documento=?, num_doc=?, telefono=?, fecha_nacimiento=?, correo=?, activo=?, permisos_extra=?, descripcion_perfil=?, logros=?, mostrar_en_web=?, foto_perfil=? WHERE id_maestro=?");
-            $stmt->bind_param("isssssssisssisi",
+            $stmt = $db->prepare("UPDATE maestro SET id_sede=?, nombre=?, apellido=?, tipo_documento=?, num_doc=?, telefono=?, correo=?, activo=?, permisos_extra=?, descripcion_perfil=?, logros=?, mostrar_en_web=?, foto_perfil=? WHERE id_maestro=?");
+            $stmt->bind_param("issssssisssisi",
                 $id_sede, $nombre, $apellido, $tipo_doc, $num_doc,
-                $telefono, $fnac, $correo, $activo,
+                $telefono, $correo, $activo,
                 $permisos, $desc, $logros, $web, $foto_perfil, $id
             );
             $stmt->execute();
