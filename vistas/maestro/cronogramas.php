@@ -1,52 +1,62 @@
 <?php require_once __DIR__ . '/../layout/maestro_cabecera.php'; ?>
 
-<div class="p-6">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Cronogramas de Clase</h1>
-            <p class="text-sm text-gray-500">Planificación metodológica de sesiones por grupo y fechas.</p>
-        </div>
-        <button onclick="openModal('modal-nuevo-cronograma')" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg shadow-sm transition">
-            <span class="material-icons-outlined text-sm">add</span>
-            Crear Cronograma
-        </button>
-    </div>
+<main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
+    <div class="space-y-6">
 
-    <!-- Filtros -->
-    <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
-        <div class="flex-1 w-full md:w-auto relative">
-            <span class="material-icons-outlined absolute left-3 top-2.5 text-gray-400">search</span>
-            <input type="text" id="filter-search" placeholder="Buscar por objetivo u observaciones..." 
-                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none text-sm">
+        <!-- Encabezado -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight transition-colors">
+                    Cronogramas de Clase
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                    Planificación metodológica de sesiones por grupo, fechas y fases de entrenamiento.
+                </p>
+            </div>
+            <div>
+                <button onclick="openModal('modal-nuevo-cronograma')" class="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm transition-all">
+                    <span class="material-icons-outlined text-base">add</span>
+                    <span>Crear Cronograma</span>
+                </button>
+            </div>
         </div>
-        <div class="flex items-center gap-2 w-full md:w-auto">
-            <span class="text-sm font-medium text-gray-600 whitespace-nowrap">Grupo:</span>
-            <select id="filter-grupo" class="w-full md:w-56 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
-                <option value="">Todos los grupos</option>
-                <?php foreach ($grupos as $g): ?>
-                    <option value="<?php echo htmlspecialchars($g['id_grupo']); ?>">
-                        <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
 
-    <!-- Tabla Cronogramas -->
-    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        <th class="py-3 px-4">Fecha</th>
-                        <th class="py-3 px-4">Grupo / Sede</th>
-                        <th class="py-3 px-4">Maestro Responsable</th>
-                        <th class="py-3 px-4">Objetivo de la Clase</th>
-                        <th class="py-3 px-4 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+        <!-- Barra de Búsqueda y Filtros -->
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors">
+            <div class="relative w-full sm:w-80">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <span class="material-icons-outlined text-sm">search</span>
+                </div>
+                <input type="text" id="filter-search" placeholder="Buscar por objetivo, grupo o día..." 
+                       class="block w-full pl-9 pr-3 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors">
+            </div>
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <span class="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">Grupo:</span>
+                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors w-full md:w-64">
+                    <option value="">Todos los grupos</option>
+                    <?php foreach ($grupos as $g): ?>
+                        <option value="<?php echo htmlspecialchars($g['id_grupo']); ?>">
+                            <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
+        <!-- Tabla Cronogramas -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
+            <div class="w-full overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
+                    <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
+                        <tr>
+                            <th scope="col" class="px-4 py-3">Fecha & Día</th>
+                            <th scope="col" class="px-4 py-3">Grupo / Sede</th>
+                            <th scope="col" class="px-4 py-3">Maestro Responsable</th>
+                            <th scope="col" class="px-4 py-3">Objetivo de la Clase</th>
+                            <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
 <?php
 function fechaEspanolCompleta($fechaStr) {
     $dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -60,81 +70,85 @@ function fechaEspanolCompleta($fechaStr) {
 }
 ?>
 
-                    <?php if (empty($cronogramas)): ?>
-                        <tr>
-                            <td colspan="5" class="py-8 text-center text-gray-400">
-                                <span class="material-icons-outlined text-4xl block mb-2 text-gray-300">event_note</span>
-                                No hay cronogramas creados aún.
-                            </td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($cronogramas as $c): 
-                            $fInfo = fechaEspanolCompleta($c['fecha']);
-                        ?>
-                            <tr class="hover:bg-gray-50 transition item-cronograma"
-                                data-grupo="<?php echo htmlspecialchars($c['id_grupo']); ?>"
-                                data-text="<?php echo htmlspecialchars(strtolower(($c['objetivo'] ?? '') . ' ' . ($c['observaciones'] ?? '') . ' ' . ($c['maestro_nombre'] ?? '') . ' ' . $fInfo['fecha_completa'])); ?>">
-                                <td class="py-3 px-4 whitespace-nowrap">
-                                    <div class="flex items-center gap-2">
-                                        <span class="p-1.5 bg-purple-50 text-purple-700 rounded-lg material-icons-outlined text-sm">calendar_today</span>
-                                        <div>
-                                            <span class="font-bold text-gray-900 block text-sm"><?php echo $fInfo['dia_semana']; ?></span>
-                                            <span class="text-xs text-gray-500 font-medium"><?php echo $fInfo['fecha_completa']; ?></span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <span class="font-medium text-gray-800"><?php echo htmlspecialchars($c['grupo_nombre'] ?? 'Sin grupo'); ?></span>
-                                    <?php if (!empty($c['grupo_sede'])): ?>
-                                        <span class="text-xs text-gray-400 block"><?php echo htmlspecialchars($c['grupo_sede']); ?></span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="py-3 px-4 text-gray-600">
-                                    <?php echo htmlspecialchars($c['maestro_nombre'] ?? 'No asignado'); ?>
-                                </td>
-                                <td class="py-3 px-4 text-gray-700 max-w-md">
-                                    <p class="line-clamp-2"><?php echo htmlspecialchars($c['objetivo'] ?? 'Sin objetivo específico'); ?></p>
-                                </td>
-                                <td class="py-3 px-4 text-center">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <a href="<?php echo base_url('maestro/cronogramas/' . $c['id_cronograma']); ?>" 
-                                           class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-lg text-xs font-semibold transition" title="Ver fases y ejercicios">
-                                            <span class="material-icons-outlined text-sm">visibility</span>
-                                            Ver Plan
-                                        </a>
-                                        <form method="POST" action="<?php echo base_url('maestro/cronogramas/delete'); ?>" onsubmit="return confirm('¿Seguro de eliminar este cronograma completo?')" class="inline">
-                                            <input type="hidden" name="id_cronograma" value="<?php echo $c['id_cronograma']; ?>">
-                                            <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition" title="Eliminar">
-                                                <span class="material-icons-outlined text-lg">delete</span>
-                                            </button>
-                                        </form>
-                                    </div>
+                        <?php if (empty($cronogramas)): ?>
+                            <tr>
+                                <td colspan="5" class="py-12 text-center text-slate-400 dark:text-slate-500">
+                                    <span class="material-icons-outlined text-4xl block mb-2 opacity-50">event_note</span>
+                                    No hay cronogramas creados aún.
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php else: ?>
+                            <?php foreach ($cronogramas as $c): 
+                                $fInfo = fechaEspanolCompleta($c['fecha']);
+                            ?>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all item-cronograma"
+                                    data-grupo="<?php echo htmlspecialchars($c['id_grupo']); ?>"
+                                    data-text="<?php echo htmlspecialchars(strtolower(($c['objetivo'] ?? '') . ' ' . ($c['observaciones'] ?? '') . ' ' . ($c['maestro_nombre'] ?? '') . ' ' . $fInfo['fecha_completa'])); ?>">
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900/40">
+                                                <span class="material-icons-outlined text-base block">calendar_today</span>
+                                            </div>
+                                            <div>
+                                                <span class="font-bold text-slate-900 dark:text-white block text-sm"><?php echo $fInfo['dia_semana']; ?></span>
+                                                <span class="text-xs text-slate-500 dark:text-slate-400"><?php echo $fInfo['fecha_completa']; ?></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <span class="font-semibold text-slate-800 dark:text-slate-200"><?php echo htmlspecialchars($c['grupo_nombre'] ?? 'Sin grupo'); ?></span>
+                                        <?php if (!empty($c['grupo_sede'])): ?>
+                                            <span class="text-xs text-slate-400 dark:text-slate-500 block"><?php echo htmlspecialchars($c['grupo_sede']); ?></span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="px-4 py-3 text-slate-600 dark:text-slate-300">
+                                        <?php echo htmlspecialchars($c['maestro_nombre'] ?? 'No asignado'); ?>
+                                    </td>
+                                    <td class="px-4 py-3 text-slate-700 dark:text-slate-300 max-w-md">
+                                        <p class="line-clamp-2"><?php echo htmlspecialchars($c['objetivo'] ?? 'Sin objetivo específico'); ?></p>
+                                    </td>
+                                    <td class="px-4 py-3 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a href="<?php echo base_url('maestro/cronogramas/' . $c['id_cronograma']); ?>" 
+                                               class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 rounded-xl text-xs font-semibold transition border border-purple-200 dark:border-purple-800/60" title="Ver plan y fases">
+                                                <span class="material-icons-outlined text-sm">visibility</span>
+                                                Ver Plan
+                                            </a>
+                                            <form method="POST" action="<?php echo base_url('maestro/cronogramas/delete'); ?>" onsubmit="return confirm('¿Seguro de eliminar este cronograma?')" class="inline">
+                                                <input type="hidden" name="id_cronograma" value="<?php echo $c['id_cronograma']; ?>">
+                                                <button type="submit" class="p-1.5 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition" title="Eliminar">
+                                                    <span class="material-icons-outlined text-lg">delete</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
     </div>
-</div>
+</main>
 
 <!-- Modal Nuevo Cronograma -->
-<div id="modal-nuevo-cronograma" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 class="font-bold text-gray-800 flex items-center gap-2">
-                <span class="material-icons-outlined text-purple-600">event_note</span>
+<div id="modal-nuevo-cronograma" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-base">
+                <span class="material-icons-outlined text-purple-600 dark:text-purple-400">event_note</span>
                 Crear Nuevo Cronograma de Clase
             </h3>
-            <button onclick="closeModal('modal-nuevo-cronograma')" class="text-gray-400 hover:text-gray-600">
+            <button onclick="closeModal('modal-nuevo-cronograma')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                 <span class="material-icons-outlined">close</span>
             </button>
         </div>
         <form method="POST" action="<?php echo base_url('maestro/cronogramas/create'); ?>" class="p-6 space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Grupo *</label>
-                <select name="id_grupo" required class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Grupo *</label>
+                <select name="id_grupo" required class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:outline-none">
                     <option value="">Seleccione grupo...</option>
                     <?php foreach ($grupos as $g): ?>
                         <option value="<?php echo $g['id_grupo']; ?>">
@@ -145,15 +159,15 @@ function fechaEspanolCompleta($fechaStr) {
             </div>
 
             <!-- Selector de Día de la Semana con Fecha Exacta -->
-            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div class="bg-slate-50 dark:bg-slate-950/60 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
                 <div class="flex items-center justify-between mb-3">
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Día de la Clase (Seleccionar en la semana)</label>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Día de la Clase (En la semana)</label>
                     <div class="flex items-center gap-1 text-xs">
-                        <button type="button" onclick="cambiarSemana(-1)" class="p-1 text-gray-500 hover:text-purple-600 hover:bg-white rounded transition" title="Semana anterior">
+                        <button type="button" onclick="cambiarSemana(-1)" class="p-1 text-slate-500 hover:text-purple-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition" title="Semana anterior">
                             <span class="material-icons-outlined text-sm">chevron_left</span>
                         </button>
-                        <span id="semana-rango-label" class="font-medium text-gray-600 px-1">Semana actual</span>
-                        <button type="button" onclick="cambiarSemana(1)" class="p-1 text-gray-500 hover:text-purple-600 hover:bg-white rounded transition" title="Semana siguiente">
+                        <span id="semana-rango-label" class="font-medium text-slate-600 dark:text-slate-400 px-1">Semana actual</span>
+                        <button type="button" onclick="cambiarSemana(1)" class="p-1 text-slate-500 hover:text-purple-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition" title="Semana siguiente">
                             <span class="material-icons-outlined text-sm">chevron_right</span>
                         </button>
                     </div>
@@ -164,34 +178,37 @@ function fechaEspanolCompleta($fechaStr) {
                     <!-- Rellenado por JS: Lunes a Domingo con su fecha calculada -->
                 </div>
 
-                <!-- Input oculto o sincronizado con la fecha exacta YYYY-MM-DD -->
-                <div class="flex items-center justify-between pt-2 border-t border-gray-200 text-xs">
-                    <div class="flex items-center gap-1.5 text-purple-700 font-semibold">
+                <!-- Input sincronizado con la fecha exacta YYYY-MM-DD -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800 text-xs gap-2">
+                    <div class="flex items-center gap-1.5 text-purple-600 dark:text-purple-400 font-semibold">
                         <span class="material-icons-outlined text-sm">event</span>
                         <span id="label-fecha-seleccionada">Selecciona un día</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <span class="text-gray-400">O ingresa fecha:</span>
+                        <span class="text-slate-400 text-[11px]">O fecha manual:</span>
                         <input type="date" id="input-fecha-modal" name="fecha" required value="<?php echo date('Y-m-d'); ?>"
-                               class="px-2 py-1 border border-gray-300 rounded text-xs bg-white focus:outline-none focus:ring-1 focus:ring-purple-500">
+                               class="px-2 py-1 border border-slate-200 dark:border-slate-700 rounded-lg text-xs bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-purple-500">
                     </div>
                 </div>
             </div>
+
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Objetivo de la Sesión</label>
-                <input type="text" name="objetivo" placeholder="Ej: Mejorar potencia de pateo y resistencia aeróbica..." 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Objetivo de la Sesión</label>
+                <input type="text" name="objetivo" placeholder="Ej: Potencia de pateo y resistencia aeróbica..." 
+                       class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:outline-none">
             </div>
+
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Observaciones Generales</label>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Observaciones Generales</label>
                 <textarea name="observaciones" rows="3" placeholder="Requerimientos de material, notas previas..."
-                          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+                          class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
             </div>
-            <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeModal('modal-nuevo-cronograma')" class="px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-lg text-sm font-medium transition">
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <button type="button" onclick="closeModal('modal-nuevo-cronograma')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition">
                     Cancelar
                 </button>
-                <button type="submit" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-medium transition">
+                <button type="submit" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-sm">
                     Crear y Configurar Fases
                 </button>
             </div>
@@ -221,7 +238,7 @@ const nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Ju
 function obtenerLunesDeSemana(offset) {
     const hoy = new Date();
     const diaSemana = hoy.getDay(); // 0 es Domingo, 1 es Lunes
-    const diff = (diaSemana === 0 ? -6 : 1) - diaSemana; // Llevar a Lunes
+    const diff = (diaSemana === 0 ? -6 : 1) - diaSemana;
     const lunes = new Date(hoy);
     lunes.setDate(hoy.getDate() + diff + (offset * 7));
     lunes.setHours(0, 0, 0, 0);
@@ -251,7 +268,7 @@ function actualizarLabelFecha() {
     if (!fechaSeleccionada) return;
     const partes = fechaSeleccionada.split('-');
     const fechaObj = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
-    const diaSemIndex = (fechaObj.getDay() + 6) % 7; // Lunes = 0, Domingo = 6
+    const diaSemIndex = (fechaObj.getDay() + 6) % 7;
     const nombreDia = nombresDiasCompletos[diaSemIndex];
     const numDia = partes[2];
     const mes = nombresMeses[parseInt(partes[1]) - 1];
@@ -299,13 +316,13 @@ function renderizarDiasSemana() {
         btn.type = 'button';
         btn.onclick = () => seleccionarDia(iso);
 
-        let clases = 'p-2 rounded-lg text-xs flex flex-col items-center justify-center transition border ';
+        let clases = 'p-2 rounded-xl text-xs flex flex-col items-center justify-center transition border ';
         if (esSeleccionado) {
-            clases += 'bg-purple-600 text-white font-bold border-purple-700 shadow-sm scale-105';
+            clases += 'bg-purple-600 text-white font-bold border-purple-500 shadow-sm scale-105';
         } else if (esHoy) {
-            clases += 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 font-semibold';
+            clases += 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/50 hover:bg-purple-100 font-semibold';
         } else {
-            clases += 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100';
+            clases += 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800';
         }
 
         btn.className = clases;
@@ -319,13 +336,11 @@ function renderizarDiasSemana() {
     actualizarLabelFecha();
 }
 
-// Sincronización cuando se cambia el input type="date" manualmente
 const inputFechaModal = document.getElementById('input-fecha-modal');
 if (inputFechaModal) {
     inputFechaModal.addEventListener('change', function() {
         if (this.value) {
             fechaSeleccionada = this.value;
-            // Ajustar offset si la fecha seleccionada no está en la semana mostrada
             const fechaObj = new Date(this.value + 'T00:00:00');
             const hoyLunes = obtenerLunesDeSemana(0);
             const diffDias = Math.floor((fechaObj - hoyLunes) / (1000 * 60 * 60 * 24));
@@ -335,12 +350,10 @@ if (inputFechaModal) {
     });
 }
 
-// Inicializar al cargar
 document.addEventListener('DOMContentLoaded', () => {
     renderizarDiasSemana();
 });
 
-// --- Filtros de búsqueda en la tabla ---
 const filterSearch = document.getElementById('filter-search');
 const filterGrupo = document.getElementById('filter-grupo');
 const itemsCronograma = document.querySelectorAll('.item-cronograma');
