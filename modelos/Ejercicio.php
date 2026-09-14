@@ -6,56 +6,78 @@ class Ejercicio extends Model
 {
     public function getAll()
     {
-        $stmt = $this->db->prepare("SELECT * FROM ejercicios ORDER BY tipo ASC, nombre ASC");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = "SELECT * FROM ejercicios ORDER BY tipo ASC, nombre ASC";
+        $result = $this->db->query($sql);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     public function getById($id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM ejercicios WHERE id_ejercicio = :id LIMIT 1");
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $id = (int)$id;
+        $stmt = $this->db->prepare("SELECT * FROM ejercicios WHERE id_ejercicio = ? LIMIT 1");
+        if (!$stmt) return null;
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
+        $stmt->close();
+        return $row;
     }
 
     public function getByTipo($tipo)
     {
-        $stmt = $this->db->prepare("SELECT * FROM ejercicios WHERE tipo = :tipo ORDER BY nombre ASC");
-        $stmt->execute([':tipo' => $tipo]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->db->prepare("SELECT * FROM ejercicios WHERE tipo = ? ORDER BY nombre ASC");
+        if (!$stmt) return [];
+        $stmt->bind_param("s", $tipo);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $rows;
     }
 
     public function create($data)
     {
         $stmt = $this->db->prepare("
             INSERT INTO ejercicios (tipo, nombre, explicacion)
-            VALUES (:tipo, :nombre, :explicacion)
+            VALUES (?, ?, ?)
         ");
-        return $stmt->execute([
-            ':tipo' => $data['tipo'],
-            ':nombre' => $data['nombre'],
-            ':explicacion' => $data['explicacion'] ?? null
-        ]);
+        if (!$stmt) return false;
+        $tipo = $data['tipo'];
+        $nombre = $data['nombre'];
+        $explicacion = $data['explicacion'] ?? null;
+        $stmt->bind_param("sss", $tipo, $nombre, $explicacion);
+        $res = $stmt->execute();
+        $stmt->close();
+        return $res;
     }
 
     public function update($id, $data)
     {
         $stmt = $this->db->prepare("
             UPDATE ejercicios 
-            SET tipo = :tipo, nombre = :nombre, explicacion = :explicacion
-            WHERE id_ejercicio = :id
+            SET tipo = ?, nombre = ?, explicacion = ?
+            WHERE id_ejercicio = ?
         ");
-        return $stmt->execute([
-            ':id' => $id,
-            ':tipo' => $data['tipo'],
-            ':nombre' => $data['nombre'],
-            ':explicacion' => $data['explicacion'] ?? null
-        ]);
+        if (!$stmt) return false;
+        $id = (int)$id;
+        $tipo = $data['tipo'];
+        $nombre = $data['nombre'];
+        $explicacion = $data['explicacion'] ?? null;
+        $stmt->bind_param("sssi", $tipo, $nombre, $explicacion, $id);
+        $res = $stmt->execute();
+        $stmt->close();
+        return $res;
     }
 
     public function delete($id)
     {
-        $stmt = $this->db->prepare("DELETE FROM ejercicios WHERE id_ejercicio = :id");
-        return $stmt->execute([':id' => $id]);
+        $id = (int)$id;
+        $stmt = $this->db->prepare("DELETE FROM ejercicios WHERE id_ejercicio = ?");
+        if (!$stmt) return false;
+        $stmt->bind_param("i", $id);
+        $res = $stmt->execute();
+        $stmt->close();
+        return $res;
     }
 }

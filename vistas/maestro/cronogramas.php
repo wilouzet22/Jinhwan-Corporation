@@ -26,7 +26,7 @@
                 <option value="">Todos los grupos</option>
                 <?php foreach ($grupos as $g): ?>
                     <option value="<?php echo htmlspecialchars($g['id_grupo']); ?>">
-                        <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['sede'] ?? '') . ')'); ?>
+                        <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -121,7 +121,7 @@
                         <option value="">Seleccione grupo...</option>
                         <?php foreach ($grupos as $g): ?>
                             <option value="<?php echo $g['id_grupo']; ?>">
-                                <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['sede'] ?? '') . ')'); ?>
+                                <?php echo htmlspecialchars($g['nombre'] . ' (' . ($g['nombre_sede'] ?? '') . ')'); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

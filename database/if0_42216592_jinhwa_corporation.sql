@@ -723,6 +723,49 @@ ALTER TABLE `historial_grados`
 ALTER TABLE `teorias`
   ADD CONSTRAINT `fk_teoria_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_teoria_tipo` FOREIGN KEY (`id_tipo_teoria`) REFERENCES `tipos_teoria` (`id_tipo_teoria`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Estructura de tabla para la tabla `ejercicios`
+--
+
+CREATE TABLE IF NOT EXISTS `ejercicios` (
+  `id_ejercicio` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` enum('Fuerza general','Fuerza Especifica','Pliometria','Coordinación','Resistencia Aerobica','Resistencia anaerobica','Combate','Flexibilidad','Velocidad','Otro') NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `explicacion` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_ejercicio`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Estructura de tabla para la tabla `cronogramas_clase`
+--
+
+CREATE TABLE IF NOT EXISTS `cronogramas_clase` (
+  `id_cronograma` int(11) NOT NULL AUTO_INCREMENT,
+  `id_grupo` int(11) NOT NULL,
+  `id_maestro` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `objetivo` text DEFAULT NULL,
+  `observaciones` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_cronograma`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Estructura de tabla para la tabla `clase_ejercicios`
+--
+
+CREATE TABLE IF NOT EXISTS `clase_ejercicios` (
+  `id_clase_ejercicio` int(11) NOT NULL AUTO_INCREMENT,
+  `id_cronograma` int(11) NOT NULL,
+  `id_ejercicio` int(11) NOT NULL,
+  `fase` enum('inicial','central','final') NOT NULL,
+  `series_o_tiempo` varchar(100) DEFAULT NULL,
+  `observaciones_especificas` text DEFAULT NULL,
+  PRIMARY KEY (`id_clase_ejercicio`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

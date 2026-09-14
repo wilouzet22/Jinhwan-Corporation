@@ -73,7 +73,7 @@ class MaestroCronogramasController extends Controller
             $fecha = $_POST['fecha'] ?? null;
             $objetivo = trim($_POST['objetivo'] ?? '');
             $observaciones = trim($_POST['observaciones'] ?? '');
-            $id_maestro = $_SESSION['user_id'] ?? null;
+            $id_maestro = $_SESSION['id'] ?? null;
 
             if ($id_grupo && $fecha && $id_maestro) {
                 $newId = $this->cronogramaModel->create([
