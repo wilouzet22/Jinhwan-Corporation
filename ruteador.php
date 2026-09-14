@@ -128,6 +128,7 @@ $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']
 // Maestro / Instructores
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
+$router->get('/maestro/alumnos/{id}', [MaestroAlumnosController::class, 'show']);
 $router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesAscensoController::class, 'index']);
 $router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesAscensoController::class, 'store']);
 $router->post('/maestro/solicitudes-ascenso/aprobar', [MaestroSolicitudesAscensoController::class, 'aprobar']);

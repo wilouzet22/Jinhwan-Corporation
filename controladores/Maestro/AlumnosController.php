@@ -42,4 +42,21 @@ class MaestroAlumnosController extends Controller {
             'current_page' => 'alumnos'
         ]);
     }
+
+    public function show($id) {
+        $id = (int)$id;
+        $alumno = $this->usuarioModel->getById($id);
+
+        if (!$alumno || $alumno['rol_id'] !== Roles::ESTUDIANTE) {
+            http_response_code(404);
+            echo "Alumno no encontrado";
+            return;
+        }
+
+        $this->view('maestro/alumno_detalle', [
+            'alumno'       => $alumno,
+            'page_title'   => 'Detalle del Alumno',
+            'current_page' => 'alumnos'
+        ]);
+    }
 }

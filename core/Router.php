@@ -31,6 +31,7 @@ class Router {
             $path = '/';
         }
 
+        // Ruta exacta
         if (array_key_exists($path, $this->routes[$method] ?? [])) {
             $callback = $this->routes[$method][$path];
 
@@ -44,8 +45,34 @@ class Router {
             return call_user_func($callback);
         }
 
+        // Rutas dinámicas con parámetros {param}
+        foreach ($this->routes[$method] ?? [] as $routePath => $callback) {
+            if (strpos($routePath, '{') === false) continue;
+
+            $paramNames = [];
+            $pattern = preg_replace_callback('/\{(\w+)\}/', function($m) use (&$paramNames) {
+                $paramNames[] = $m[1];
+                return '([^/]+)';
+            }, $routePath);
+
+            $pattern = '#^' . $pattern . '$#';
+
+            if (preg_match($pattern, $path, $matches)) {
+                array_shift($matches);
+                $params = array_combine($paramNames, $matches);
+
+                if (is_array($callback)) {
+                    $controllerClass = $callback[0];
+                    $methodName = $callback[1];
+                    $controller = new $controllerClass();
+                    return $controller->$methodName(...array_values($params));
+                }
+
+                return call_user_func_array($callback, array_values($params));
+            }
+        }
+
         http_response_code(404);
         echo "404 Not Found";
     }
 }
-

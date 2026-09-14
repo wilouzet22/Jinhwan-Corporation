@@ -154,9 +154,9 @@
 
                                     <!-- Acción -->
                                     <td class="px-4 py-2.5 text-right whitespace-nowrap">
-                                        <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-600 hover:text-white border border-purple-200 dark:border-purple-800/50 text-purple-700 dark:text-purple-300 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
-                                            <span class="material-icons-outlined text-sm">trending_up</span>
-                                            <span>Ascender</span>
+                                        <a href="<?= base_url('/maestro/alumnos/' . $alumno['id']) ?>" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-50 dark:bg-slate-800/60 hover:bg-purple-600 hover:text-white border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-bold uppercase tracking-wider transition-all group">
+                                            <span class="material-icons-outlined text-sm group-hover:text-white">visibility</span>
+                                            <span>Ver</span>
                                         </a>
                                     </td>
                                 </tr>
