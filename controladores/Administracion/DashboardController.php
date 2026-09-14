@@ -34,17 +34,25 @@ class AdminDashboardController extends Controller {
         $res = $db->query("SELECT COUNT(*) as total FROM sedes");
         $stats['total_sedes'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Distribución de grados de deportistas activos
+        // Distribución de grados de deportistas activos (solo grados con practicantes)
         $sqlGrados = "SELECT g.nombre, COUNT(e.id_estudiante) as cantidad
                       FROM grados g
                       LEFT JOIN estudiante e ON g.id_grado = e.id_grado AND e.activo = 1
                       GROUP BY g.id_grado, g.nombre
+                      HAVING cantidad > 0
                       ORDER BY g.id_grado ASC";
         $resGrados = $db->query($sqlGrados);
         $distribucion_grados = $resGrados ? $resGrados->fetch_all(MYSQLI_ASSOC) : [];
 
-        // Distribución por sedes (a través de grupos)
-        $sqlSedes = "SELECT s.nombre, COUNT(e.id_estudiante) as cantidad
+        // Distribución por sedes con nombres simplificados
+        $sqlSedes = "SELECT 
+                        CASE 
+                            WHEN s.nombre LIKE '%Santa Mónica%' THEN 'Santa Mónica'
+                            WHEN s.nombre LIKE '%San Cristóbal%' THEN 'San Cristóbal'
+                            WHEN s.nombre LIKE '%Itagüí%' THEN 'Itagüí'
+                            ELSE REPLACE(s.nombre, 'Sede ', '')
+                        END as nombre,
+                        COUNT(e.id_estudiante) as cantidad
                      FROM sedes s
                      LEFT JOIN grupos gr ON s.id_sede = gr.id_sede
                      LEFT JOIN estudiante e ON gr.id_grupo = e.id_grupo AND e.activo = 1
