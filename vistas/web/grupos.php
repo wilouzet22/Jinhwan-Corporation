@@ -90,20 +90,6 @@
                             </div>
                         </div>
 
-                        <!-- Footer con Acción -->
-                        <div class="p-6 pt-0 mt-2">
-                            <div class="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-3">
-                                <span class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                    <span class="material-icons-outlined text-sm text-tkd-blue">verified</span>
-                                    Cupos disponibles
-                                </span>
-                                <a href="<?= base_url('/registro') ?>" class="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-tkd-blue hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow transition-all cursor-pointer">
-                                    <span>Inscribirme</span>
-                                    <span class="material-icons-outlined text-sm">arrow_forward</span>
-                                </a>
-                            </div>
-                        </div>
-
                     </div>
                 <?php endforeach; ?>
             </div>
