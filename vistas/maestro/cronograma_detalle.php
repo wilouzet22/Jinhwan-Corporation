@@ -222,9 +222,9 @@ function renderEjercicioCard($item, $id_cronograma) {
 ?>
 
 <!-- Modal Agregar Ejercicio a Fase -->
-<div id="modal-agregar-ejercicio" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-800 transition-colors">
-        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div id="modal-agregar-ejercicio" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs overflow-y-auto p-4 flex items-center justify-center">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-lg my-auto max-h-[90vh] flex flex-col border border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
             <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-base">
                 <span class="material-icons-outlined text-purple-600 dark:text-purple-400">fitness_center</span>
                 Agregar Ejercicio a <span id="modal-fase-titulo" class="capitalize"></span>
@@ -233,7 +233,7 @@ function renderEjercicioCard($item, $id_cronograma) {
                 <span class="material-icons-outlined">close</span>
             </button>
         </div>
-        <form method="POST" action="<?php echo base_url('maestro/cronogramas/ejercicio/add'); ?>" class="p-6 space-y-4">
+        <form method="POST" action="<?php echo base_url('maestro/cronogramas/ejercicio/add'); ?>" class="p-6 space-y-4 overflow-y-auto flex-1">
             <input type="hidden" name="id_cronograma" value="<?php echo $cronograma['id_cronograma']; ?>">
             <input type="hidden" name="fase" id="input-fase" value="inicial">
 
