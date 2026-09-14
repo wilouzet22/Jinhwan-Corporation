@@ -20,15 +20,16 @@ class AdminMaestrosController extends Controller {
     public function index() {
         $db = Database::getInstance()->getConnection();
 
-        $sql = "SELECT m.id_maestro as id, m.nombre, m.apellido, m.correo, m.telefono,
+        $sql = "SELECT m.id_maestro as id, m.id_maestro, m.nombre, m.apellido, m.correo, m.telefono,
                        m.num_doc, m.tipo_documento,
                        m.foto_perfil, m.activo, m.permisos_extra,
                        m.descripcion_perfil, m.logros, m.mostrar_en_web,
                        s.nombre as sede_nombre, s.id_sede,
-                       g.nombre as grupo_nombre, g.id_grupo
+                       GROUP_CONCAT(DISTINCT g.nombre SEPARATOR ', ') as grupos_asignados
                 FROM maestro m
                 LEFT JOIN sedes s ON m.id_sede = s.id_sede
                 LEFT JOIN grupos g ON g.id_maestro = m.id_maestro
+                GROUP BY m.id_maestro, s.nombre, s.id_sede
                 ORDER BY m.apellido, m.nombre";
 
         $result = $db->query($sql);
