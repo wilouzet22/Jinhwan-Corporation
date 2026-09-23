@@ -38,13 +38,14 @@ class AdminPerfilesPublicosController extends Controller {
         
         $input = json_decode(file_get_contents('php://input'), true);
         $id = (int)($input['id'] ?? $_POST['id'] ?? 0);
+        $rol = $input['rol'] ?? $_POST['rol'] ?? null;
 
         if (!$id) {
             echo json_encode(['success' => false, 'message' => 'ID inválido']);
             exit;
         }
 
-        $nuevoEstado = $this->usuarioModel->togglePublicVisibility($id);
+        $nuevoEstado = $this->usuarioModel->togglePublicVisibility($id, $rol);
         echo json_encode([
             'success' => true,
             'visible' => $nuevoEstado,
@@ -73,14 +74,14 @@ class AdminPerfilesPublicosController extends Controller {
             $mostrar_en_web = isset($_POST['mostrar_en_web']) ? 1 : 0;
             $descripcion = $_POST['descripcion_perfil'] ?? '';
             $url_instagram = $_POST['url_instagram'] ?? '';
-            $rol = $_POST['rol'] ?? '';
+            $rol = $_POST['rol_origen'] ?? $_POST['rol'] ?? 'Maestros';
 
             $this->usuarioModel->updatePublicProfile($id, $mostrar_en_web, $descripcion, $rol);
 
             if (!empty($url_instagram)) {
-                $this->multimediaModel->upsert($id, $url_instagram);
+                $this->multimediaModel->upsertRole($id, $rol, $url_instagram);
             } else {
-                $this->multimediaModel->upsert($id, '');
+                $this->multimediaModel->upsertRole($id, $rol, '');
             }
 
             $this->redirect('/admin/perfiles-publicos?msg=profile_saved');

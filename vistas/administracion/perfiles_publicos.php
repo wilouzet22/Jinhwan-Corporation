@@ -126,7 +126,7 @@
                                     data-visible="<?= $isVisible ? '1' : '0' ?>">
                                     
                                     <td class="p-4 text-center">
-                                        <input type="checkbox" class="profile-checkbox h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue cursor-pointer" value="<?= $m['id'] ?>" onchange="updateBulkUI()">
+                                        <input type="checkbox" class="profile-checkbox h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-tkd-blue focus:ring-tkd-blue cursor-pointer" value="<?= htmlspecialchars($rol . ':' . $m['id']) ?>" onchange="updateBulkUI()">
                                     </td>
 
                                     <td class="p-4">
@@ -174,7 +174,7 @@
                                     <td class="p-4 text-center">
                                         <div class="inline-flex items-center gap-2">
                                             <button type="button" 
-                                                    onclick="toggleMemberVisibility(<?= $m['id'] ?>, this)" 
+                                                    onclick="toggleMemberVisibility(<?= $m['id'] ?>, '<?= htmlspecialchars($rol) ?>', this)" 
                                                     class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none <?= $isVisible ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700' ?>"
                                                     role="switch" 
                                                     aria-checked="<?= $isVisible ? 'true' : 'false' ?>"
@@ -239,6 +239,7 @@
         <div class="relative bg-white dark:bg-slate-900 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-lg w-full border border-slate-200 dark:border-slate-800 duration-300">
             <form action="<?= base_url('/admin/perfiles-publicos/update') ?>" method="POST">
                 <input type="hidden" name="id" id="edit_id">
+                <input type="hidden" name="rol_origen" id="edit_rol_origen">
                 
                 <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950/50 transition-colors">
                     <div class="flex items-center gap-3">
@@ -472,7 +473,7 @@
     filterProfiles();
 
     // Toggle Instantáneo con AJAX
-    async function toggleMemberVisibility(memberId, buttonElement) {
+    async function toggleMemberVisibility(memberId, memberRole, buttonElement) {
         buttonElement.disabled = true;
         
         try {
@@ -481,7 +482,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: memberId })
+                body: JSON.stringify({ id: memberId, rol: memberRole })
             });
 
             const data = await response.json();
@@ -539,6 +540,7 @@
     // Modal
     function openEditModal(miembro) {
         document.getElementById('edit_id').value = miembro.id;
+        document.getElementById('edit_rol_origen').value = miembro.rol_id || 'Deportistas';
         document.getElementById('modal-member-name').textContent = (miembro.nombre + ' ' + miembro.apellido).trim();
         document.getElementById('edit_mostrar').checked = (miembro.mostrar_en_web == 1);
         document.getElementById('edit_rol').value = miembro.rol_id || 'Deportistas';

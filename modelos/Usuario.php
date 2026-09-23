@@ -265,12 +265,18 @@ class Usuario extends Model {
         $eps = $data['eps'] ?? null;
         $rh = $data['rh'] ?? null;
 
+        $descripcion = $data['descripcion_perfil'] ?? null;
+        $logros = $data['logros'] ?? null;
+        $mostrar_en_web = isset($data['mostrar_en_web']) ? (int)$data['mostrar_en_web'] : 0;
+
+        $this->ensurePublicProfileColumns();
+
         if ($foto_perfil) {
-            $stmt = $this->db->prepare("UPDATE estudiante SET id_grado = ?, id_categoria = ?, id_grupo = COALESCE(?, id_grupo), nombre = ?, apellido = ?, tipo_documento = ?, num_doc = ?, telefono = ?, foto_perfil = ?, fecha_nacimiento = ?, peso = ?, division = ?, eps = ?, rh = ?, correo = ? WHERE id_estudiante = ?");
-            $stmt->bind_param("iiisssssssdssssi", $nivel_id, $categoria_id, $id_grupo, $nombre, $apellido, $tipo_documento, $num_doc, $telefono, $foto_perfil, $fecha_nacimiento, $peso, $division, $eps, $rh, $correo, $id);
+            $stmt = $this->db->prepare("UPDATE estudiante SET id_grado = ?, id_categoria = ?, id_grupo = COALESCE(?, id_grupo), nombre = ?, apellido = ?, tipo_documento = ?, num_doc = ?, telefono = ?, foto_perfil = ?, fecha_nacimiento = ?, peso = ?, division = ?, eps = ?, rh = ?, correo = ?, descripcion_perfil = ?, logros = ?, mostrar_en_web = ? WHERE id_estudiante = ?");
+            $stmt->bind_param("iiisssssssdssssssii", $nivel_id, $categoria_id, $id_grupo, $nombre, $apellido, $tipo_documento, $num_doc, $telefono, $foto_perfil, $fecha_nacimiento, $peso, $division, $eps, $rh, $correo, $descripcion, $logros, $mostrar_en_web, $id);
         } else {
-            $stmt = $this->db->prepare("UPDATE estudiante SET id_grado = ?, id_categoria = ?, id_grupo = COALESCE(?, id_grupo), nombre = ?, apellido = ?, tipo_documento = ?, num_doc = ?, telefono = ?, fecha_nacimiento = ?, peso = ?, division = ?, eps = ?, rh = ?, correo = ? WHERE id_estudiante = ?");
-            $stmt->bind_param("iiissssssdssssi", $nivel_id, $categoria_id, $id_grupo, $nombre, $apellido, $tipo_documento, $num_doc, $telefono, $fecha_nacimiento, $peso, $division, $eps, $rh, $correo, $id);
+            $stmt = $this->db->prepare("UPDATE estudiante SET id_grado = ?, id_categoria = ?, id_grupo = COALESCE(?, id_grupo), nombre = ?, apellido = ?, tipo_documento = ?, num_doc = ?, telefono = ?, fecha_nacimiento = ?, peso = ?, division = ?, eps = ?, rh = ?, correo = ?, descripcion_perfil = ?, logros = ?, mostrar_en_web = ? WHERE id_estudiante = ?");
+            $stmt->bind_param("iiissssssdssssssii", $nivel_id, $categoria_id, $id_grupo, $nombre, $apellido, $tipo_documento, $num_doc, $telefono, $fecha_nacimiento, $peso, $division, $eps, $rh, $correo, $descripcion, $logros, $mostrar_en_web, $id);
         }
         $res = $stmt->execute();
         $stmt->close();
@@ -371,59 +377,200 @@ class Usuario extends Model {
         return null;
     }
 
+    public function ensurePublicProfileColumns() {
+        // Asegurar columnas en estudiante
+        $checkE = $this->db->query("SHOW COLUMNS FROM estudiante LIKE 'mostrar_en_web'");
+        if ($checkE && $checkE->num_rows === 0) {
+            $this->db->query("ALTER TABLE estudiante ADD COLUMN mostrar_en_web TINYINT(1) DEFAULT 0");
+            $this->db->query("ALTER TABLE estudiante ADD COLUMN descripcion_perfil TEXT DEFAULT NULL");
+            $this->db->query("ALTER TABLE estudiante ADD COLUMN logros TEXT DEFAULT NULL");
+        }
+        // Asegurar columnas en administrador
+        $checkA = $this->db->query("SHOW COLUMNS FROM administrador LIKE 'mostrar_en_web'");
+        if ($checkA && $checkA->num_rows === 0) {
+            $this->db->query("ALTER TABLE administrador ADD COLUMN mostrar_en_web TINYINT(1) DEFAULT 0");
+            $this->db->query("ALTER TABLE administrador ADD COLUMN descripcion_perfil TEXT DEFAULT NULL");
+            $this->db->query("ALTER TABLE administrador ADD COLUMN logros TEXT DEFAULT NULL");
+        }
+        // Asegurar columnas en galeria_multimedia
+        $checkGE = $this->db->query("SHOW COLUMNS FROM galeria_multimedia LIKE 'id_estudiante'");
+        if ($checkGE && $checkGE->num_rows === 0) {
+            $this->db->query("ALTER TABLE galeria_multimedia ADD COLUMN id_estudiante INT(11) DEFAULT NULL AFTER id_maestro");
+        }
+        $checkGA = $this->db->query("SHOW COLUMNS FROM galeria_multimedia LIKE 'id_administrador'");
+        if ($checkGA && $checkGA->num_rows === 0) {
+            $this->db->query("ALTER TABLE galeria_multimedia ADD COLUMN id_administrador INT(11) DEFAULT NULL AFTER id_estudiante");
+        }
+    }
+
     public function getPublicProfiles() {
-        $sql = "SELECT m.id_maestro as id, m.nombre, m.apellido,
-                       'Maestros' as rol_id,
-                       m.descripcion_perfil, m.logros, m.foto_perfil,
-                       g.nombre as nombre_nivel, s.nombre as nombre_sede,
-                       gm.url as instagram_url
-                FROM maestro m
-                LEFT JOIN grados g ON m.id_grado = g.id_grado
-                LEFT JOIN sedes s ON m.id_sede = s.id_sede
-                LEFT JOIN galeria_multimedia gm ON m.id_maestro = gm.id_maestro AND gm.tipo = 'instagram'
-                WHERE m.mostrar_en_web = 1 AND m.activo = 1
-                ORDER BY m.nombre ASC";
+        $this->ensurePublicProfileColumns();
+        $sql = "
+        -- 1. Maestros e Instructores
+        SELECT m.id_maestro as id, m.nombre, m.apellido,
+               'Maestros' as rol_id,
+               m.descripcion_perfil, m.logros, m.foto_perfil,
+               g.nombre as nombre_nivel, s.nombre as nombre_sede,
+               gm.url as instagram_url
+        FROM maestro m
+        LEFT JOIN grados g ON m.id_grado = g.id_grado
+        LEFT JOIN sedes s ON m.id_sede = s.id_sede
+        LEFT JOIN galeria_multimedia gm ON m.id_maestro = gm.id_maestro AND gm.tipo = 'instagram'
+        WHERE COALESCE(m.mostrar_en_web, 0) = 1 AND m.activo = 1
+
+        UNION ALL
+
+        -- 2. Alumnos / Deportistas
+        SELECT e.id_estudiante as id, e.nombre, e.apellido,
+               'Deportistas' as rol_id,
+               e.descripcion_perfil, e.logros, e.foto_perfil,
+               g.nombre as nombre_nivel, s.nombre as nombre_sede,
+               gm.url as instagram_url
+        FROM estudiante e
+        LEFT JOIN grados g ON e.id_grado = g.id_grado
+        LEFT JOIN grupos gr ON e.id_grupo = gr.id_grupo
+        LEFT JOIN sedes s ON gr.id_sede = s.id_sede
+        LEFT JOIN galeria_multimedia gm ON e.id_estudiante = gm.id_estudiante AND gm.tipo = 'instagram'
+        WHERE COALESCE(e.mostrar_en_web, 0) = 1 AND e.activo = 1
+
+        ORDER BY nombre ASC";
         $result = $this->db->query($sql);
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     public function getAllWithPublicProfileInfo() {
-        $sql = "SELECT m.id_maestro as id, m.nombre, m.apellido,
-                       'Maestros' as rol_id,
-                       m.descripcion_perfil, COALESCE(m.mostrar_en_web, 0) as mostrar_en_web,
-                       m.foto_perfil, gm.url as instagram_url
-                FROM maestro m
-                LEFT JOIN galeria_multimedia gm ON m.id_maestro = gm.id_maestro AND gm.tipo = 'instagram'
-                ORDER BY m.nombre ASC";
+        $this->ensurePublicProfileColumns();
+        $sql = "
+        -- 1. Administradores
+        SELECT a.id_administrador as id, a.nombre, a.apellido,
+               'Administracion' as rol_id,
+               a.descripcion_perfil, COALESCE(a.mostrar_en_web, 0) as mostrar_en_web,
+               a.foto_perfil, gm.url as instagram_url
+        FROM administrador a
+        LEFT JOIN galeria_multimedia gm ON a.id_administrador = gm.id_administrador AND gm.tipo = 'instagram'
+
+        UNION ALL
+
+        -- 2. Maestros e Instructores
+        SELECT m.id_maestro as id, m.nombre, m.apellido,
+               'Maestros' as rol_id,
+               m.descripcion_perfil, COALESCE(m.mostrar_en_web, 0) as mostrar_en_web,
+               m.foto_perfil, gm.url as instagram_url
+        FROM maestro m
+        LEFT JOIN galeria_multimedia gm ON m.id_maestro = gm.id_maestro AND gm.tipo = 'instagram'
+
+        UNION ALL
+
+        -- 3. Estudiantes / Deportistas
+        SELECT e.id_estudiante as id, e.nombre, e.apellido,
+               'Deportistas' as rol_id,
+               e.descripcion_perfil, COALESCE(e.mostrar_en_web, 0) as mostrar_en_web,
+               e.foto_perfil, gm.url as instagram_url
+        FROM estudiante e
+        LEFT JOIN galeria_multimedia gm ON e.id_estudiante = gm.id_estudiante AND gm.tipo = 'instagram'
+
+        ORDER BY nombre ASC";
         $result = $this->db->query($sql);
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     public function updatePublicProfile($id, $mostrar_en_web, $descripcion_perfil, $rol = null) {
-        $stmt = $this->db->prepare("UPDATE maestro SET descripcion_perfil = ?, mostrar_en_web = ? WHERE id_maestro = ?");
+        $this->ensurePublicProfileColumns();
+        $id = (int)$id;
+        $mostrar_en_web = (int)$mostrar_en_web;
+
+        if ($rol === Roles::ADMINISTRADOR || $rol === 'Administracion') {
+            $stmt = $this->db->prepare("UPDATE administrador SET descripcion_perfil = ?, mostrar_en_web = ? WHERE id_administrador = ?");
+        } elseif ($rol === Roles::ESTUDIANTE || $rol === 'Deportistas' || $rol === 'Estudiantes') {
+            $stmt = $this->db->prepare("UPDATE estudiante SET descripcion_perfil = ?, mostrar_en_web = ? WHERE id_estudiante = ?");
+        } else {
+            $stmt = $this->db->prepare("UPDATE maestro SET descripcion_perfil = ?, mostrar_en_web = ? WHERE id_maestro = ?");
+        }
+
         $stmt->bind_param("sii", $descripcion_perfil, $mostrar_en_web, $id);
         $res = $stmt->execute();
         $stmt->close();
         return $res;
     }
 
-    public function togglePublicVisibility($id) {
-        $stmt = $this->db->prepare("UPDATE maestro SET mostrar_en_web = IF(mostrar_en_web = 1, 0, 1) WHERE id_maestro = ?");
+    public function togglePublicVisibility($id, $rol = null) {
+        $this->ensurePublicProfileColumns();
+        $id = (int)$id;
+
+        if ($rol === Roles::ADMINISTRADOR || $rol === 'Administracion') {
+            $table = 'administrador';
+            $pk = 'id_administrador';
+        } elseif ($rol === Roles::ESTUDIANTE || $rol === 'Deportistas' || $rol === 'Estudiantes') {
+            $table = 'estudiante';
+            $pk = 'id_estudiante';
+        } else {
+            // Intentar detectar si no se envió rol
+            $table = 'maestro';
+            $pk = 'id_maestro';
+            if (!$rol) {
+                $checkM = $this->db->query("SELECT id_maestro FROM maestro WHERE id_maestro = $id");
+                if (!$checkM || $checkM->num_rows === 0) {
+                    $checkE = $this->db->query("SELECT id_estudiante FROM estudiante WHERE id_estudiante = $id");
+                    if ($checkE && $checkE->num_rows > 0) {
+                        $table = 'estudiante';
+                        $pk = 'id_estudiante';
+                    } else {
+                        $table = 'administrador';
+                        $pk = 'id_administrador';
+                    }
+                }
+            }
+        }
+
+        $stmt = $this->db->prepare("UPDATE {$table} SET mostrar_en_web = IF(mostrar_en_web = 1, 0, 1) WHERE {$pk} = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
 
-        $check = $this->db->query("SELECT mostrar_en_web FROM maestro WHERE id_maestro = " . (int)$id);
+        $check = $this->db->query("SELECT mostrar_en_web FROM {$table} WHERE {$pk} = " . $id);
         $row = $check ? $check->fetch_assoc() : null;
         return $row ? (int)$row['mostrar_en_web'] : 0;
     }
 
-    public function setBulkPublicVisibility(array $ids, $visible) {
-        if (empty($ids)) return false;
+    public function setBulkPublicVisibility(array $items, $visible) {
+        if (empty($items)) return false;
+        $this->ensurePublicProfileColumns();
         $visible = $visible ? 1 : 0;
-        $idsClean = array_map('intval', $ids);
-        $inList = implode(',', $idsClean);
-        return (bool)$this->db->query("UPDATE maestro SET mostrar_en_web = $visible WHERE id_maestro IN ($inList)");
+
+        $maestroIds = [];
+        $estudianteIds = [];
+        $adminIds = [];
+
+        foreach ($items as $item) {
+            if (is_string($item) && str_contains($item, ':')) {
+                [$rol, $id] = explode(':', $item, 2);
+                $id = (int)$id;
+                if ($rol === 'Administracion' || $rol === Roles::ADMINISTRADOR) {
+                    $adminIds[] = $id;
+                } elseif ($rol === 'Deportistas' || $rol === Roles::ESTUDIANTE) {
+                    $estudianteIds[] = $id;
+                } else {
+                    $maestroIds[] = $id;
+                }
+            } else {
+                $maestroIds[] = (int)$item;
+            }
+        }
+
+        if (!empty($maestroIds)) {
+            $inList = implode(',', $maestroIds);
+            $this->db->query("UPDATE maestro SET mostrar_en_web = $visible WHERE id_maestro IN ($inList)");
+        }
+        if (!empty($estudianteIds)) {
+            $inList = implode(',', $estudianteIds);
+            $this->db->query("UPDATE estudiante SET mostrar_en_web = $visible WHERE id_estudiante IN ($inList)");
+        }
+        if (!empty($adminIds)) {
+            $inList = implode(',', $adminIds);
+            $this->db->query("UPDATE administrador SET mostrar_en_web = $visible WHERE id_administrador IN ($inList)");
+        }
+
+        return true;
     }
 
     public function updatePassword(int $id, string $newPasswordHash, ?string $rol = null): bool {
