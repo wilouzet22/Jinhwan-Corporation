@@ -54,23 +54,7 @@
         </div>
         <?php endif; ?>
 
-        <?php if ($stats['pendientes_ascenso'] > 0): ?>
-        <div class="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent dark:from-blue-500/20 dark:via-slate-900 dark:to-slate-900 border border-blue-500/30 p-5 rounded-2xl flex items-center justify-between shadow-md hover-lift transition-all">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-500 shrink-0">
-                    <span class="material-icons-outlined text-2xl">military_tech</span>
-                </div>
-                <div>
-                    <h3 class="text-blue-900 dark:text-blue-300 font-bold text-base flex items-center gap-2">
-                        Solicitudes de Ascenso
-                        <span class="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-600 dark:text-blue-400 font-extrabold"><?= $stats['pendientes_ascenso'] ?></span>
-                    </h3>
-                    <p class="text-slate-600 dark:text-slate-400 text-xs mt-0.5">Propuestas enviadas por los maestros para evaluar.</p>
-                </div>
-            </div>
-            <a href="<?= base_url('/admin/registros') ?>" class="px-4 py-2.5 bg-tkd-blue hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-md hover:shadow-blue-500/30 shrink-0 ml-3">Revisar</a>
-        </div>
-        <?php endif; ?>
+
     </div>
     <?php endif; ?>
 
