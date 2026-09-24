@@ -104,7 +104,7 @@ class AdminEstudiantesController extends Controller {
 
             $stmt = $db->prepare("INSERT INTO estudiante (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo, peso, division, eps, rh, foto_perfil)
                                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("iiiiisssssssisssss",
+            $stmt->bind_param("iiiisssssssisssss",
                 $id_grado, $id_cat, $id_grupo, $id_maestro,
                 $nombre, $apellido, $tipo_doc, $num_doc,
                 $telefono, $fnac, $correo, $clave, $activo,
@@ -176,7 +176,7 @@ class AdminEstudiantesController extends Controller {
                                   nombre=?, apellido=?, tipo_documento=?, num_doc=?, telefono=?, fecha_nacimiento=?,
                                   correo=?, activo=?, peso=?, division=?, eps=?, rh=?, foto_perfil=?
                                   WHERE id_estudiante=?");
-            $stmt->bind_param("iiiiissssssisssssi",
+            $stmt->bind_param("iiiissssssisssssi",
                 $id_grado, $id_cat, $id_grupo, $id_maestro,
                 $nombre, $apellido, $tipo_doc, $num_doc,
                 $telefono, $fnac, $correo, $activo,

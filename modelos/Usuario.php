@@ -401,6 +401,67 @@ class Usuario extends Model {
         if ($checkGA && $checkGA->num_rows === 0) {
             $this->db->query("ALTER TABLE galeria_multimedia ADD COLUMN id_administrador INT(11) DEFAULT NULL AFTER id_estudiante");
         }
+
+        // Restaurar nombres de estudiantes que se hayan guardado como 0
+        $checkZero = $this->db->query("SELECT id_estudiante FROM estudiante WHERE nombre = '0' OR nombre = 0 LIMIT 1");
+        if ($checkZero && $checkZero->num_rows > 0) {
+            $studentNames = [
+                101 => 'Jean Karlo',
+                102 => 'Samuel',
+                103 => 'Daniel Andrés',
+                104 => 'Miguel Ángel',
+                105 => 'Daniel',
+                106 => 'Juan Camilo',
+                107 => 'Salome',
+                108 => 'Matías',
+                109 => 'Juan Pablo',
+                110 => 'Juan Camilo',
+                111 => 'Danna Sofia',
+                112 => 'Samir Enrique',
+                113 => 'Matías',
+                114 => 'Maximiliano',
+                115 => 'Sofia',
+                116 => 'Dylan Andrés',
+                117 => 'Santiago Andres',
+                118 => 'Smith',
+                119 => 'Aaron David',
+                120 => 'Anderson Steven',
+                121 => 'Nicolás',
+                122 => 'Jerónimo',
+                123 => 'Juan David',
+                124 => 'Sara',
+                125 => 'Ana Sofía',
+                126 => 'José Ignacio',
+                127 => 'Marcelo Gabriel',
+                128 => 'Juan Camilo',
+                129 => 'Samuel Cano',
+                130 => 'Hillary',
+                131 => 'Diego Fernando',
+                132 => 'Rubiangelys Sofía',
+                133 => 'Jeziel Abrahán',
+                134 => 'Juan José',
+                135 => 'Kevin Andrés',
+                136 => 'Samuel',
+                137 => 'Emanuel',
+                138 => 'Ana Sofía',
+                139 => 'Samuel',
+                140 => 'Sarah Sofía',
+                141 => 'Ana Sofía',
+                142 => 'Ismael',
+                143 => 'Valeria',
+                144 => 'Mariana',
+                145 => 'Jimena',
+                146 => 'Luciana',
+                147 => 'Gabriela',
+                148 => 'Ana Sofia',
+                153 => 'Mateo',
+                154 => 'maria jose'
+            ];
+            foreach ($studentNames as $sid => $sname) {
+                $snameClean = $this->db->real_escape_string($sname);
+                $this->db->query("UPDATE estudiante SET nombre = '{$snameClean}' WHERE id_estudiante = {$sid} AND (nombre = '0' OR nombre = 0)");
+            }
+        }
     }
 
     public function getPublicProfiles() {
