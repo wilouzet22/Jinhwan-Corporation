@@ -98,6 +98,14 @@ $total_inactivos = $total_estudiantes - $total_activos;
                            class="block w-full pl-9 pr-3 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
                 </div>
 
+                <!-- Filtro Grupo (Destacado) -->
+                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors font-medium">
+                    <option value="all">👥 Todos los Grupos</option>
+                    <?php foreach($grupos_list as $grp): ?>
+                        <option value="<?= htmlspecialchars($grp['nombre']) ?>"><?= htmlspecialchars($grp['nombre']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+
                 <!-- Filtro Sede -->
                 <select id="filter-sede" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
                     <option value="all">Todas las Sedes</option>
@@ -111,14 +119,6 @@ $total_inactivos = $total_estudiantes - $total_activos;
                     <option value="all">Todos los Grados</option>
                     <?php foreach($niveles_list as $nivel): ?>
                         <option value="<?= htmlspecialchars($nivel['nombre']) ?>"><?= htmlspecialchars($nivel['nombre']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-
-                <!-- Filtro Grupo -->
-                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
-                    <option value="all">Todos los Grupos</option>
-                    <?php foreach($grupos_list as $grp): ?>
-                        <option value="<?= htmlspecialchars($grp['nombre']) ?>"><?= htmlspecialchars($grp['nombre']) ?></option>
                     <?php endforeach; ?>
                 </select>
 
@@ -144,9 +144,9 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </div>
             </div>
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm flex flex-col transition-colors">
-                <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Alumnos por Sede</h3>
+                <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Alumnos por Grupo</h3>
                 <div class="flex-grow relative w-full flex items-center justify-center min-h-[190px]">
-                    <canvas id="chart-sedes"></canvas>
+                    <canvas id="chart-grupos"></canvas>
                 </div>
             </div>
         </div>
@@ -909,8 +909,8 @@ $total_inactivos = $total_estudiantes - $total_activos;
             }
         });
 
-        const ctxS = document.getElementById('chart-sedes').getContext('2d');
-        const chartSedes = new Chart(ctxS, {
+        const ctxG = document.getElementById('chart-grupos').getContext('2d');
+        const chartGrupos = new Chart(ctxG, {
             type: 'bar',
             data: { labels: [], datasets: [{ label: 'Estudiantes', data: [], backgroundColor: '#3b82f6', borderRadius: 8 }] },
             options: {
@@ -1083,13 +1083,13 @@ $total_inactivos = $total_estudiantes - $total_activos;
 
         function updateCharts(visibleRows) {
             const cintMap = {};
-            const sedeMap = {};
+            const grupoMap = {};
 
             visibleRows.forEach(r => {
                 const c = r.getAttribute('data-nivel') || 'Sin Asignar';
-                const s = r.getAttribute('data-sede') || 'Sin Asignar';
+                const g = r.getAttribute('data-grupo') || 'Sin Asignar';
                 cintMap[c] = (cintMap[c] || 0) + 1;
-                sedeMap[s] = (sedeMap[s] || 0) + 1;
+                grupoMap[g] = (grupoMap[g] || 0) + 1;
             });
 
             // Ordenar cinturones
@@ -1118,9 +1118,9 @@ $total_inactivos = $total_estudiantes - $total_activos;
             chartCinturones.data.datasets[0].borderColor = isDark ? '#0f172a' : '#ffffff';
             chartCinturones.update();
 
-            chartSedes.data.labels = Object.keys(sedeMap);
-            chartSedes.data.datasets[0].data = Object.values(sedeMap);
-            chartSedes.update();
+            chartGrupos.data.labels = Object.keys(grupoMap);
+            chartGrupos.data.datasets[0].data = Object.values(grupoMap);
+            chartGrupos.update();
         }
 
         searchInput.addEventListener('input', () => { currentPage = 1; filterStudents(); });
