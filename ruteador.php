@@ -76,6 +76,7 @@ $router->post('/registro/completar/process', [AutenticacionController::class, 'p
 $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 $router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
 $router->post('/admin/ascensos/store', [AdminAscensosController::class, 'store']);
+$router->get('/admin/ascensos/certificado', [AdminAscensosController::class, 'certificado']);
 
 $router->get('/admin/teoria', [AdminTeoriaController::class, 'index']);
 $router->post('/admin/teoria/create', [AdminTeoriaController::class, 'store']);

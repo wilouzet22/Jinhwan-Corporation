@@ -50,6 +50,7 @@
                             <th class="px-3 py-3">Fecha</th>
                             <th class="px-3 py-3">Folio</th>
                             <th class="px-3 py-3">Realizado por</th>
+                            <th class="px-3 py-3 text-center">Diploma</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
@@ -77,6 +78,13 @@
                             </td>
                             <td class="px-3 py-3 text-xs text-slate-500 dark:text-slate-400">
                                 <?= htmlspecialchars($h['nombre_maestro']) ?>
+                            </td>
+                            <td class="px-3 py-3 text-center">
+                                <button type="button" onclick="openAdminCert(<?= (int)$h['id'] ?>)"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-xs hover:shadow" title="Ver Diploma">
+                                    <span class="material-icons-outlined text-sm">workspace_premium</span>
+                                    <span>Ver</span>
+                                </button>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -230,6 +238,73 @@ function applyModalFilters() {
 
 document.getElementById('modal-filter-sede')?.addEventListener('change', applyModalFilters);
 document.getElementById('modal-filter-grupo')?.addEventListener('change', applyModalFilters);
+</script>
+
+<!-- Modal Diploma / Certificado Admin -->
+<div id="modal-cert-admin" class="fixed inset-0 z-50 hidden items-center justify-center p-0">
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAdminCert()"></div>
+    <div class="relative bg-white dark:bg-slate-900 w-screen h-screen max-w-none max-h-screen overflow-hidden">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+            <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="material-icons-outlined text-blue-600">workspace_premium</span>
+                Certificado / Diploma de Ascenso de Grado
+            </h2>
+            <div class="flex items-center gap-2">
+                <button onclick="closeAdminCert()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer">
+                    <span class="material-icons-outlined text-sm">arrow_back</span>
+                    Volver
+                </button>
+                <button onclick="downloadAdminPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer">
+                    <span class="material-icons-outlined text-sm">picture_as_pdf</span>
+                    Descargar PDF
+                </button>
+                <button onclick="closeAdminCert()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors cursor-pointer" aria-label="Cerrar diploma">
+                    <span class="material-icons-outlined text-sm">close</span>
+                </button>
+            </div>
+        </div>
+        <div id="admin-cert-wrapper" class="flex items-start justify-center h-[calc(100vh-80px)] overflow-y-auto overflow-x-hidden bg-slate-100 dark:bg-slate-950/60 p-4 md:p-8" style="scrollbar-width: thin; overscroll-behavior: contain;">
+            <div class="flex items-center justify-center py-12 text-slate-400">
+                <span class="material-icons-outlined text-4xl">hourglass_top</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function openAdminCert(idCert) {
+    const modal = document.getElementById('modal-cert-admin');
+    const wrapper = document.getElementById('admin-cert-wrapper');
+    wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    fetch('<?= base_url('/admin/ascensos/certificado') ?>?id=' + idCert)
+        .then(r => r.text())
+        .then(html => { wrapper.innerHTML = html; })
+        .catch(() => { wrapper.innerHTML = '<p class="text-center text-rose-500 py-8">Error al cargar el diploma.</p>'; });
+}
+
+function closeAdminCert() {
+    const modal = document.getElementById('modal-cert-admin');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+
+function downloadAdminPDF() {
+    const element = document.getElementById('certificado-contenido');
+    if (!element) return;
+    html2pdf().set({
+        margin: [8,8,8,8], filename: 'diploma-jinhwan.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+    }).from(element).save();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAdminCert(); });
 </script>
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>

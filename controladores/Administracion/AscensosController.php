@@ -103,4 +103,26 @@ class AdminAscensosController extends Controller {
             $this->redirect('/admin/ascensos?error=fallo');
         }
     }
+
+    /** Endpoint AJAX: devuelve el HTML del certificado/diploma para el modal del admin */
+    public function certificado() {
+        Security::verifySession();
+        Security::verifyPermission('ascensos');
+
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            http_response_code(400);
+            echo '<p class="text-center text-rose-500 py-8">Solicitud inválida.</p>';
+            return;
+        }
+
+        $cert = $this->certModel->getById($id);
+        if (!$cert) {
+            http_response_code(404);
+            echo '<p class="text-center text-slate-500 py-8">Certificado no encontrado.</p>';
+            return;
+        }
+
+        include __DIR__ . '/../../vistas/administracion/certificado_preview.php';
+    }
 }
