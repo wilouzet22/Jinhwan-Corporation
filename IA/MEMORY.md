@@ -43,6 +43,7 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
     - Se respetó intacto el texto formal preimpreso *"Aprobó el examen reglamentario para Ascenso de grado..."* sin superposiciones.
     - En el área central se organizó la foto oficial con marco circular de honor, el nuevo grado en tipografía marcial burdeos, el grado previo, el distintivo de fecha en español puro (sin zonas horarias rotas) y las observaciones.
     - Se despejó totalmente el tercio inferior para garantizar la visibilidad de las firmas oficiales (Director Nelson Restrepo, Ana Patricia Giraldo, WTF, Cristian Hincapié y Fran Posada).
+    - **Solución al bloqueo de descarga PDF**: Se incrustaron la plantilla del diploma y la foto del estudiante como cadenas **Base64 (Data URIs)** directamente en el HTML. Esto erradica las violaciones de CORS / *tainted canvas* que hacían que `html2pdf.js` y `html2canvas` se quedaran congelados esperando recursos. Además, se alojó la librería `html2pdf.bundle.min.js` localmente en `public/js/vendor/` y se añadió un botón alternativo de **"Imprimir"** con `@media print` optimizado para Guardar en PDF de manera nativa y vectorial.
 
 ---
 
