@@ -94,7 +94,7 @@ class Certificado {
     public function getById(int $id): ?array {
         $sql = "SELECT c.*,
                        CONCAT(e.nombre, ' ', e.apellido) AS alumno_nombre,
-                       e.num_doc, e.foto_perfil, gr.id_sede,
+                       e.tipo_documento, e.num_doc, e.foto_perfil, gr.id_sede,
                        CONCAT(m.nombre, ' ', m.apellido) AS maestro_nombre,
                        se.nombre AS nombre_sede,
                        c.id_estudiante as id_persona

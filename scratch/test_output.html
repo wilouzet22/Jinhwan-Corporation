@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vista Previa Diploma</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #e2e8f0; display: flex; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<div id="certificado-contenido" style="width:800px; height:1036px; max-width:100%; margin:0 auto; position:relative; background:#ffffff url('../public/img/visual/diploma_base.png') no-repeat center top; background-size:100% 100%; box-sizing:border-box; box-shadow:0 20px 45px rgba(15,23,42,0.18); border-radius:12px; overflow:hidden; font-family:'Playfair Display', Georgia, serif; color:#0f172a; user-select:none;">
+
+    <!-- 1. ZONA DEL ESTUDIANTE: Nombre, documento, folio y sede sobre la línea de certificación -->
+    <div style="position:absolute; top:222px; left:70px; right:70px; text-align:center;">
+        <h2 style="font-family:'Cinzel', Georgia, serif; font-size:26px; font-weight:800; color:#0f172a; letter-spacing:1.8px; margin:0; line-height:1.2; text-shadow:0 0 1px rgba(0,0,0,0.15);">
+            ANA SOFÍA RAMÍREZ AGUDELO        </h2>
+        <div style="display:inline-flex; align-items:center; gap:8px; margin-top:5px; font-family:'Segoe UI', system-ui, sans-serif; font-size:11.5px; font-weight:700; color:#475569; letter-spacing:1px; text-transform:uppercase;">
+                            <span>T.I.: 1.025.485.992</span>
+                <span style="color:#cbd5e1;">•</span>
+                                        <span style="font-family:'Courier New', monospace; letter-spacing:1.5px; color:#1e293b;">FOLIO: JH-2026-0001</span>
+                                        <span style="color:#cbd5e1;">•</span>
+                <span>SEDE: Belén</span>
+                    </div>
+    </div>
+
+    <!-- 
+        NOTA: En la plantilla base (diploma_base.png), entre y=380px e y=495px ya se encuentra 
+        impreso en el diseño oficial el texto:
+        "Aprobó el examen reglamentario para Ascenso de grado, según lo requerido por el 
+         Programa de esta institución, por lo cual se Acredita como:"
+        Por directriz de diseño, NO se posiciona ningún elemento encima de este bloque.
+    -->
+
+    <!-- 2. ZONA DE ACREDITACIÓN: Foto, nuevo grado, grado previo, fecha oficial y observaciones -->
+    <div style="position:absolute; top:514px; left:80px; right:80px; display:flex; flex-direction:column; align-items:center; text-align:center;">
+        
+        <!-- Foto oficial del estudiante con marco circular de honor -->
+        <div style="width:68px; height:68px; border-radius:50%; border:2.5px solid #0f172a; box-shadow:0 4px 12px rgba(15,23,42,0.22); overflow:hidden; background:#ffffff; margin-bottom:5px; flex-shrink:0;">
+            <img src="../public/img/visual/logo.svg" alt="Foto del estudiante" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+
+        <!-- Grado Acreditado -->
+        <div style="font-family:'Cinzel', Georgia, serif; font-size:23px; font-weight:900; color:#881337; letter-spacing:2px; text-transform:uppercase; margin:0; line-height:1.15; text-shadow:0 0 1px rgba(136,19,55,0.2);">
+            CINTURÓN PINTA ROJO        </div>
+
+        <!-- Indicador de Grado Anterior -->
+                    <div style="font-family:Georgia, serif; font-size:11px; font-style:italic; color:#475569; margin-top:2px;">
+                Grado anterior: Cinturón Azul            </div>
+        
+        <!-- Distintivo de Fecha Oficial del Examen (opaco para pulcritud total) -->
+        <div style="display:inline-block; margin-top:6px; min-width:280px; max-width:330px; background:#ffffff; border:1px solid #94a3b8; border-radius:9999px; padding:3px 20px; font-family:Georgia, serif; font-size:12px; font-style:italic; font-weight:600; color:#0f172a; box-shadow:0 2px 6px rgba(0,0,0,0.08); text-align:center;">
+            Medellín, 15 de Agosto de 2026        </div>
+
+        <!-- Observaciones / Mención de Honor del Maestro Evaluador (en el centro libre sin invadir firmas) -->
+                    <div style="margin-top:5px; max-width:330px; font-family:Georgia, serif; font-size:9.5px; line-height:1.25; font-style:italic; color:#334155; padding:0 5px;">
+                “El practicante demostró excelente disciplina y técnica de poomsae.”
+            </div>
+            </div>
+
+    <!-- 
+        NOTA: En la plantilla base (diploma_base.png), entre y=680px e y=1036px ya se encuentran 
+        impresas las firmas originales y sellos: Gran Maestro Nelson Restrepo (6 Dan), 
+        Maestra Ana Patricia Giraldo (4 Dan), Emblema Oficial WTF, Cristian Hincapié y Fran Posada.
+        La zona inferior queda 100% despejada y libre de elementos para respetar su autenticidad.
+    -->
+
+</div>
+</body>
+</html>

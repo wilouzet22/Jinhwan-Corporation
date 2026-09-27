@@ -36,8 +36,13 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
   - Se eliminó el bloque obsoleto de "Solicitudes de Ascenso" del dashboard principal (`vistas/administracion/dashboard.php`).
   - Se eliminó la barra de búsqueda obsoleta ("Buscar miembro...") del banner superior del Centro de Control en `dashboard.php`.
   - La opción **"Solicitudes"** (`/admin/registros`) se mantiene en el menú lateral de administración dedicada **exclusivamente a las nuevas solicitudes de registro** de alumnos al sistema.
-  - Toda la gestión de ascensos está concentrada en el módulo de **Ascensos** (`/admin/ascensos`).
   - El administrador ahora cuenta con la columna **"Diploma"** en el Historial de Ascensos (`ascensos.php`) con botón para previsualizar el diploma oficial y descargarlo en formato PDF en alta calidad mediante `html2pdf.js`.
+  - **Reestructuración y Limpieza del Diploma (`certificado_preview.php`)**:
+    - Se limpió la plantilla gráfica base (`diploma_base.png`) eliminando los textos estáticos previos ("TI" y fecha quemada de 2023).
+    - Se agrupó la identidad del estudiante (Nombre en fuente Cinzel, Documento, Folio y Sede) en la línea superior de acreditación.
+    - Se respetó intacto el texto formal preimpreso *"Aprobó el examen reglamentario para Ascenso de grado..."* sin superposiciones.
+    - En el área central se organizó la foto oficial con marco circular de honor, el nuevo grado en tipografía marcial burdeos, el grado previo, el distintivo de fecha en español puro (sin zonas horarias rotas) y las observaciones.
+    - Se despejó totalmente el tercio inferior para garantizar la visibilidad de las firmas oficiales (Director Nelson Restrepo, Ana Patricia Giraldo, WTF, Cristian Hincapié y Fran Posada).
 
 ---
 
