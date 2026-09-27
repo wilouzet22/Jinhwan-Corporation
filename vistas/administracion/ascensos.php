@@ -294,14 +294,31 @@ function closeAdminCert() {
 }
 
 function downloadAdminPDF() {
+    const btn  = document.querySelector('[onclick="downloadAdminPDF()"]');
     const element = document.getElementById('certificado-contenido');
     if (!element) return;
+
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="material-icons-outlined animate-spin" style="font-size:18px;vertical-align:middle;">autorenew</span> Generando…'; }
+
     html2pdf().set({
-        margin: [8,8,8,8], filename: 'diploma-jinhwan.pdf',
+        margin: 0,
+        filename: 'diploma-jinhwan.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
-    }).from(element).save();
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            logging: false,
+            foreignObjectRendering: false,
+            imageTimeout: 15000,
+            removeContainer: true
+        },
+        jsPDF: { unit: 'mm', format: [213.5, 276.5], orientation: 'portrait' }
+    }).from(element).save().then(() => {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-icons-outlined" style="font-size:18px;vertical-align:middle;">download</span> Descargar PDF'; }
+    }).catch(() => {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-icons-outlined" style="font-size:18px;vertical-align:middle;">download</span> Descargar PDF'; }
+    });
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAdminCert(); });

@@ -31,18 +31,21 @@ $observaciones  = mb_strlen($observaciones_raw, 'UTF-8') > 280
     : $observaciones_raw;
 $nombre_sede    = htmlspecialchars(trim($cert['nombre_sede'] ?? ''));
 
-// Usamos la plantilla v3 limpia con parámetro de versión para evitar caché del navegador
-$plantilla_url  = asset('img/visual/diploma_plantilla_v3.png') . '?v=' . filemtime(__DIR__ . '/../../public/img/visual/diploma_plantilla_v3.png');
+// La plantilla se carga como <img> real (html2canvas no soporta background-image CSS)
+$plantilla_url  = asset('img/visual/diploma_plantilla_v3.png');
 ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-<div id="certificado-contenido" style="width:800px; height:1036px; max-width:100%; margin:0 auto; position:relative; background:#ffffff url('<?= $plantilla_url ?>') no-repeat center top; background-size:100% 100%; box-sizing:border-box; box-shadow:0 20px 45px rgba(15,23,42,0.18); border-radius:12px; overflow:hidden; font-family:'Playfair Display', Georgia, serif; color:#0f172a; user-select:none;">
+<div id="certificado-contenido" style="width:800px; height:1036px; max-width:100%; margin:0 auto; position:relative; background:#ffffff; box-sizing:border-box; box-shadow:0 20px 45px rgba(15,23,42,0.18); border-radius:12px; overflow:hidden; font-family:'Playfair Display', Georgia, serif; color:#0f172a; user-select:none;">
+
+    <!-- Plantilla gráfica de fondo como img real para html2canvas -->
+    <img src="<?= $plantilla_url ?>" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:12px; display:block; z-index:0;" crossorigin="anonymous">
 
     <!-- 1. ZONA DEL ESTUDIANTE: Nombre completo sobre la línea y documento de identidad oficial -->
-    <div style="position:absolute; top:236px; left:60px; right:60px; text-align:center;">
+    <div style="position:absolute; top:236px; left:60px; right:60px; text-align:center; z-index:1;">
         <h2 style="font-family:'Cinzel', Georgia, serif; font-size:27px; font-weight:800; color:#0f172a; letter-spacing:2px; margin:0; line-height:1.2; text-shadow:0 0 1px rgba(0,0,0,0.12);">
             <?= $nombre_alumno ?>
         </h2>
@@ -78,7 +81,7 @@ $plantilla_url  = asset('img/visual/diploma_plantilla_v3.png') . '?v=' . filemti
     -->
 
     <!-- 2. ZONA DE ACREDITACIÓN: Foto con insignia marcial, nuevo grado, fecha y observaciones -->
-    <div style="position:absolute; top:524px; left:60px; right:60px; display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <div style="position:absolute; top:524px; left:60px; right:60px; display:flex; flex-direction:column; align-items:center; text-align:center; z-index:1;">
         
         <!-- Bloque integrado: Foto del estudiante y Grado Acreditado -->
         <div style="display:flex; align-items:center; justify-content:center; gap:18px;">
