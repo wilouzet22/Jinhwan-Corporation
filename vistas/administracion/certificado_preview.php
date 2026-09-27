@@ -3,9 +3,32 @@
 // Espera recibir $cert = array con datos del certificado.
 if (!isset($cert) || empty($cert)) return;
 
-$foto_url = !empty($cert['foto_perfil'])
-    ? base_url('/public/uploads/perfiles/' . $cert['foto_perfil'])
-    : asset('img/visual/logo.svg');
+// Plantilla institucional v3 embebida en base64 para evitar errores de CORS / canvas en html2pdf
+$plantilla_file = __DIR__ . '/../../public/img/visual/diploma_plantilla_v3.png';
+if (file_exists($plantilla_file)) {
+    $plantilla_url = 'data:image/png;base64,' . base64_encode(file_get_contents($plantilla_file));
+} else {
+    $plantilla_url = asset('img/visual/diploma_plantilla_v3.png');
+}
+
+// Foto del alumno o logotipo oficial embebido en base64
+$foto_data = null;
+if (!empty($cert['foto_perfil'])) {
+    $p = __DIR__ . '/../../public/uploads/perfiles/' . $cert['foto_perfil'];
+    if (file_exists($p)) {
+        $mime = mime_content_type($p) ?: 'image/jpeg';
+        $foto_data = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($p));
+    }
+}
+if (!$foto_data) {
+    $p = __DIR__ . '/../../public/img/visual/logo.svg';
+    if (file_exists($p)) {
+        $foto_data = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents($p));
+    } else {
+        $foto_data = asset('img/visual/logo.svg');
+    }
+}
+$foto_url = $foto_data;
 
 // Formato de fecha en español sin fugas de zona horaria
 $meses = [
@@ -30,9 +53,6 @@ $observaciones  = mb_strlen($observaciones_raw, 'UTF-8') > 280
     ? mb_substr($observaciones_raw, 0, 280, 'UTF-8') . '…'
     : $observaciones_raw;
 $nombre_sede    = htmlspecialchars(trim($cert['nombre_sede'] ?? ''));
-
-// La plantilla se carga como <img> real (html2canvas no soporta background-image CSS)
-$plantilla_url  = asset('img/visual/diploma_plantilla_v3.png');
 ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +62,7 @@ $plantilla_url  = asset('img/visual/diploma_plantilla_v3.png');
 <div id="certificado-contenido" style="width:800px; height:1036px; max-width:100%; margin:0 auto; position:relative; background:#ffffff; box-sizing:border-box; box-shadow:0 20px 45px rgba(15,23,42,0.18); border-radius:12px; overflow:hidden; font-family:'Playfair Display', Georgia, serif; color:#0f172a; user-select:none;">
 
     <!-- Plantilla gráfica de fondo como img real para html2canvas -->
-    <img src="<?= $plantilla_url ?>" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:12px; display:block; z-index:0;" crossorigin="anonymous">
+    <img src="<?= $plantilla_url ?>" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:12px; display:block; z-index:0;">
 
     <!-- 1. ZONA DEL ESTUDIANTE: Nombre completo sobre la línea y documento de identidad oficial -->
     <div style="position:absolute; top:236px; left:60px; right:60px; text-align:center; z-index:1;">

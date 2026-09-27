@@ -136,8 +136,15 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
     </div>
 </main>
 
-<!-- html2pdf.js CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- html2pdf.js local + fallback -->
+<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>"></script>
+<script>
+if (typeof html2pdf === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    document.head.appendChild(s);
+}
+</script>
 
 <script>
 function openCertModal(idSolicitud) {

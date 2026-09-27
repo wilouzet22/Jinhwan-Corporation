@@ -798,7 +798,14 @@
     });
 </script>
 
-<!-- html2pdf.js CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- html2pdf.js local + fallback -->
+<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>"></script>
+<script>
+if (typeof html2pdf === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    document.head.appendChild(s);
+}
+</script>
 
 <?php include __DIR__ . '/../layout/maestro_pie.php'; ?>

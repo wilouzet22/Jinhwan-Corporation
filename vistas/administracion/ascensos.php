@@ -254,9 +254,13 @@ document.getElementById('modal-filter-grupo')?.addEventListener('change', applyM
                     <span class="material-icons-outlined text-sm">arrow_back</span>
                     Volver
                 </button>
-                <button onclick="downloadAdminPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer">
+                <button id="btn-download-admin-pdf" onclick="downloadAdminPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer">
                     <span class="material-icons-outlined text-sm">picture_as_pdf</span>
                     Descargar PDF
+                </button>
+                <button onclick="printAdminCert()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer" title="Imprimir o Guardar como PDF con la impresora del sistema">
+                    <span class="material-icons-outlined text-sm">print</span>
+                    Imprimir
                 </button>
                 <button onclick="closeAdminCert()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors cursor-pointer" aria-label="Cerrar diploma">
                     <span class="material-icons-outlined text-sm">close</span>
@@ -271,8 +275,26 @@ document.getElementById('modal-filter-grupo')?.addEventListener('change', applyM
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+@media print {
+    body > *:not(#modal-cert-admin) { display: none !important; }
+    #modal-cert-admin { position: static !important; display: block !important; background: transparent !important; padding: 0 !important; width: 100% !important; height: auto !important; }
+    #modal-cert-admin > div:first-child,
+    #modal-cert-admin .sticky { display: none !important; }
+    #admin-cert-wrapper { overflow: visible !important; height: auto !important; padding: 0 !important; margin: 0 !important; background: transparent !important; }
+    #certificado-contenido { box-shadow: none !important; border-radius: 0 !important; margin: 0 auto !important; page-break-inside: avoid !important; }
+    @page { size: portrait; margin: 0; }
+}
+</style>
+
+<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>"></script>
 <script>
+if (typeof html2pdf === 'undefined') {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    document.head.appendChild(s);
+}
+
 function openAdminCert(idCert) {
     const modal = document.getElementById('modal-cert-admin');
     const wrapper = document.getElementById('admin-cert-wrapper');
@@ -294,31 +316,63 @@ function closeAdminCert() {
 }
 
 function downloadAdminPDF() {
-    const btn  = document.querySelector('[onclick="downloadAdminPDF()"]');
+    const btn = document.getElementById('btn-download-admin-pdf');
     const element = document.getElementById('certificado-contenido');
-    if (!element) return;
+    if (!element) {
+        alert('El certificado aún se está cargando. Espere un momento e intente de nuevo.');
+        return;
+    }
 
-    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="material-icons-outlined animate-spin" style="font-size:18px;vertical-align:middle;">autorenew</span> Generando…'; }
+    if (typeof html2pdf === 'undefined') {
+        alert('Cargando librería de PDF... Por favor intente en unos segundos o use el botón Imprimir.');
+        return;
+    }
 
-    html2pdf().set({
-        margin: 0,
-        filename: 'diploma-jinhwan.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            allowTaint: false,
-            logging: false,
-            foreignObjectRendering: false,
-            imageTimeout: 15000,
-            removeContainer: true
+    const originalBtnText = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="material-icons-outlined animate-spin" style="font-size:16px;vertical-align:middle;">autorenew</span> Generando…';
+    }
+
+    const opt = {
+        margin:       0,
+        filename:     'diploma-jinhwan.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { 
+            scale: 2, 
+            useCORS: true, 
+            allowTaint: true,
+            scrollX: 0,
+            scrollY: 0,
+            logging: false
         },
-        jsPDF: { unit: 'mm', format: [213.5, 276.5], orientation: 'portrait' }
-    }).from(element).save().then(() => {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-icons-outlined" style="font-size:18px;vertical-align:middle;">download</span> Descargar PDF'; }
-    }).catch(() => {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-icons-outlined" style="font-size:18px;vertical-align:middle;">download</span> Descargar PDF'; }
-    });
+        jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save()
+        .then(() => {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+        })
+        .catch(err => {
+            console.error('Error al generar PDF:', err);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }
+            alert('No se pudo descargar automáticamente. Use el botón "Imprimir" para Guardar como PDF desde su navegador.');
+        });
+}
+
+function printAdminCert() {
+    const element = document.getElementById('certificado-contenido');
+    if (!element) {
+        alert('El certificado aún se está cargando.');
+        return;
+    }
+    window.print();
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAdminCert(); });
