@@ -34,6 +34,7 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
     6. Botón de limpieza rápida de filtros.
 - **Limpieza del Dashboard y Módulo de Solicitudes y Ascensos**:
   - Se eliminó el bloque obsoleto de "Solicitudes de Ascenso" del dashboard principal (`vistas/administracion/dashboard.php`).
+  - Se eliminó la barra de búsqueda obsoleta ("Buscar miembro...") del banner superior del Centro de Control en `dashboard.php`.
   - La opción **"Solicitudes"** (`/admin/registros`) se mantiene en el menú lateral de administración dedicada **exclusivamente a las nuevas solicitudes de registro** de alumnos al sistema.
   - Toda la gestión de ascensos está concentrada en el módulo de **Ascensos** (`/admin/ascensos`).
   - El administrador ahora cuenta con la columna **"Diploma"** en el Historial de Ascensos (`ascensos.php`) con botón para previsualizar el diploma oficial y descargarlo en formato PDF en alta calidad mediante `html2pdf.js`.
