@@ -6,16 +6,16 @@ function asset($path = '') { return '../public/' . $path; }
 
 $cert = [
     'id_certificado' => 1,
-    'alumno_nombre' => 'Ana Sofía Ramírez Agudelo',
-    'tipo_documento' => 'T.I.',
-    'num_doc' => '1.025.485.992',
+    'alumno_nombre' => 'Ana Sofia Sánchez Agudelo',
+    'tipo_documento' => 'TI',
+    'num_doc' => '1011222665',
     'foto_perfil' => '',
-    'grado_anterior' => 'Cinturón Azul',
-    'grado_nuevo' => 'Cinturón Pinta Rojo',
-    'fecha_examen' => '2026-08-15',
-    'observaciones' => 'El practicante demostró excelente disciplina y técnica de poomsae.',
+    'grado_anterior' => 'Azul',
+    'grado_nuevo' => 'Pinta Rojo',
+    'fecha_examen' => '2026-08-29',
+    'observaciones' => 'El practicante buen despeño tiene muy buana tecnica de pateo pero tiene que mejorar en las poomseas tiene un cardio muy bajo debe mejorar eso no sabe combatir peor lo intenta y tiene muy buen compañerismo.',
     'folio' => 'JH-2026-0001',
-    'nombre_sede' => 'Belén'
+    'nombre_sede' => 'SEDE PRINCIPAL SANTA MÓNICA CAMPO ALEGRE'
 ];
 
 ob_start();
@@ -38,4 +38,4 @@ include __DIR__ . '/../vistas/administracion/certificado_preview.php';
 <?php
 $html = ob_get_clean();
 file_put_contents(__DIR__ . '/test_output.html', $html);
-echo "Generated static test_output.html\n";
+echo "Rendered static test_output.html with v3!\n";
