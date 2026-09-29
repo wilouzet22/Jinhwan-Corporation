@@ -782,11 +782,22 @@
         const element = document.getElementById('certificado-contenido');
         if (!element) return;
 
+        const rawName = element.getAttribute('data-alumno') || 'alumno';
+        const cleanName = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        const filename = 'diploma-' + (cleanName || 'jinhwan') + '.pdf';
+
         const opt = {
-            margin:       [8, 8, 8, 8],
-            filename:     'certificado-jinhwan.pdf',
+            margin:       0,
+            filename:     filename,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, logging: false },
+            html2canvas:  { 
+                scale: 2, 
+                useCORS: true, 
+                allowTaint: true,
+                scrollX: 0,
+                scrollY: 0,
+                logging: false 
+            },
             jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
         };
         html2pdf().set(opt).from(element).save();
@@ -799,7 +810,7 @@
 </script>
 
 <!-- html2pdf.js local + fallback -->
-<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>"></script>
+<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>" charset="utf-8"></script>
 <script>
 if (typeof html2pdf === 'undefined') {
     const s = document.createElement('script');

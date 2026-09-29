@@ -37,13 +37,23 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
   - Se eliminó la barra de búsqueda obsoleta ("Buscar miembro...") del banner superior del Centro de Control en `dashboard.php`.
   - La opción **"Solicitudes"** (`/admin/registros`) se mantiene en el menú lateral de administración dedicada **exclusivamente a las nuevas solicitudes de registro** de alumnos al sistema.
   - El administrador ahora cuenta con la columna **"Diploma"** en el Historial de Ascensos (`ascensos.php`) con botón para previsualizar el diploma oficial y descargarlo en formato PDF en alta calidad mediante `html2pdf.js`.
-  - **Reestructuración y Limpieza del Diploma (`certificado_preview.php`)**:
-    - Se limpió la plantilla gráfica base (`diploma_base.png`) eliminando los textos estáticos previos ("TI" y fecha quemada de 2023).
-    - Se agrupó la identidad del estudiante (Nombre en fuente Cinzel, Documento, Folio y Sede) en la línea superior de acreditación.
-    - Se respetó intacto el texto formal preimpreso *"Aprobó el examen reglamentario para Ascenso de grado..."* sin superposiciones.
-    - En el área central se organizó la foto oficial con marco circular de honor, el nuevo grado en tipografía marcial burdeos, el grado previo, el distintivo de fecha en español puro (sin zonas horarias rotas) y las observaciones.
-    - Se despejó totalmente el tercio inferior para garantizar la visibilidad de las firmas oficiales (Director Nelson Restrepo, Ana Patricia Giraldo, WTF, Cristian Hincapié y Fran Posada).
-    - **Solución al bloqueo de descarga PDF**: Se incrustaron la plantilla del diploma y la foto del estudiante como cadenas **Base64 (Data URIs)** directamente en el HTML. Esto erradica las violaciones de CORS / *tainted canvas* que hacían que `html2pdf.js` y `html2canvas` se quedaran congelados esperando recursos. Además, se alojó la librería `html2pdf.bundle.min.js` localmente en `public/js/vendor/` y se añadió un botón alternativo de **"Imprimir"** con `@media print` optimizado para Guardar en PDF de manera nativa y vectorial.
+  - **Reestructuración y Estandarización Oficial del Diploma (`certificado_preview.php`)**:
+    - **Plantilla base oficial (`diploma_base.pdf`)**: Se extrajo y limpió de `resources/assets/diploma_base.pdf` la plantilla base institucional en alta definición (`1278 x 1654 px`, proporción Letter 8.5" x 11") eliminando remanentes de líneas, texto estático ("TI") y fechas antiguas, conservando intactos los logos, textos preimpresos, firmas y el ideograma de agua coreano (*태권도*). Se guardó en `public/img/visual/diploma_plantilla_v3.png` y `diploma_base.png`.
+    - **Tipografía Oficial Caligráfica (`Script MT Bold`)**: Se identificó que la tipografía de todo el diploma oficial es **Script MT Bold** (`SCRIPTBL.TTF`). Se alojó en `public/fonts/ScriptMTBold.ttf` y se incrustó en Base64 en el CSS `@font-face`, garantizando renderizado perfecto en cualquier dispositivo y compatibilidad inmediata con `html2canvas` / `html2pdf.js` sin solicitudes de red externas ni fallos de CORS.
+    - **Estructura visual idéntica al certificado físico del club**:
+      1. **Nombre del Estudiante**: Centrado en Title Case con tipografía `Script MT Bold` (38px, color negro puro `#000000`) debajo de *"Certifica que"*.
+      2. **Documento de Identidad**: Centrado con tipografía `Script MT Bold` (26px, ej. *"TI 1013462218"*).
+      3. **Cuerpo formal**: Texto preimpreso *"Aprobó el examen reglamentario para Ascenso de grado..."* 100% respetado sin superposiciones.
+      4. **Bloque de Acreditación**: Directamente bajo *"Acredita como:"* y centrado sobre la marca de agua coreana:
+         - **Grado alcanzado**: En `Script MT Bold` (30px, ej. *"Cinturon Rojo P, Negra"*).
+         - **Gup / Nivel**: En `Script MT Bold` (26px, ej. *"Gup 1"*, *"10° Gup"*, etc. calculado automáticamente según el grado).
+         - **Fecha del examen**: En `Script MT Bold` (22px, ej. *"16 de Noviembre del 2025"*).
+      5. **Área de firmas**: Mantiene las firmas de los directores, maestros evaluadores y el logo WTF intactos.
+    - **Descarga y Exportación PDF**:
+      - Configuración de `html2pdf.js` con margen `0`, escala `2` (alta resolución) y orientación `letter portrait`.
+      - Nombre de archivo dinámico basado en el alumno: `diploma-[nombre-alumno].pdf`.
+      - Script local `html2pdf.bundle.min.js` configurado con `charset="utf-8"` y fallback a CDNJS.
+      - Soporte para `@media print` nativo para guardar como PDF en cualquier navegador.
 
 ---
 

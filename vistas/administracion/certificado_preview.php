@@ -3,7 +3,7 @@
 // Espera recibir $cert = array con datos del certificado.
 if (!isset($cert) || empty($cert)) return;
 
-// Plantilla institucional v3 embebida en base64 para evitar errores de CORS / canvas en html2pdf
+// 1. Plantilla institucional de alta resolución embebida en Base64 para evitar errores de CORS / canvas
 $plantilla_file = __DIR__ . '/../../public/img/visual/diploma_plantilla_v3.png';
 if (file_exists($plantilla_file)) {
     $plantilla_url = 'data:image/png;base64,' . base64_encode(file_get_contents($plantilla_file));
@@ -11,26 +11,78 @@ if (file_exists($plantilla_file)) {
     $plantilla_url = asset('img/visual/diploma_plantilla_v3.png');
 }
 
-// Foto del alumno o logotipo oficial embebido en base64
-$foto_data = null;
-if (!empty($cert['foto_perfil'])) {
-    $p = __DIR__ . '/../../public/uploads/perfiles/' . $cert['foto_perfil'];
-    if (file_exists($p)) {
-        $mime = mime_content_type($p) ?: 'image/jpeg';
-        $foto_data = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($p));
-    }
+// 2. Tipografía oficial Script MT Bold embebida en Base64 para máxima fidelidad vectorial y renderizado offline
+$font_file = __DIR__ . '/../../public/fonts/ScriptMTBold.ttf';
+$font_base64 = '';
+if (file_exists($font_file)) {
+    $font_base64 = base64_encode(file_get_contents($font_file));
 }
-if (!$foto_data) {
-    $p = __DIR__ . '/../../public/img/visual/logo.svg';
-    if (file_exists($p)) {
-        $foto_data = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents($p));
-    } else {
-        $foto_data = asset('img/visual/logo.svg');
-    }
-}
-$foto_url = $foto_data;
 
-// Formato de fecha en español sin fugas de zona horaria
+// 3. Procesamiento del Nombre del Alumno (Title Case caligráfico)
+$nombre_raw    = trim($cert['alumno_nombre'] ?? 'Estudiante');
+$nombre_alumno = mb_convert_case($nombre_raw, MB_CASE_TITLE, 'UTF-8');
+
+// 4. Procesamiento del Documento de Identidad (ej. "TI 1013462218")
+$tipo_doc_raw = trim($cert['tipo_documento'] ?? 'TI');
+$tipo_doc     = strtoupper(str_replace(['.', ' ', ':'], '', $tipo_doc_raw));
+$num_doc      = trim($cert['num_doc'] ?? '');
+$documento_texto = !empty($num_doc) ? "{$tipo_doc} {$num_doc}" : '';
+
+// 5. Procesamiento de Grado y Gup
+$grado_raw   = trim($cert['grado_nuevo'] ?? '');
+$grado_lower = mb_strtolower($grado_raw, 'UTF-8');
+
+// Mapeo tradicional y cálculo automático de Gup / Dan
+$gup_calculado = '';
+if (preg_match('/(gup\s*\d+|\d+\s*gup|dan\s*\d+|\d+\s*dan)/i', $grado_raw, $m)) {
+    $gup_calculado = mb_convert_case($m[0], MB_CASE_TITLE, 'UTF-8');
+} elseif (str_contains($grado_lower, 'blanco') || str_contains($grado_lower, 'white')) {
+    $gup_calculado = '10° Gup';
+} elseif (str_contains($grado_lower, 'pinta amarilla') || str_contains($grado_lower, 'pinta amarillo') || str_contains($grado_lower, 'punta amarilla') || str_contains($grado_lower, 'punta amarillo')) {
+    $gup_calculado = '9° Gup';
+} elseif (str_contains($grado_lower, 'amarillo') || str_contains($grado_lower, 'yellow')) {
+    $gup_calculado = '8° Gup';
+} elseif (str_contains($grado_lower, 'pinta verde') || str_contains($grado_lower, 'punta verde')) {
+    $gup_calculado = '7° Gup';
+} elseif (str_contains($grado_lower, 'verde') || str_contains($grado_lower, 'green')) {
+    $gup_calculado = '6° Gup';
+} elseif (str_contains($grado_lower, 'pinta azul') || str_contains($grado_lower, 'punta azul')) {
+    $gup_calculado = '5° Gup';
+} elseif (str_contains($grado_lower, 'azul') || str_contains($grado_lower, 'blue')) {
+    $gup_calculado = '4° Gup';
+} elseif (str_contains($grado_lower, 'pinta roja') || str_contains($grado_lower, 'pinta rojo') || str_contains($grado_lower, 'punta roja') || str_contains($grado_lower, 'punta rojo')) {
+    $gup_calculado = '3° Gup';
+} elseif (str_contains($grado_lower, 'rojo') || str_contains($grado_lower, 'red')) {
+    if (str_contains($grado_lower, 'negra') || str_contains($grado_lower, 'negro') || str_contains($grado_lower, 'black') || str_contains($grado_lower, 'pinta') || str_contains($grado_lower, 'punta')) {
+        $gup_calculado = 'Gup 1';
+    } else {
+        $gup_calculado = '2° Gup';
+    }
+} elseif (str_contains($grado_lower, 'pinta negra') || str_contains($grado_lower, 'pinta negro') || str_contains($grado_lower, 'punta negra') || str_contains($grado_lower, 'punta negro')) {
+    $gup_calculado = 'Gup 1';
+} elseif (str_contains($grado_lower, 'negro') || str_contains($grado_lower, 'dan')) {
+    if (preg_match('/(\d+)/', $grado_raw, $d)) {
+        $gup_calculado = $d[1] . ' Dan';
+    } else {
+        $gup_calculado = '1er Dan';
+    }
+}
+
+// Formateo del texto del cinturón
+if (!empty($grado_raw)) {
+    if (str_contains($grado_lower, 'pinta negro') || str_contains($grado_lower, 'punta negra') || str_contains($grado_lower, 'rojo p, negra')) {
+        $grado_nuevo_texto = 'Cinturon Rojo P, Negra';
+    } else {
+        $grado_nuevo_texto = mb_convert_case($grado_raw, MB_CASE_TITLE, 'UTF-8');
+        if (!str_starts_with(mb_strtolower($grado_nuevo_texto, 'UTF-8'), 'cintur')) {
+            $grado_nuevo_texto = 'Cinturón ' . $grado_nuevo_texto;
+        }
+    }
+} else {
+    $grado_nuevo_texto = 'Cinturón de Taekwondo';
+}
+
+// 6. Formato de fecha en español idéntico al ejemplo físico oficial ("16 de Noviembre del 2025")
 $meses = [
     1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',
     5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto',
@@ -40,107 +92,150 @@ $ts = !empty($cert['fecha_examen']) ? strtotime($cert['fecha_examen']) : time();
 $dia = date('j', $ts);
 $mes = $meses[(int)date('n', $ts)] ?? date('F', $ts);
 $ano = date('Y', $ts);
-$fecha_formateada = "{$dia} de {$mes} de {$ano}";
-
-$nombre_alumno  = htmlspecialchars(mb_strtoupper(trim($cert['alumno_nombre'] ?? 'Estudiante'), 'UTF-8'));
-$tipo_doc       = htmlspecialchars(trim($cert['tipo_documento'] ?? 'T.I.'));
-$num_doc        = htmlspecialchars(trim($cert['num_doc'] ?? ''));
-$folio          = htmlspecialchars(trim($cert['folio'] ?? ''));
-$grado_anterior = htmlspecialchars(trim($cert['grado_anterior'] ?? ''));
-$grado_nuevo    = htmlspecialchars(mb_strtoupper(trim($cert['grado_nuevo'] ?? ''), 'UTF-8'));
-$observaciones_raw = trim((string)($cert['observaciones'] ?? ''));
-$observaciones  = mb_strlen($observaciones_raw, 'UTF-8') > 280
-    ? mb_substr($observaciones_raw, 0, 280, 'UTF-8') . '…'
-    : $observaciones_raw;
-$nombre_sede    = htmlspecialchars(trim($cert['nombre_sede'] ?? ''));
+$fecha_formateada = "{$dia} de {$mes} del {$ano}";
 ?>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+@font-face {
+    font-family: 'Script MT Bold';
+    src: <?php if (!empty($font_base64)): ?>url('data:font/truetype;charset=utf-8;base64,<?= $font_base64 ?>') format('truetype'),<?php endif; ?>
+         url('<?= asset('fonts/ScriptMTBold.ttf') ?>') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
 
-<div id="certificado-contenido" style="width:800px; height:1036px; max-width:100%; margin:0 auto; position:relative; background:#ffffff; box-sizing:border-box; box-shadow:0 20px 45px rgba(15,23,42,0.18); border-radius:12px; overflow:hidden; font-family:'Playfair Display', Georgia, serif; color:#0f172a; user-select:none;">
+#certificado-contenido {
+    width: 800px;
+    height: 1035px;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    background: #ffffff;
+    box-sizing: border-box;
+    box-shadow: 0 20px 45px rgba(15,23,42,0.18);
+    border-radius: 8px;
+    overflow: hidden;
+    user-select: none;
+}
 
-    <!-- Plantilla gráfica de fondo como img real para html2canvas -->
-    <img src="<?= $plantilla_url ?>" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:12px; display:block; z-index:0;">
+.diploma-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    display: block;
+    z-index: 0;
+}
 
-    <!-- 1. ZONA DEL ESTUDIANTE: Nombre completo sobre la línea y documento de identidad oficial -->
-    <div style="position:absolute; top:236px; left:60px; right:60px; text-align:center; z-index:1;">
-        <h2 style="font-family:'Cinzel', Georgia, serif; font-size:27px; font-weight:800; color:#0f172a; letter-spacing:2px; margin:0; line-height:1.2; text-shadow:0 0 1px rgba(0,0,0,0.12);">
-            <?= $nombre_alumno ?>
-        </h2>
-        
-        <!-- Línea caligráfica institucional -->
-        <div style="width:540px; height:1.5px; background:linear-gradient(90deg, transparent, #1e293b 15%, #1e293b 85%, transparent); margin:7px auto 5px;"></div>
+.diploma-nombre {
+    position: absolute;
+    top: 275px;
+    left: 70px;
+    right: 70px;
+    text-align: center;
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 38px;
+    color: #000000;
+    line-height: 1.1;
+    z-index: 1;
+    letter-spacing: 0.5px;
+}
 
-        <!-- Documento de identidad oficial destacado y sin saltos -->
-        <?php if (!empty($num_doc)): ?>
-            <div style="font-family:'Segoe UI', system-ui, sans-serif; font-size:13.5px; font-weight:800; color:#0f172a; letter-spacing:1.5px; text-transform:uppercase;">
-                <?= $tipo_doc ?>: <?= $num_doc ?>
-            </div>
+.diploma-doc {
+    position: absolute;
+    top: 326px;
+    left: 70px;
+    right: 70px;
+    text-align: center;
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 26px;
+    color: #000000;
+    line-height: 1.1;
+    z-index: 1;
+    letter-spacing: 0.5px;
+}
+
+.diploma-acredita-bloque {
+    position: absolute;
+    top: 550px;
+    left: 70px;
+    right: 70px;
+    text-align: center;
+    z-index: 1;
+}
+
+.diploma-grado {
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 30px;
+    color: #000000;
+    line-height: 1.2;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.diploma-gup {
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 26px;
+    color: #000000;
+    line-height: 1.2;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+}
+
+.diploma-fecha {
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 22px;
+    color: #000000;
+    line-height: 1.2;
+    margin-top: 14px;
+    letter-spacing: 0.5px;
+}
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #certificado-contenido, #certificado-contenido * {
+        visibility: visible !important;
+    }
+    #certificado-contenido {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    @page {
+        size: letter portrait;
+        margin: 0;
+    }
+}
+</style>
+
+<div id="certificado-contenido" data-alumno="<?= htmlspecialchars($nombre_alumno) ?>">
+    <!-- Plantilla gráfica institucional de fondo en alta resolución -->
+    <img src="<?= $plantilla_url ?>" class="diploma-bg" alt="Diploma Jinhwan">
+    
+    <!-- 1. Nombre completo del estudiante -->
+    <div class="diploma-nombre"><?= htmlspecialchars($nombre_alumno) ?></div>
+    
+    <!-- 2. Documento de identidad -->
+    <?php if (!empty($documento_texto)): ?>
+        <div class="diploma-doc"><?= htmlspecialchars($documento_texto) ?></div>
+    <?php endif; ?>
+    
+    <!-- 3. Bloque de Acreditación: Grado, Gup y Fecha sobre la marca de agua 태권도 -->
+    <div class="diploma-acredita-bloque">
+        <div class="diploma-grado"><?= htmlspecialchars($grado_nuevo_texto) ?></div>
+        <?php if (!empty($gup_calculado)): ?>
+            <div class="diploma-gup"><?= htmlspecialchars($gup_calculado) ?></div>
         <?php endif; ?>
-
-        <!-- Folio y Sede en segunda línea para máxima nitidez -->
-        <div style="display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-top:2px; font-family:'Segoe UI', system-ui, sans-serif; font-size:11px; font-weight:600; color:#64748b; letter-spacing:1px; text-transform:uppercase;">
-            <?php if (!empty($folio)): ?>
-                <span style="font-family:'Courier New', monospace; letter-spacing:1.5px; font-weight:700; color:#334155;">FOLIO: <?= $folio ?></span>
-            <?php endif; ?>
-            <?php if (!empty($nombre_sede)): ?>
-                <span style="color:#cbd5e1;">•</span>
-                <span><?= $nombre_sede ?></span>
-            <?php endif; ?>
-        </div>
+        <div class="diploma-fecha"><?= htmlspecialchars($fecha_formateada) ?></div>
     </div>
-
-    <!-- 
-        NOTA: En la plantilla base (diploma_plantilla_v3.png), entre y=380px e y=516px ya se encuentra 
-        impreso en el diseño oficial el texto:
-        "Aprobó el examen reglamentario para Ascenso de grado, según lo requerido por el 
-         Programa de esta institución, por lo cual se Acredita como:"
-        Esta zona queda 100% respetada y visible sin ninguna superposición.
-    -->
-
-    <!-- 2. ZONA DE ACREDITACIÓN: Foto con insignia marcial, nuevo grado, fecha y observaciones -->
-    <div style="position:absolute; top:524px; left:60px; right:60px; display:flex; flex-direction:column; align-items:center; text-align:center; z-index:1;">
-        
-        <!-- Bloque integrado: Foto del estudiante y Grado Acreditado -->
-        <div style="display:flex; align-items:center; justify-content:center; gap:18px;">
-            <!-- Foto oficial con marco circular de honor -->
-            <div style="width:64px; height:64px; border-radius:50%; border:2.5px solid #0f172a; box-shadow:0 3px 10px rgba(15,23,42,0.22); overflow:hidden; background:#ffffff; flex-shrink:0;">
-                <img src="<?= $foto_url ?>" alt="Foto del estudiante" style="width:100%; height:100%; object-fit:cover; display:block;">
-            </div>
-
-            <!-- Grado Acreditado e Indicador Previo -->
-            <div style="text-align:left;">
-                <div style="font-family:'Cinzel', Georgia, serif; font-size:24px; font-weight:900; color:#881337; letter-spacing:2px; text-transform:uppercase; margin:0; line-height:1.1; text-shadow:0 0 1px rgba(136,19,55,0.2);">
-                    <?= $grado_nuevo ?>
-                </div>
-                <?php if (!empty($grado_anterior)): ?>
-                    <div style="font-family:Georgia, serif; font-size:11.5px; font-style:italic; color:#475569; margin-top:3px;">
-                        Grado anterior: <?= $grado_anterior ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Distintivo de Fecha Oficial del Examen (opaco para máxima nitidez) -->
-        <div style="display:inline-block; margin-top:8px; min-width:280px; max-width:340px; background:#ffffff; border:1px solid #94a3b8; border-radius:9999px; padding:3px 22px; font-family:Georgia, serif; font-size:12px; font-style:italic; font-weight:600; color:#0f172a; box-shadow:0 2px 6px rgba(0,0,0,0.06); text-align:center;">
-            Medellín, <?= $fecha_formateada ?>
-        </div>
-
-        <!-- Observaciones / Mención de Honor del Maestro Evaluador (en el centro superior sin tocar firmas) -->
-        <?php if (!empty($observaciones)): ?>
-            <div style="margin-top:6px; max-width:380px; font-family:Georgia, serif; font-size:9.5px; line-height:1.25; font-style:italic; color:#334155; padding:0 10px;">
-                “<?= htmlspecialchars($observaciones) ?>”
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <!-- 
-        NOTA: En la plantilla base (diploma_plantilla_v3.png), a partir de y=677px se encuentran 
-        impresas las firmas originales y sellos: Gran Maestro Nelson Restrepo (6 Dan), 
-        Maestra Ana Patricia Giraldo (4 Dan), Emblema Oficial WTF, Cristian Hincapié y Fran Posada.
-        Toda esta zona queda 100% libre e intacta.
-    -->
-
 </div>

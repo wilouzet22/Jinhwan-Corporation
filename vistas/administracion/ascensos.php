@@ -287,7 +287,7 @@ document.getElementById('modal-filter-grupo')?.addEventListener('change', applyM
 }
 </style>
 
-<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>"></script>
+<script src="<?= asset('js/vendor/html2pdf.bundle.min.js') ?>" charset="utf-8"></script>
 <script>
 if (typeof html2pdf === 'undefined') {
     const s = document.createElement('script');
@@ -334,9 +334,13 @@ function downloadAdminPDF() {
         btn.innerHTML = '<span class="material-icons-outlined animate-spin" style="font-size:16px;vertical-align:middle;">autorenew</span> Generando…';
     }
 
+    const rawName = element.getAttribute('data-alumno') || 'alumno';
+    const cleanName = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const filename = 'diploma-' + (cleanName || 'jinhwan') + '.pdf';
+
     const opt = {
         margin:       0,
-        filename:     'diploma-jinhwan.pdf',
+        filename:     filename,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { 
             scale: 2, 
