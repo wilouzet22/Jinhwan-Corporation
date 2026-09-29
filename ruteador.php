@@ -33,6 +33,7 @@ include_once __DIR__ . '/controladores/Maestro/DashboardController.php';
 include_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
 include_once __DIR__ . '/controladores/Maestro/EjerciciosController.php';
 include_once __DIR__ . '/controladores/Maestro/CronogramasController.php';
+include_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
 
 $router = new Router();
 
@@ -52,6 +53,7 @@ $router->get('/estudiante/estudio', [EstudianteEstudioController::class, 'index'
 $router->post('/ascensos/toggle', [EstudianteEstudioController::class, 'toggle']);
 $router->get('/estudiante/historial', [EstudianteHistorialController::class, 'index']);
 $router->get('/estudiante/historial/certificado', [EstudianteHistorialController::class, 'certificado']);
+$router->get('/estudiante/historial/descargar', [EstudianteHistorialController::class, 'descargar']);
 $router->get('/estudiante/perfil', [UsuarioPerfilController::class, 'index']);
 $router->post('/estudiante/perfil/update', [UsuarioPerfilController::class, 'update']);
 
@@ -77,6 +79,7 @@ $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 $router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
 $router->post('/admin/ascensos/store', [AdminAscensosController::class, 'store']);
 $router->get('/admin/ascensos/certificado', [AdminAscensosController::class, 'certificado']);
+$router->get('/admin/ascensos/descargar', [AdminAscensosController::class, 'descargar']);
 
 $router->get('/admin/teoria', [AdminTeoriaController::class, 'index']);
 $router->post('/admin/teoria/create', [AdminTeoriaController::class, 'store']);
@@ -135,6 +138,10 @@ $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/alumnos/{id}', [MaestroAlumnosController::class, 'show']);
+$router->get('/maestro/solicitudes', [MaestroSolicitudesAscensoController::class, 'index']);
+$router->post('/maestro/solicitudes/store', [MaestroSolicitudesAscensoController::class, 'store']);
+$router->get('/maestro/solicitudes/certificado', [MaestroSolicitudesAscensoController::class, 'certificado']);
+$router->get('/maestro/solicitudes/descargar', [MaestroSolicitudesAscensoController::class, 'descargar']);
 
 // Biblioteca de Ejercicios
 $router->get('/maestro/ejercicios', [MaestroEjerciciosController::class, 'index']);

@@ -125,4 +125,24 @@ class AdminAscensosController extends Controller {
 
         include __DIR__ . '/../../vistas/administracion/certificado_preview.php';
     }
+
+    public function descargar() {
+        Security::verifyPermission('ascensos');
+
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            http_response_code(400);
+            exit('Solicitud inválida.');
+        }
+
+        $cert = $this->certModel->getById($id);
+        if (!$cert) {
+            http_response_code(404);
+            exit('Certificado no encontrado.');
+        }
+
+        require_once __DIR__ . '/../../helpers/DiplomaPdf.php';
+        DiplomaPdf::descargar($cert);
+    }
 }
+

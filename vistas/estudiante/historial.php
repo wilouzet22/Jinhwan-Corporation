@@ -147,7 +147,10 @@ if (typeof html2pdf === 'undefined') {
 </script>
 
 <script>
+let currentHistorialCertId = null;
+
 function openCertModal(idSolicitud) {
+    currentHistorialCertId = idSolicitud;
     const modal = document.getElementById('modal-certificado');
     const wrapper = document.getElementById('cert-content-wrapper');
 
@@ -176,28 +179,12 @@ function closeCertModal() {
 }
 
 function downloadCertPDF() {
-    const element = document.getElementById('certificado-contenido');
-    if (!element) return;
-
-    const rawName = element.getAttribute('data-alumno') || 'alumno';
-    const cleanName = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    const filename = 'diploma-' + (cleanName || 'jinhwan') + '.pdf';
-
-    const opt = {
-        margin:       0,
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
-            allowTaint: true,
-            scrollX: 0,
-            scrollY: 0,
-            logging: false 
-        },
-        jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+    if (!currentHistorialCertId) {
+        alert('Por favor seleccione un certificado válido.');
+        return;
+    }
+    // Descarga directa normal de PDF del servidor
+    window.location.href = '<?= base_url('/estudiante/historial/descargar') ?>?id=' + currentHistorialCertId;
 }
 
 // Close on Escape

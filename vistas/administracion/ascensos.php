@@ -295,7 +295,10 @@ if (typeof html2pdf === 'undefined') {
     document.head.appendChild(s);
 }
 
+let currentAdminCertId = null;
+
 function openAdminCert(idCert) {
+    currentAdminCertId = idCert;
     const modal = document.getElementById('modal-cert-admin');
     const wrapper = document.getElementById('admin-cert-wrapper');
     wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
@@ -316,58 +319,12 @@ function closeAdminCert() {
 }
 
 function downloadAdminPDF() {
-    const btn = document.getElementById('btn-download-admin-pdf');
-    const element = document.getElementById('certificado-contenido');
-    if (!element) {
-        alert('El certificado aún se está cargando. Espere un momento e intente de nuevo.');
+    if (!currentAdminCertId) {
+        alert('Por favor seleccione un certificado válido.');
         return;
     }
-
-    if (typeof html2pdf === 'undefined') {
-        alert('Cargando librería de PDF... Por favor intente en unos segundos o use el botón Imprimir.');
-        return;
-    }
-
-    const originalBtnText = btn ? btn.innerHTML : '';
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="material-icons-outlined animate-spin" style="font-size:16px;vertical-align:middle;">autorenew</span> Generando…';
-    }
-
-    const rawName = element.getAttribute('data-alumno') || 'alumno';
-    const cleanName = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    const filename = 'diploma-' + (cleanName || 'jinhwan') + '.pdf';
-
-    const opt = {
-        margin:       0,
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { 
-            scale: 2, 
-            useCORS: true, 
-            allowTaint: true,
-            scrollX: 0,
-            scrollY: 0,
-            logging: false
-        },
-        jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(element).save()
-        .then(() => {
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalBtnText;
-            }
-        })
-        .catch(err => {
-            console.error('Error al generar PDF:', err);
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalBtnText;
-            }
-            alert('No se pudo descargar automáticamente. Use el botón "Imprimir" para Guardar como PDF desde su navegador.');
-        });
+    // Descarga directa normal del PDF generado en el servidor
+    window.location.href = '<?= base_url('/admin/ascensos/descargar') ?>?id=' + currentAdminCertId;
 }
 
 function printAdminCert() {

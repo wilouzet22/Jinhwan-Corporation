@@ -68,4 +68,32 @@ class EstudianteHistorialController extends Controller {
         // Render HTML fragment (no layout)
         include __DIR__ . '/../../vistas/administracion/certificado_preview.php';
     }
+
+    public function descargar() {
+        Security::verifyRole(Roles::ESTUDIANTE);
+
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            http_response_code(400);
+            exit('Solicitud inválida.');
+        }
+
+        $certModel = new Certificado();
+        $cert = $certModel->getById($id);
+
+        if (!$cert) {
+            http_response_code(404);
+            exit('Certificado no encontrado.');
+        }
+
+        // Sólo puede descargar su propio certificado
+        if ((int)$cert['id_estudiante'] !== (int)$_SESSION['id']) {
+            http_response_code(403);
+            exit('Acceso denegado.');
+        }
+
+        require_once __DIR__ . '/../../helpers/DiplomaPdf.php';
+        DiplomaPdf::descargar($cert);
+    }
 }
+

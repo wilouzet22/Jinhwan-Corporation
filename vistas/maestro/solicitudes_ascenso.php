@@ -750,7 +750,10 @@
         document.getElementById('form-observaciones').value = this.value;
     });
 
+    let currentCertSolicitudId = null;
+
     function openCertModal(idSolicitud) {
+        currentCertSolicitudId = idSolicitud;
         const modal = document.getElementById('modal-certificado');
         const wrapper = document.getElementById('cert-content-wrapper');
 
@@ -761,7 +764,7 @@
         document.body.style.overflow = 'hidden';
 
         // Fetch certificate HTML
-        fetch('<?= base_url('/maestro/solicitudes-ascenso/certificado') ?>?id=' + idSolicitud)
+        fetch('<?= base_url('/maestro/solicitudes/certificado') ?>?id=' + idSolicitud)
             .then(r => r.text())
             .then(html => {
                 wrapper.innerHTML = html;
@@ -779,28 +782,12 @@
     }
 
     function downloadCertPDF() {
-        const element = document.getElementById('certificado-contenido');
-        if (!element) return;
-
-        const rawName = element.getAttribute('data-alumno') || 'alumno';
-        const cleanName = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        const filename = 'diploma-' + (cleanName || 'jinhwan') + '.pdf';
-
-        const opt = {
-            margin:       0,
-            filename:     filename,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { 
-                scale: 2, 
-                useCORS: true, 
-                allowTaint: true,
-                scrollX: 0,
-                scrollY: 0,
-                logging: false 
-            },
-            jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(element).save();
+        if (!currentCertSolicitudId) {
+            alert('Por favor seleccione un certificado válido.');
+            return;
+        }
+        // Descarga directa normal de PDF del servidor
+        window.location.href = '<?= base_url('/maestro/solicitudes/descargar') ?>?id=' + currentCertSolicitudId;
     }
 
     // Close on Escape
