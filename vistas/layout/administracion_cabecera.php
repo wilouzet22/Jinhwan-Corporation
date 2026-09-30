@@ -222,7 +222,7 @@ if (isset($_SESSION['id'])) {
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 min-h-full overflow-y-auto relative transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300" style="min-height:100vh">
         
         <header class="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
