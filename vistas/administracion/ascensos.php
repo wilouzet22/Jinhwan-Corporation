@@ -6,58 +6,85 @@
         <!-- Encabezado -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                    Ascensos de Alumnos
+                <h1 class="text-3xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight flex items-center gap-3">
+                    <span class="material-icons-outlined text-3xl text-tkd-blue">workspace_premium</span>
+                    Gestión de Ascensos y Diplomas
                 </h1>
                 <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                    Registra ascensos de grado directamente. El certificado se genera de forma automática.
+                    Emite diplomas oficiales seleccionando la persona, el nuevo grado y la fecha de expedición.
                 </p>
             </div>
             <button onclick="document.getElementById('modal-ascenso').classList.remove('hidden'); document.getElementById('modal-ascenso').classList.add('flex');"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm transition-all cursor-pointer">
-                <span class="material-icons-outlined text-base">military_tech</span>
-                Registrar Ascenso
+                    class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer">
+                <span class="material-icons-outlined text-lg">add_circle</span>
+                <span>Generar Nuevo Diploma</span>
             </button>
         </div>
 
         <?php if (isset($_GET['success'])): ?>
-        <div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-4 py-3 rounded-xl text-sm font-medium">
-            <span class="material-icons-outlined text-base">check_circle</span>
-            Ascenso registrado correctamente. El certificado fue generado.
+        <div class="flex items-center justify-between gap-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-5 py-4 rounded-xl text-sm font-semibold shadow-xs">
+            <div class="flex items-center gap-3">
+                <span class="material-icons-outlined text-xl text-emerald-600 dark:text-emerald-400">verified</span>
+                <span>¡Diploma generado exitosamente! El certificado y registro de grado han sido actualizados.</span>
+            </div>
         </div>
         <?php elseif (isset($_GET['error'])): ?>
-        <div class="flex items-center gap-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 px-4 py-3 rounded-xl text-sm font-medium">
-            <span class="material-icons-outlined text-base">error</span>
+        <div class="flex items-center gap-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 px-5 py-4 rounded-xl text-sm font-medium shadow-xs">
+            <span class="material-icons-outlined text-xl">error</span>
             Ocurrió un error: <?= htmlspecialchars($_GET['error']) ?>
         </div>
         <?php endif; ?>
 
-        <!-- Historial -->
+        <!-- Historial de Diplomas Generados -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
-            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-                <span class="material-icons-outlined text-base text-blue-500">history</span>
-                <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Historial de Ascensos</h2>
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-outlined text-base text-blue-500">history</span>
+                    <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                        Diplomas y Certificados Emitidos (<?= count($historial) ?>)
+                    </h2>
+                </div>
+                
+                <!-- Buscador de diplomas en tiempo real -->
+                <div class="relative w-full sm:w-72">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+                    <input type="text" id="filtro-historial" placeholder="Buscar por alumno, grado o folio..."
+                           class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-colors">
+                </div>
             </div>
 
             <?php if (!empty($historial)): ?>
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
+                <table class="w-full text-sm text-left" id="tabla-diplomas">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                         <tr>
-                            <th class="px-4 py-3">Alumno</th>
-                            <th class="px-3 py-3 text-center">De</th>
-                            <th class="px-3 py-3 text-center">A</th>
-                            <th class="px-3 py-3">Fecha</th>
-                            <th class="px-3 py-3">Folio</th>
-                            <th class="px-3 py-3">Realizado por</th>
-                            <th class="px-3 py-3 text-center">Diploma</th>
+                            <th class="px-4 py-3.5">Alumno</th>
+                            <th class="px-3 py-3.5 text-center">De</th>
+                            <th class="px-3 py-3.5 text-center">A</th>
+                            <th class="px-3 py-3.5">Fecha Diploma</th>
+                            <th class="px-3 py-3.5">Folio</th>
+                            <th class="px-3 py-3.5">Evaluador</th>
+                            <th class="px-3 py-3.5 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50">
                         <?php foreach($historial as $h): ?>
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                            <td class="px-4 py-3 font-semibold text-slate-900 dark:text-white">
-                                <?= htmlspecialchars($h['nombre_alumno']) ?>
+                        <tr class="fila-diploma hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+                            data-search="<?= htmlspecialchars(strtolower($h['nombre_alumno'] . ' ' . $h['grado_nuevo'] . ' ' . $h['folio'])) ?>">
+                            <td class="px-4 py-3 font-semibold text-slate-900 dark:text-white whitespace-nowrap">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-xs shrink-0">
+                                        <?= strtoupper(substr($h['nombre_alumno'], 0, 1)) ?>
+                                    </div>
+                                    <div>
+                                        <div><?= htmlspecialchars($h['nombre_alumno']) ?></div>
+                                        <?php if (!empty($h['num_doc'])): ?>
+                                            <div class="text-[11px] font-normal text-slate-400">
+                                                <?= htmlspecialchars($h['tipo_documento'] ?? 'TI') ?> <?= htmlspecialchars($h['num_doc']) ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </td>
                             <td class="px-3 py-3 text-center">
                                 <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 uppercase">
@@ -65,26 +92,33 @@
                                 </span>
                             </td>
                             <td class="px-3 py-3 text-center">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 uppercase">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 uppercase">
                                     <span class="material-icons-outlined text-xs">arrow_upward</span>
                                     <?= htmlspecialchars($h['grado_nuevo']) ?>
                                 </span>
                             </td>
-                            <td class="px-3 py-3 text-slate-600 dark:text-slate-400 text-xs">
+                            <td class="px-3 py-3 text-slate-600 dark:text-slate-400 text-xs whitespace-nowrap">
                                 <?= date('d/m/Y', strtotime($h['fecha_examen'])) ?>
                             </td>
                             <td class="px-3 py-3">
                                 <span class="font-mono text-xs text-slate-500 dark:text-slate-400"><?= htmlspecialchars($h['folio']) ?></span>
                             </td>
-                            <td class="px-3 py-3 text-xs text-slate-500 dark:text-slate-400">
+                            <td class="px-3 py-3 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                 <?= htmlspecialchars($h['nombre_maestro']) ?>
                             </td>
-                            <td class="px-3 py-3 text-center">
-                                <button type="button" onclick="openAdminCert(<?= (int)$h['id'] ?>)"
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-xs hover:shadow" title="Ver Diploma">
-                                    <span class="material-icons-outlined text-sm">workspace_premium</span>
-                                    <span>Ver</span>
-                                </button>
+                            <td class="px-3 py-3 text-center whitespace-nowrap">
+                                <div class="inline-flex items-center gap-1.5">
+                                    <button type="button" onclick="openAdminCert(<?= (int)$h['id'] ?>)"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-600 hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" title="Ver Diploma">
+                                        <span class="material-icons-outlined text-sm">visibility</span>
+                                        <span>Ver</span>
+                                    </button>
+                                    <a href="<?= base_url('/admin/ascensos/descargar?id=' . (int)$h['id']) ?>"
+                                       class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-bold uppercase tracking-wider transition-all" title="Descargar PDF">
+                                        <span class="material-icons-outlined text-sm">download</span>
+                                        <span>PDF</span>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -93,10 +127,13 @@
             </div>
             <?php else: ?>
             <div class="px-6 py-10 text-center text-slate-500 dark:text-slate-400 text-sm">
-                No hay ascensos registrados todavía.
+                No hay diplomas generados todavía. Haz clic en "Generar Nuevo Diploma" para emitir el primero.
             </div>
             <?php endif; ?>
         </div>
+
+    </div>
+</main>
 
     </div>
 </main>
@@ -174,29 +211,43 @@
                 </select>
             </div>
 
-            <!-- Fecha -->
+            <!-- Fecha del Diploma -->
             <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Fecha del Examen</label>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Fecha del Diploma / Examen *</label>
                 <input type="date" name="fecha_examen" value="<?= date('Y-m-d') ?>" required
                        class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                <span class="text-[11px] text-slate-400 mt-1 block">Esta es la fecha que se imprimirá en el diploma oficial.</span>
+            </div>
+
+            <!-- Maestro Evaluador (Opcional) -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Maestro Evaluador</label>
+                <select name="id_maestro"
+                        class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                    <option value="">— Directo por Administración —</option>
+                    <?php foreach($maestros_list as $m): ?>
+                        <option value="<?= $m['id_maestro'] ?>"><?= htmlspecialchars($m['nombre_completo']) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <!-- Observaciones -->
             <div>
                 <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Observaciones</label>
-                <textarea name="observaciones" rows="2"
+                <textarea name="observaciones" rows="2" placeholder="Notas sobre el examen o méritos..."
                           class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none resize-none"></textarea>
             </div>
 
-            <div class="pt-2 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
+            <div class="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
                 <button type="button"
                         onclick="document.getElementById('modal-ascenso').classList.add('hidden'); document.getElementById('modal-ascenso').classList.remove('flex');"
                         class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase text-xs rounded-xl transition-colors">
                     Cancelar
                 </button>
                 <button type="submit"
-                        class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase text-xs rounded-xl transition-all shadow-sm">
-                    Registrar Ascenso
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold uppercase text-xs rounded-xl transition-all shadow-md hover:shadow-lg cursor-pointer">
+                    <span class="material-icons-outlined text-sm">workspace_premium</span>
+                    <span>Generar y Emitir Diploma</span>
                 </button>
             </div>
         </form>
@@ -238,6 +289,16 @@ function applyModalFilters() {
 
 document.getElementById('modal-filter-sede')?.addEventListener('change', applyModalFilters);
 document.getElementById('modal-filter-grupo')?.addEventListener('change', applyModalFilters);
+
+// Buscador dinámico en la tabla de historial
+document.getElementById('filtro-historial')?.addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    const filas = document.querySelectorAll('.fila-diploma');
+    filas.forEach(f => {
+        const text = f.getAttribute('data-search') || '';
+        f.style.display = text.includes(q) ? '' : 'none';
+    });
+});
 </script>
 
 <!-- Modal Diploma / Certificado Admin -->

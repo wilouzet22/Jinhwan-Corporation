@@ -38,28 +38,32 @@ class AdminAscensosController extends Controller {
         $sedes_list  = $this->sedeModel->getAll();
         $grupos_list = $this->grupoModel->getAll();
 
-        // Historial de ascensos realizados
+        // Lista de maestros para evaluador opcional
+        $resM = $db->query("SELECT id_maestro, CONCAT(nombre, ' ', apellido) as nombre_completo FROM maestro WHERE activo = 1 ORDER BY nombre ASC");
+        $maestros_list = $resM ? $resM->fetch_all(MYSQLI_ASSOC) : [];
+
+        // Historial de ascensos y diplomas generados
         $sql = "SELECT c.id_certificado as id, c.grado_anterior, c.grado_nuevo,
                        c.fecha_examen, c.folio, c.observaciones, c.creado_en,
                        CONCAT(e.nombre, ' ', e.apellido) as nombre_alumno,
-                       e.foto_perfil,
-                       COALESCE(CONCAT(m.nombre, ' ', m.apellido), 'Administrador') as nombre_maestro
+                       e.foto_perfil, e.tipo_documento, e.num_doc,
+                       COALESCE(CONCAT(m.nombre, ' ', m.apellido), 'Administración') as nombre_maestro
                 FROM certificados_ascenso c
                 JOIN estudiante e ON c.id_estudiante = e.id_estudiante
                 LEFT JOIN maestro m ON c.id_maestro = m.id_maestro
-                ORDER BY c.creado_en DESC
-                LIMIT 50";
+                ORDER BY c.creado_en DESC";
         $res = $db->query($sql);
         $historial = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 
         $this->view('administracion/ascensos', [
-            'alumnos'      => $alumnos,
-            'grados_list'  => $grados_list,
-            'sedes_list'   => $sedes_list,
-            'grupos_list'  => $grupos_list,
-            'historial'    => $historial,
-            'page_title'   => 'Ascensos de Alumnos',
-            'current_page' => 'ascensos'
+            'alumnos'       => $alumnos,
+            'grados_list'   => $grados_list,
+            'sedes_list'    => $sedes_list,
+            'grupos_list'   => $grupos_list,
+            'maestros_list' => $maestros_list,
+            'historial'     => $historial,
+            'page_title'    => 'Ascensos y Diplomas',
+            'current_page'  => 'ascensos'
         ]);
     }
 
@@ -72,7 +76,8 @@ class AdminAscensosController extends Controller {
         $id_alumno          = (int)($_POST['id_alumno'] ?? 0);
         $id_grado_nuevo     = (int)($_POST['id_grado_nuevo'] ?? 0);
         $grado_anterior     = trim($_POST['grado_anterior'] ?? '');
-        $fecha_examen       = $_POST['fecha_examen'] ?? date('Y-m-d');
+        $fecha_examen       = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
+        $id_maestro         = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
         $observaciones      = trim($_POST['observaciones'] ?? '');
 
         if ($id_alumno <= 0 || $id_grado_nuevo <= 0) {
@@ -86,9 +91,22 @@ class AdminAscensosController extends Controller {
         foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
         $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
 
+        // Si grado_anterior no viene, consultar el grado actual del alumno desde la BD
+        if (empty($grado_anterior)) {
+            $db = Database::getInstance()->getConnection();
+            $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
+            if ($stmt) {
+                $stmt->bind_param("i", $id_alumno);
+                $stmt->execute();
+                $r = $stmt->get_result()->fetch_assoc();
+                $stmt->close();
+                $grado_anterior = $r['nombre'] ?? 'Blanco';
+            }
+        }
+
         $ok = $this->certModel->create([
             'id_estudiante'  => $id_alumno,
-            'id_maestro'     => null,
+            'id_maestro'     => $id_maestro,
             'grado_anterior' => $grado_anterior,
             'grado_nuevo'    => $grado_nuevo,
             'id_grado_nuevo' => $id_grado_nuevo,

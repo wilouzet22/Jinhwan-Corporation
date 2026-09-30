@@ -15,16 +15,19 @@ class MaestroSolicitudesAscensoController extends Controller {
         $db = Database::getInstance()->getConnection();
         $id_maestro = (int)$_SESSION['id'];
 
-        // Consultar ascensos registrados por este maestro
-        $sql = "SELECT c.id_certificado as id, c.id_estudiante, c.observaciones, 'aprobado' as estado,
+        // Consultar diplomas y ascensos: todos los estudiantes y los evaluados por este maestro
+        $sql = "SELECT c.id_certificado as id, c.id_estudiante, c.id_maestro, c.observaciones, 'aprobado' as estado,
                        c.creado_en as fecha_solicitud, c.fecha_examen as fecha_resolucion,
                        e.nombre as nombre_alumno, e.apellido as apellido_alumno,
+                       e.tipo_documento, e.num_doc, e.foto_perfil,
                        c.grado_anterior as grado_actual,
                        c.grado_nuevo as grado_solicitado,
-                       c.folio, c.id_certificado
+                       c.folio, c.id_certificado, c.fecha_examen,
+                       COALESCE(CONCAT(m.nombre, ' ', m.apellido), 'Administración') as evaluador_nombre,
+                       (c.id_maestro = ?) as es_mio
                 FROM certificados_ascenso c
                 JOIN estudiante e ON c.id_estudiante = e.id_estudiante
-                WHERE c.id_maestro = ?
+                LEFT JOIN maestro m ON c.id_maestro = m.id_maestro
                 ORDER BY c.creado_en DESC";
 
         $stmt = $db->prepare($sql);

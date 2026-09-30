@@ -127,107 +127,163 @@
                 </table>
             </div>
         </div>
-    </div>
-
-    <!-- SECCIÓN 2: Historial de Solicitudes Enviadas -->
+       <!-- SECCIÓN 2: Diplomas y Ascensos de Alumnos -->
     <div class="space-y-4">
-        <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-            <h2 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                Historial de Solicitudes Enviadas (<?= count($solicitudes) ?>)
-            </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+                <h2 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                    Diplomas y Ascensos de Alumnos (<?= count($solicitudes) ?>)
+                </h2>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+                <!-- Filtros Todos / Por mí -->
+                <div class="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider">
+                    <button type="button" onclick="filtrarDiplomasMaestro('todos')" id="btn-filtro-todos"
+                            class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs transition-all cursor-pointer">
+                        Todos (<?= count($solicitudes) ?>)
+                    </button>
+                    <?php
+                        $misDiplomasCount = count(array_filter($solicitudes, fn($s) => !empty($s['es_mio'])));
+                    ?>
+                    <button type="button" onclick="filtrarDiplomasMaestro('mios')" id="btn-filtro-mios"
+                            class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer">
+                        Evaluados por Mí (<?= $misDiplomasCount ?>)
+                    </button>
+                </div>
+
+                <!-- Buscador de diplomas -->
+                <div class="relative w-full sm:w-64">
+                    <span class="material-icons-outlined absolute left-3 top-2.5 text-slate-400 text-sm">search</span>
+                    <input type="text" id="filtro-diplomas-maestro" placeholder="Buscar alumno o cinturón..."
+                           class="w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors">
+                </div>
+            </div>
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse">
+                <table class="w-full text-sm text-left border-collapse" id="tabla-diplomas-maestro">
                     <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
                         <tr>
                             <th scope="col" class="px-6 py-4">Deportista</th>
                             <th scope="col" class="px-6 py-4 text-center">Cambio de Cinturón</th>
-                            <th scope="col" class="px-6 py-4">Fecha Solicitud</th>
-                            <th scope="col" class="px-6 py-4">Observaciones</th>
-                            <th scope="col" class="px-6 py-4 text-center">Estado</th>
-                            <th scope="col" class="px-6 py-4">Resolución</th>
+                            <th scope="col" class="px-6 py-4">Fecha Diploma</th>
+                            <th scope="col" class="px-6 py-4">Evaluador</th>
+                            <th scope="col" class="px-6 py-4 text-center">Folio</th>
                             <th scope="col" class="px-6 py-4 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors">
                         <?php if (empty($solicitudes)): ?>
                             <tr>
-                                <td colspan="7" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
+                                <td colspan="6" class="px-6 py-10 text-center text-slate-500 dark:text-slate-400">
                                     <span class="material-icons-outlined text-4xl block mb-2 text-slate-300 dark:text-slate-700">history_toggle_off</span>
-                                    No has enviado ninguna solicitud de ascenso de grado todavía.
+                                    No hay diplomas o ascensos registrados todavía en la academia.
                                 </td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($solicitudes as $s): ?>
-                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-all">
+                                <tr class="fila-diploma-m hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-all"
+                                    data-mio="<?= !empty($s['es_mio']) ? '1' : '0' ?>"
+                                    data-search="<?= htmlspecialchars(strtolower($s['nombre_alumno'] . ' ' . $s['apellido_alumno'] . ' ' . $s['grado_solicitado'] . ' ' . ($s['folio'] ?? ''))) ?>">
                                     <td class="px-6 py-4 font-semibold whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="h-8 w-8 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/80 text-tkd-purple flex items-center justify-center mr-3 font-bold shrink-0">
+                                            <div class="h-8 w-8 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/80 text-tkd-purple flex items-center justify-center mr-3 font-bold shrink-0 text-xs">
                                                 <?= strtoupper(substr($s['nombre_alumno'], 0, 1)) ?>
                                             </div>
-                                            <span class="text-slate-800 dark:text-white"><?= htmlspecialchars($s['nombre_alumno'] . ' ' . $s['apellido_alumno']) ?></span>
+                                            <div>
+                                                <div class="text-slate-800 dark:text-white"><?= htmlspecialchars($s['nombre_alumno'] . ' ' . $s['apellido_alumno']) ?></div>
+                                                <?php if (!empty($s['num_doc'])): ?>
+                                                    <div class="text-[11px] font-normal text-slate-400">
+                                                        <?= htmlspecialchars($s['tipo_documento'] ?? 'TI') ?> <?= htmlspecialchars($s['num_doc']) ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center whitespace-nowrap">
                                         <div class="flex items-center justify-center gap-2 text-xs font-semibold">
-                                            <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"><?= htmlspecialchars($s['grado_actual']) ?></span>
+                                            <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700"><?= htmlspecialchars($s['grado_actual']) ?></span>
                                             <span class="material-icons-outlined text-slate-400 text-sm">arrow_forward</span>
-                                            <span class="px-2.5 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400"><?= htmlspecialchars($s['grado_solicitado']) ?></span>
+                                            <span class="px-2.5 py-1 rounded bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400 border border-purple-200 dark:border-purple-800"><?= htmlspecialchars($s['grado_solicitado']) ?></span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                                        <?= date('d/m/Y H:i', strtotime($s['fecha_solicitud'])) ?>
+                                        <?= !empty($s['fecha_examen']) ? date('d/m/Y', strtotime($s['fecha_examen'])) : date('d/m/Y', strtotime($s['fecha_solicitud'])) ?>
                                     </td>
-                                    <td class="px-6 py-4 text-xs text-slate-600 dark:text-slate-300 max-w-[200px] truncate" title="<?= htmlspecialchars($s['observaciones'] ?? '') ?>">
-                                        <?= htmlspecialchars($s['observaciones'] ?? 'Sin observaciones') ?>
-                                    </td>
-                                    <td class="px-6 py-4 text-center whitespace-nowrap">
-                                        <?php if ($s['estado'] === 'pendiente'): ?>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 uppercase tracking-wider">
-                                                Pendiente
-                                            </span>
-                                        <?php elseif ($s['estado'] === 'aprobado'): ?>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 uppercase tracking-wider">
-                                                Aprobado
+                                    <td class="px-6 py-4 text-xs whitespace-nowrap">
+                                        <?php if (!empty($s['es_mio'])): ?>
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                                <span class="material-icons-outlined text-xs">verified</span>
+                                                Por ti
                                             </span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400 uppercase tracking-wider">
-                                                Rechazado
-                                            </span>
+                                            <span class="text-slate-600 dark:text-slate-400"><?= htmlspecialchars($s['evaluador_nombre']) ?></span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                                        <?= $s['fecha_resolucion'] ? date('d/m/Y', strtotime($s['fecha_resolucion'])) : '---' ?>
+                                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                                        <span class="font-mono text-xs text-slate-500 dark:text-slate-400"><?= htmlspecialchars($s['folio'] ?? '---') ?></span>
                                     </td>
                                     <td class="px-6 py-4 text-center whitespace-nowrap">
-                                        <?php if ($s['estado'] === 'pendiente'): ?>
-                                            <div class="flex items-center justify-center gap-2">
-                                                <button onclick="openCertificadoModal(<?= (int)$s['id'] ?>, <?= (int)$s['id_persona_estudiante'] ?>, <?= (int)$s['id_grado_solicitado'] ?>, '<?= htmlspecialchars($s['nombre_alumno']) ?>', '<?= htmlspecialchars($s['apellido_alumno']) ?>', '<?= htmlspecialchars($s['grado_actual']) ?>', '<?= htmlspecialchars($s['grado_solicitado']) ?>')" class="bg-emerald-500 hover:bg-emerald-400 text-white p-2 rounded-xl shadow-md hover:shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Realizar Ascenso">
-                                                    <span class="material-icons-outlined block text-sm">edit_document</span>
-                                                </button>
-                                                <form action="<?= base_url('/maestro/solicitudes-ascenso/rechazar') ?>" method="POST" onsubmit="return confirm('¿Está seguro de rechazar esta propuesta de ascenso?');">
-                                                    <input type="hidden" name="id" value="<?= $s['id'] ?>">
-                                                    <button type="submit" class="bg-red-500 hover:bg-red-400 text-white p-2 rounded-xl shadow-md hover:shadow-red-500/25 transition-all transform hover:-translate-y-0.5 active:scale-95 focus:outline-none" title="Rechazar Propuesta">
-                                                        <span class="material-icons-outlined block text-sm">close</span>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        <?php elseif ($s['estado'] === 'aprobado'): ?>
-                                            <button onclick="openCertModal(<?= (int)$s['id'] ?>)" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all">
-                                                <span class="material-icons-outlined text-sm">workspace_premium</span>
-                                                Ver Certificado
+                                        <div class="inline-flex items-center gap-2">
+                                            <button onclick="openCertModal(<?= (int)$s['id'] ?>)"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-tkd-blue hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-xs hover:shadow" title="Ver Diploma">
+                                                <span class="material-icons-outlined text-sm">visibility</span>
+                                                <span>Ver</span>
                                             </button>
-                                        <?php else: ?>
-                                            <span class="text-[11px] text-slate-400 dark:text-slate-600 italic">Rechazado</span>
-                                        <?php endif; ?>
+                                            <a href="<?= base_url('/maestro/solicitudes/descargar?id=' . (int)$s['id']) ?>"
+                                               class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer" title="Descargar PDF">
+                                                <span class="material-icons-outlined text-sm">download</span>
+                                                <span>PDF</span>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+let filtroTipoMaestro = 'todos';
+
+function filtrarDiplomasMaestro(tipo) {
+    filtroTipoMaestro = tipo;
+    const btnTodos = document.getElementById('btn-filtro-todos');
+    const btnMios = document.getElementById('btn-filtro-mios');
+
+    if (tipo === 'todos') {
+        btnTodos.className = 'px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs transition-all cursor-pointer';
+        btnMios.className = 'px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer';
+    } else {
+        btnMios.className = 'px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-purple-600 dark:text-purple-400 shadow-xs transition-all cursor-pointer';
+        btnTodos.className = 'px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer';
+    }
+    aplicarFiltrosTablaMaestro();
+}
+
+function aplicarFiltrosTablaMaestro() {
+    const q = (document.getElementById('filtro-diplomas-maestro')?.value || '').toLowerCase().trim();
+    const filas = document.querySelectorAll('.fila-diploma-m');
+
+    filas.forEach(f => {
+        const esMio = f.getAttribute('data-mio') === '1';
+        const search = f.getAttribute('data-search') || '';
+
+        const cumpleTipo = (filtroTipoMaestro === 'todos') || (filtroTipoMaestro === 'mios' && esMio);
+        const cumpleTexto = !q || search.includes(q);
+
+        f.style.display = (cumpleTipo && cumpleTexto) ? '' : 'none';
+    });
+}
+
+document.getElementById('filtro-diplomas-maestro')?.addEventListener('input', aplicarFiltrosTablaMaestro);
+</script>         </tbody>
                 </table>
             </div>
         </div>
