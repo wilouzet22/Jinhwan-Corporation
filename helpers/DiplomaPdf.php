@@ -28,7 +28,27 @@ class DiplomaPdf {
         $nombreAlumno = mb_convert_case($nombreRaw, MB_CASE_TITLE, 'UTF-8');
 
         $tipoDocRaw = trim($cert['tipo_documento'] ?? 'TI');
-        $tipoDoc = strtoupper(str_replace(['.', ' ', ':'], '', $tipoDocRaw));
+        $tUpper = mb_strtoupper($tipoDocRaw, 'UTF-8');
+        $tClean = preg_replace('/[^A-Z]/', '', $tUpper);
+
+        if (str_contains($tUpper, 'TARJETA') || $tClean === 'TI') {
+            $tipoDoc = 'T.I.';
+        } elseif (str_contains($tUpper, 'CIUDADAN') || $tClean === 'CC') {
+            $tipoDoc = 'C.C.';
+        } elseif (str_contains($tUpper, 'EXTRANJER') || $tClean === 'CE') {
+            $tipoDoc = 'C.E.';
+        } elseif (str_contains($tUpper, 'PPT') || str_contains($tUpper, 'PROTECCI') || str_contains($tUpper, 'TEMPORAL')) {
+            $tipoDoc = 'PPT';
+        } elseif (str_contains($tUpper, 'REGISTRO') || $tClean === 'RC') {
+            $tipoDoc = 'R.C.';
+        } elseif (str_contains($tUpper, 'PASAPORTE') || $tClean === 'PA') {
+            $tipoDoc = 'Pasaporte';
+        } elseif (str_contains($tUpper, 'NIT')) {
+            $tipoDoc = 'NIT';
+        } else {
+            $tipoDoc = !empty($tClean) ? $tClean : 'T.I.';
+        }
+
         $numDoc = trim($cert['num_doc'] ?? '');
         $documentoTexto = !empty($numDoc) ? "{$tipoDoc} {$numDoc}" : '';
 

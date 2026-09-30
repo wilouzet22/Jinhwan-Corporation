@@ -22,10 +22,30 @@ if (file_exists($font_file)) {
 $nombre_raw    = trim($cert['alumno_nombre'] ?? 'Estudiante');
 $nombre_alumno = mb_convert_case($nombre_raw, MB_CASE_TITLE, 'UTF-8');
 
-// 4. Procesamiento del Documento de Identidad (ej. "TI 1013462218")
+// 4. Procesamiento del Documento de Identidad (ej. "T.I. 1013462218", "C.C. 43567890", "PPT 987654321")
 $tipo_doc_raw = trim($cert['tipo_documento'] ?? 'TI');
-$tipo_doc     = strtoupper(str_replace(['.', ' ', ':'], '', $tipo_doc_raw));
-$num_doc      = trim($cert['num_doc'] ?? '');
+$t_upper = mb_strtoupper($tipo_doc_raw, 'UTF-8');
+$t_clean = preg_replace('/[^A-Z]/', '', $t_upper);
+
+if (str_contains($t_upper, 'TARJETA') || $t_clean === 'TI') {
+    $tipo_doc = 'T.I.';
+} elseif (str_contains($t_upper, 'CIUDADAN') || $t_clean === 'CC') {
+    $tipo_doc = 'C.C.';
+} elseif (str_contains($t_upper, 'EXTRANJER') || $t_clean === 'CE') {
+    $tipo_doc = 'C.E.';
+} elseif (str_contains($t_upper, 'PPT') || str_contains($t_upper, 'PROTECCI') || str_contains($t_upper, 'TEMPORAL')) {
+    $tipo_doc = 'PPT';
+} elseif (str_contains($t_upper, 'REGISTRO') || $t_clean === 'RC') {
+    $tipo_doc = 'R.C.';
+} elseif (str_contains($t_upper, 'PASAPORTE') || $t_clean === 'PA') {
+    $tipo_doc = 'Pasaporte';
+} elseif (str_contains($t_upper, 'NIT')) {
+    $tipo_doc = 'NIT';
+} else {
+    $tipo_doc = !empty($t_clean) ? $t_clean : 'T.I.';
+}
+
+$num_doc = trim($cert['num_doc'] ?? '');
 $documento_texto = !empty($num_doc) ? "{$tipo_doc} {$num_doc}" : '';
 
 // 5. Procesamiento de Grado y Gup

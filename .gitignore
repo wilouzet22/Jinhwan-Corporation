@@ -1,0 +1,22 @@
+# Dependencias
+/node_modules/
+/vendor/
+
+# Archivos de entorno y logs
+*.log
+.env
+.env.*
+
+# Entornos de desarrollo / IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Carpeta de pruebas y archivos temporales de desarrollo
+scratch/
