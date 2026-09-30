@@ -184,13 +184,23 @@ $fecha_formateada = "{$dia} de {$mes} del {$ano}";
     left: 70px;
     right: 70px;
     text-align: center;
-    font-family: 'DocIdFont', Georgia, 'Times New Roman', serif;
-    font-style: italic;
-    font-weight: bold;
-    font-size: 24px;
     color: #000000;
     line-height: 1.1;
     z-index: 1;
+}
+
+.diploma-doc-tipo {
+    font-family: 'DocIdFont', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 22px;
+    margin-right: 6px;
+    letter-spacing: 0.5px;
+}
+
+.diploma-doc-num {
+    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
+    font-size: 26px;
     letter-spacing: 0.5px;
 }
 
@@ -263,8 +273,13 @@ $fecha_formateada = "{$dia} de {$mes} del {$ano}";
     <div class="diploma-nombre"><?= htmlspecialchars($nombre_alumno) ?></div>
     
     <!-- 2. Documento de identidad -->
-    <?php if (!empty($documento_texto)): ?>
-        <div class="diploma-doc"><?= htmlspecialchars($documento_texto) ?></div>
+    <?php if (!empty($num_doc)): ?>
+        <div class="diploma-doc">
+            <?php if (!empty($tipo_doc)): ?>
+                <span class="diploma-doc-tipo"><?= htmlspecialchars($tipo_doc) ?></span>
+            <?php endif; ?>
+            <span class="diploma-doc-num"><?= htmlspecialchars($num_doc) ?></span>
+        </div>
     <?php endif; ?>
     
     <!-- 3. Bloque de Acreditación: Grado, Gup y Fecha sobre la marca de agua 태권도 -->

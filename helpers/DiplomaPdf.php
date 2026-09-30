@@ -136,9 +136,27 @@ class DiplomaPdf {
         // 1. Nombre del alumno (debajo de "Certifica que")
         $drawCentered(38, 445, $nombreAlumno);
 
-        // 2. Documento de identidad (usando DocIdFont para máxima legibilidad de TI, CC, PPT)
-        if (!empty($documentoTexto)) {
-            $drawCentered(24, 508, $documentoTexto, $fontDocPath);
+        // 2. Documento de identidad (prefijo legible + números alineados y proporcionados)
+        if (!empty($numDoc)) {
+            $prefix = !empty($tipoDoc) ? "{$tipoDoc} " : "";
+            $sizeTipo = 24;
+            $sizeNum = 27;
+
+            $bboxTipo = imagettfbbox($sizeTipo, 0, $fontDocPath, $prefix);
+            $wTipo = abs($bboxTipo[2] - $bboxTipo[0]);
+
+            $bboxNum = imagettfbbox($sizeNum, 0, $fontPath, $numDoc);
+            $wNum = abs($bboxNum[2] - $bboxNum[0]);
+
+            $gap = 6;
+            $totalW = $wTipo + $gap + $wNum;
+            $imWidth = imagesx($im);
+            $startX = (int)round(($imWidth - $totalW) / 2);
+
+            if (!empty($prefix)) {
+                imagettftext($im, $sizeTipo, 0, $startX, 508, $black, $fontDocPath, $prefix);
+            }
+            imagettftext($im, $sizeNum, 0, $startX + $wTipo + $gap, 508, $black, $fontPath, $numDoc);
         }
 
         // 3. Bloque de Acreditación (sobre la marca de agua)
