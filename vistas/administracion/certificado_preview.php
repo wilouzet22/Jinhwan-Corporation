@@ -18,31 +18,37 @@ if (file_exists($font_file)) {
     $font_base64 = base64_encode(file_get_contents($font_file));
 }
 
+$font_doc_file = __DIR__ . '/../../public/fonts/DocIdFont.ttf';
+$font_doc_base64 = '';
+if (file_exists($font_doc_file)) {
+    $font_doc_base64 = base64_encode(file_get_contents($font_doc_file));
+}
+
 // 3. Procesamiento del Nombre del Alumno (Title Case caligráfico)
 $nombre_raw    = trim($cert['alumno_nombre'] ?? 'Estudiante');
 $nombre_alumno = mb_convert_case($nombre_raw, MB_CASE_TITLE, 'UTF-8');
 
-// 4. Procesamiento del Documento de Identidad (ej. "T.I. 1013462218", "C.C. 43567890", "PPT 987654321")
+// 4. Procesamiento del Documento de Identidad (ej. "TI 1013462218", "CC 43567890", "PPT 987654321")
 $tipo_doc_raw = trim($cert['tipo_documento'] ?? 'TI');
 $t_upper = mb_strtoupper($tipo_doc_raw, 'UTF-8');
 $t_clean = preg_replace('/[^A-Z]/', '', $t_upper);
 
 if (str_contains($t_upper, 'TARJETA') || $t_clean === 'TI') {
-    $tipo_doc = 'T.I.';
+    $tipo_doc = 'TI';
 } elseif (str_contains($t_upper, 'CIUDADAN') || $t_clean === 'CC') {
-    $tipo_doc = 'C.C.';
+    $tipo_doc = 'CC';
 } elseif (str_contains($t_upper, 'EXTRANJER') || $t_clean === 'CE') {
-    $tipo_doc = 'C.E.';
+    $tipo_doc = 'CE';
 } elseif (str_contains($t_upper, 'PPT') || str_contains($t_upper, 'PROTECCI') || str_contains($t_upper, 'TEMPORAL')) {
     $tipo_doc = 'PPT';
 } elseif (str_contains($t_upper, 'REGISTRO') || $t_clean === 'RC') {
-    $tipo_doc = 'R.C.';
+    $tipo_doc = 'RC';
 } elseif (str_contains($t_upper, 'PASAPORTE') || $t_clean === 'PA') {
     $tipo_doc = 'Pasaporte';
 } elseif (str_contains($t_upper, 'NIT')) {
     $tipo_doc = 'NIT';
 } else {
-    $tipo_doc = !empty($t_clean) ? $t_clean : 'T.I.';
+    $tipo_doc = !empty($t_clean) ? $t_clean : 'TI';
 }
 
 $num_doc = trim($cert['num_doc'] ?? '');
@@ -125,6 +131,15 @@ $fecha_formateada = "{$dia} de {$mes} del {$ano}";
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'DocIdFont';
+    src: <?php if (!empty($font_doc_base64)): ?>url('data:font/truetype;charset=utf-8;base64,<?= $font_doc_base64 ?>') format('truetype'),<?php endif; ?>
+         url('<?= asset('fonts/DocIdFont.ttf') ?>') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
 #certificado-contenido {
     width: 800px;
     height: 1035px;
@@ -169,8 +184,10 @@ $fecha_formateada = "{$dia} de {$mes} del {$ano}";
     left: 70px;
     right: 70px;
     text-align: center;
-    font-family: 'Script MT Bold', cursive, 'Brush Script MT', serif;
-    font-size: 26px;
+    font-family: 'DocIdFont', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 24px;
     color: #000000;
     line-height: 1.1;
     z-index: 1;

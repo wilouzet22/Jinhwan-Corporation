@@ -13,6 +13,11 @@ class DiplomaPdf {
             $fontPath = 'C:/Windows/Fonts/SCRIPTBL.TTF';
         }
 
+        $fontDocPath = __DIR__ . '/../public/fonts/DocIdFont.ttf';
+        if (!file_exists($fontDocPath)) {
+            $fontDocPath = file_exists('C:/Windows/Fonts/georgiaz.ttf') ? 'C:/Windows/Fonts/georgiaz.ttf' : $fontPath;
+        }
+
         // Cargar imagen base (1278 x 1654 px)
         $im = @imagecreatefrompng($plantillaPath);
         if (!$im) {
@@ -32,21 +37,21 @@ class DiplomaPdf {
         $tClean = preg_replace('/[^A-Z]/', '', $tUpper);
 
         if (str_contains($tUpper, 'TARJETA') || $tClean === 'TI') {
-            $tipoDoc = 'T.I.';
+            $tipoDoc = 'TI';
         } elseif (str_contains($tUpper, 'CIUDADAN') || $tClean === 'CC') {
-            $tipoDoc = 'C.C.';
+            $tipoDoc = 'CC';
         } elseif (str_contains($tUpper, 'EXTRANJER') || $tClean === 'CE') {
-            $tipoDoc = 'C.E.';
+            $tipoDoc = 'CE';
         } elseif (str_contains($tUpper, 'PPT') || str_contains($tUpper, 'PROTECCI') || str_contains($tUpper, 'TEMPORAL')) {
             $tipoDoc = 'PPT';
         } elseif (str_contains($tUpper, 'REGISTRO') || $tClean === 'RC') {
-            $tipoDoc = 'R.C.';
+            $tipoDoc = 'RC';
         } elseif (str_contains($tUpper, 'PASAPORTE') || $tClean === 'PA') {
             $tipoDoc = 'Pasaporte';
         } elseif (str_contains($tUpper, 'NIT')) {
             $tipoDoc = 'NIT';
         } else {
-            $tipoDoc = !empty($tClean) ? $tClean : 'T.I.';
+            $tipoDoc = !empty($tClean) ? $tClean : 'TI';
         }
 
         $numDoc = trim($cert['num_doc'] ?? '');
@@ -118,21 +123,22 @@ class DiplomaPdf {
         $fechaTexto = "{$dia} de {$mes} del {$ano}";
 
         // Función para centrar texto horizontalmente en la imagen
-        $drawCentered = function($size, $y, $text) use ($im, $black, $fontPath) {
+        $drawCentered = function($size, $y, $text, $font = null) use ($im, $black, $fontPath) {
             if (empty($text)) return;
-            $bbox = imagettfbbox($size, 0, $fontPath, $text);
+            $f = $font ?: $fontPath;
+            $bbox = imagettfbbox($size, 0, $f, $text);
             $textWidth = abs($bbox[2] - $bbox[0]);
             $imWidth = imagesx($im);
             $x = (int)round(($imWidth - $textWidth) / 2);
-            imagettftext($im, $size, 0, $x, $y, $black, $fontPath, $text);
+            imagettftext($im, $size, 0, $x, $y, $black, $f, $text);
         };
 
         // 1. Nombre del alumno (debajo de "Certifica que")
         $drawCentered(38, 445, $nombreAlumno);
 
-        // 2. Documento de identidad
+        // 2. Documento de identidad (usando DocIdFont para máxima legibilidad de TI, CC, PPT)
         if (!empty($documentoTexto)) {
-            $drawCentered(28, 510, $documentoTexto);
+            $drawCentered(24, 508, $documentoTexto, $fontDocPath);
         }
 
         // 3. Bloque de Acreditación (sobre la marca de agua)
