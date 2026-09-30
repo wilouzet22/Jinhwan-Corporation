@@ -135,9 +135,6 @@
     </div>
 </main>
 
-    </div>
-</main>
-
 <!-- Modal Registrar Ascenso -->
 <div id="modal-ascenso" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
