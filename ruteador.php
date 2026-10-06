@@ -35,6 +35,7 @@ include_once __DIR__ . '/controladores/Maestro/AlumnosController.php';
 include_once __DIR__ . '/controladores/Maestro/EjerciciosController.php';
 include_once __DIR__ . '/controladores/Maestro/CronogramasController.php';
 include_once __DIR__ . '/controladores/Maestro/SolicitudesAscensoController.php';
+include_once __DIR__ . '/controladores/Maestro/IAController.php';
 
 $router = new Router();
 
@@ -160,5 +161,9 @@ $router->get('/maestro/cronogramas/{id}', [MaestroCronogramasController::class, 
 $router->post('/maestro/cronogramas/delete', [MaestroCronogramasController::class, 'delete']);
 $router->post('/maestro/cronogramas/ejercicio/add', [MaestroCronogramasController::class, 'addEjercicio']);
 $router->post('/maestro/cronogramas/ejercicio/remove', [MaestroCronogramasController::class, 'removeEjercicio']);
+
+// Asistente IA Maestro (NVIDIA NIM)
+$router->post('/maestro/ia/chat', [MaestroIAController::class, 'chat']);
+$router->post('/maestro/ia/ejercicio/guardar', [MaestroIAController::class, 'guardarEjercicioSugerido']);
 
 $router->dispatch();

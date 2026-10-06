@@ -1025,4 +1025,9 @@ if (filterSearch) filterSearch.addEventListener('input', filtrarCronogramas);
 if (filterGrupo) filterGrupo.addEventListener('change', filtrarCronogramas);
 </script>
 
+<?php 
+$contextoIA = 'cronogramas';
+require_once __DIR__ . '/../layout/ia_asistente_widget.php'; 
+?>
+
 <?php require_once __DIR__ . '/../layout/maestro_pie.php'; ?>

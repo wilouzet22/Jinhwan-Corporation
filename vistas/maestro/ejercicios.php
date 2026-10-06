@@ -229,4 +229,9 @@ if (filterSearch) filterSearch.addEventListener('input', filtrar);
 if (filterTipo) filterTipo.addEventListener('change', filtrar);
 </script>
 
+<?php 
+$contextoIA = 'ejercicios';
+require_once __DIR__ . '/../layout/ia_asistente_widget.php'; 
+?>
+
 <?php require_once __DIR__ . '/../layout/maestro_pie.php'; ?>
