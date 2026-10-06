@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: sql113.infinityfree.com
--- Tiempo de generación: 13-09-2026 a las 21:23:29
+-- Tiempo de generación: 06-10-2026 a las 13:13:01
 -- Versión del servidor: 11.4.13-MariaDB
 -- Versión de PHP: 7.2.22
 
@@ -42,8 +42,8 @@ CREATE TABLE `administrador` (
 -- Volcado de datos para la tabla `administrador`
 --
 
-INSERT INTO `administrador` (`id_administrador`, `nombre`, `apellido`, `correo`, `clave`, `foto_perfil`, `permisos_extra`, `activo`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'General', 'admin@admin.com', '$2y$10$45YUeh7Y/t9J99i86uA1Fud5ekOo1FMdYaVD1vZkGy5zN5GQCWP9a', NULL, '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05', NULL);
+INSERT INTO `administrador` (`id_administrador`, `nombre`, `apellido`, `correo`, `clave`, `foto_perfil`, `permisos_extra`, `activo`, `created_at`, `updated_at`, `mostrar_en_web`, `descripcion_perfil`, `logros`) VALUES
+(1, 'Administrador', 'General', 'admin@admin.com', '$2y$10$45YUeh7Y/t9J99i86uA1Fud5ekOo1FMdYaVD1vZkGy5zN5GQCWP9a', NULL, '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -169,64 +169,67 @@ CREATE TABLE `estudiante` (
   `clave` varchar(255) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT 1,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `mostrar_en_web` tinyint(1) DEFAULT 0,
+  `descripcion_perfil` text DEFAULT NULL,
+  `logros` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `estudiante`
 --
 
-INSERT INTO `estudiante` (`id_estudiante`, `id_grado`, `id_categoria`, `id_grupo`, `id_maestro`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `foto_perfil`, `fecha_nacimiento`, `peso`, `division`, `eps`, `rh`, `correo`, `clave`, `activo`, `created_at`, `updated_at`) VALUES
-(101, 11, 1, 1, 152, 'Jean Karlo', 'García León', 'TI', '1192466428', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(102, 9, 4, 1, 152, 'Samuel', 'Velásquez Sánchez', 'TI', '1023647991', '', NULL, '2014-07-06', '38.00', NULL, 'Sisbén', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(103, 7, 4, 1, 152, 'Daniel Andrés', 'Montoya Calle', 'TI', '1021940897', '', NULL, '2016-11-07', '44.60', NULL, 'N eps', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(104, 5, 4, 1, 152, 'Miguel Ángel', 'Bautista Monroy', 'TI', '1195214019', '', NULL, '2013-08-13', '45.00', NULL, 'sisben', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(105, 8, 6, 1, 152, 'Daniel', 'Pérez Sanmartín', 'TI', '1020226169', '', NULL, '2010-08-19', '52.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(106, 9, 1, 1, 152, 'Juan Camilo', 'Martínez Sanmartín', 'TI', '1020229154', '', NULL, '2013-01-18', '37.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(107, 5, 6, 1, 152, 'Salome', 'Taborda Blando', 'TI', '1020226181', '', NULL, '2010-08-20', '67.70', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(108, 9, 4, 1, 152, 'Matías', 'García León', 'TI', '1033265504', '', NULL, '2015-04-17', '30.00', NULL, 'sanita', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(109, 5, 4, 1, 152, 'Juan Pablo', 'Betancourt Ospina', 'TI', '1017265346', '', NULL, '2015-04-13', '42.30', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(110, 4, 4, 1, 152, 'Juan Camilo', 'Vega O', 'TI', '1021937647', '', NULL, '2015-07-02', '44.30', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(111, 1, 6, 1, 152, 'Danna Sofia', 'Alfonso', 'TI', '1011405201', '', NULL, '2012-03-27', '58.90', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(112, 8, 6, 2, 150, 'Samir Enrique', 'Nava Martínez', 'TI', '7235701', '', NULL, '2009-11-12', '70.80', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(113, 7, 6, 2, 150, 'Matías', 'Ochoa García', 'TI', '1025661867', '', NULL, '2009-06-03', '53.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(114, 7, 4, 2, 150, 'Maximiliano', 'Carvajal Ruiz', 'TI', '10376553567', '', NULL, '2014-12-06', '40.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(115, 6, 6, 1, 152, 'Sofia', 'Medina Castrillon', 'TI', '1027741702', '', NULL, '2010-01-26', '56.40', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(116, 3, 1, 1, 152, 'Dylan Andrés', 'Gaviria Alvarez', 'TI', '1233898589', '', NULL, '2016-05-21', '27.80', NULL, 'Mutual', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(117, 3, 4, 1, 152, 'Santiago Andres', 'Hernandez Torres', 'TI', '1103755101', '', NULL, '2015-08-25', '27.00', NULL, 'militar', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(118, 3, 4, 2, 150, 'Smith', 'Méndez Alvarez', 'TI', '1032059029', '', NULL, '2016-07-02', '34.20', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(119, 9, 6, 1, 152, 'Aaron David', 'Loaiza Monroy', 'TI', '1422730', '', NULL, '2010-09-14', '63.30', NULL, 'sura', 'O-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(120, 11, 1, 1, 152, 'Anderson Steven', 'Loaiza Quintero', 'CC', '1033426095', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(121, 11, 1, 1, 152, 'Nicolás', 'Osorio Valencia', 'TI', '1054875293', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(122, 9, 4, 1, 152, 'Jerónimo', 'Osorio Valencia', 'TI', '1054882227', '', NULL, '2013-10-22', '45.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(123, 11, 1, 1, 152, 'Juan David', 'Orrego Ossa', 'CC', '1020419153', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(124, 9, 1, 1, 152, 'Sara', 'Ríos Daza', 'CC', '1022152029', '', NULL, '2010-09-06', '49.00', NULL, 'ponal', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(125, 4, 1, 1, 152, 'Ana Sofía', 'Hurtado Ocampo', 'TI', '1036259874', '', NULL, '2011-05-19', '68.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(126, 9, 1, 1, 152, 'José Ignacio', 'Marín Vásquez', 'TI', '1232598434', '', NULL, '2014-01-04', '36.80', NULL, 'Total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(127, 9, 1, 1, 152, 'Marcelo Gabriel', 'Marín Vázquez', 'TI', '1232598435', '', NULL, '2010-09-08', '51.00', NULL, 'Total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(128, 7, 6, 2, 150, 'Juan Camilo', 'García Barba', 'TI', '1023637476', '', NULL, '2009-06-03', '89.00', NULL, 'Savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(129, 9, 6, 1, 152, 'Samuel Cano', 'Pulgarin', 'TI', '1033491933', '', NULL, '2009-05-14', '55.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(130, 1, 6, 1, 152, 'Hillary', 'Gómez García', 'TI', '119246017', '', NULL, '2011-11-03', '45.50', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(131, 11, 6, 1, 152, 'Diego Fernando', 'Salcedo Bonza', 'TI', '1096807375', '', NULL, '2011-03-04', '60.00', NULL, 'Sanita', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(132, 1, 4, 1, 152, 'Rubiangelys Sofía', 'Camacho Figueroa', 'TI', '6164279', '', NULL, '2013-11-17', '50.00', NULL, 'Savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(133, 1, 1, 3, 152, 'Jeziel Abrahán', 'Ruiz Figueroa', 'TI', '1087754585', '', NULL, '2020-05-26', '19.00', NULL, 'savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(134, 1, 1, 1, 152, 'Juan José', 'Diosa Ospina', 'TI', '1013464771', '', NULL, '2013-02-22', '57.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(135, 9, 6, 1, 152, 'Kevin Andrés', 'Herrera', 'TI', '1037126322', '', NULL, '2010-11-16', '63.00', NULL, 'total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(136, 9, 6, 1, 152, 'Samuel', 'Mejía Villa', 'TI', '1088302615', '', NULL, '2010-07-29', '63.00', NULL, 'Sura', 'O-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(137, 9, 2, 3, 152, 'Emanuel', 'Alcaraz Ocampo', 'TI', '1011519226', '', NULL, '2017-11-12', '43.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(138, 2, 7, 2, 150, 'Ana Sofía', 'Flórez Guzmán', 'TI', '1020224629', '', NULL, '2008-06-13', '56.00', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(139, 8, 1, 1, 152, 'Samuel', 'Valencia Tabares', 'TI', '1192467492', '', NULL, '2012-03-08', '40.80', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(140, 9, 7, 1, 152, 'Sarah Sofía', 'Triviño Saavedra', 'TI', '1094911412', '', NULL, '2008-02-19', '57.00', NULL, 'suri', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(141, 5, 6, 1, 152, 'Ana Sofía', 'Quiroz Puerta', 'TI', '1021927403', '', NULL, '2009-07-02', '60.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(142, 4, 1, 1, 152, 'Ismael', 'Arboleda Gutiérrez', 'TI', '1020123545', '', NULL, '2015-05-20', '39.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(143, 9, 6, 1, 152, 'Valeria', 'Matiz Escudero', 'TI', '1028141323', '', NULL, '2008-11-13', '63.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(144, 7, 6, 1, 152, 'Mariana', 'Giraldo Rincon', 'TI', '1027809885', '', NULL, '2011-03-12', '36.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(145, 4, 6, 2, 150, 'Jimena', 'Velásquez Ospina', 'TI', '1011594301', '', NULL, '2009-01-12', '70.00', NULL, 'nueva', NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(146, 9, 1, 1, 152, 'Luciana', 'Pino Monsalve', 'TI', '1020122879', '', NULL, '2014-09-16', '0.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(147, 9, 4, 1, 152, 'Gabriela', 'Almenares Fonegra', 'TI', '1020120658', '', NULL, '2012-02-23', '47.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(148, 8, 1, 1, 152, 'Ana Sofia', 'Sánchez Agudelo', 'TI', '1011222665', '', NULL, '2013-01-27', '60.00', NULL, 'Policía', NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL),
-(153, 1, 1, 1, 152, 'Mateo', 'Ríos', 'TI', '10000002', '', NULL, NULL, NULL, NULL, NULL, NULL, 'estudiante@jinhwan.com', '$2y$10$T7OWSqUPLN2lIqOAaJTQsuW1oDhHYcs/cJrPg0b2q1tjIWVYNWIYu', 1, '2026-08-29 17:59:05', NULL),
-(154, 7, 5, 2, 150, 'maria jose', 'gomez londoño', 'TI', '1013462218', '3246783188', NULL, '2010-11-11', '60.00', '-65', 'Sura', 'O+', 'samugomedo0@gmail.com', '$2y$10$lp.U80H.P2fdX5qJKbU8/upbxvDswylhNls8z8RZgBaUp0cgRSyNK', 1, '2026-09-06 01:21:57', NULL);
+INSERT INTO `estudiante` (`id_estudiante`, `id_grado`, `id_categoria`, `id_grupo`, `id_maestro`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `foto_perfil`, `fecha_nacimiento`, `peso`, `division`, `eps`, `rh`, `correo`, `clave`, `activo`, `created_at`, `updated_at`, `mostrar_en_web`, `descripcion_perfil`, `logros`) VALUES
+(101, 11, 1, 1, 152, 'Jean Karlo', 'García León', 'TI', '1192466428', '3044094209', '228dc1bbce4e289fef8b33e73eae0003.jpeg', NULL, '52.30', 'Junior -48kg', '', '', 'jeankarlo721@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(102, 9, 4, 1, 152, 'Samuel', 'Velásquez Sánchez', 'TI', '1023647991', '', NULL, '2014-07-06', '38.00', NULL, 'Sisbén', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(103, 7, 4, 1, 152, 'Daniel Andrés', 'Montoya Calle', 'TI', '1021940897', '', NULL, '2016-11-07', '44.60', NULL, 'N eps', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(104, 5, 4, 1, 152, 'Miguel Ángel', 'Bautista Monroy', 'TI', '1195214019', '', NULL, '2013-08-13', '45.00', NULL, 'sisben', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(105, 8, 6, 1, 152, 'Daniel', 'Pérez Sanmartín', 'TI', '1020226169', '', NULL, '2010-08-19', '52.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(106, 9, 1, 1, 152, 'Juan Camilo', 'Martínez Sanmartín', 'TI', '1020229154', '', NULL, '2013-01-18', '37.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(107, 5, 6, 1, 152, 'Salome', 'Taborda Blando', 'TI', '1020226181', '', NULL, '2010-08-20', '67.70', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(108, 9, 4, 1, 152, 'Matías', 'García León', 'TI', '1033265504', '', NULL, '2015-04-17', '30.00', NULL, 'sanita', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(109, 5, 4, 1, 152, 'Juan Pablo', 'Betancourt Ospina', 'TI', '1017265346', '', NULL, '2015-04-13', '42.30', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(110, 4, 4, 1, 152, 'Juan Camilo', 'Vega O', 'TI', '1021937647', '', NULL, '2015-07-02', '44.30', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(111, 1, 6, 1, 152, 'Danna Sofia', 'Alfonso', 'TI', '1011405201', '', NULL, '2012-03-27', '58.90', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(112, 8, 6, 2, 150, 'Samir Enrique', 'Nava Martínez', 'TI', '7235701', '', NULL, '2009-11-12', '70.80', NULL, 'savia', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(113, 7, 6, 2, 150, 'Matías', 'Ochoa García', 'TI', '1025661867', '', NULL, '2009-06-03', '53.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(114, 7, 4, 2, 150, 'Maximiliano', 'Carvajal Ruiz', 'TI', '10376553567', '', NULL, '2014-12-06', '40.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(115, 6, 6, 1, 152, 'Sofia', 'Medina Castrillon', 'TI', '1027741702', '', NULL, '2010-01-26', '56.40', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(116, 3, 1, 1, 152, 'Dylan Andrés', 'Gaviria Alvarez', 'TI', '1233898589', '', NULL, '2016-05-21', '27.80', NULL, 'Mutual', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(117, 3, 4, 1, 152, 'Santiago Andres', 'Hernandez Torres', 'TI', '1103755101', '', NULL, '2015-08-25', '27.00', NULL, 'militar', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(118, 3, 4, 2, 150, 'Smith', 'Méndez Alvarez', 'TI', '1032059029', '', NULL, '2016-07-02', '34.20', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(119, 9, 1, 1, 152, 'Aaron David', 'Loaiza Monroy', 'PASAPORTE', '1422730', '3137744231', '918dae72f17e4b2684fa6018c627d1b3.jpeg', '2010-09-14', '68.10', 'Junior -63', 'sura', 'O-', 'aarondlm1409@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(120, 11, 1, 1, 152, 'Anderson Steven', 'Loaiza Quintero', 'CC', '1033426095', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(121, 11, 1, 1, 152, 'Nicolás', 'Osorio Valencia', 'TI', '1054875293', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(122, 9, 4, 1, 152, 'Jerónimo', 'Osorio Valencia', 'TI', '1054882227', '', NULL, '2013-10-22', '45.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(123, 11, 1, 1, 152, 'Juan David', 'Orrego Ossa', 'CC', '1020419153', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(124, 9, 1, 1, 152, 'Sara', 'Ríos Daza', 'CC', '1022152029', '', NULL, '2010-09-06', '49.00', NULL, 'ponal', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(125, 4, 1, 1, 152, 'Ana Sofía', 'Hurtado Ocampo', 'TI', '1036259874', '', NULL, '2011-05-19', '68.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(126, 9, 1, 1, 152, 'José Ignacio', 'Marín Vásquez', 'TI', '1232598434', '', NULL, '2014-01-04', '36.80', NULL, 'Total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(127, 9, 1, 1, 152, 'Marcelo Gabriel', 'Marín Vázquez', 'TI', '1232598435', '3202924578', 'f1b657f32b484104e413f4a361277b28.jpeg', '2010-09-08', '52.50', 'Junior-55', 'Total', 'O+', 'marinvasquezmarcelo@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(128, 11, 1, 1, 152, 'Juan Camilo', 'García Barba', 'TI', '1023637476', '3136123094 ', 'cf44db0f0ae6939d74b0e267ecc91637.jpeg', '2009-06-03', '99.70', '', 'Savia', 'A+', 'juancamilo@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(129, 9, 6, 1, 152, 'Samuel Cano', 'Pulgarin', 'TI', '1033491933', '', NULL, '2009-05-14', '55.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(130, 1, 6, 1, 152, 'Hillary', 'Gómez García', 'TI', '119246017', '', NULL, '2011-11-03', '45.50', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(131, 11, 1, 1, 152, 'Diego Fernando', 'Salcedo Bonza', 'TI', '1096807375', '3183719434', '4d7465a5c745efd268f3bab63a898cd0.jpeg', '2011-03-04', '62.70', '', 'Sanita', 'O+', 'disb0403@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(132, 1, 4, 1, 152, 'Rubiangelys Sofía', 'Camacho Figueroa', 'TI', '6164279', '', NULL, '2013-11-17', '50.00', NULL, 'Savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(133, 1, 1, 3, 152, 'Jeziel Abrahán', 'Ruiz Figueroa', 'TI', '1087754585', '', NULL, '2020-05-26', '19.00', NULL, 'savia', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(134, 1, 1, 1, 152, 'Juan José', 'Diosa Ospina', 'TI', '1013464771', '', NULL, '2013-02-22', '57.00', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(135, 9, 6, 1, 152, 'Kevin Andrés', 'Herrera', 'TI', '1037126322', '', NULL, '2010-11-16', '63.00', NULL, 'total', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(136, 9, 6, 1, 152, 'Samuel', 'Mejía Villa', 'TI', '1088302615', '', NULL, '2010-07-29', '63.00', NULL, 'Sura', 'O-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(137, 9, 2, 3, 152, 'Emanuel', 'Alcaraz Ocampo', 'TI', '1011519226', '', NULL, '2017-11-12', '43.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(138, 2, 7, 2, 150, 'Ana Sofía', 'Flórez Guzmán', 'TI', '1020224629', '', NULL, '2008-06-13', '56.00', NULL, 'sura', 'A-', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(139, 8, 1, 1, 152, 'Samuel', 'Valencia Tabares', 'TI', '1192467492', '', NULL, '2012-03-08', '40.80', NULL, 'Sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(140, 9, 7, 1, 152, 'Sarah Sofía', 'Triviño Saavedra', 'TI', '1094911412', '', NULL, '2008-02-19', '57.00', NULL, 'suri', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(141, 5, 6, 1, 152, 'Ana Sofía', 'Quiroz Puerta', 'TI', '1021927403', '', NULL, '2009-07-02', '60.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(142, 4, 1, 1, 152, 'Ismael', 'Arboleda Gutiérrez', 'TI', '1020123545', '', NULL, '2015-05-20', '39.00', NULL, 'Sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(143, 9, 6, 1, 152, 'Valeria', 'Matiz Escudero', 'TI', '1028141323', '', NULL, '2008-11-13', '63.00', NULL, 'sura', 'A+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(144, 7, 1, 1, 152, 'Mariana', 'Giraldo Rincon', 'TI', '1027809885', '3153490705', '2c61e1762be63ddf00f86b47c10ec69c.jpeg', '2011-03-12', '41.90', ' junior avanzado', 'sura', 'A+', 'mariangiraldo@gmail.com', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(145, 4, 6, 2, 150, 'Jimena', 'Velásquez Ospina', 'TI', '1011594301', '', NULL, '2009-01-12', '70.00', NULL, 'nueva', NULL, NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(146, 9, 1, 1, 152, 'Luciana', 'Pino Monsalve', 'TI', '1020122879', '', NULL, '2014-09-16', '0.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(147, 9, 4, 1, 152, 'Gabriela', 'Almenares Fonegra', 'TI', '1020120658', '', NULL, '2012-02-23', '47.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(148, 8, 1, 1, 152, 'Ana Sofia', 'Sánchez Agudelo', 'TI', '1011222665', '3185520570', '8369377c5c9faadecc5993bdd5fb1873.jpeg', '2013-01-27', '62.10', 'cadete avanzado', 'Policía', '', 'assancheza@corazonistamedellin.edu.co', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
+(153, 1, 1, 1, 152, 'Mateo', 'Ríos', 'TI', '10000002', '', NULL, NULL, NULL, NULL, NULL, NULL, 'estudiante@jinhwan.com', '$2y$10$T7OWSqUPLN2lIqOAaJTQsuW1oDhHYcs/cJrPg0b2q1tjIWVYNWIYu', 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
+(154, 7, 5, 2, 150, 'maria jose', 'gomez londoño', 'TI', '1013462218', '3246783188', NULL, '2010-11-11', '60.00', '-65', 'Sura', 'O+', 'samugomedo0@gmail.com', '$2y$10$lp.U80H.P2fdX5qJKbU8/upbxvDswylhNls8z8RZgBaUp0cgRSyNK', 1, '2026-09-06 01:21:57', NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -257,6 +260,8 @@ CREATE TABLE `eventos` (
 CREATE TABLE `galeria_multimedia` (
   `id_multimedia` int(11) NOT NULL,
   `id_maestro` int(11) DEFAULT NULL,
+  `id_estudiante` int(11) DEFAULT NULL,
+  `id_administrador` int(11) DEFAULT NULL,
   `url` varchar(255) NOT NULL,
   `titulo` varchar(100) DEFAULT NULL,
   `descripcion` text DEFAULT NULL,
@@ -268,9 +273,9 @@ CREATE TABLE `galeria_multimedia` (
 -- Volcado de datos para la tabla `galeria_multimedia`
 --
 
-INSERT INTO `galeria_multimedia` (`id_multimedia`, `id_maestro`, `url`, `titulo`, `descripcion`, `tipo`, `created_at`) VALUES
-(3, NULL, 'https://www.youtube.com/watch?v=5ZXHQDD2ITs', NULL, NULL, 'video', '2026-09-13 23:11:34'),
-(4, NULL, '', NULL, NULL, 'imagen', '2026-09-13 23:11:34');
+INSERT INTO `galeria_multimedia` (`id_multimedia`, `id_maestro`, `id_estudiante`, `id_administrador`, `url`, `titulo`, `descripcion`, `tipo`, `created_at`) VALUES
+(3, NULL, NULL, NULL, 'https://www.youtube.com/watch?v=5ZXHQDD2ITs', NULL, NULL, 'video', '2026-09-13 23:11:34'),
+(4, NULL, NULL, NULL, '', NULL, NULL, 'imagen', '2026-09-13 23:11:34');
 
 -- --------------------------------------------------------
 
@@ -384,7 +389,7 @@ CREATE TABLE `maestro` (
 
 INSERT INTO `maestro` (`id_maestro`, `id_grado`, `nombre`, `apellido`, `tipo_documento`, `num_doc`, `telefono`, `id_sede`, `foto_perfil`, `descripcion_perfil`, `logros`, `mostrar_en_web`, `correo`, `clave`, `permisos_extra`, `activo`, `created_at`, `updated_at`) VALUES
 (150, 11, 'Samuel', 'Gómez', 'TI', '1013462218', '3246783188', 1, '606e99e11b6916d3ccf18632109d0667.jpg', 'Profesor de Taekwondo federado y creador de la plataforma', 'Campeón olímpico', 0, 'samugomedo@gmail.com', '$2y$10$7MwlMj3DwkcViNNvF1rscugFN4Cko0.OzeysQGMJL34cSm2qmX.le', '{\"sedes\": false, \"galeria\": false, \"ascensos\": false, \"reportes\": false, \"registros\": false, \"calendario\": false}', 1, '2026-08-29 17:59:05', NULL),
-(152, 11, 'Carlos', 'Mendoza', 'CC', '10000001', '', 2, NULL, 'Maestro principal de la sede', 'Cinturón Negro 1 Dan', 0, 'maestro@jinhwan.com', '$2y$10$Tn44kYfa6/Jacswrc8IR8unk0GpBthtGDc3iHK1JZfWbeSJHf8nG.', '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05', NULL);
+(152, 11, 'Carlos', 'Mendoza', 'CC', '10000001', '', 2, NULL, 'Maestro principal de la sede', 'Cinturón Negro 1 Dan', 0, 'maestro@jinhwan.com', '$2y$10$Tn44kYfa6/Jacswrc8IR8unk0GpBthtGDc3iHK1JZfWbeSJHf8nG.', '{\"sedes\": true, \"galeria\": true, \"ascensos\": true, \"reportes\": true, \"registros\": true, \"calendario\": true}', 1, '2026-08-29 17:59:05', '2026-09-23 21:22:10');
 
 -- --------------------------------------------------------
 
@@ -723,49 +728,6 @@ ALTER TABLE `historial_grados`
 ALTER TABLE `teorias`
   ADD CONSTRAINT `fk_teoria_grado` FOREIGN KEY (`id_grado`) REFERENCES `grados` (`id_grado`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_teoria_tipo` FOREIGN KEY (`id_tipo_teoria`) REFERENCES `tipos_teoria` (`id_tipo_teoria`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Estructura de tabla para la tabla `ejercicios`
---
-
-CREATE TABLE IF NOT EXISTS `ejercicios` (
-  `id_ejercicio` int(11) NOT NULL AUTO_INCREMENT,
-  `tipo` enum('Fuerza general','Fuerza Especifica','Pliometria','Coordinación','Resistencia Aerobica','Resistencia anaerobica','Combate','Flexibilidad','Velocidad','Otro') NOT NULL,
-  `nombre` varchar(150) NOT NULL,
-  `explicacion` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id_ejercicio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Estructura de tabla para la tabla `cronogramas_clase`
---
-
-CREATE TABLE IF NOT EXISTS `cronogramas_clase` (
-  `id_cronograma` int(11) NOT NULL AUTO_INCREMENT,
-  `id_grupo` int(11) NOT NULL,
-  `id_maestro` int(11) NOT NULL,
-  `fecha` date NOT NULL,
-  `objetivo` text DEFAULT NULL,
-  `observaciones` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id_cronograma`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Estructura de tabla para la tabla `clase_ejercicios`
---
-
-CREATE TABLE IF NOT EXISTS `clase_ejercicios` (
-  `id_clase_ejercicio` int(11) NOT NULL AUTO_INCREMENT,
-  `id_cronograma` int(11) NOT NULL,
-  `id_ejercicio` int(11) NOT NULL,
-  `fase` enum('inicial','central','final') NOT NULL,
-  `series_o_tiempo` varchar(100) DEFAULT NULL,
-  `observaciones_especificas` text DEFAULT NULL,
-  PRIMARY KEY (`id_clase_ejercicio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

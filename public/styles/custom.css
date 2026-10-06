@@ -136,6 +136,12 @@ html:not(.dark) footer {
   border-top: 1px solid rgba(37,99,235,0.12) !important;
 }
 
+html.dark footer {
+  background: rgba(2, 6, 23, 0.75) !important;
+  border-top: 1px solid rgba(30, 41, 59, 0.8) !important;
+  color: #94a3b8 !important;
+}
+
 html:not(.dark) #theme-toggle {
   background: linear-gradient(135deg, #eff6ff, #fef2f2);
   border: 1px solid rgba(37,99,235,0.18);

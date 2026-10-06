@@ -1,6 +1,6 @@
 <?php include __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
-<main class="flex-1 container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
+<main class="flex-grow w-full px-4 py-6 sm:px-6 lg:px-8 relative transition-colors duration-300">
     <div class="space-y-6">
 
         <!-- Encabezado -->
