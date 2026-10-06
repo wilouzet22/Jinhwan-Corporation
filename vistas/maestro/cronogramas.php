@@ -135,7 +135,11 @@ function fechaEspanolCompleta($fechaStr) {
 
 <style>
 /* Scrollbars personalizados y siempre accesibles para el modal */
+#modal-nuevo-cronograma {
+    overscroll-behavior: contain;
+}
 .panel-scroll-custom {
+    overscroll-behavior: contain;
     scrollbar-width: thin;
     scrollbar-color: rgba(168, 85, 247, 0.45) transparent;
 }
@@ -155,8 +159,8 @@ function fechaEspanolCompleta($fechaStr) {
 </style>
 
 <!-- Modal Nuevo Cronograma (Ventana Unificada Dividida al 50/50: Izquierda = Biblioteca, Derecha = Formulario) -->
-<div id="modal-nuevo-cronograma" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs p-3 sm:p-5 flex items-center justify-center">
-    <div class="w-full max-w-7xl h-[90vh] max-h-[840px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden relative">
+<div id="modal-nuevo-cronograma" class="fixed inset-0 z-[9999] hidden bg-black/80 backdrop-blur-xs p-3 sm:p-5 flex items-center justify-center">
+    <div class="w-full max-w-7xl h-[90vh] max-h-[840px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden relative" onclick="event.stopPropagation()">
 
         <!-- MITAD IZQUIERDA (50%): BIBLIOTECA DE EJERCICIOS -->
         <div class="w-full md:w-1/2 flex flex-col h-full min-h-0 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50/50 dark:bg-slate-950/30">
@@ -476,14 +480,67 @@ function fechaEspanolCompleta($fechaStr) {
 
 <script>
 function openModal(id) {
-    document.getElementById(id).classList.remove('hidden');
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    // Desacoplar el modal del contenedor con scroll del dashboard y moverlo directamente al body
+    if (modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+    }
+
+    modal.classList.remove('hidden');
+
+    // Bloquear scroll de la página de fondo
+    document.body.style.overflow = 'hidden';
+    const mainScrollArea = document.querySelector('.flex-1.flex.flex-col.min-w-0.overflow-y-auto');
+    if (mainScrollArea) {
+        mainScrollArea.style.overflow = 'hidden';
+    }
+
     if (id === 'modal-nuevo-cronograma') {
         renderizarDiasSemana();
     }
 }
+
 function closeModal(id) {
-    document.getElementById(id).classList.add('hidden');
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+
+    // Restaurar scroll de la página de fondo
+    document.body.style.overflow = '';
+    const mainScrollArea = document.querySelector('.flex-1.flex.flex-col.min-w-0.overflow-y-auto');
+    if (mainScrollArea) {
+        mainScrollArea.style.overflow = '';
+    }
 }
+
+// Cerrar modal al hacer clic en el backdrop oscuro
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal-nuevo-cronograma');
+    if (modal) {
+        // Mover anticipadamente a document.body para evitar cualquier parpadeo de layout
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal('modal-nuevo-cronograma');
+            }
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const m = document.getElementById('modal-nuevo-cronograma');
+            if (m && !m.classList.contains('hidden')) {
+                closeModal('modal-nuevo-cronograma');
+            }
+        }
+    });
+});
 
 // --- Manejo Dinámico de Ejercicios por Fase en el Formulario ---
 let indexEjercicioGlobal = 0;
