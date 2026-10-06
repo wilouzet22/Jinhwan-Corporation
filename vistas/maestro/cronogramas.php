@@ -152,6 +152,7 @@ function fechaEspanolCompleta($fechaStr) {
     justify-content: center !important;
     padding: 1rem !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
     overscroll-behavior: contain !important;
 }
 
@@ -159,11 +160,92 @@ function fechaEspanolCompleta($fechaStr) {
     display: none !important;
 }
 
+/* La tarjeta/caja del modal con ALTURA LIMITADA A LA PANTALLA */
 .modal-dialog-box {
+    width: 95vw !important;
+    max-width: 1250px !important;
+    height: 88vh !important;
+    max-height: 850px !important;
+    min-height: 480px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
     background-color: #ffffff;
+    border-radius: 1rem !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    position: relative !important;
 }
 html.dark .modal-dialog-box {
     background-color: #0f172a !important;
+}
+
+/* Mitad Izquierda (Biblioteca de Ejercicios) */
+.modal-col-biblioteca {
+    width: 50% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    border-right: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+/* Mitad Derecha (Formulario de Cronograma) */
+.modal-col-formulario {
+    width: 50% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.modal-col-formulario form {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+/* Contenedores interiores con SCROLL INDEPENDIENTE (height: 0 + flex: 1 obliga al overflow-y) */
+#contenedor-biblioteca-ejercicios {
+    flex: 1 1 0% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+}
+
+#contenedor-formulario-scroll {
+    flex: 1 1 0% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+    .modal-dialog-box {
+        flex-direction: column !important;
+        height: 94vh !important;
+    }
+    .modal-col-biblioteca {
+        width: 100% !important;
+        height: 45% !important;
+        max-height: 45% !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+    }
+    .modal-col-formulario {
+        width: 100% !important;
+        height: 55% !important;
+        max-height: 55% !important;
+    }
 }
 
 /* Scrollbars personalizados y siempre accesibles para el modal */
@@ -189,10 +271,10 @@ html.dark .modal-dialog-box {
 
 <!-- Modal Nuevo Cronograma (Ventana Unificada Dividida al 50/50: Izquierda = Biblioteca, Derecha = Formulario) -->
 <div id="modal-nuevo-cronograma" class="hidden">
-    <div class="modal-dialog-box w-full max-w-7xl h-[90vh] max-h-[840px] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden relative" onclick="event.stopPropagation()">
+    <div class="modal-dialog-box border border-slate-200 dark:border-slate-800" onclick="event.stopPropagation()">
 
         <!-- MITAD IZQUIERDA (50%): BIBLIOTECA DE EJERCICIOS -->
-        <div class="w-full md:w-1/2 flex flex-col h-full min-h-0 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50/50 dark:bg-slate-950/30">
+        <div class="modal-col-biblioteca bg-slate-50/50 dark:bg-slate-950/30">
             <!-- Header Izquierdo (Biblioteca) -->
             <div class="px-5 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-slate-50 dark:bg-slate-950">
                 <div class="flex items-center gap-2.5">
@@ -331,7 +413,7 @@ html.dark .modal-dialog-box {
         </div>
 
         <!-- MITAD DERECHA (50%): FORMULARIO DEL CRONOGRAMA DE CLASE Y SUS 3 FASES -->
-        <div class="w-full md:w-1/2 flex flex-col h-full min-h-0 overflow-hidden bg-white dark:bg-slate-900">
+        <div class="modal-col-formulario bg-white dark:bg-slate-900">
             <form id="form-nuevo-cronograma" method="POST" action="<?php echo base_url('maestro/cronogramas/create'); ?>" class="flex flex-col h-full min-h-0">
                 <!-- Header Derecho Fijo (shrink-0) -->
                 <div class="px-5 py-3.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-slate-50 dark:bg-slate-950">
@@ -350,7 +432,7 @@ html.dark .modal-dialog-box {
                 </div>
 
                 <!-- Contenedor SCROLLEABLE de Campos y Fases (flex-1 min-h-0 overflow-y-auto) -->
-                <div class="overflow-y-auto flex-1 min-h-0 p-5 space-y-4 panel-scroll-custom">
+                <div id="contenedor-formulario-scroll" class="p-5 space-y-4 panel-scroll-custom">
                     
                     <!-- Selector de Grupo -->
                     <div>
