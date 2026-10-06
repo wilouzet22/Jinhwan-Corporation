@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/../layout/maestro_cabecera.php'; ?>
 
-<main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
+<main class="flex-1 flex-grow w-full container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
     <div class="space-y-6">
 
         <!-- Encabezado -->
@@ -131,6 +131,8 @@ function fechaEspanolCompleta($fechaStr) {
         </div>
 
     </div>
+</main>
+
 <!-- Modal Nuevo Cronograma (Doble Ventana en Paralelo: Planificador + Biblioteca de Ejercicios) -->
 <div id="modal-nuevo-cronograma" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-xs overflow-y-auto p-2 sm:p-4 lg:p-6 flex items-center justify-center">
     <div class="w-full max-w-7xl max-h-[92vh] flex flex-col lg:flex-row gap-4 my-auto relative">
