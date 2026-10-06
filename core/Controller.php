@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../helpers/url_helper.php';
+
 class Controller {
 
     protected function view($view, $data = []) {
@@ -15,10 +17,7 @@ class Controller {
     }
 
     protected function redirect($url) {
-        $base = dirname($_SERVER['SCRIPT_NAME']);
-        if ($base === '/' || $base === '\\') $base = '';
-
-        header("Location: " . $base . $url);
+        header("Location: " . base_url($url));
         exit;
     }
 }
