@@ -178,6 +178,62 @@ function fechaEspanolCompleta($fechaStr) {
 }
 html.dark .modal-dialog-box {
     background-color: #0f172a !important;
+    border-color: #1e293b !important;
+}
+
+/* DARK MODE — Columna izquierda */
+html.dark .modal-col-biblioteca {
+    background-color: rgba(2, 6, 23, 0.3) !important;
+    border-right-color: #1e293b !important;
+}
+html.dark .modal-col-biblioteca > div:first-child {
+    background-color: #020617 !important;
+    border-bottom-color: #1e293b !important;
+}
+html.dark #busqueda-biblioteca-wrapper {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    border-bottom-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+/* DARK MODE — Columna derecha */
+html.dark .modal-col-formulario {
+    background-color: #0f172a !important;
+}
+html.dark .modal-col-formulario form {
+    background-color: #0f172a !important;
+}
+html.dark .modal-col-formulario .header-formulario {
+    background-color: #020617 !important;
+    border-bottom-color: #1e293b !important;
+}
+html.dark .modal-col-formulario .footer-formulario {
+    background-color: rgba(2, 6, 23, 0.9) !important;
+    border-top-color: #1e293b !important;
+}
+html.dark #contenedor-formulario-scroll {
+    background-color: #0f172a !important;
+}
+
+/* DARK MODE — Headers y footers internos del modal (via etiquetas genéricas) */
+html.dark #modal-nuevo-cronograma .bg-slate-50 {
+    background-color: #020617 !important;
+}
+html.dark #modal-nuevo-cronograma .bg-white {
+    background-color: #0f172a !important;
+}
+html.dark #modal-nuevo-cronograma .border-slate-200 {
+    border-color: #1e293b !important;
+}
+html.dark #modal-nuevo-cronograma select,
+html.dark #modal-nuevo-cronograma input[type="text"],
+html.dark #modal-nuevo-cronograma input[type="date"],
+html.dark #modal-nuevo-cronograma textarea {
+    background-color: #020617 !important;
+    color: #e2e8f0 !important;
+    border-color: #334155 !important;
+}
+html.dark #modal-nuevo-cronograma .bg-slate-50\/50 {
+    background-color: rgba(2, 6, 23, 0.3) !important;
 }
 
 /* Mitad Izquierda (Biblioteca de Ejercicios) */
