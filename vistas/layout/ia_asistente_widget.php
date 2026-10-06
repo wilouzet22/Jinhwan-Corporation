@@ -6,12 +6,57 @@
 $contextoIA = $contextoIA ?? 'cronogramas';
 ?>
 
+<!-- Estilos dedicados para el Panel Lateral IA y su Backdrop -->
+<style>
+#ia-panel-lateral {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100vh !important;
+    width: 440px !important;
+    max-width: 95vw !important;
+    z-index: 999999 !important;
+    transform: translateX(100%) !important;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease !important;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+#ia-panel-lateral.panel-ia-abierto {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+#ia-panel-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(2, 6, 23, 0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    z-index: 999990 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+}
+
+#ia-panel-backdrop.backdrop-ia-abierto {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+</style>
+
 <!-- Botón Flotante IA (FAB) -->
 <div id="ia-fab-container" class="fixed bottom-6 right-6 z-50">
     <button type="button" 
             id="ia-btn-toggle" 
             onclick="togglePanelIA()" 
-            class="group relative inline-flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0">
+            class="group relative inline-flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
         <!-- Glow pulse ring -->
         <span class="absolute -inset-0.5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 opacity-60 blur-xs group-hover:opacity-100 transition duration-300 animate-pulse"></span>
         <span class="relative flex items-center gap-2">
@@ -21,14 +66,14 @@ $contextoIA = $contextoIA ?? 'cronogramas';
     </button>
 </div>
 
-<!-- Backdrop Overlay para móviles y pantallas pequeñas -->
+<!-- Backdrop Overlay -->
 <div id="ia-panel-backdrop" 
      onclick="cerrarPanelIA()" 
-     class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 hidden transition-opacity duration-300 opacity-0"></div>
+     class="transition-all duration-300"></div>
 
 <!-- Panel Lateral Deslizante (Slideover) -->
 <aside id="ia-panel-lateral" 
-       class="fixed top-0 right-0 h-full w-[440px] max-w-[95vw] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col overflow-hidden text-slate-800 dark:text-slate-100">
+       class="bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden text-slate-800 dark:text-slate-100">
     
     <!-- Header del Panel -->
     <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md flex items-center justify-between shrink-0">
@@ -44,18 +89,20 @@ $contextoIA = $contextoIA ?? 'cronogramas';
                 <p class="text-[11px] text-slate-500 dark:text-slate-400">Planificador pedagógico y biblioteca</p>
             </div>
         </div>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1.5">
             <button type="button" 
+                    id="ia-btn-refresh"
                     onclick="limpiarChatIA()" 
-                    class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition" 
+                    class="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition cursor-pointer flex items-center justify-center" 
                     title="Reiniciar conversación">
-                <span class="material-icons-outlined text-lg">refresh</span>
+                <span class="material-icons-outlined text-lg pointer-events-none">refresh</span>
             </button>
             <button type="button" 
+                    id="ia-btn-cerrar"
                     onclick="cerrarPanelIA()" 
-                    class="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition" 
-                    title="Cerrar panel">
-                <span class="material-icons-outlined text-xl">close</span>
+                    class="p-2 text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition cursor-pointer flex items-center justify-center" 
+                    title="Cerrar panel (Esc)">
+                <span class="material-icons-outlined text-xl pointer-events-none">close</span>
             </button>
         </div>
     </div>
@@ -149,14 +196,12 @@ let iaProcesando = false;
 
 function togglePanelIA() {
     const panel = document.getElementById('ia-panel-lateral');
-    const backdrop = document.getElementById('ia-panel-backdrop');
     if (!panel) return;
 
-    const cerrado = panel.classList.contains('translate-x-full');
-    if (cerrado) {
-        abrirPanelIA();
-    } else {
+    if (panel.classList.contains('panel-ia-abierto')) {
         cerrarPanelIA();
+    } else {
+        abrirPanelIA();
     }
 }
 
@@ -165,27 +210,76 @@ function abrirPanelIA() {
     const backdrop = document.getElementById('ia-panel-backdrop');
     if (!panel) return;
 
-    panel.classList.remove('translate-x-full');
+    panel.classList.add('panel-ia-abierto');
+    panel.style.transform = 'translateX(0)';
+    panel.style.visibility = 'visible';
+    panel.style.pointerEvents = 'auto';
+
     if (backdrop) {
-        backdrop.classList.remove('hidden');
-        setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+        backdrop.classList.add('backdrop-ia-abierto');
+        backdrop.style.opacity = '1';
+        backdrop.style.visibility = 'visible';
+        backdrop.style.pointerEvents = 'auto';
     }
+
     setTimeout(() => {
         const inp = document.getElementById('ia-input-mensaje');
         if (inp) inp.focus();
-    }, 200);
+    }, 150);
 }
 
 function cerrarPanelIA() {
     const panel = document.getElementById('ia-panel-lateral');
     const backdrop = document.getElementById('ia-panel-backdrop');
-    if (!panel) return;
 
-    panel.classList.add('translate-x-full');
-    if (backdrop) {
-        backdrop.classList.add('opacity-0');
-        setTimeout(() => backdrop.classList.add('hidden'), 300);
+    if (panel) {
+        panel.classList.remove('panel-ia-abierto');
+        panel.style.transform = 'translateX(100%)';
+        panel.style.visibility = 'hidden';
+        panel.style.pointerEvents = 'none';
     }
+
+    if (backdrop) {
+        backdrop.classList.remove('backdrop-ia-abierto');
+        backdrop.style.opacity = '0';
+        backdrop.style.visibility = 'hidden';
+        backdrop.style.pointerEvents = 'none';
+    }
+}
+
+// Listeners adicionales de respaldo (Click directo, Escape, Backdrop)
+function inicializarEventosPanelIA() {
+    const btnCerrar = document.getElementById('ia-btn-cerrar');
+    if (btnCerrar) {
+        btnCerrar.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            cerrarPanelIA();
+        };
+    }
+
+    const backdrop = document.getElementById('ia-panel-backdrop');
+    if (backdrop) {
+        backdrop.onclick = function(e) {
+            e.preventDefault();
+            cerrarPanelIA();
+        };
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const panel = document.getElementById('ia-panel-lateral');
+            if (panel && panel.classList.contains('panel-ia-abierto')) {
+                cerrarPanelIA();
+            }
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarEventosPanelIA);
+} else {
+    inicializarEventosPanelIA();
 }
 
 function limpiarChatIA() {
