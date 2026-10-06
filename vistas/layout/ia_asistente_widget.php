@@ -49,10 +49,24 @@ $contextoIA = $contextoIA ?? 'cronogramas';
     visibility: visible !important;
     pointer-events: auto !important;
 }
+
+/* Fijar el botón flotante SIEMPRE abajo a la derecha de la ventana */
+#ia-fab-container {
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 99990 !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 </style>
 
-<!-- Botón Flotante IA (FAB) -->
-<div id="ia-fab-container" class="fixed bottom-6 right-6 z-50">
+<!-- Botón Flotante IA (FAB) — Blindado abajo a la derecha -->
+<div id="ia-fab-container" 
+     style="position: fixed !important; bottom: 24px !important; right: 24px !important; top: auto !important; left: auto !important; z-index: 99990 !important;">
     <button type="button" 
             id="ia-btn-toggle" 
             onclick="togglePanelIA()" 
@@ -249,6 +263,21 @@ function cerrarPanelIA() {
 
 // Listeners adicionales de respaldo (Click directo, Escape, Backdrop)
 function inicializarEventosPanelIA() {
+    const fab = document.getElementById('ia-fab-container');
+    const backdrop = document.getElementById('ia-panel-backdrop');
+    const panel = document.getElementById('ia-panel-lateral');
+
+    // Desacoplar de contenedores relativos y anclar directamente al body del navegador
+    if (fab && fab.parentElement !== document.body) {
+        document.body.appendChild(fab);
+    }
+    if (backdrop && backdrop.parentElement !== document.body) {
+        document.body.appendChild(backdrop);
+    }
+    if (panel && panel.parentElement !== document.body) {
+        document.body.appendChild(panel);
+    }
+
     const btnCerrar = document.getElementById('ia-btn-cerrar');
     if (btnCerrar) {
         btnCerrar.onclick = function(e) {
@@ -258,7 +287,6 @@ function inicializarEventosPanelIA() {
         };
     }
 
-    const backdrop = document.getElementById('ia-panel-backdrop');
     if (backdrop) {
         backdrop.onclick = function(e) {
             e.preventDefault();
