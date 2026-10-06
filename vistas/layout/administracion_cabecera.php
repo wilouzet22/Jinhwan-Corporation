@@ -63,7 +63,7 @@ if (isset($_SESSION['id'])) {
         <?php
             $cp = $current_page ?? '';
             $gh_pages = ['estudiantes','miembros','maestros','registros','perfiles_publicos','grupos','ascensos'];
-            $ac_pages = ['teoria','sedes','calendario','galeria'];
+            $ac_pages = ['teoria','sedes','calendario','galeria','cronogramas'];
             $gh_open = in_array($cp, $gh_pages);
             $ac_open = in_array($cp, $ac_pages);
         ?>
@@ -159,6 +159,12 @@ if (isset($_SESSION['id'])) {
                             <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'calendario' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                                 <span class="material-icons-outlined text-lg">event</span>
                                 <span class="text-sm font-medium">Calendario</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= base_url('/admin/cronogramas') ?>" class="flex items-center gap-3 pl-5 pr-3 py-2 rounded-lg transition-colors group <?= $cp === 'cronogramas' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                                <span class="material-icons-outlined text-lg">event_note</span>
+                                <span class="text-sm font-medium">Cronogramas</span>
                             </a>
                         </li>
                         <li>

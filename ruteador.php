@@ -18,6 +18,7 @@ include_once __DIR__ . '/controladores/Administracion/PerfilesPublicosController
 include_once __DIR__ . '/controladores/Administracion/RegistrosController.php';
 include_once __DIR__ . '/controladores/Administracion/DashboardController.php';
 include_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
+include_once __DIR__ . '/controladores/Administracion/CronogramasController.php';
 include_once __DIR__ . '/controladores/Administracion/GaleriaController.php';
 
 include_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
@@ -128,6 +129,9 @@ $router->get('/admin/calendario/get-eventos', [AdminCalendarioController::class,
 $router->post('/admin/calendario/create', [AdminCalendarioController::class, 'store']);
 $router->post('/admin/calendario/update', [AdminCalendarioController::class, 'update']);
 $router->post('/admin/calendario/delete', [AdminCalendarioController::class, 'delete']);
+
+$router->get('/admin/cronogramas', [AdminCronogramasController::class, 'index']);
+$router->get('/admin/cronogramas/{id}', [AdminCronogramasController::class, 'show']);
 
 $router->get('/admin/galeria', [AdminGaleriaController::class, 'index']);
 $router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
