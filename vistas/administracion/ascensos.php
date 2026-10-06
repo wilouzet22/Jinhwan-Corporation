@@ -146,99 +146,101 @@
             </button>
         </div>
 
-        <form method="POST" action="<?= base_url('/admin/ascensos/store') ?>" class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+        <form method="POST" action="<?= base_url('/admin/ascensos/store') ?>" class="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                <!-- Filtros para encontrar alumno -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Filtrar por Sede</label>
+                        <select id="modal-filter-sede" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                            <option value="">Todas</option>
+                            <?php foreach($sedes_list as $sede): ?>
+                                <option value="<?= htmlspecialchars($sede['nombre']) ?>"><?= htmlspecialchars($sede['nombre']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Filtrar por Grupo</label>
+                        <select id="modal-filter-grupo" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                            <option value="">Todos</option>
+                            <?php foreach($grupos_list as $grupo): ?>
+                                <option value="<?= htmlspecialchars($grupo['nombre']) ?>"><?= htmlspecialchars($grupo['nombre']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
 
-            <!-- Filtros para encontrar alumno -->
-            <div class="grid grid-cols-2 gap-3">
+                <!-- Select Alumno -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Filtrar por Sede</label>
-                    <select id="modal-filter-sede" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                        <option value="">Todas</option>
-                        <?php foreach($sedes_list as $sede): ?>
-                            <option value="<?= htmlspecialchars($sede['nombre']) ?>"><?= htmlspecialchars($sede['nombre']) ?></option>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Alumno *</label>
+                    <select name="id_alumno" id="select-alumno" required
+                            class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                        <option value="">— Selecciona un alumno —</option>
+                        <?php foreach($alumnos as $a): ?>
+                            <option value="<?= $a['id'] ?>"
+                                    data-grado="<?= htmlspecialchars($a['nombre_nivel'] ?? '') ?>"
+                                    data-sede="<?= htmlspecialchars($a['nombre_sede'] ?? '') ?>"
+                                    data-grupo="<?= htmlspecialchars($a['nombre_grupo'] ?? '') ?>">
+                                <?= htmlspecialchars($a['nombre'] . ' ' . $a['apellido']) ?> — <?= htmlspecialchars($a['nombre_nivel'] ?? 'Sin grado') ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
+
+                <!-- Grado anterior (auto) -->
+                <input type="hidden" name="grado_anterior" id="input-grado-anterior">
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Filtrar por Grupo</label>
-                    <select id="modal-filter-grupo" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                        <option value="">Todos</option>
-                        <?php foreach($grupos_list as $grupo): ?>
-                            <option value="<?= htmlspecialchars($grupo['nombre']) ?>"><?= htmlspecialchars($grupo['nombre']) ?></option>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Grado Actual</label>
+                    <div id="display-grado-actual" class="w-full rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 p-3 text-sm">
+                        Selecciona un alumno...
+                    </div>
+                </div>
+
+                <!-- Nuevo Grado -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Nuevo Grado *</label>
+                    <select name="id_grado_nuevo" required
+                            class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                        <option value="">— Selecciona el nuevo grado —</option>
+                        <?php foreach($grados_list as $g): ?>
+                            <option value="<?= $g['id'] ?>"><?= htmlspecialchars($g['nombre']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
 
-            <!-- Select Alumno -->
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Alumno *</label>
-                <select name="id_alumno" id="select-alumno" required
-                        class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                    <option value="">— Selecciona un alumno —</option>
-                    <?php foreach($alumnos as $a): ?>
-                        <option value="<?= $a['id'] ?>"
-                                data-grado="<?= htmlspecialchars($a['nombre_nivel'] ?? '') ?>"
-                                data-sede="<?= htmlspecialchars($a['nombre_sede'] ?? '') ?>"
-                                data-grupo="<?= htmlspecialchars($a['nombre_grupo'] ?? '') ?>">
-                            <?= htmlspecialchars($a['nombre'] . ' ' . $a['apellido']) ?> — <?= htmlspecialchars($a['nombre_nivel'] ?? 'Sin grado') ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+                <!-- Fecha del Diploma -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Fecha del Diploma / Examen *</label>
+                    <input type="date" name="fecha_examen" value="<?= date('Y-m-d') ?>" required
+                           class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                    <span class="text-[11px] text-slate-400 mt-1 block">Esta es la fecha que se imprimirá en el diploma oficial.</span>
+                </div>
 
-            <!-- Grado anterior (auto) -->
-            <input type="hidden" name="grado_anterior" id="input-grado-anterior">
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Grado Actual</label>
-                <div id="display-grado-actual" class="w-full rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 p-3 text-sm">
-                    Selecciona un alumno...
+                <!-- Maestro Evaluador (Opcional) -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Maestro Evaluador</label>
+                    <select name="id_maestro"
+                            class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
+                        <option value="">— Directo por Administración —</option>
+                        <?php foreach($maestros_list as $m): ?>
+                            <option value="<?= $m['id_maestro'] ?>"><?= htmlspecialchars($m['nombre_completo']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <!-- Observaciones -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Observaciones</label>
+                    <textarea name="observaciones" rows="2" placeholder="Notas sobre el examen o méritos..."
+                              class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none resize-none"></textarea>
                 </div>
             </div>
 
-            <!-- Nuevo Grado -->
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Nuevo Grado *</label>
-                <select name="id_grado_nuevo" required
-                        class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                    <option value="">— Selecciona el nuevo grado —</option>
-                    <?php foreach($grados_list as $g): ?>
-                        <option value="<?= $g['id'] ?>"><?= htmlspecialchars($g['nombre']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- Fecha del Diploma -->
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Fecha del Diploma / Examen *</label>
-                <input type="date" name="fecha_examen" value="<?= date('Y-m-d') ?>" required
-                       class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                <span class="text-[11px] text-slate-400 mt-1 block">Esta es la fecha que se imprimirá en el diploma oficial.</span>
-            </div>
-
-            <!-- Maestro Evaluador (Opcional) -->
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Maestro Evaluador</label>
-                <select name="id_maestro"
-                        class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
-                    <option value="">— Directo por Administración —</option>
-                    <?php foreach($maestros_list as $m): ?>
-                        <option value="<?= $m['id_maestro'] ?>"><?= htmlspecialchars($m['nombre_completo']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- Observaciones -->
-            <div>
-                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5">Observaciones</label>
-                <textarea name="observaciones" rows="2" placeholder="Notas sobre el examen o méritos..."
-                          class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none resize-none"></textarea>
-            </div>
-
-            <div class="pt-4 pb-1 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800 sticky bottom-0 bg-white dark:bg-slate-900 z-10">
+            <!-- Barra fija inferior de botones de acción -->
+            <div class="p-4 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-3 shrink-0">
                 <button type="button"
                         onclick="document.getElementById('modal-ascenso').classList.add('hidden'); document.getElementById('modal-ascenso').classList.remove('flex');"
-                        class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase text-xs rounded-xl transition-colors">
+                        class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase text-xs rounded-xl transition-colors cursor-pointer">
                     Cancelar
                 </button>
                 <button type="submit"
