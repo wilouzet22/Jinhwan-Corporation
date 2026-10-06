@@ -25,10 +25,12 @@ class MaestroCronogramasController extends Controller
     {
         $cronogramas = $this->cronogramaModel->getAll();
         $grupos = $this->grupoModel->getAll();
+        $biblioteca = $this->ejercicioModel->getAll();
 
         $this->view('maestro/cronogramas', [
             'cronogramas' => $cronogramas,
             'grupos' => $grupos,
+            'biblioteca' => $biblioteca,
             'current_page' => 'cronogramas'
         ]);
     }
@@ -72,7 +74,6 @@ class MaestroCronogramasController extends Controller
             $id_grupo = $_POST['id_grupo'] ?? null;
             $fecha = $_POST['fecha'] ?? null;
             $objetivo = trim($_POST['objetivo'] ?? '');
-            $observaciones = trim($_POST['observaciones'] ?? '');
             $id_maestro = $_SESSION['id'] ?? null;
 
             if ($id_grupo && $fecha && $id_maestro) {
@@ -81,10 +82,30 @@ class MaestroCronogramasController extends Controller
                     'id_maestro' => $id_maestro,
                     'fecha' => $fecha,
                     'objetivo' => $objetivo,
-                    'observaciones' => $observaciones
+                    'observaciones' => ''
                 ]);
 
                 if ($newId) {
+                    // Guardar ejercicios asignados a cada fase (inicial, central, final)
+                    if (!empty($_POST['ejercicios']) && is_array($_POST['ejercicios'])) {
+                        foreach ($_POST['ejercicios'] as $item) {
+                            $id_ejercicio = (int)($item['id_ejercicio'] ?? 0);
+                            $fase = $item['fase'] ?? 'inicial';
+                            $series = trim($item['series_o_tiempo'] ?? '');
+                            $obs = trim($item['observaciones_especificas'] ?? '');
+
+                            if ($id_ejercicio > 0 && in_array($fase, ['inicial', 'central', 'final'])) {
+                                $this->cronogramaModel->addEjercicio([
+                                    'id_cronograma' => $newId,
+                                    'id_ejercicio' => $id_ejercicio,
+                                    'fase' => $fase,
+                                    'series_o_tiempo' => $series,
+                                    'observaciones_especificas' => $obs
+                                ]);
+                            }
+                        }
+                    }
+
                     $this->redirect("maestro/cronogramas/{$newId}");
                     return;
                 }
