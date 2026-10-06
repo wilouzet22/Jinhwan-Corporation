@@ -136,9 +136,9 @@
 </main>
 
 <!-- Modal Registrar Ascenso -->
-<div id="modal-ascenso" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<div id="modal-ascenso" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col my-auto">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center shrink-0">
             <h3 class="text-xl font-display font-bold text-slate-900 dark:text-white">Registrar Ascenso</h3>
             <button onclick="document.getElementById('modal-ascenso').classList.add('hidden'); document.getElementById('modal-ascenso').classList.remove('flex');"
                     class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer">
@@ -146,7 +146,7 @@
             </button>
         </div>
 
-        <form method="POST" action="<?= base_url('/admin/ascensos/store') ?>" class="p-6 space-y-4">
+        <form method="POST" action="<?= base_url('/admin/ascensos/store') ?>" class="p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
 
             <!-- Filtros para encontrar alumno -->
             <div class="grid grid-cols-2 gap-3">
@@ -235,7 +235,7 @@
                           class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none resize-none"></textarea>
             </div>
 
-            <div class="pt-3 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
+            <div class="pt-4 pb-1 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800 sticky bottom-0 bg-white dark:bg-slate-900 z-10">
                 <button type="button"
                         onclick="document.getElementById('modal-ascenso').classList.add('hidden'); document.getElementById('modal-ascenso').classList.remove('flex');"
                         class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase text-xs rounded-xl transition-colors">
