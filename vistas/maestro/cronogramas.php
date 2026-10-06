@@ -134,10 +134,39 @@ function fechaEspanolCompleta($fechaStr) {
 </main>
 
 <style>
-/* Scrollbars personalizados y siempre accesibles para el modal */
+/* Modal independiente y 100% blindado contra scroll y layouts externos */
 #modal-nuevo-cronograma {
-    overscroll-behavior: contain;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(2, 6, 23, 0.85) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    z-index: 99999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+    overscroll-behavior: contain !important;
 }
+
+#modal-nuevo-cronograma.hidden {
+    display: none !important;
+}
+
+.modal-dialog-box {
+    background-color: #ffffff;
+}
+html.dark .modal-dialog-box {
+    background-color: #0f172a !important;
+}
+
+/* Scrollbars personalizados y siempre accesibles para el modal */
 .panel-scroll-custom {
     overscroll-behavior: contain;
     scrollbar-width: thin;
@@ -159,8 +188,8 @@ function fechaEspanolCompleta($fechaStr) {
 </style>
 
 <!-- Modal Nuevo Cronograma (Ventana Unificada Dividida al 50/50: Izquierda = Biblioteca, Derecha = Formulario) -->
-<div id="modal-nuevo-cronograma" class="fixed inset-0 z-[9999] hidden bg-black/80 backdrop-blur-xs p-3 sm:p-5 flex items-center justify-center">
-    <div class="w-full max-w-7xl h-[90vh] max-h-[840px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden relative" onclick="event.stopPropagation()">
+<div id="modal-nuevo-cronograma" class="hidden">
+    <div class="modal-dialog-box w-full max-w-7xl h-[90vh] max-h-[840px] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden relative" onclick="event.stopPropagation()">
 
         <!-- MITAD IZQUIERDA (50%): BIBLIOTECA DE EJERCICIOS -->
         <div class="w-full md:w-1/2 flex flex-col h-full min-h-0 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-50/50 dark:bg-slate-950/30">
