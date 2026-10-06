@@ -4,16 +4,19 @@ require_once __DIR__ . '/../../core/Controller.php';
 require_once __DIR__ . '/../../core/Security.php';
 require_once __DIR__ . '/../../config/ia.php';
 require_once __DIR__ . '/../../modelos/Ejercicio.php';
+require_once __DIR__ . '/../../modelos/Grupo.php';
 
 class MaestroIAController extends Controller
 {
     private $ejercicioModel;
+    private $grupoModel;
 
     public function __construct()
     {
         Security::verifySession();
         Security::verifyMaestro();
         $this->ejercicioModel = new Ejercicio();
+        $this->grupoModel = new Grupo();
     }
 
     /**
@@ -44,23 +47,30 @@ class MaestroIAController extends Controller
         // Obtener la biblioteca actual de ejercicios para dar contexto a la IA
         $biblioteca = $this->ejercicioModel->getAll();
         $catalogoTexto = "";
-        $mapaEjercicios = [];
         foreach ($biblioteca as $ej) {
-            $catalogoTexto .= "- [ID: {$ej['id_ejercicio']}] \"{$ej['nombre']}\" (Tipo: {$ej['tipo']}): " . mb_substr($ej['explicacion'] ?? '', 0, 100) . "\n";
-            $mapaEjercicios[mb_strtolower($ej['nombre'], 'UTF-8')] = $ej;
+            $catalogoTexto .= "- [ID: {$ej['id_ejercicio']}] \"{$ej['nombre']}\" (Tipo: {$ej['tipo']}): " . mb_substr($ej['explicacion'] ?? '', 0, 90) . "\n";
         }
 
-        // Construir System Prompt especializado
-        $systemPrompt = $this->construirSystemPrompt($contexto, $catalogoTexto);
+        // Obtener los grupos reales de la escuela
+        $grupos = $this->grupoModel->getAll();
+        $gruposTexto = "";
+        foreach ($grupos as $g) {
+            $sedeStr = !empty($g['nombre_sede']) ? " (Sede: {$g['nombre_sede']})" : "";
+            $horarioStr = !empty($g['horario']) ? " - Horario: {$g['horario']}" : "";
+            $gruposTexto .= "- [ID: {$g['id_grupo']}] \"{$g['nombre']}\"{$sedeStr}{$horarioStr}\n";
+        }
+
+        // Construir System Prompt especializado e interactivo
+        $systemPrompt = $this->construirSystemPrompt($contexto, $catalogoTexto, $gruposTexto);
 
         // Armar el arreglo de mensajes para la API
         $messagesPayload = [
             ['role' => 'system', 'content' => $systemPrompt]
         ];
 
-        // Añadir historial previo si existe (limitado a los últimos 6 mensajes)
+        // Añadir historial previo si existe (limitado a los últimos 8 mensajes para mantener contexto conversacional)
         if (is_array($historial) && !empty($historial)) {
-            $historialReciente = array_slice($historial, -6);
+            $historialReciente = array_slice($historial, -8);
             foreach ($historialReciente as $h) {
                 if (isset($h['role'], $h['content']) && in_array($h['role'], ['user', 'assistant'])) {
                     $messagesPayload[] = [
@@ -108,9 +118,9 @@ class MaestroIAController extends Controller
             exit;
         }
 
-        // Si es llenado de cronograma, asociar IDs de biblioteca si faltaron
+        // Si es llenado de cronograma, asociar IDs de biblioteca y grupo
         if (($parsed['accion'] ?? '') === 'llenar_cronograma' && isset($parsed['cronograma'])) {
-            $parsed['cronograma'] = $this->completarIdsEjercicios($parsed['cronograma'], $biblioteca);
+            $parsed['cronograma'] = $this->completarDatosCronograma($parsed['cronograma'], $biblioteca, $grupos);
         }
 
         echo json_encode([
@@ -166,35 +176,75 @@ class MaestroIAController extends Controller
     }
 
     /**
-     * Construye el system prompt según el contexto
+     * Construye el system prompt según el contexto y catálogo
      */
-    private function construirSystemPrompt($contexto, $catalogoTexto)
+    private function construirSystemPrompt($contexto, $catalogoTexto, $gruposTexto)
     {
+        $diasEsp = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        $diaHoy = $diasEsp[date('w')];
+        $fechaHoy = date('Y-m-d');
         $tiposValidos = "Fuerza general, Fuerza Especifica, Pliometria, Coordinación, Resistencia Aerobica, Resistencia anaerobica, Combate, Flexibilidad, Velocidad, Otro";
 
         return "Eres el Asistente Inteligente de Taekwondo para Maestros e Instructores de la Corporación Jinhwan.
-Tu misión es asistir a los profesores a planificar sesiones de entrenamiento de Taekwondo estructuradas, profesionales y metodológicamente correctas, o sugerir nuevos ejercicios y contestar consultas técnicas.
+Tu función es ayudar a los profesores a planificar sus clases de Taekwondo paso a paso de manera interactiva, profesional y pedagógica.
 
-IMPORTANTE: DEBES RESPONDER EXCLUSIVAMENTE CON UN OBJETO JSON VÁLIDO. No añadas bloques markdown como ```json ... ```, no saludes fuera del JSON, entrega estrictamente el JSON crudo.
-
-Biblioteca de ejercicios actualmente registrada en la escuela:
+DATOS DEL SISTEMA:
+- Fecha de Hoy: {$fechaHoy} ({$diaHoy})
+- Grupos registrados en la academia:
+{$gruposTexto}
+- Catálogo de ejercicios registrado en la biblioteca:
 {$catalogoTexto}
+- Tipos válidos de ejercicios: [{$tiposValidos}].
 
-Tipos válidos de ejercicios: [{$tiposValidos}].
+IMPORTANTE: DEBES RESPONDER SIEMPRE CON UN OBJETO JSON VÁLIDO (sin bloques markdown ```json, solo el objeto JSON).
 
-FORMATOS DE RESPUESTA JSON REQUERIDOS:
+==================================================
+COMPORTAMIENTO CONVERSACIONAL Y PEDAGÓGICO
+==================================================
+Para que una clase pueda registrarse en el sistema, se requieren indispensablemente:
+1. El GRUPO (debe corresponder a uno de los grupos de la academia listados arriba).
+2. El DÍA o FECHA de la clase (ej: Mañana, Viernes, Lunes próximo, o fecha específica).
+3. El OBJETIVO general y los ejercicios en sus 3 FASES (Inicial, Central, Final).
 
-CASO 1: Si el maestro pide crear o generar una clase, cronograma, sesión o entrenamiento:
+REGLAS DE INTERACCIÓN:
+
+A) SI EL MAESTRO TE PIDE GENERAR UNA CLASE PERO AÚN NO HA DEFINIDO EL GRUPO O LA FECHA:
+(Por ejemplo: \"Quiero que me generes un cronograma de clase con un objetivo que tú escojas\", \"Ayúdame a planificar una clase\", \"Hazme una clase de combate\"):
+-> NO entregues aún la acción 'llenar_cronograma'.
+-> Responde con accion: 'texto'.
+-> Proponle con entusiasmo el objetivo de entrenamiento que tú escogiste (o 2 variantes según tu criterio marcial).
+-> Pídele amablemente los datos que te faltan para completar la planificación:
+   1. ¿Para qué grupo será? (Enumera los grupos disponibles arriba de forma clara).
+   2. ¿Para qué día de la semana o fecha deseas programarla?
+   3. Pregúntale si está de acuerdo con el objetivo propuesto o si desea ajustarlo.
+
+Ejemplo de respuesta JSON en este caso:
 {
-  \"mensaje\": \"Breve resumen explicativo del enfoque pedagógico de la clase (2-3 oraciones).\",
+  \"mensaje\": \"¡Excelente iniciativa, Sabomnim! Te propongo una clase enfocada en: **Desarrollo de potencia y velocidad en patada Bandal Chagui con anticipación ofensiva**.\\n\\nPara dejar tu cronograma listo y aplicarlo al sistema, por favor indícame:\\n1. **¿Para qué grupo será?** (Disponibles: Infantil, Juvenil Principiante, Adultos...)\\n2. **¿Para qué día o fecha?** (ej: Mañana, este Viernes, etc.)\\n\\n¿Te parece bien este objetivo o prefieres enfocarlo en otra área?\",
+  \"accion\": \"texto\"
+}
+
+B) SI EL MAESTRO YA ESPECIFICÓ EL GRUPO Y LA FECHA (o los responde en su mensaje posterior, o te dice explícitamente 'escoge tú el grupo y el día'):
+-> Genera la planificación completa con accion: 'llenar_cronograma'.
+-> Calcula la fecha correspondiente a partir de la fecha de hoy ({$fechaHoy}, {$diaHoy}) en formato YYYY-MM-DD.
+-> Selecciona el 'id_grupo' numérico correspondiente a dicho grupo.
+-> Estructura las 3 fases (Inicial, Central, Final) usando preferentemente los ejercicios de la biblioteca provista.
+
+Estructura requerida cuando accion === 'llenar_cronograma':
+{
+  \"mensaje\": \"¡Listo, Sabomnim! He planificado la sesión para el grupo [Nombre Grupo] programada para el [Día/Fecha]. A continuación tienes el detalle de las 3 fases.\",
   \"accion\": \"llenar_cronograma\",
   \"cronograma\": {
-    \"objetivo\": \"Objetivo claro y medible de la sesión (ej: Desarrollar potencia en Bandal Chagui y velocidad de anticipación).\",
+    \"id_grupo\": 1, // ID numérico exacto del grupo
+    \"grupo_nombre\": \"Nombre del Grupo\",
+    \"fecha\": \"2026-10-09\", // Formato YYYY-MM-DD
+    \"fecha_texto\": \"Viernes, 9 de Octubre de 2026\",
+    \"objetivo\": \"Objetivo claro y pedagógico de la sesión...\",
     \"parte_inicial\": [
       {
-        \"id_ejercicio\": 12, // Usa el ID de la biblioteca si existe, o null si es nuevo
+        \"id_ejercicio\": 12, // ID de la biblioteca o null si es nuevo
         \"nombre\": \"Nombre del ejercicio\",
-        \"tipo\": \"Coordinación\", // Uno de los tipos válidos
+        \"tipo\": \"Coordinación\",
         \"series_o_tiempo\": \"8 min\",
         \"observaciones\": \"Calentamiento articular y activación neuromuscular\"
       }
@@ -202,47 +252,44 @@ CASO 1: Si el maestro pide crear o generar una clase, cronograma, sesión o entr
     \"parte_central\": [
       {
         \"id_ejercicio\": 5,
-        \"nombre\": \"Nombre del ejercicio central\",
+        \"nombre\": \"Nombre del ejercicio\",
         \"tipo\": \"Combate\",
         \"series_o_tiempo\": \"4 series x 15 reps\",
-        \"observaciones\": \"Pateo a peto buscando máxima velocidad en el impacto\"
+        \"observaciones\": \"Pateo a peto buscando máxima velocidad\"
       }
     ],
     \"parte_final\": [
       {
         \"id_ejercicio\": 8,
-        \"nombre\": \"Nombre ejercicio de calma\",
+        \"nombre\": \"Estiramiento pasivo\",
         \"tipo\": \"Flexibilidad\",
         \"series_o_tiempo\": \"5 min\",
-        \"observaciones\": \"Estiramiento estático de isquiotibiales y cadera\"
+        \"observaciones\": \"Relajación y estiramiento de tren inferior\"
       }
     ]
   }
 }
 
-CASO 2: Si el maestro pide ideas de ejercicios nuevos para registrar en la biblioteca:
+C) SI EL MAESTRO PIDE IDEAS DE EJERCICIOS NUEVOS PARA LA BIBLIOTECA:
 {
-  \"mensaje\": \"Explicación de los ejercicios sugeridos y su aplicación.\",
+  \"mensaje\": \"Explicación de las propuestas...\",
   \"accion\": \"agregar_ejercicio\",
   \"ejercicios_sugeridos\": [
     {
       \"nombre\": \"Nombre técnico claro\",
-      \"tipo\": \"Pliometria\", // Debe ser uno de los tipos válidos
-      \"explicacion\": \"Instrucción detallada de ejecución, postura y recomendaciones de seguridad.\"
+      \"tipo\": \"Pliometria\",
+      \"explicacion\": \"Instrucción de ejecución...\"
     }
   ]
 }
 
-CASO 3: Preguntas teóricas, dudas de reglamento, poomsae o saludos:
+D) PREGUNTAS GENERALES, DOCTRINA, REGLAMENTO O SALUDOS:
 {
-  \"mensaje\": \"Tu respuesta detallada y profesional como maestro experimentado de Taekwondo.\",
+  \"mensaje\": \"Tu respuesta profesional y experta.\",
   \"accion\": \"texto\"
 }
 
-Reglas clave:
-- Siempre prioriza utilizar los ejercicios de la biblioteca provista si encajan con el objetivo. Si un ejercicio no está en la biblioteca, puedes proponerlo con 'id_ejercicio': null.
-- Organiza la sesión coherentemente: parte inicial (calentamiento/movilidad), parte central (trabajo principal técnico/táctico/físico), parte final (vuelta a la calma y estiramiento).
-- Toda respuesta debe ser en perfecto español.";
+Recuerda: Si falta el grupo o el día, pregúntaselos primero al maestro de forma cortés para que la clase quede perfecta y lista para guardar en la base de datos.";
     }
 
     /**
@@ -317,10 +364,40 @@ Reglas clave:
     }
 
     /**
-     * Intenta relacionar ejercicios sin ID con los nombres exactos o parecidos de la biblioteca
+     * Completa y normaliza datos del cronograma (grupo, fecha y ejercicios)
      */
-    private function completarIdsEjercicios($cronograma, $biblioteca)
+    private function completarDatosCronograma($cronograma, $biblioteca, $grupos)
     {
+        // 1. Validar / mapear grupo
+        $mapaGrupos = [];
+        foreach ($grupos as $g) {
+            $key = mb_strtolower(trim($g['nombre']), 'UTF-8');
+            $mapaGrupos[$key] = $g;
+        }
+
+        if (empty($cronograma['id_grupo']) && !empty($cronograma['grupo_nombre'])) {
+            $gKey = mb_strtolower(trim($cronograma['grupo_nombre']), 'UTF-8');
+            foreach ($mapaGrupos as $nombreKey => $gObj) {
+                if (strpos($nombreKey, $gKey) !== false || strpos($gKey, $nombreKey) !== false) {
+                    $cronograma['id_grupo'] = (int)$gObj['id_grupo'];
+                    $cronograma['grupo_nombre'] = $gObj['nombre'];
+                    break;
+                }
+            }
+        }
+
+        // Si aún no tiene id_grupo y hay al menos un grupo, asignar el primero
+        if (empty($cronograma['id_grupo']) && !empty($grupos)) {
+            $cronograma['id_grupo'] = (int)$grupos[0]['id_grupo'];
+            $cronograma['grupo_nombre'] = $grupos[0]['nombre'];
+        }
+
+        // 2. Validar fecha (formato YYYY-MM-DD)
+        if (empty($cronograma['fecha']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $cronograma['fecha'])) {
+            $cronograma['fecha'] = date('Y-m-d');
+        }
+
+        // 3. Relacionar ejercicios sin ID con los de la biblioteca
         $mapaNombres = [];
         foreach ($biblioteca as $b) {
             $key = mb_strtolower(trim($b['nombre']), 'UTF-8');

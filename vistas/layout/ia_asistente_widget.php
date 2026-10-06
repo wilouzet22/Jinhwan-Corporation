@@ -329,6 +329,24 @@ function renderizarRespuestaIA(data) {
                 
                 <!-- Tarjeta del Cronograma -->
                 <div class="p-3 bg-slate-50 dark:bg-slate-950/70 border border-purple-200 dark:border-purple-900/50 rounded-xl space-y-2">
+                    <!-- Badges de Grupo y Fecha si fueron especificados -->
+                    ${(cronograma.grupo_nombre || cronograma.fecha_texto || cronograma.fecha) ? `
+                        <div class="flex flex-wrap items-center gap-1.5 pb-1">
+                            ${cronograma.grupo_nombre ? `
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/40">
+                                    <span class="material-icons-outlined text-xs">groups</span>
+                                    <span>${escaparHTML(cronograma.grupo_nombre)}</span>
+                                </span>
+                            ` : ''}
+                            ${(cronograma.fecha_texto || cronograma.fecha) ? `
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800/40">
+                                    <span class="material-icons-outlined text-xs">event</span>
+                                    <span>${escaparHTML(cronograma.fecha_texto || cronograma.fecha)}</span>
+                                </span>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+
                     <div class="flex items-center gap-1.5 text-purple-700 dark:text-purple-300 font-bold text-[11px] uppercase tracking-wide">
                         <span class="material-icons-outlined text-sm">flag</span>
                         <span>Objetivo de la sesión</span>
@@ -439,9 +457,29 @@ function aplicarCronogramaAlFormulario(idMemoria) {
         if (modal) modal.classList.remove('hidden');
     }
 
-    // 2. Rellenar el objetivo de la sesión
     const form = document.getElementById('form-nuevo-cronograma');
     if (form) {
+        // 2. Asignar Grupo si fue determinado por la IA
+        if (cronograma.id_grupo) {
+            const selectGrupo = form.querySelector('select[name="id_grupo"]');
+            if (selectGrupo) {
+                selectGrupo.value = cronograma.id_grupo;
+                selectGrupo.classList.add('ring-2', 'ring-purple-500');
+                setTimeout(() => selectGrupo.classList.remove('ring-2', 'ring-purple-500'), 1500);
+            }
+        }
+
+        // 3. Asignar Fecha seleccionada
+        if (cronograma.fecha) {
+            if (typeof seleccionarDia === 'function') {
+                seleccionarDia(cronograma.fecha);
+            } else {
+                const inpFecha = document.getElementById('input-fecha-modal');
+                if (inpFecha) inpFecha.value = cronograma.fecha;
+            }
+        }
+
+        // 4. Rellenar el objetivo de la sesión
         const txtObjetivo = form.querySelector('textarea[name="objetivo"]');
         if (txtObjetivo) {
             txtObjetivo.value = cronograma.objetivo || '';
@@ -450,7 +488,7 @@ function aplicarCronogramaAlFormulario(idMemoria) {
         }
     }
 
-    // 3. Si fasesState existe (en cronogramas.php), vaciar fases previas e insertar las de la IA
+    // 5. Si fasesState existe (en cronogramas.php), vaciar fases previas e insertar las de la IA
     if (typeof fasesState !== 'undefined' && typeof renderizarFase === 'function') {
         fasesState.inicial = [];
         fasesState.central = [];
