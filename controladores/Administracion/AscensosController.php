@@ -122,6 +122,65 @@ class AdminAscensosController extends Controller {
         }
     }
 
+    /** Ascenso masivo: varios alumnos al mismo nuevo grado */
+    public function storeBulk() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/admin/ascensos');
+            return;
+        }
+
+        $ids_alumnos    = array_filter(array_map('intval', $_POST['ids_alumnos'] ?? []), fn($i) => $i > 0);
+        $id_grado_nuevo = (int)($_POST['id_grado_nuevo'] ?? 0);
+        $fecha_examen   = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
+        $id_maestro     = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
+        $observaciones  = trim($_POST['observaciones'] ?? '');
+
+        if (empty($ids_alumnos) || $id_grado_nuevo <= 0) {
+            $this->redirect('/admin/ascensos?error=datos_invalidos');
+            return;
+        }
+
+        // Obtener nombre del nuevo grado
+        $grados = $this->nivelModel->getAll();
+        $gradosMap = [];
+        foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
+        $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
+
+        $db = Database::getInstance()->getConnection();
+        $exitosos = 0;
+
+        foreach ($ids_alumnos as $id_alumno) {
+            // Obtener grado actual del alumno
+            $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
+            $grado_anterior = 'Blanco';
+            if ($stmt) {
+                $stmt->bind_param("i", $id_alumno);
+                $stmt->execute();
+                $r = $stmt->get_result()->fetch_assoc();
+                $stmt->close();
+                $grado_anterior = $r['nombre'] ?? 'Blanco';
+            }
+
+            $ok = $this->certModel->create([
+                'id_estudiante'  => $id_alumno,
+                'id_maestro'     => $id_maestro,
+                'grado_anterior' => $grado_anterior,
+                'grado_nuevo'    => $grado_nuevo,
+                'id_grado_nuevo' => $id_grado_nuevo,
+                'fecha_examen'   => $fecha_examen,
+                'observaciones'  => $observaciones,
+                'folio'          => Certificado::generarFolio(),
+            ]);
+            if ($ok) $exitosos++;
+        }
+
+        if ($exitosos > 0) {
+            $this->redirect('/admin/ascensos?success=' . $exitosos . '&bulk=1');
+        } else {
+            $this->redirect('/admin/ascensos?error=fallo');
+        }
+    }
+
     /** Endpoint AJAX: devuelve el HTML del certificado/diploma para el modal del admin */
     public function certificado() {
         Security::verifySession();

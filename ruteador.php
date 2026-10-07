@@ -80,6 +80,7 @@ $router->post('/registro/completar/process', [AutenticacionController::class, 'p
 $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 $router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
 $router->post('/admin/ascensos/store', [AdminAscensosController::class, 'store']);
+$router->post('/admin/ascensos/store-bulk', [AdminAscensosController::class, 'storeBulk']);
 $router->get('/admin/ascensos/certificado', [AdminAscensosController::class, 'certificado']);
 $router->get('/admin/ascensos/descargar', [AdminAscensosController::class, 'descargar']);
 
