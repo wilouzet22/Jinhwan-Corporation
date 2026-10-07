@@ -81,6 +81,16 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                 </div>
             </div>
         <?php endforeach; ?>
+
+        <?php if (empty($teorias)): ?>
+        <div class="col-span-full flex flex-col items-center justify-center py-20 text-center">
+            <div class="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-5 border border-slate-200 dark:border-slate-700 mx-auto">
+                <span class="material-icons-outlined text-4xl text-slate-400">menu_book</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">Aún no hay material disponible</h3>
+            <p class="text-sm text-slate-400 max-w-sm">Tu academia todavía no ha publicado material teórico. Cuando el administrador agregue contenido, aparecerá aquí.</p>
+        </div>
+        <?php endif; ?>
     </div>
 
     <div id="mi-teoria-empty" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 transition-colors duration-300">

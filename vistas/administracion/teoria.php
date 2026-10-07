@@ -59,6 +59,16 @@
             <?php endforeach; ?>
 
         </div>
+
+        <?php if (empty($teorias)): ?>
+        <div class="flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-5 border border-slate-200 dark:border-slate-700">
+                <span class="material-icons-outlined text-4xl text-slate-400">menu_book</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">No hay material teórico aún</h3>
+            <p class="text-sm text-slate-400 max-w-sm">Agrega temas con el botón <strong>"Nueva Teoría"</strong> para que los estudiantes puedan verlos en su panel de Estudio Teórico.</p>
+        </div>
+        <?php endif; ?>
     </main>
 
 <div id="theory-modal" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
@@ -70,7 +80,7 @@
             </button>
         </div>
         
-        <form id="theory-form" action="<?= base_url('/admin/ascensos/create') ?>" method="POST" class="p-6 space-y-4">
+        <form id="theory-form" action="<?= base_url('/admin/teoria/create') ?>" method="POST" class="p-6 space-y-4">
             <input type="hidden" name="id" id="id">
             
             <div>

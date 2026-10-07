@@ -39,11 +39,58 @@ class Teoria extends Model {
         return $resultado;
     }
 
+    private function ensureFavoritosTable() {
+        $this->db->query("
+            CREATE TABLE IF NOT EXISTS `teoria_favoritos` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `id_estudiante` INT NOT NULL,
+                `id_teoria` INT NOT NULL,
+                `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE KEY `uq_fav` (`id_estudiante`, `id_teoria`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ");
+    }
+
     public function getFavorites($usuario_id) {
-        return [];
+        $this->ensureFavoritosTable();
+        $stmt = $this->db->prepare(
+            "SELECT id_teoria FROM teoria_favoritos WHERE id_estudiante = ?"
+        );
+        if (!$stmt) return [];
+        $stmt->bind_param('i', $usuario_id);
+        $stmt->execute();
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return array_column($rows, 'id_teoria');
     }
 
     public function toggleFavorite($usuario_id, $teoria_id) {
-        return 'removed';
+        $this->ensureFavoritosTable();
+        // Verificar si ya existe
+        $stmt = $this->db->prepare(
+            "SELECT id FROM teoria_favoritos WHERE id_estudiante = ? AND id_teoria = ?"
+        );
+        $stmt->bind_param('ii', $usuario_id, $teoria_id);
+        $stmt->execute();
+        $existe = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($existe) {
+            $del = $this->db->prepare(
+                "DELETE FROM teoria_favoritos WHERE id_estudiante = ? AND id_teoria = ?"
+            );
+            $del->bind_param('ii', $usuario_id, $teoria_id);
+            $del->execute();
+            $del->close();
+            return 'removed';
+        } else {
+            $ins = $this->db->prepare(
+                "INSERT INTO teoria_favoritos (id_estudiante, id_teoria) VALUES (?, ?)"
+            );
+            $ins->bind_param('ii', $usuario_id, $teoria_id);
+            $ins->execute();
+            $ins->close();
+            return 'added';
+        }
     }
 }
