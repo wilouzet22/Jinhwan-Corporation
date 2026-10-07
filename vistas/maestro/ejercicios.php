@@ -137,71 +137,84 @@
 </main>
 
 <!-- Modal Visualizar Ejercicio (Detalle Completo) -->
-<div id="modal-ver-ejercicio" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs overflow-y-auto p-4 flex items-center justify-center">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg my-auto max-h-[90vh] flex flex-col border border-slate-200 dark:border-slate-800 transition-colors animate-in fade-in zoom-in-95 duration-150">
-        <!-- Header -->
-        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
-            <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+<div id="modal-ver-ejercicio" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm overflow-y-auto p-4 flex items-center justify-center transition-opacity">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-xl my-auto max-h-[92vh] flex flex-col border border-slate-200 dark:border-slate-800 transition-colors overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        
+        <!-- Header con diseño pulcro y armonioso -->
+        <div class="px-6 py-4.5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0 bg-white dark:bg-slate-900">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/70 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/60 flex items-center justify-center shrink-0 shadow-xs">
                     <span class="material-icons-outlined text-xl">fitness_center</span>
                 </div>
                 <div>
+                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-purple-600 dark:text-purple-400 block">
+                        Ficha Técnica del Ejercicio
+                    </span>
                     <h3 class="font-bold text-slate-900 dark:text-white text-base leading-tight">
-                        Ficha del Ejercicio
+                        Detalle y Metodología
                     </h3>
-                    <p class="text-xs text-slate-400 dark:text-slate-500">
-                        Información técnica y metodología de ejecución
-                    </p>
                 </div>
             </div>
-            <button onclick="closeModal('modal-ver-ejercicio')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <button type="button" onclick="closeModal('modal-ver-ejercicio')" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer" title="Cerrar ventana">
                 <span class="material-icons-outlined text-xl">close</span>
             </button>
         </div>
 
-        <!-- Body -->
-        <div class="p-6 space-y-5 overflow-y-auto flex-1">
-            <!-- Título y Categoría -->
-            <div>
-                <div class="flex flex-wrap items-center gap-2 mb-2">
-                    <span id="ver-tipo-badge" class="px-2.5 py-1 rounded-xl text-xs font-semibold border"></span>
-                    <span id="ver-fase-badge" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"></span>
+        <!-- Body con scroll interno -->
+        <div class="p-6 space-y-5 overflow-y-auto flex-1 bg-white dark:bg-slate-900">
+            
+            <!-- Bloque de Identificación y Categorías -->
+            <div class="space-y-2.5 pb-1">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span id="ver-tipo-badge" class="px-3 py-1 rounded-xl text-xs font-semibold border"></span>
+                    <span id="ver-fase-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700"></span>
                 </div>
-                <h2 id="ver-nombre" class="text-2xl font-bold font-display text-slate-900 dark:text-white leading-tight"></h2>
+                <h2 id="ver-nombre" class="text-2xl font-bold font-display text-slate-900 dark:text-white tracking-tight leading-snug"></h2>
             </div>
 
-            <!-- Explicación Técnica -->
+            <!-- Bloque Explicación / Metodología Técnica -->
             <div class="space-y-2">
-                <div class="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                    <span class="material-icons-outlined text-sm text-purple-600 dark:text-purple-400">menu_book</span>
-                    <span>Explicación / Metodología de Ejecución</span>
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="material-icons-outlined text-sm text-purple-600 dark:text-purple-400">description</span>
+                        <span>Metodología de Ejecución</span>
+                    </label>
+                    <button type="button" id="btn-copiar-expl" onclick="copiarMetodologia()" class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition cursor-pointer px-2 py-0.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <span class="material-icons-outlined text-xs">content_copy</span>
+                        <span>Copiar</span>
+                    </button>
                 </div>
                 <div id="ver-explicacion" 
-                     class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800/80 text-sm leading-relaxed text-slate-700 dark:text-slate-200 whitespace-pre-line min-h-[100px] select-text">
+                     class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-sm leading-relaxed text-slate-800 dark:text-slate-200 whitespace-pre-line min-h-[110px] select-text">
                 </div>
             </div>
 
-            <!-- Nota pedagógica / Tips para el Maestro -->
-            <div class="p-3.5 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-800/40 flex items-start gap-3 text-xs text-amber-800 dark:text-amber-300/90">
-                <span class="material-icons-outlined text-amber-500 text-base shrink-0 mt-0.5">lightbulb</span>
-                <p class="leading-relaxed">
-                    <strong>Recomendación para clase:</strong> Supervisa siempre la postura, la respiración y los rangos articulares seguros. Adapta la cadencia y repeticiones según el nivel técnico del grupo.
-                </p>
+            <!-- Recomendación Pedagógica -->
+            <div class="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 flex items-start gap-3 text-xs">
+                <div class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-900/60 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="material-icons-outlined text-base">lightbulb</span>
+                </div>
+                <div class="space-y-1">
+                    <p class="font-bold text-amber-800 dark:text-amber-300">Recomendación Pedagógica para la Sesión:</p>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Supervisa siempre la postura, la respiración y los rangos articulares seguros. Adapta la cadencia y repeticiones según el nivel técnico del grupo (Infantil, Juvenil o Adulto).
+                    </p>
+                </div>
             </div>
+
         </div>
 
-        <!-- Footer -->
-        <div class="px-6 py-3.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 shrink-0 bg-slate-50/50 dark:bg-slate-950/30">
-            <button type="button" onclick="closeModal('modal-ver-ejercicio')" class="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition">
+        <!-- Footer perfectamente integrado con el contenedor -->
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 shrink-0 bg-white dark:bg-slate-900">
+            <button type="button" onclick="closeModal('modal-ver-ejercicio')" class="px-4 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition cursor-pointer">
                 Cerrar
             </button>
-            <div class="flex items-center gap-2">
-                <button type="button" onclick="editarDesdeVer()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-sm">
-                    <span class="material-icons-outlined text-sm">edit</span>
-                    <span>Editar Ejercicio</span>
-                </button>
-            </div>
+            <button type="button" onclick="editarDesdeVer()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-sm hover:shadow-md cursor-pointer">
+                <span class="material-icons-outlined text-sm">edit</span>
+                <span>Editar Ejercicio</span>
+            </button>
         </div>
+
     </div>
 </div>
 
@@ -310,12 +323,12 @@ function verEjercicio(ej) {
     // Categoría badge
     const badge = document.getElementById('ver-tipo-badge');
     badge.textContent = ej.tipo || 'Sin clasificar';
-    badge.className = 'px-2.5 py-1 rounded-xl text-xs font-semibold border ' + obtenerEstiloBadge(ej.tipo);
+    badge.className = 'px-3 py-1 rounded-xl text-xs font-semibold border ' + obtenerEstiloBadge(ej.tipo);
     
     // Sugerencia de fase
     const faseBadge = document.getElementById('ver-fase-badge');
     const faseInfo = sugerirFase(ej.tipo);
-    faseBadge.innerHTML = `<span class="material-icons-outlined text-xs">${faseInfo.icono}</span> Sugerido: ${faseInfo.nombre}`;
+    faseBadge.innerHTML = `<span class="material-icons-outlined text-xs">${faseInfo.icono}</span> <span>${faseInfo.nombre}</span>`;
     
     // Explicación
     const expl = document.getElementById('ver-explicacion');
@@ -326,6 +339,24 @@ function verEjercicio(ej) {
     }
     
     openModal('modal-ver-ejercicio');
+}
+
+function copiarMetodologia() {
+    const expl = document.getElementById('ver-explicacion');
+    if (!expl) return;
+    const texto = expl.innerText || expl.textContent;
+    if (!texto) return;
+    
+    navigator.clipboard.writeText(texto).then(() => {
+        const btn = document.getElementById('btn-copiar-expl');
+        if (btn) {
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-outlined text-xs text-emerald-500">check</span><span class="text-emerald-500 font-bold">¡Copiado!</span>';
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+        }
+    }).catch(err => {
+        console.error('Error al copiar:', err);
+    });
 }
 
 function sugerirFase(tipo) {
