@@ -61,8 +61,19 @@ html:not(.dark) .nav-link:hover {
   background: linear-gradient(90deg, rgba(37,99,235,0.10) 0%, transparent 100%) !important;
 }
 
-html:not(.dark) #sidebar .border-t {
-  background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%) !important;
+html:not(.dark) #sidebar .border-t,
+html:not(.dark) #admin-sidebar .border-t,
+html:not(.dark) #maestro-sidebar .border-t,
+html:not(.dark) #estudiante-sidebar .border-t {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) #maestro-sidebar h1,
+html:not(.dark) #admin-sidebar h1,
+html:not(.dark) #estudiante-sidebar h1,
+html:not(.dark) #sidebar h1 {
+  color: #0f172a !important;
 }
 
 html:not(.dark) body {

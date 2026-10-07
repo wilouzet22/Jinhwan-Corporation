@@ -54,11 +54,17 @@ html:not(.dark) #estudiante-sidebar a:hover {
   color: #dc2626 !important;
 }
 
-html:not(.dark) #sidebar h1 {
+html:not(.dark) #sidebar h1,
+html:not(.dark) #admin-sidebar h1,
+html:not(.dark) #maestro-sidebar h1,
+html:not(.dark) #estudiante-sidebar h1 {
   color: #0f172a !important;
 }
 
-html:not(.dark) #sidebar h2 {
+html:not(.dark) #sidebar h2,
+html:not(.dark) #admin-sidebar h2,
+html:not(.dark) #maestro-sidebar h2,
+html:not(.dark) #estudiante-sidebar h2 {
   color: #dc2626 !important;
 }
 
