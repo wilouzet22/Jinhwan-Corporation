@@ -102,8 +102,9 @@ class AdminEstudiantesController extends Controller {
                 $division  = !empty($_POST['division']) ? trim($_POST['division']) : null;
                 $eps       = !empty($_POST['eps']) ? trim($_POST['eps']) : null;
                 $rh        = !empty($_POST['rh']) ? trim($_POST['rh']) : null;
-                $activo    = isset($_POST['activo']) ? 1 : 0;
-                $clave     = !empty($_POST['clave']) ? password_hash($_POST['clave'], PASSWORD_DEFAULT) : password_hash('jinhwa2024', PASSWORD_DEFAULT);
+                $activo    = isset($_POST['activo']) ? (int)$_POST['activo'] : 1;
+                $raw_clave = !empty($_POST['clave']) ? trim($_POST['clave']) : 'jinhwa2024';
+                $clave     = password_hash($raw_clave, PASSWORD_DEFAULT);
 
                 // Obtener maestro del grupo si existe
                 $id_maestro = null;

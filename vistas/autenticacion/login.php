@@ -91,14 +91,14 @@ if (isset($_GET['msg'])) {
 
             <form class="space-y-5" method="POST" action="<?= base_url('/login/process') ?>">
                 <div>
-                    <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Correo Electrónico</label>
+                    <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 transition-colors">Correo Electrónico o Documento</label>
                     <div class="relative group">
                         <span class="absolute inset-y-0 left-0 pl-1 py-1 flex items-center pointer-events-none text-slate-400 group-focus-within:text-tkd-blue transition-colors">
                             <span class="material-icons-outlined ml-3">alternate_email</span>
                         </span>
-                        <input id="email" name="email" type="email" autocomplete="email" required 
+                        <input id="email" name="email" type="text" autocomplete="username" required 
                             class="pl-12 block w-full py-3 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300"
-                            placeholder="ejemplo@jinhwa.com">
+                            placeholder="ejemplo@jinhwa.com o número de documento">
                     </div>
                 </div>
 
