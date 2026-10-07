@@ -46,14 +46,14 @@
         <?php endif; ?>
 
         <!-- ========= SECCIÓN: TABLA DE ALUMNOS PARA ASCENDER ========= -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
+        <div id="card-alumnos" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-2">
                     <span class="material-icons-outlined text-base text-blue-600 dark:text-blue-400">groups</span>
                     <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                         Alumnos Activos — Seleccionar para Ascender
                     </h2>
-                    <span class="ml-2 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-[11px] font-bold border border-blue-200 dark:border-blue-800">
+                    <span id="badge-total-alumnos" class="ml-2 px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-[11px] font-bold border border-blue-200 dark:border-blue-800">
                         <?= count($alumnos) ?>
                     </span>
                 </div>
@@ -70,7 +70,7 @@
                             <option value="<?= htmlspecialchars($grp['nombre']) ?>"><?= htmlspecialchars($grp['nombre']) ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <button onclick="toggleSelectAll()" id="btn-sel-all"
+                    <button onclick="toggleSelectAllMatching()" id="btn-sel-all"
                             class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
                         Seleccionar todos
                     </button>
@@ -82,8 +82,8 @@
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                         <tr>
                             <th class="px-4 py-3 w-10">
-                                <input type="checkbox" id="chk-all" onchange="toggleSelectAll(this.checked)"
-                                       class="rounded border-slate-300 dark:border-slate-600 text-blue-600 cursor-pointer">
+                                <input type="checkbox" id="chk-all" onchange="toggleSelectCurrentPage(this.checked)"
+                                       class="rounded border-slate-300 dark:border-slate-600 text-blue-600 cursor-pointer" title="Seleccionar visibles en esta página">
                             </th>
                             <th class="px-4 py-3">Alumno</th>
                             <th class="px-4 py-3">Grado Actual</th>
@@ -94,7 +94,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50" id="tbody-alumnos">
                         <?php if (empty($alumnos)): ?>
-                        <tr>
+                        <tr id="fila-no-alumnos">
                             <td colspan="6" class="px-6 py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                                 <span class="material-icons-outlined text-3xl block mb-2 opacity-40">person_off</span>
                                 No hay alumnos activos registrados.
@@ -153,8 +153,48 @@
                         </tr>
                         <?php endforeach; ?>
                         <?php endif; ?>
+                        <!-- Fila de sin resultados en filtro -->
+                        <tr id="fila-sin-coincidencias-alumnos" style="display: none;">
+                            <td colspan="6" class="px-6 py-10 text-center text-slate-400 text-sm">
+                                No se encontraron alumnos con los filtros aplicados.
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Controles de Paginación Alumnos (10 por página) -->
+            <div id="alumnos-pagination-controls" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors">
+                <div class="flex items-center gap-3">
+                    <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                        Mostrando <span id="alumnos-page-start" class="font-bold text-slate-800 dark:text-slate-200">1</span> a <span id="alumnos-page-end" class="font-bold text-slate-800 dark:text-slate-200">10</span> de <span id="alumnos-total-count" class="font-bold text-slate-800 dark:text-slate-200"><?= count($alumnos) ?></span> alumnos
+                    </div>
+                    <div class="flex items-center gap-1.5 text-xs text-slate-400">
+                        <span>Mostrar:</span>
+                        <select id="alumnos-page-size" class="text-xs rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 py-1 px-2 focus:outline-none focus:border-blue-500">
+                            <option value="10" selected>10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="all">Todos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1.5" id="alumnos-pagination-buttons">
+                    <button type="button" id="alumnos-btn-prev" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span class="material-icons-outlined text-sm">chevron_left</span>
+                        <span>Anterior</span>
+                    </button>
+                    
+                    <div id="alumnos-page-numbers" class="flex items-center gap-1">
+                        <!-- Números generados dinámicamente -->
+                    </div>
+
+                    <button type="button" id="alumnos-btn-next" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span>Siguiente</span>
+                        <span class="material-icons-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -164,7 +204,7 @@
                 <div class="flex items-center gap-2">
                     <span class="material-icons-outlined text-base text-blue-500">history</span>
                     <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                        Diplomas y Certificados Emitidos (<?= count($historial) ?>)
+                        Diplomas y Certificados Emitidos (<span id="historial-total-badge"><?= count($historial) ?></span>)
                     </h2>
                 </div>
                 <div class="relative w-full sm:w-72">
@@ -243,9 +283,38 @@
                             </td>
                         </tr>
                         <?php endforeach; ?>
+                        <tr id="fila-sin-coincidencias-diplomas" style="display: none;">
+                            <td colspan="7" class="px-6 py-8 text-center text-slate-400 text-sm">
+                                No se encontraron diplomas que coincidan con la búsqueda.
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+
+            <!-- Controles de Paginación Diplomas -->
+            <div id="diplomas-pagination-controls" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    Mostrando <span id="diplomas-page-start" class="font-bold text-slate-800 dark:text-slate-200">1</span> a <span id="diplomas-page-end" class="font-bold text-slate-800 dark:text-slate-200">10</span> de <span id="diplomas-total-count" class="font-bold text-slate-800 dark:text-slate-200"><?= count($historial) ?></span> diplomas
+                </div>
+
+                <div class="flex items-center gap-1.5" id="diplomas-pagination-buttons">
+                    <button type="button" id="diplomas-btn-prev" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span class="material-icons-outlined text-sm">chevron_left</span>
+                        <span>Anterior</span>
+                    </button>
+                    
+                    <div id="diplomas-page-numbers" class="flex items-center gap-1">
+                        <!-- Números generados dinámicamente -->
+                    </div>
+
+                    <button type="button" id="diplomas-btn-next" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1">
+                        <span>Siguiente</span>
+                        <span class="material-icons-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+
             <?php else: ?>
             <div class="px-6 py-10 text-center text-slate-500 dark:text-slate-400 text-sm">
                 No hay diplomas generados todavía.
@@ -417,45 +486,220 @@
 </style>
 
 <script>
-// ============ SELECCIÓN DE ALUMNOS ============
-function actualizarContador() {
-    const checks = document.querySelectorAll('.chk-alumno:checked');
-    const n = checks.length;
-    document.getElementById('contador-seleccionados').textContent = n;
-    const btn = document.getElementById('btn-abrir-ascenso-masivo');
-    if (btn) btn.disabled = n === 0;
-    // Sync header checkbox
-    const all = document.querySelectorAll('.chk-alumno').length;
-    const chkAll = document.getElementById('chk-all');
-    if (chkAll) {
-        chkAll.checked = n > 0 && n === all;
-        chkAll.indeterminate = n > 0 && n < all;
+// ==========================================
+// PAGINACIÓN Y FILTRADO DE ALUMNOS ACTIVOS
+// ==========================================
+const todasFilasAlumnos = Array.from(document.querySelectorAll('.fila-alumno'));
+let matchingAlumnos = [...todasFilasAlumnos];
+let alumnosCurrentPage = 1;
+let alumnosPageSize = 10;
+
+function renderAlumnosPagination() {
+    const totalMatching = matchingAlumnos.length;
+    const effectivePageSize = alumnosPageSize === 'all' ? (totalMatching || 1) : parseInt(alumnosPageSize);
+    const totalPages = Math.max(1, Math.ceil(totalMatching / effectivePageSize));
+
+    if (alumnosCurrentPage > totalPages) alumnosCurrentPage = totalPages;
+    if (alumnosCurrentPage < 1) alumnosCurrentPage = 1;
+
+    const startIdx = totalMatching === 0 ? 0 : (alumnosCurrentPage - 1) * effectivePageSize + 1;
+    const endIdx = Math.min(alumnosCurrentPage * effectivePageSize, totalMatching);
+
+    const startEl = document.getElementById('alumnos-page-start');
+    const endEl = document.getElementById('alumnos-page-end');
+    const totalEl = document.getElementById('alumnos-total-count');
+    const badgeEl = document.getElementById('badge-total-alumnos');
+
+    if (startEl) startEl.textContent = startIdx;
+    if (endEl) endEl.textContent = endIdx;
+    if (totalEl) totalEl.textContent = totalMatching;
+    if (badgeEl) badgeEl.textContent = totalMatching;
+
+    // Ocultar todas las filas de alumnos
+    todasFilasAlumnos.forEach(f => f.style.display = 'none');
+
+    // Mostrar fila de "sin coincidencias" si aplica
+    const noMatchRow = document.getElementById('fila-sin-coincidencias-alumnos');
+    if (noMatchRow) {
+        noMatchRow.style.display = totalMatching === 0 && todasFilasAlumnos.length > 0 ? '' : 'none';
     }
+
+    // Mostrar solo el segmento de la página activa
+    const pageSlice = alumnosPageSize === 'all' 
+        ? matchingAlumnos 
+        : matchingAlumnos.slice((alumnosCurrentPage - 1) * effectivePageSize, alumnosCurrentPage * effectivePageSize);
+    pageSlice.forEach(f => f.style.display = '');
+
+    // Botones Prev / Next
+    const btnPrev = document.getElementById('alumnos-btn-prev');
+    const btnNext = document.getElementById('alumnos-btn-next');
+    if (btnPrev) btnPrev.disabled = (alumnosCurrentPage === 1 || totalMatching === 0);
+    if (btnNext) btnNext.disabled = (alumnosCurrentPage === totalPages || totalMatching === 0);
+
+    // Renderizar botones numéricos
+    const numbersContainer = document.getElementById('alumnos-page-numbers');
+    if (numbersContainer) {
+        numbersContainer.innerHTML = '';
+
+        if (alumnosPageSize !== 'all' && totalPages > 1) {
+            let startPage = Math.max(1, alumnosCurrentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+
+            if (startPage > 1) {
+                numbersContainer.appendChild(crearBotonPaginaAlumno(1));
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    numbersContainer.appendChild(dots);
+                }
+            }
+
+            for (let p = startPage; p <= endPage; p++) {
+                numbersContainer.appendChild(crearBotonPaginaAlumno(p));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    numbersContainer.appendChild(dots);
+                }
+                numbersContainer.appendChild(crearBotonPaginaAlumno(totalPages));
+            }
+        }
+    }
+
+    sincronizarCheckHeader();
 }
 
-function toggleSelectAll(val) {
-    const checks = document.querySelectorAll('.chk-alumno');
-    const visible = Array.from(checks).filter(c => c.closest('tr').style.display !== 'none');
-    const allChecked = visible.every(c => c.checked);
-    visible.forEach(c => { c.checked = val !== undefined ? val : !allChecked; });
-    actualizarContador();
+function crearBotonPaginaAlumno(num) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = num;
+    const isActive = num === alumnosCurrentPage;
+    btn.className = `w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+        isActive 
+            ? 'bg-blue-600 text-white shadow-md scale-105' 
+            : 'border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+    }`;
+    btn.addEventListener('click', () => {
+        alumnosCurrentPage = num;
+        renderAlumnosPagination();
+        document.getElementById('card-alumnos')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    return btn;
 }
 
-// ============ FILTROS DE LA TABLA ============
+// Eventos de botones Prev / Next de alumnos
+document.getElementById('alumnos-btn-prev')?.addEventListener('click', () => {
+    if (alumnosCurrentPage > 1) {
+        alumnosCurrentPage--;
+        renderAlumnosPagination();
+        document.getElementById('card-alumnos')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+});
+
+document.getElementById('alumnos-btn-next')?.addEventListener('click', () => {
+    const effectivePageSize = alumnosPageSize === 'all' ? matchingAlumnos.length : parseInt(alumnosPageSize);
+    const totalPages = Math.ceil(matchingAlumnos.length / effectivePageSize) || 1;
+    if (alumnosCurrentPage < totalPages) {
+        alumnosCurrentPage++;
+        renderAlumnosPagination();
+        document.getElementById('card-alumnos')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+});
+
+// Selector de tamaño de página
+document.getElementById('alumnos-page-size')?.addEventListener('change', function() {
+    alumnosPageSize = this.value;
+    alumnosCurrentPage = 1;
+    renderAlumnosPagination();
+});
+
+// Filtros de búsqueda y grupo para alumnos
 function filtrarTablaAlumnos() {
-    const q = document.getElementById('buscar-alumno').value.toLowerCase().trim();
-    const g = document.getElementById('filtro-grupo-tabla').value;
-    document.querySelectorAll('.fila-alumno').forEach(fila => {
+    const q = document.getElementById('buscar-alumno')?.value.toLowerCase().trim() || '';
+    const g = document.getElementById('filtro-grupo-tabla')?.value || '';
+
+    matchingAlumnos = todasFilasAlumnos.filter(fila => {
         const nombre = fila.getAttribute('data-nombre') || '';
         const grupo  = fila.getAttribute('data-grupo') || '';
-        const ok = (!q || nombre.includes(q)) && (!g || grupo === g);
-        fila.style.display = ok ? '' : 'none';
+        return (!q || nombre.includes(q)) && (!g || grupo === g);
     });
+
+    alumnosCurrentPage = 1;
+    renderAlumnosPagination();
 }
+
 document.getElementById('buscar-alumno')?.addEventListener('input', filtrarTablaAlumnos);
 document.getElementById('filtro-grupo-tabla')?.addEventListener('change', filtrarTablaAlumnos);
 
-// ============ ABRIR MODAL MASIVO ============
+// ==========================================
+// SELECCIÓN Y CHECKBOXES DE ALUMNOS
+// ==========================================
+function actualizarContador() {
+    const checks = document.querySelectorAll('.chk-alumno:checked');
+    const n = checks.length;
+    const contadorEl = document.getElementById('contador-seleccionados');
+    if (contadorEl) contadorEl.textContent = n;
+
+    const btn = document.getElementById('btn-abrir-ascenso-masivo');
+    if (btn) btn.disabled = n === 0;
+
+    sincronizarCheckHeader();
+}
+
+function sincronizarCheckHeader() {
+    const chkAll = document.getElementById('chk-all');
+    if (!chkAll) return;
+
+    // Verificar si los visibles en la página actual están seleccionados
+    const visibleChecks = Array.from(document.querySelectorAll('.fila-alumno'))
+        .filter(f => f.style.display !== 'none')
+        .map(f => f.querySelector('.chk-alumno'))
+        .filter(c => c !== null);
+
+    if (visibleChecks.length === 0) {
+        chkAll.checked = false;
+        chkAll.indeterminate = false;
+        return;
+    }
+
+    const checkedVisible = visibleChecks.filter(c => c.checked).length;
+    chkAll.checked = checkedVisible === visibleChecks.length;
+    chkAll.indeterminate = checkedVisible > 0 && checkedVisible < visibleChecks.length;
+}
+
+// Checkbox de cabecera: selecciona/deselecciona los visibles en la página actual
+function toggleSelectCurrentPage(val) {
+    const visibleChecks = Array.from(document.querySelectorAll('.fila-alumno'))
+        .filter(f => f.style.display !== 'none')
+        .map(f => f.querySelector('.chk-alumno'))
+        .filter(c => c !== null);
+
+    visibleChecks.forEach(c => { c.checked = val; });
+    actualizarContador();
+}
+
+// Botón "Seleccionar todos": selecciona/deselecciona todos los que coincidan con el filtro actual
+function toggleSelectAllMatching() {
+    const matchingChecks = matchingAlumnos
+        .map(f => f.querySelector('.chk-alumno'))
+        .filter(c => c !== null);
+
+    const allChecked = matchingChecks.length > 0 && matchingChecks.every(c => c.checked);
+    matchingChecks.forEach(c => { c.checked = !allChecked; });
+    actualizarContador();
+}
+
+// ==========================================
+// MODAL DE ASCENSO MASIVO / INDIVIDUAL
+// ==========================================
 function abrirModalMasivo() {
     const checks = document.querySelectorAll('.chk-alumno:checked');
     if (checks.length === 0) return;
@@ -493,7 +737,6 @@ function abrirModalMasivo() {
     modal.classList.add('flex');
 }
 
-// ============ ABRIR MODAL INDIVIDUAL ============
 function abrirModalIndividual(idAlumno, nombre, gradoActual) {
     const form = document.getElementById('form-ascenso');
     form.action = '<?= base_url('/admin/ascensos/store') ?>';
@@ -504,12 +747,10 @@ function abrirModalIndividual(idAlumno, nombre, gradoActual) {
     document.getElementById('modal-titulo').textContent = 'Ascender: ' + nombre;
     document.getElementById('texto-btn-confirmar').textContent = 'Generar Diploma';
 
-    // Mostrar grado actual
     document.getElementById('campo-grado-actual').classList.remove('hidden');
     document.getElementById('display-grado-actual').textContent = gradoActual;
     document.getElementById('input-grado-anterior').value = gradoActual;
 
-    // Resumen de alumnos: mostrar solo este
     const chips = document.getElementById('chips-alumnos');
     chips.innerHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
         <span class="material-icons-outlined text-xs">person</span>${nombre} <span class="text-blue-400 text-[10px]">(${gradoActual})</span></span>`;
@@ -525,16 +766,129 @@ function cerrarModal() {
     modal.classList.remove('flex');
 }
 
-// ============ HISTORIAL BUSCADOR ============
-document.getElementById('filtro-historial')?.addEventListener('input', function() {
-    const q = this.value.toLowerCase().trim();
-    document.querySelectorAll('.fila-diploma').forEach(f => {
-        const text = f.getAttribute('data-search') || '';
-        f.style.display = text.includes(q) ? '' : 'none';
+// ==========================================
+// PAGINACIÓN Y FILTRADO DE DIPLOMAS / HISTORIAL
+// ==========================================
+const todasFilasDiplomas = Array.from(document.querySelectorAll('.fila-diploma'));
+let matchingDiplomas = [...todasFilasDiplomas];
+let diplomasCurrentPage = 1;
+const diplomasPageSize = 10;
+
+function renderDiplomasPagination() {
+    const totalMatching = matchingDiplomas.length;
+    const totalPages = Math.max(1, Math.ceil(totalMatching / diplomasPageSize));
+
+    if (diplomasCurrentPage > totalPages) diplomasCurrentPage = totalPages;
+    if (diplomasCurrentPage < 1) diplomasCurrentPage = 1;
+
+    const startIdx = totalMatching === 0 ? 0 : (diplomasCurrentPage - 1) * diplomasPageSize + 1;
+    const endIdx = Math.min(diplomasCurrentPage * diplomasPageSize, totalMatching);
+
+    const startEl = document.getElementById('diplomas-page-start');
+    const endEl = document.getElementById('diplomas-page-end');
+    const totalEl = document.getElementById('diplomas-total-count');
+    const badgeEl = document.getElementById('historial-total-badge');
+
+    if (startEl) startEl.textContent = startIdx;
+    if (endEl) endEl.textContent = endIdx;
+    if (totalEl) totalEl.textContent = totalMatching;
+    if (badgeEl) badgeEl.textContent = totalMatching;
+
+    todasFilasDiplomas.forEach(f => f.style.display = 'none');
+
+    const noMatchRow = document.getElementById('fila-sin-coincidencias-diplomas');
+    if (noMatchRow) {
+        noMatchRow.style.display = totalMatching === 0 && todasFilasDiplomas.length > 0 ? '' : 'none';
+    }
+
+    const pageSlice = matchingDiplomas.slice((diplomasCurrentPage - 1) * diplomasPageSize, diplomasCurrentPage * diplomasPageSize);
+    pageSlice.forEach(f => f.style.display = '');
+
+    const btnPrev = document.getElementById('diplomas-btn-prev');
+    const btnNext = document.getElementById('diplomas-btn-next');
+    if (btnPrev) btnPrev.disabled = (diplomasCurrentPage === 1 || totalMatching === 0);
+    if (btnNext) btnNext.disabled = (diplomasCurrentPage === totalPages || totalMatching === 0);
+
+    const numbersContainer = document.getElementById('diplomas-page-numbers');
+    if (numbersContainer) {
+        numbersContainer.innerHTML = '';
+        if (totalPages > 1) {
+            let startPage = Math.max(1, diplomasCurrentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+            if (startPage > 1) {
+                numbersContainer.appendChild(crearBotonPaginaDiploma(1));
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    numbersContainer.appendChild(dots);
+                }
+            }
+
+            for (let p = startPage; p <= endPage; p++) {
+                numbersContainer.appendChild(crearBotonPaginaDiploma(p));
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-1 text-slate-400 text-xs font-bold';
+                    dots.textContent = '...';
+                    numbersContainer.appendChild(dots);
+                }
+                numbersContainer.appendChild(crearBotonPaginaDiploma(totalPages));
+            }
+        }
+    }
+}
+
+function crearBotonPaginaDiploma(num) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = num;
+    const isActive = num === diplomasCurrentPage;
+    btn.className = `w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+        isActive 
+            ? 'bg-blue-600 text-white shadow-md scale-105' 
+            : 'border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+    }`;
+    btn.addEventListener('click', () => {
+        diplomasCurrentPage = num;
+        renderDiplomasPagination();
     });
+    return btn;
+}
+
+document.getElementById('diplomas-btn-prev')?.addEventListener('click', () => {
+    if (diplomasCurrentPage > 1) {
+        diplomasCurrentPage--;
+        renderDiplomasPagination();
+    }
 });
 
-// ============ MODAL DIPLOMA / CERTIFICADO ============
+document.getElementById('diplomas-btn-next')?.addEventListener('click', () => {
+    const totalPages = Math.ceil(matchingDiplomas.length / diplomasPageSize) || 1;
+    if (diplomasCurrentPage < totalPages) {
+        diplomasCurrentPage++;
+        renderDiplomasPagination();
+    }
+});
+
+document.getElementById('filtro-historial')?.addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    matchingDiplomas = todasFilasDiplomas.filter(f => {
+        const text = f.getAttribute('data-search') || '';
+        return text.includes(q);
+    });
+    diplomasCurrentPage = 1;
+    renderDiplomasPagination();
+});
+
+// ==========================================
+// MODAL DIPLOMA / CERTIFICADO VIEWER
+// ==========================================
 let currentAdminCertId = null;
 
 function openAdminCert(idCert) {
@@ -570,6 +924,16 @@ function printAdminCert() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModal(); closeAdminCert(); } });
+
+// ==========================================
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    renderAlumnosPagination();
+    if (todasFilasDiplomas.length > 0) {
+        renderDiplomasPagination();
+    }
+});
 </script>
 
 <?php include __DIR__ . '/../layout/administracion_pie.php'; ?>
