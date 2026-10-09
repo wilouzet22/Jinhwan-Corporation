@@ -31,8 +31,11 @@ class EstudianteEstudioController extends Controller {
             }
         }
 
+        $tipos = $teoriaModel->getTipos();
+
         $this->view('estudiante/estudio', [
-            'teorias'       => $teorias,    
+            'teorias'       => $teorias,
+            'tipos'         => $tipos,
             'mi_teoria_ids' => $favorites,  
             'estudiante'    => $estudiante, 
             'page_title'    => 'Estudio Teórico'
