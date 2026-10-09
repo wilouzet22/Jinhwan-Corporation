@@ -56,11 +56,11 @@ $iconos = [
     </div>
 
     <!-- Pestañas de Categorías Oficiales (Poomsae, Técnicas, Vocabulario, Código de Honor) -->
-    <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 dark:bg-slate-900/80 rounded-2xl border border-slate-200 dark:border-slate-800/80">
+    <div class="flex gap-2 p-1.5 bg-slate-100 dark:bg-slate-900/80 rounded-2xl border border-slate-200 dark:border-slate-800/80 overflow-x-auto custom-scrollbar">
         <button
             onclick="setCategoryFilter('all')"
             id="cat-tab-all"
-            class="cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-white dark:bg-slate-800 text-tkd-blue dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700/60"
+            class="cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all bg-white dark:bg-slate-800 text-tkd-blue dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700/60"
         >
             <span class="material-icons-outlined text-base">apps</span>
             Todas las Categorías
@@ -76,7 +76,7 @@ $iconos = [
         <button
             onclick="setCategoryFilter(<?= $tipo['id'] ?>)"
             id="cat-tab-<?= $tipo['id'] ?>"
-            class="cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60"
+            class="cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60"
         >
             <span class="material-icons-outlined text-base"><?= $catIcon ?></span>
             <?= htmlspecialchars($tipo['nombre']) ?>
@@ -238,12 +238,12 @@ $iconos = [
     function setCategoryFilter(catId) {
         selectedCategory = catId;
         document.querySelectorAll('.cat-tab').forEach(tab => {
-            tab.className = 'cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60';
+            tab.className = 'cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/60';
         });
 
         const activeTab = document.getElementById('cat-tab-' + catId);
         if (activeTab) {
-            activeTab.className = 'cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all bg-white dark:bg-slate-800 text-tkd-blue dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700/60';
+            activeTab.className = 'cat-tab flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all bg-white dark:bg-slate-800 text-tkd-blue dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700/60';
         }
         filterCards();
     }

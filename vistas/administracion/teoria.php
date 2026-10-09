@@ -42,7 +42,7 @@
                 <button
                     id="tab-btn-<?= $tid ?>"
                     onclick="switchTab(<?= $tid ?>)"
-                    class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800"
+                    class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap shrink-0 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800"
                 >
                     <span class="material-icons-outlined text-base"><?= $icon ?></span>
                     <?= htmlspecialchars($tab['nombre']) ?>
