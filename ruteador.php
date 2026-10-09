@@ -86,6 +86,7 @@ $router->get('/admin/ascensos/descargar', [AdminAscensosController::class, 'desc
 
 $router->get('/admin/teoria', [AdminTeoriaController::class, 'index']);
 $router->post('/admin/teoria/create', [AdminTeoriaController::class, 'store']);
+$router->post('/admin/teoria/create-tipo', [AdminTeoriaController::class, 'storeTipo']);
 $router->post('/admin/teoria/update', [AdminTeoriaController::class, 'update']);
 $router->post('/admin/teoria/delete', [AdminTeoriaController::class, 'delete']);
 

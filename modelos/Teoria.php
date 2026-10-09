@@ -7,6 +7,29 @@ class Teoria extends Model {
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
+    public function findOrCreateTipo($nombre, $descripcion = '') {
+        $nombre = trim($nombre);
+        if (empty($nombre)) return 1;
+
+        $stmt = $this->db->prepare("SELECT id_tipo_teoria FROM tipos_teoria WHERE LOWER(nombre) = LOWER(?) LIMIT 1");
+        $stmt->bind_param("s", $nombre);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        if ($res && $row = $res->fetch_assoc()) {
+            $stmt->close();
+            return (int)$row['id_tipo_teoria'];
+        }
+        $stmt->close();
+
+        $desc = !empty($descripcion) ? $descripcion : 'Contenido y material de ' . $nombre;
+        $stmt = $this->db->prepare("INSERT INTO tipos_teoria (nombre, descripcion) VALUES (?, ?)");
+        $stmt->bind_param("ss", $nombre, $desc);
+        $stmt->execute();
+        $newId = $this->db->insert_id;
+        $stmt->close();
+        return (int)$newId;
+    }
+
     public function getAll() {
         $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, t.url_video,
                        t.id_grado as nivel_id, g.nombre as nivel_nombre, g.id_grado as orden,
