@@ -46,7 +46,7 @@ if (isset($_SESSION['id'])) {
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="h-1 w-full bg-gradient-to-r from-tkd-purple via-purple-500 to-amber-500"></div>
+        <div class="h-1 w-full bg-gradient-to-r from-purple-700 via-purple-500 to-amber-500"></div>
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-10 w-auto object-contain transition-transform group-hover:scale-105 duration-300">
@@ -66,7 +66,7 @@ if (isset($_SESSION['id'])) {
                 </li>
                 <li>
                     <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors group">
-                        <span class="material-icons-outlined text-xl group-hover:text-tkd-purple transition-colors">public</span>
+                        <span class="material-icons-outlined text-xl group-hover:text-purple-700 transition-colors">public</span>
                         <span class="font-medium text-sm">Volver al Sitio</span>
                     </a>
                 </li>
@@ -75,32 +75,32 @@ if (isset($_SESSION['id'])) {
                     <span class="px-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">Instructor</span>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/dashboard') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-purple' : '' ?>">dashboard</span>
+                    <a href="<?= base_url('/maestro/dashboard') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'dashboard' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'dashboard' ? 'text-purple-700' : '' ?>">dashboard</span>
                         <span class="text-sm font-medium">Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'alumnos' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'alumnos' ? 'text-tkd-purple' : '' ?>">people</span>
+                    <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'alumnos' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'alumnos' ? 'text-purple-700' : '' ?>">people</span>
                         <span class="text-sm font-medium">Alumnos de Jinhwan</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/cronogramas') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'cronogramas' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'cronogramas' ? 'text-tkd-purple' : '' ?>">event_note</span>
+                    <a href="<?= base_url('/maestro/cronogramas') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'cronogramas' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'cronogramas' ? 'text-purple-700' : '' ?>">event_note</span>
                         <span class="text-sm font-medium">Cronogramas de Clase</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/maestro/ejercicios') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ejercicios' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ejercicios' ? 'text-tkd-purple' : '' ?>">fitness_center</span>
+                    <a href="<?= base_url('/maestro/ejercicios') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ejercicios' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ejercicios' ? 'text-purple-700' : '' ?>">fitness_center</span>
                         <span class="text-sm font-medium">Biblioteca Ejercicios</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-tkd-purple' : '' ?>">event</span>
+                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario' ? 'text-purple-700' : '' ?>">event</span>
                         <span class="text-sm font-medium">Calendario</span>
                     </a>
                 </li>
@@ -121,48 +121,48 @@ if (isset($_SESSION['id'])) {
                 </li>
                 <?php if($hasSedes): ?>
                 <li>
-                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-tkd-purple' : '' ?>">place</span>
+                    <a href="<?= base_url('/admin/sedes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'sedes' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'sedes' ? 'text-purple-700' : '' ?>">place</span>
                         <span class="text-sm font-medium">Sedes</span>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if($hasRegistros): ?>
                 <li>
-                    <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'registros' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'registros' ? 'text-tkd-purple' : '' ?>">how_to_reg</span>
+                    <a href="<?= base_url('/admin/registros') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'registros' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'registros' ? 'text-purple-700' : '' ?>">how_to_reg</span>
                         <span class="text-sm font-medium">Aprobar Registros</span>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if($hasAscensosAdmin): ?>
                 <li>
-                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-tkd-purple' : '' ?>">military_tech</span>
+                    <a href="<?= base_url('/admin/ascensos') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'ascensos' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'ascensos' ? 'text-purple-700' : '' ?>">military_tech</span>
                         <span class="text-sm font-medium">Ascensos</span>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if($hasCalendarioAdmin): ?>
                 <li>
-                    <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario_admin' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario_admin' ? 'text-tkd-purple' : '' ?>">edit_calendar</span>
+                    <a href="<?= base_url('/admin/calendario') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'calendario_admin' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'calendario_admin' ? 'text-purple-700' : '' ?>">edit_calendar</span>
                         <span class="text-sm font-medium">Gestionar Calendario</span>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if($hasGaleria): ?>
                 <li>
-                    <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'galeria' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'galeria' ? 'text-tkd-purple' : '' ?>">collections</span>
+                    <a href="<?= base_url('/admin/galeria') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'galeria' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'galeria' ? 'text-purple-700' : '' ?>">collections</span>
                         <span class="text-sm font-medium">Gestionar Galería</span>
                     </a>
                 </li>
                 <?php endif; ?>
                 <?php if($hasReportes): ?>
                 <li>
-                    <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'reportes' ? 'bg-purple-50 dark:bg-tkd-purple/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
-                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'reportes' ? 'text-tkd-purple' : '' ?>">analytics</span>
+                    <a href="<?= base_url('/admin/reportes') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'reportes' ? 'bg-purple-50 dark:bg-purple-700/20 text-purple-700 dark:text-white font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'reportes' ? 'text-purple-700' : '' ?>">analytics</span>
                         <span class="text-sm font-medium">Reportes</span>
                     </a>
                 </li>
@@ -177,12 +177,12 @@ if (isset($_SESSION['id'])) {
                 <?php if (!empty($_SESSION['foto_perfil'])): ?>
                     <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-8 h-8 rounded-lg object-cover shrink-0 border border-slate-200 dark:border-slate-700">
                 <?php else: ?>
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-tkd-purple to-purple-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-700 to-purple-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
                         <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
                     </div>
                 <?php endif; ?>
                 <div class="min-w-0 flex-1">
-                    <p class="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-tkd-purple transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>">
+                    <p class="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-purple-700 transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>">
                         <?= htmlspecialchars($nombre_usuario) ?>
                     </p>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider leading-none mt-0.5">Instructor</p>
@@ -213,5 +213,5 @@ if (isset($_SESSION['id'])) {
                  </button>
                  <span class="font-display font-bold text-lg text-slate-900 dark:text-white">JINHWAN</span>
              </div>
-             <a href="<?= base_url('/index.php') ?>" class="text-xs font-semibold text-tkd-purple uppercase tracking-wider">Ver Web</a>
+             <a href="<?= base_url('/index.php') ?>" class="text-xs font-semibold text-purple-700 uppercase tracking-wider">Ver Web</a>
         </header>

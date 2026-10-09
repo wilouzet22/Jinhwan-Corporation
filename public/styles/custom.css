@@ -38,7 +38,10 @@ html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
 .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #334155 transparent; }
 
-html:not(.dark) #sidebar {
+html:not(.dark) #sidebar,
+html:not(.dark) #maestro-sidebar,
+html:not(.dark) #admin-sidebar,
+html:not(.dark) #estudiante-sidebar {
   background: linear-gradient(175deg, #ffffff 0%, #eef2ff 55%, #fff1f2 100%) !important;
   border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
   box-shadow: 6px 0 32px rgba(99, 102, 241, 0.10) !important;
@@ -74,6 +77,46 @@ html:not(.dark) #admin-sidebar h1,
 html:not(.dark) #estudiante-sidebar h1,
 html:not(.dark) #sidebar h1 {
   color: #0f172a !important;
+}
+
+/* ── Dark mode: sidebar del maestro, admin y estudiante ── */
+html.dark #maestro-sidebar,
+html.dark #admin-sidebar,
+html.dark #estudiante-sidebar,
+html.dark #sidebar {
+  background: #0f172a !important;           /* slate-900 sólido */
+  border-right: 1px solid rgba(30, 41, 59, 0.8) !important;
+  box-shadow: none !important;
+}
+
+html.dark #maestro-sidebar .border-t,
+html.dark #admin-sidebar .border-t,
+html.dark #estudiante-sidebar .border-t,
+html.dark #sidebar .border-t {
+  background: rgba(2, 6, 23, 0.75) !important;  /* slate-950 translúcido */
+  border-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+html.dark #maestro-sidebar h1,
+html.dark #admin-sidebar h1,
+html.dark #estudiante-sidebar h1,
+html.dark #sidebar h1 {
+  color: #f1f5f9 !important;   /* slate-100 */
+}
+
+html.dark #maestro-sidebar .nav-link,
+html.dark #admin-sidebar .nav-link,
+html.dark #estudiante-sidebar .nav-link,
+html.dark #sidebar .nav-link {
+  color: #94a3b8 !important;  /* slate-400 */
+}
+
+html.dark #maestro-sidebar .nav-link:hover,
+html.dark #admin-sidebar .nav-link:hover,
+html.dark #estudiante-sidebar .nav-link:hover,
+html.dark #sidebar .nav-link:hover {
+  background: rgba(30, 41, 59, 0.7) !important;
+  color: #f1f5f9 !important;
 }
 
 html:not(.dark) body {
