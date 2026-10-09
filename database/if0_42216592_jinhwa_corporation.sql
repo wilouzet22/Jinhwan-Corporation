@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: sql113.infinityfree.com
--- Tiempo de generación: 06-10-2026 a las 13:13:01
+-- Tiempo de generación: 09-10-2026 a las 14:02:31
 -- Versión del servidor: 11.4.13-MariaDB
 -- Versión de PHP: 7.2.22
 
@@ -95,7 +95,9 @@ CREATE TABLE `certificados_ascenso` (
 --
 
 INSERT INTO `certificados_ascenso` (`id_certificado`, `id_estudiante`, `id_maestro`, `grado_anterior`, `grado_nuevo`, `fecha_examen`, `observaciones`, `folio`, `creado_en`) VALUES
-(1, 148, 150, 'Azul', 'Pinta Rojo', '2026-08-29', 'El practicante buen despeño tiene muy buana tecnica de pateo pero tiene que mejorar en las poomseas tiene un cardio muy bajo debe mejorar eso no sabe combatir peor lo intenta y tiene muy buen compañerismo.', 'JH-2026-0001', '2026-08-29 18:19:21');
+(1, 148, 150, 'Azul', 'Pinta Rojo', '2026-08-29', 'El practicante buen despeño tiene muy buana tecnica de pateo pero tiene que mejorar en las poomseas tiene un cardio muy bajo debe mejorar eso no sabe combatir peor lo intenta y tiene muy buen compañerismo.', 'JH-2026-0001', '2026-08-29 18:19:21'),
+(2, 155, 150, 'Blanco', 'Pinta Amarillo', '2026-10-07', '', 'JH-2026-0002', '2026-10-07 19:53:47'),
+(3, 155, 150, 'Pinta Amarillo', 'Amarillo', '2026-10-07', '', 'JH-2026-0003', '2026-10-07 19:54:55');
 
 -- --------------------------------------------------------
 
@@ -111,6 +113,44 @@ CREATE TABLE `clase_ejercicios` (
   `series_o_tiempo` varchar(100) DEFAULT NULL COMMENT 'Ej: 3 series de 20 reps o 45 segundos',
   `observaciones_especificas` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `clase_ejercicios`
+--
+
+INSERT INTO `clase_ejercicios` (`id_clase_ejercicio`, `id_cronograma`, `id_ejercicio`, `fase`, `series_o_tiempo`, `observaciones_especificas`) VALUES
+(1, 1, 11, 'inicial', '5 min', 'Calentamiento articular y activación neuromuscular de piernas y core.'),
+(2, 1, 16, 'inicial', '5 min', 'Trabajo de reacción y agilidad con obstáculos para mejorar la rapidez de respuesta.'),
+(3, 1, 20, 'central', '4 series x 12 reps', 'Fortalecimiento de cuádriceps y glúteos, base para potencia de patadas.'),
+(4, 1, 14, 'central', '4 series x 8 reps', 'Desarrollo de explosividad y potencia en patadas y movimientos de salto.'),
+(5, 1, 9, 'central', '4 series x 10 reps', 'Mejora de la velocidad de ejecución de patadas y movimientos de ataque.'),
+(6, 1, 8, 'final', '5 min', 'Estiramientos pasivos y activación proprioceptiva para recuperación.'),
+(7, 1, 5, 'final', '5 min', 'Desplazamientos continuos para mantener la intensidad aeróbica y la movilidad.'),
+(8, 2, 9, 'inicial', '5 min', 'Ejercicios de reacción rápida con estímulos verbales y visuales para activar la respuesta neuromuscular.'),
+(9, 2, 8, 'inicial', '5 min', 'Estiramientos dinámicos de piernas y cadera para preparar la musculatura y mejorar la movilidad.'),
+(10, 2, 16, 'central', '4 series x 8 repeticiones', 'Pase por encima del obstáculo con patada rápida, enfocándose en la velocidad y precisión.'),
+(11, 2, 21, 'central', '3 series x 6 repeticiones', 'Salto explosivo con giro de cadera, enfatizando la potencia y la velocidad de la patada.'),
+(12, 2, 6, 'central', '3 min', 'Pateo continuo a máxima velocidad para mejorar la resistencia anaeróbica y la velocidad de ejecución.'),
+(13, 2, 12, 'central', '', ''),
+(14, 2, 8, 'final', '5 min', 'Estiramiento pasivo y relajación de la musculatura de piernas y cadera para prevenir lesiones y favorecer la recuperación.'),
+(15, 4, 13, 'inicial', '', ''),
+(16, 4, 1, 'central', '', ''),
+(17, 4, 2, 'central', '', ''),
+(18, 4, 10, 'central', '', ''),
+(19, 4, 14, 'central', '', ''),
+(20, 4, 20, 'final', '', ''),
+(21, 5, 4, 'inicial', '5 min', 'Movilidad articular y activación neuromuscular ligera para preparar el cuerpo.'),
+(22, 5, 11, 'inicial', '3 min', 'Estira suavemente los músculos de la pierna y la cadera mientras se mantiene el ritmo.'),
+(23, 5, 22, 'central', '4 min', 'Mantener 30 seg por lado, enfocándose en la apertura de la cadera y la extensión de la espalda.'),
+(24, 5, 8, 'central', '4 min', 'Estiramientos de 10?15 seg en cada fase, con énfasis en la propriocepción y la relajación muscular.'),
+(25, 5, 8, 'final', '5 min', 'Estiramiento pasivo y relajación profunda para cerrar la sesión.'),
+(26, 5, 12, 'final', '2 min', 'Movimientos suaves de transición para volver a la postura neutra.'),
+(27, 6, 4, 'inicial', '8 min', 'Calentamiento articular y activación neuromuscular, movimientos de escalera con foco en la técnica de patada ligera.'),
+(28, 6, 11, 'inicial', '5 min', 'Integración de patadas en el desplazamiento, aumentando la coordinación y la rapidez de transición.'),
+(29, 6, 17, 'central', '4 rounds x 30 seg', 'Circuito de desplazamientos, patadas frontales y patadas de reacción, con 15 seg de descanso entre rondas.'),
+(30, 6, 6, 'central', '3 series x 30 seg', 'Pateo a máxima velocidad, reforzando la potencia y la resistencia anaeróbica.'),
+(31, 6, 22, 'final', '5 min', 'Relajación y estiramiento profundo del tren inferior.'),
+(32, 6, 8, 'final', '3 series x 15 seg', 'Estiramientos de cuerpo completo con enfoque en la propriocepción y la recuperación muscular.');
 
 -- --------------------------------------------------------
 
@@ -128,6 +168,17 @@ CREATE TABLE `cronogramas_clase` (
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `cronogramas_clase`
+--
+
+INSERT INTO `cronogramas_clase` (`id_cronograma`, `id_grupo`, `id_maestro`, `fecha`, `objetivo`, `observaciones`, `created_at`) VALUES
+(1, 1, 150, '2026-10-08', 'Desarrollo de potencia y velocidad en patadas frontales combinado con mejora de la resistencia aeróbica y coordinación para una ejecución técnica y explosiva durante toda la sesión.', '', '2026-10-06 20:20:50'),
+(2, 2, 150, '2026-10-07', 'Desarrollar velocidad y reacción en patadas, mejorando la rapidez de ejecución y la capacidad de respuesta ante estímulos durante la práctica de técnicas de pateo.', '', '2026-10-07 19:22:42'),
+(4, 2, 150, '2026-10-07', 'Desarrollar la fuerza específica', '', '2026-10-07 20:14:04'),
+(5, 1, 150, '2026-10-09', 'Mejorar la flexibilidad general, con énfasis en la cadera y la movilidad de la columna lumbar.', '', '2026-10-07 21:18:57'),
+(6, 2, 150, '2026-10-10', 'Mejora de la coordinación y resistencia aeróbica en desplazamientos y patadas combinadas, enfocando la movilidad, la velocidad de reacción y la capacidad de trabajo continuo.', '', '2026-10-08 22:30:58');
+
 -- --------------------------------------------------------
 
 --
@@ -141,6 +192,35 @@ CREATE TABLE `ejercicios` (
   `explicacion` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `ejercicios`
+--
+
+INSERT INTO `ejercicios` (`id_ejercicio`, `tipo`, `nombre`, `explicacion`, `created_at`) VALUES
+(1, 'Fuerza general', 'Lagartijas', 'Flexiones de codo, con una alta cantidad de repeticiones para ganar fuerza', '2026-10-06 18:11:27'),
+(2, 'Fuerza Especifica', 'Abducción de cadera de pie explosivas', 'De pie realizar yop chaoligui con la rodilla extendida o flexionada rapido para mejorar la fuerza rapida en el gesto tecnico y el rango de movimiento', '2026-10-06 18:11:27'),
+(3, 'Pliometria', 'Saltos frontales', 'Realizar saltos hacia el frente ya sea maxima altura o maxima distancia para mejorar la fuerza explosiva', '2026-10-06 18:11:27'),
+(4, 'Coordinación', 'Desplazamiento en escalera', 'Realizar ejercicios de coordinacion en la escalera seleccionados segun el nivel del deportista', '2026-10-06 18:11:27'),
+(5, 'Resistencia Aerobica', 'Trabajo de desplazamientos', 'En un area especifica o Aro, se realizan todos los desplazamientos del deporte con una alta duración en el tiempo', '2026-10-06 18:11:27'),
+(6, 'Resistencia anaerobica', 'Pateo repetido estatico', 'En parejas se realiza un pateo repetido a maxima velocidad durante un tiempo entre 30 y 50 segundos por pierna', '2026-10-06 18:11:27'),
+(7, 'Combate', 'Combate solo anterior', 'Se realiza un combate 1 vs 1 donde siempre la primera patada lanzada debe ser la anterior, luego se puede combinar con otras técnicas.', '2026-10-06 18:11:27'),
+(8, 'Flexibilidad', 'FNP (Facilitacion neuro muscular propioceptiva)', 'Estiramientos en los cuales se deben cumplir varias faces y durar en ellas entre 10 y 15 segundos. Las faces son: Estiramiento, Contracción y Relajación.', '2026-10-06 18:11:27'),
+(9, 'Velocidad', 'Reacción', NULL, '2026-10-06 18:11:27'),
+(10, 'Fuerza Especifica', 'Abducción de cadera de pie isometrica', 'De pie realizar yop chagui sostenido a la maxima altura posible para ganar fuerza', '2026-10-06 18:11:27'),
+(11, 'Coordinación', 'Desplazamiento en escalera con pateo', 'Realizar ejercicios de coordinacion en la escalera mientras se ejecutan tecnicas de pateo especificas del deporte y desplazamientos del mismo', '2026-10-06 18:11:27'),
+(12, 'Velocidad', 'Gestual', NULL, '2026-10-06 18:11:27'),
+(13, 'Fuerza general', 'Fuerza y potencia', 'Peso muerto, pesas, bandas o compañero una cantidad de 5 sentadillas y 2 pi chaguis, por la cantidad de maximo 5 repeticiones o por tiempo ( tener en cuenta el tiempo de recuperación)', '2026-10-06 18:11:27'),
+(14, 'Fuerza Especifica', 'Pliometria con lanzamiento', 'Cada sentadilla sera contada a orden sentadillas con salto en pliometria y lanzamientos ( ya sea de balon medicinal paos o cualquier objeto)', '2026-10-06 18:11:27'),
+(15, 'Pliometria', 'salto con rotación de cadera', 'Salta desde abajo y al levantarse debe girar la cadera a los laterales', '2026-10-06 18:11:27'),
+(16, 'Coordinación', 'Patada de reacción con obstáculo', 'pocision de caballero,a la orden se levanta salta por encima del obstáculo pasando al otro las y realiza la patada indicada', '2026-10-06 18:11:27'),
+(17, 'Resistencia Aerobica', 'Entrenamiento en circuito', 'Realizar un circuito por bases enfocada en la carga aeróbica ya sea desplazamientos patadas por tiempo etc', '2026-10-06 18:11:27'),
+(18, 'Fuerza Especifica', 'Sentadilla en avanzada', 'Pies separados anchura de los hombros, izquierdo sale adelante, rodilla flexionada a 90 grados y la rodilla de atrás acompaña el movimiento.', '2026-10-06 18:11:27'),
+(19, 'Resistencia Aerobica', 'ejercico de estres metabolico en bases', 'se realizan esjercicos de resistenciaa anaerobica de corta duracion distribuidos en 4 bases', '2026-10-06 18:11:27'),
+(20, 'Fuerza Especifica', 'Sentadilla búlgara', 'Apoyo del pie anterior en empeine una silla o superficie plana, rodilla de delante flexiona a 90 grados y sin mancuernas.', '2026-10-06 18:11:27'),
+(21, 'Pliometria', 'Salto de Patada de Tijera con Giro', 'El alumno comienza en posición de guardia, salta explosivamente elevando la pierna trasera y la pierna delantera simultáneamente como si fuera una patada de tijera. Al llegar a la altura máxima, gira 180° en el aire y aterriza en posición de guardia. Este ejercicio desarrolla la potencia de las piernas, la coordinación y la capacidad de salto vertical, además de reforzar la técnica de patada de tijera.', '2026-10-07 00:00:12'),
+(22, 'Flexibilidad', 'Estiramiento de cadera en posición de \'Boca de Perro\' con apoyo de rodilla', '1. Colócate en posición de cuatro patas. 2. Lleva la pierna derecha hacia adelante, apoyando la rodilla en el suelo y extendiendo la cadera izquierda. 3. Mantén la espalda recta y la pelvis en posición neutra. 4. Inclina el torso hacia adelante hasta sentir un estiramiento suave en la cadera derecha. 5. Mantén 15-20 segundos y repite 3 veces por lado. Este estiramiento favorece la apertura de la cadera y la flexibilidad de la cadena posterior.', '2026-10-07 19:25:19'),
+(23, 'Resistencia Aerobica', 'Circuito de desplazamientos con patadas rápidas', 'Se realizan 4 bases de desplazamientos (adelante, atrás, lateral, giro) combinadas con 3 patadas rápidas (frontales, circulares y de tijera) en cada base. Cada base dura 45 segundos con 15 segundos de descanso entre ellas. El objetivo es mantener un ritmo cardíaco elevado, mejorar la resistencia anaeróbica y la coordinación de patadas. Ideal para estudiantes de nivel intermedio a avanzado que buscan mejorar su rendimiento en combate.', '2026-10-08 22:31:49');
 
 -- --------------------------------------------------------
 
@@ -229,7 +309,8 @@ INSERT INTO `estudiante` (`id_estudiante`, `id_grado`, `id_categoria`, `id_grupo
 (147, 9, 4, 1, 152, 'Gabriela', 'Almenares Fonegra', 'TI', '1020120658', '', NULL, '2012-02-23', '47.00', NULL, 'sura', 'O+', NULL, NULL, 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
 (148, 8, 1, 1, 152, 'Ana Sofia', 'Sánchez Agudelo', 'TI', '1011222665', '3185520570', '8369377c5c9faadecc5993bdd5fb1873.jpeg', '2013-01-27', '62.10', 'cadete avanzado', 'Policía', '', 'assancheza@corazonistamedellin.edu.co', NULL, 1, '2026-08-29 17:59:05', '2026-09-24 23:24:52', 1, NULL, NULL),
 (153, 1, 1, 1, 152, 'Mateo', 'Ríos', 'TI', '10000002', '', NULL, NULL, NULL, NULL, NULL, NULL, 'estudiante@jinhwan.com', '$2y$10$T7OWSqUPLN2lIqOAaJTQsuW1oDhHYcs/cJrPg0b2q1tjIWVYNWIYu', 1, '2026-08-29 17:59:05', NULL, 0, NULL, NULL),
-(154, 7, 5, 2, 150, 'maria jose', 'gomez londoño', 'TI', '1013462218', '3246783188', NULL, '2010-11-11', '60.00', '-65', 'Sura', 'O+', 'samugomedo0@gmail.com', '$2y$10$lp.U80H.P2fdX5qJKbU8/upbxvDswylhNls8z8RZgBaUp0cgRSyNK', 1, '2026-09-06 01:21:57', NULL, 0, NULL, NULL);
+(154, 7, 5, 2, 150, 'maria jose', 'gomez londoño', 'TI', '1013462218', '3246783188', NULL, '2010-11-11', '60.00', '-65', 'Sura', 'O+', 'samugomedo0@gmail.com', '$2y$10$lp.U80H.P2fdX5qJKbU8/upbxvDswylhNls8z8RZgBaUp0cgRSyNK', 1, '2026-09-06 01:21:57', NULL, 0, NULL, NULL),
+(155, 3, NULL, 2, 150, 'Mariana', 'Mora Chavarria', 'TI', '1015190715', '3022410826', NULL, '2009-11-21', '58.00', '-60', 'sura', 'AB+', 'marianamorach21@gmail.com', '$2y$12$U0fkLMQkJBT47fhPneOgae4/ECiozUoqoI9hh8sDMEAGQwBOgq5Ji', 1, '2026-10-07 19:34:31', '2026-10-07 20:34:54', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -268,14 +349,6 @@ CREATE TABLE `galeria_multimedia` (
   `tipo` enum('imagen','video','documento') DEFAULT 'imagen',
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Volcado de datos para la tabla `galeria_multimedia`
---
-
-INSERT INTO `galeria_multimedia` (`id_multimedia`, `id_maestro`, `id_estudiante`, `id_administrador`, `url`, `titulo`, `descripcion`, `tipo`, `created_at`) VALUES
-(3, NULL, NULL, NULL, 'https://www.youtube.com/watch?v=5ZXHQDD2ITs', NULL, NULL, 'video', '2026-09-13 23:11:34'),
-(4, NULL, NULL, NULL, '', NULL, NULL, 'imagen', '2026-09-13 23:11:34');
 
 -- --------------------------------------------------------
 
@@ -359,6 +432,14 @@ CREATE TABLE `historial_grados` (
   `id_certificado` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `historial_grados`
+--
+
+INSERT INTO `historial_grados` (`id_historial`, `id_estudiante`, `id_grado`, `fecha_obtencion`, `id_certificado`) VALUES
+(1, 155, 2, '2026-10-07', 2),
+(2, 155, 3, '2026-10-07', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -430,6 +511,19 @@ CREATE TABLE `teorias` (
   `contenido` text DEFAULT NULL,
   `url_video` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `teoria_favoritos`
+--
+
+CREATE TABLE `teoria_favoritos` (
+  `id` int(11) NOT NULL,
+  `id_estudiante` int(11) NOT NULL,
+  `id_teoria` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -555,6 +649,13 @@ ALTER TABLE `teorias`
   ADD KEY `idx_teoria_tipo` (`id_tipo_teoria`);
 
 --
+-- Indices de la tabla `teoria_favoritos`
+--
+ALTER TABLE `teoria_favoritos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_fav` (`id_estudiante`,`id_teoria`);
+
+--
 -- Indices de la tabla `tipos_teoria`
 --
 ALTER TABLE `tipos_teoria`
@@ -580,31 +681,31 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `certificados_ascenso`
 --
 ALTER TABLE `certificados_ascenso`
-  MODIFY `id_certificado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_certificado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `clase_ejercicios`
 --
 ALTER TABLE `clase_ejercicios`
-  MODIFY `id_clase_ejercicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_clase_ejercicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `cronogramas_clase`
 --
 ALTER TABLE `cronogramas_clase`
-  MODIFY `id_cronograma` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cronograma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `ejercicios`
 --
 ALTER TABLE `ejercicios`
-  MODIFY `id_ejercicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_ejercicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `estudiante`
 --
 ALTER TABLE `estudiante`
-  MODIFY `id_estudiante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id_estudiante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
 --
 -- AUTO_INCREMENT de la tabla `eventos`
@@ -634,7 +735,7 @@ ALTER TABLE `grupos`
 -- AUTO_INCREMENT de la tabla `historial_grados`
 --
 ALTER TABLE `historial_grados`
-  MODIFY `id_historial` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_historial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `maestro`
@@ -652,7 +753,13 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `teorias`
 --
 ALTER TABLE `teorias`
-  MODIFY `id_teoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_teoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `teoria_favoritos`
+--
+ALTER TABLE `teoria_favoritos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tipos_teoria`

@@ -2,30 +2,39 @@
 
 class Teoria extends Model {
 
+    public function getTipos() {
+        $result = $this->db->query("SELECT id_tipo_teoria as id, nombre FROM tipos_teoria ORDER BY id_tipo_teoria ASC");
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    }
+
     public function getAll() {
-        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, t.url_video, t.id_grado as nivel_id,
-                       g.nombre as nivel_nombre, g.id_grado as orden
+        $sql = "SELECT t.id_teoria as id, t.nombre as titulo, t.contenido as descripcion, t.url_video,
+                       t.id_grado as nivel_id, g.nombre as nivel_nombre, g.id_grado as orden,
+                       t.id_tipo_teoria as tipo_id, tt.nombre as tipo_nombre
                 FROM teorias t
                 LEFT JOIN grados g ON t.id_grado = g.id_grado
-                ORDER BY g.id_grado ASC, t.id_teoria ASC";
+                LEFT JOIN tipos_teoria tt ON t.id_tipo_teoria = tt.id_tipo_teoria
+                ORDER BY t.id_tipo_teoria ASC, g.id_grado ASC, t.id_teoria ASC";
 
         $result = $this->db->query($sql);
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     public function create($data) {
-        $tipo_defecto = 1; 
+        $tipo_id = (int)($data['tipo_id'] ?? 1);
 
         $stmt = $this->db->prepare("INSERT INTO teorias (nombre, contenido, url_video, id_grado, id_tipo_teoria) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $tipo_defecto);
+        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $tipo_id);
         $res = $stmt->execute();
         $stmt->close();
         return $res;
     }
 
     public function update($id, $data) {
-        $stmt = $this->db->prepare("UPDATE teorias SET nombre = ?, contenido = ?, url_video = ?, id_grado = ? WHERE id_teoria = ?");
-        $stmt->bind_param("sssii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $id);
+        $tipo_id = (int)($data['tipo_id'] ?? 1);
+
+        $stmt = $this->db->prepare("UPDATE teorias SET nombre = ?, contenido = ?, url_video = ?, id_grado = ?, id_tipo_teoria = ? WHERE id_teoria = ?");
+        $stmt->bind_param("sssiii", $data['titulo'], $data['descripcion'], $data['url_video'], $data['nivel_id'], $tipo_id, $id);
         $res = $stmt->execute();
         $stmt->close();
         return $res;

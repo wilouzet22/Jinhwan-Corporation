@@ -30,7 +30,10 @@ Cada vez que el usuario solicite una tarea o cambio, la IA debe cumplir estricta
   - Exportación Excel: `SheetJS (xlsx.full.min.js)`.
   - Exportación PDF: `jsPDF` y `jsPDF-AutoTable`.
   - Iconografía: Google Material Icons Outlined (`class="material-icons-outlined"`).
-- **Entorno de Servidor**: Laragon en Windows (Apache / Nginx, PHP 8+, MySQL).
+- **Entorno de Servidor y Hosting**:
+  - **Local**: Laragon en Windows (Apache / Nginx, PHP 8+, MySQL).
+  - **Producción / Despliegue**: **InfinityFree** (Apache, PHP, base de datos MySQL/MariaDB `if0_42216592_jinhwa_corporation` vía phpMyAdmin).
+  - **Compatibilidad SQL**: Todos los scripts de migración o consultas deben ser compatibles con el motor MariaDB/MySQL de InfinityFree.
 
 ---
 

@@ -12,6 +12,16 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
   - `admin`: Personal administrativo.
 - **Campos Médicos y Deportivos**: La tabla `estudiante` integra directamente información deportiva (`id_grado`, `id_grupo`, `id_categoria`, `division`) e información médica (`peso`, `eps`, `rh`).
 - **Relaciones Clave**: Los estudiantes están asignados a un `id_grupo`, y a través del grupo se determina su sede (`id_sede`) y su maestro asignado (`id_maestro`).
+- **Hosting y Entorno de Producción**:
+  - Servidor en **InfinityFree** con base de datos remota MariaDB (`if0_42216592_jinhwa_corporation` en `sql113.infinityfree.com`).
+  - Todo cambio o script SQL de migración debe tenerse en cuenta para aplicarse tanto en Laragon (local) como en phpMyAdmin de **InfinityFree**.
+- **Módulo de Teoría**:
+  - Se estructuró la tabla `tipos_teoria` con los 4 tipos oficiales del programa de Taekwondo:
+    1. `Poomsae` (Formas y secuencias oficiales).
+    2. `Técnicas` (Chagui, Makki, Jireugi).
+    3. `Vocabulario Coreano` (Términos y comandos en dojang).
+    4. `Código de Honor` (Filosofía y principios del club).
+  - El panel administrativo (`teoria.php`) y el modelo `Teoria.php` quedan sincronizados con estos 4 tipos.
 
 ---
 

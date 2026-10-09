@@ -18,10 +18,12 @@ class AdminTeoriaController extends Controller {
     public function index() {
         $teorias = $this->teoriaModel->getAll(); 
         $niveles = $this->nivelModel->getAll();  
+        $tipos   = $this->teoriaModel->getTipos();
 
         $this->view('administracion/teoria', [
             'teorias'      => $teorias,
             'niveles'      => $niveles,
+            'tipos'        => $tipos,
             'page_title'   => 'Administración de Teoría y Ascensos',
             'current_page' => 'ascensos'
         ]);
@@ -32,8 +34,9 @@ class AdminTeoriaController extends Controller {
             $data = [
                 'titulo'      => $_POST['titulo'] ?? '',
                 'descripcion' => $_POST['descripcion'] ?? '',
-                'url_video'   => $_POST['url'] ?? '',    
-                'nivel_id'    => $_POST['nivel_id'] ?? 1
+                'url_video'   => $_POST['url'] ?? '',
+                'nivel_id'    => $_POST['nivel_id'] ?? 1,
+                'tipo_id'     => $_POST['tipo_id'] ?? 1
             ];
 
             $this->teoriaModel->create($data);
@@ -48,7 +51,8 @@ class AdminTeoriaController extends Controller {
                 'titulo'      => $_POST['titulo'] ?? '',
                 'descripcion' => $_POST['descripcion'] ?? '',
                 'url_video'   => $_POST['url'] ?? '',
-                'nivel_id'    => $_POST['nivel_id'] ?? 1
+                'nivel_id'    => $_POST['nivel_id'] ?? 1,
+                'tipo_id'     => $_POST['tipo_id'] ?? 1
             ];
 
             $this->teoriaModel->update($id, $data);
