@@ -21,6 +21,7 @@ include_once __DIR__ . '/controladores/Administracion/DashboardController.php';
 include_once __DIR__ . '/controladores/Administracion/CalendarioController.php';
 include_once __DIR__ . '/controladores/Administracion/CronogramasController.php';
 include_once __DIR__ . '/controladores/Administracion/GaleriaController.php';
+include_once __DIR__ . '/controladores/Administracion/NotificacionesController.php';
 
 include_once __DIR__ . '/controladores/Autenticacion/AutenticacionController.php';
 
@@ -144,6 +145,12 @@ $router->get('/admin/galeria', [AdminGaleriaController::class, 'index']);
 $router->get('/admin/galeria/crear', [AdminGaleriaController::class, 'crear']);
 $router->post('/admin/galeria/store', [AdminGaleriaController::class, 'store']);
 $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']);
+
+// Notificaciones del Sistema
+$router->get('/admin/notificaciones', [AdminNotificacionesController::class, 'index']);
+$router->post('/admin/notificaciones/marcar-leida', [AdminNotificacionesController::class, 'marcarLeida']);
+$router->post('/admin/notificaciones/marcar-todas', [AdminNotificacionesController::class, 'marcarTodas']);
+$router->post('/admin/notificaciones/eliminar', [AdminNotificacionesController::class, 'eliminar']);
 
 // Maestro / Instructores
 $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index']);

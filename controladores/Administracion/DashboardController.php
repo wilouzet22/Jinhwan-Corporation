@@ -71,14 +71,18 @@ class AdminDashboardController extends Controller {
         $eventoModel = new Evento();
         $proximos_eventos = $eventoModel->getUpcoming(3);
 
+        $notifModel = new Notificacion();
+        $notificaciones_recientes = $notifModel->getRecientes(5);
+
         $this->view('administracion/dashboard', [
-            'stats'               => $stats,               
-            'distribucion_grados' => $distribucion_grados, 
-            'distribucion_sedes'  => $distribucion_sedes,  
-            'ultimos_miembros'    => $ultimos_miembros,    
-            'proximos_eventos'    => $proximos_eventos,    
-            'page_title'          => 'Panel de Control',   
-            'current_page'        => 'dashboard'           
+            'stats'                    => $stats,               
+            'distribucion_grados'      => $distribucion_grados, 
+            'distribucion_sedes'       => $distribucion_sedes,  
+            'ultimos_miembros'         => $ultimos_miembros,    
+            'proximos_eventos'         => $proximos_eventos,    
+            'notificaciones_recientes' => $notificaciones_recientes,
+            'page_title'               => 'Panel de Control',   
+            'current_page'             => 'dashboard'           
         ]);
     }
 }

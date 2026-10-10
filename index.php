@@ -16,6 +16,7 @@ require_once __DIR__ . '/modelos/Usuario.php';
 require_once __DIR__ . '/modelos/MultimediaGaleria.php';
 require_once __DIR__ . '/modelos/Evento.php';
 require_once __DIR__ . '/modelos/Categoria.php';
+require_once __DIR__ . '/modelos/Notificacion.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

@@ -67,6 +67,10 @@ if (isset($_SESSION['id'])) {
             $gh_open = in_array($cp, $gh_pages);
             $ac_open = in_array($cp, $ac_pages);
         ?>
+        <?php
+            $notif_model_header = new Notificacion();
+            $no_leidas_sidebar = $notif_model_header->getNoLeidasCount();
+        ?>
         <nav class="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
             <ul class="space-y-1">
 
@@ -75,6 +79,21 @@ if (isset($_SESSION['id'])) {
                     <a href="<?= base_url('/admin/dashboard') ?>" class="flex items-center gap-3 px-4 py-2 rounded-lg transition-colors group <?= $cp === 'dashboard' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
                         <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110">dashboard</span>
                         <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Notificaciones -->
+                <li>
+                    <a href="<?= base_url('/admin/notificaciones') ?>" class="flex items-center justify-between px-4 py-2 rounded-lg transition-colors group <?= $cp === 'notificaciones' ? 'bg-blue-50 dark:bg-tkd-blue/10 text-tkd-blue font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900' ?>">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= $no_leidas_sidebar > 0 ? 'text-amber-500 animate-pulse' : '' ?>">notifications</span>
+                            <span class="text-sm font-medium">Notificaciones</span>
+                        </div>
+                        <?php if ($no_leidas_sidebar > 0): ?>
+                            <span class="px-2 py-0.5 rounded-full text-xs font-black bg-rose-500 text-white shadow-xs">
+                                <?= $no_leidas_sidebar ?>
+                            </span>
+                        <?php endif; ?>
                     </a>
                 </li>
 
@@ -237,5 +256,13 @@ if (isset($_SESSION['id'])) {
                  </button>
                  <span class="font-display font-bold text-lg text-slate-900 dark:text-white">JINHWAN</span>
              </div>
-             <a href="<?= base_url('/index.php') ?>" class="text-xs font-semibold text-tkd-blue uppercase tracking-wider">Ver Web</a>
+             <div class="flex items-center gap-3">
+                 <a href="<?= base_url('/admin/notificaciones') ?>" class="relative p-1.5 text-slate-600 dark:text-slate-300 hover:text-tkd-blue" title="Notificaciones">
+                     <span class="material-icons-outlined text-2xl">notifications</span>
+                     <?php if (!empty($no_leidas_sidebar) && $no_leidas_sidebar > 0): ?>
+                         <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-rose-500 rounded-full"></span>
+                     <?php endif; ?>
+                 </a>
+                 <a href="<?= base_url('/index.php') ?>" class="text-xs font-semibold text-tkd-blue uppercase tracking-wider">Ver Web</a>
+             </div>
         </header>

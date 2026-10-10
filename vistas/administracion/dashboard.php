@@ -99,6 +99,76 @@
         ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>'
     ></div>
 
+    <!-- Actividad Reciente y Notificaciones -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">
+                    <span class="material-icons-outlined text-2xl">notifications_active</span>
+                </span>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white leading-tight">Actividad y Notificaciones en Vivo</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Caracterizaciones de alumnos, nuevos registros y eventos recientes</p>
+                </div>
+            </div>
+            <a href="<?= base_url('/admin/notificaciones') ?>" class="text-tkd-blue hover:text-blue-700 text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1">
+                Ver Centro de Notificaciones →
+            </a>
+        </div>
+        <div class="divide-y divide-slate-100 dark:divide-slate-800/80 p-2 sm:p-4">
+            <?php if (!empty($notificaciones_recientes)): ?>
+                <?php foreach ($notificaciones_recientes as $n): ?>
+                    <?php
+                        $iconN = 'notifications';
+                        $colorN = 'text-slate-500 bg-slate-100 dark:bg-slate-800';
+                        if ($n['tipo'] === 'caracterizacion_nueva') {
+                            $iconN = 'assignment_ind';
+                            $colorN = 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40';
+                        } elseif ($n['tipo'] === 'caracterizacion_update') {
+                            $iconN = 'edit_note';
+                            $colorN = 'text-cyan-600 bg-cyan-50 dark:bg-cyan-950/40';
+                        } elseif ($n['tipo'] === 'registro') {
+                            $iconN = 'person_add';
+                            $colorN = 'text-amber-500 bg-amber-50 dark:bg-amber-950/40';
+                        } elseif ($n['tipo'] === 'ascenso') {
+                            $iconN = 'military_tech';
+                            $colorN = 'text-purple-600 bg-purple-50 dark:bg-purple-950/40';
+                        }
+                    ?>
+                    <div class="py-3 px-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-xl transition flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl <?= $colorN ?> flex items-center justify-center shrink-0">
+                                <span class="material-icons-outlined text-xl"><?= $iconN ?></span>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <?= htmlspecialchars($n['titulo']) ?>
+                                    <?php if ((int)$n['leida'] === 0): ?>
+                                        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                    <?php endif; ?>
+                                </h4>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5 line-clamp-1"><?= htmlspecialchars($n['mensaje']) ?></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <span class="text-[11px] text-slate-400 hidden sm:inline"><?= htmlspecialchars($n['created_at']) ?></span>
+                            <?php if (!empty($n['enlace'])): ?>
+                                <a href="<?= base_url($n['enlace']) ?>" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition">
+                                    Revisar
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="py-8 text-center text-slate-400 text-xs">
+                    <span class="material-icons-outlined text-3xl mb-1 text-slate-300 dark:text-slate-600">notifications_none</span>
+                    <p>No hay notificaciones recientes registradas.</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
     <!-- Data Tables Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         

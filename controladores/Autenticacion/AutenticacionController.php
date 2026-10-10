@@ -262,6 +262,16 @@ class AutenticacionController extends Controller {
             if ($stmt->execute()) {
                 unset($_SESSION['temp_registro']);
                 $stmt->close();
+
+                // Notificar al administrador
+                $nomCompleto = trim($nombre . ' ' . $apellido);
+                Notificacion::registrar(
+                    'registro',
+                    'Nueva Solicitud de Registro',
+                    "El alumno {$nomCompleto} ({$temp['email']}) creó su cuenta y espera aprobación.",
+                    '/admin/registros'
+                );
+
                 $this->redirect('/login?msg=sent');
             } else {
                 $stmt->close();

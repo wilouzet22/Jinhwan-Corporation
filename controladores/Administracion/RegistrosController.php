@@ -53,6 +53,7 @@ class AdminRegistrosController extends Controller {
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute()) {
+                Notificacion::registrar('sistema', 'Estudiante Aprobado', "Se aprobó y activó un nuevo estudiante en la academia.", '/admin/estudiantes');
                 $this->redirect('/admin/registros?msg=approved');
             } else {
                 $this->redirect('/admin/registros?error=1');

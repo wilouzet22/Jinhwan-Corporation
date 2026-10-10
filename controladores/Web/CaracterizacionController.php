@@ -153,6 +153,16 @@ class WebCaracterizacionController extends Controller {
         $stmt->execute();
         $stmt->close();
 
+        // Registrar notificación para el administrador
+        $nombreCompleto = trim($nombre . ' ' . $apellido);
+        $rolLabel = $rol === 'maestro' ? 'El Maestro' : 'El Estudiante';
+        Notificacion::registrar(
+            'caracterizacion_update',
+            'Caracterización Actualizada',
+            "{$rolLabel} {$nombreCompleto} (Doc: {$num_doc}) actualizó sus datos de contacto y médicos.",
+            $rol === 'estudiante' ? '/admin/estudiantes' : '/admin/maestros'
+        );
+
         $this->redirect('/caracterizacion?doc=' . urlencode($num_doc) . '&ok=1');
     }
 
@@ -229,6 +239,15 @@ class WebCaracterizacionController extends Controller {
         );
         $stmt->execute();
         $stmt->close();
+
+        // Registrar notificación para el administrador
+        $nombreCompleto = trim($nombre . ' ' . $apellido);
+        Notificacion::registrar(
+            'caracterizacion_nueva',
+            'Nuevo Alumno Registrado',
+            "El estudiante {$nombreCompleto} (Doc: {$num_doc}) completó su ficha inicial de caracterización.",
+            '/admin/registros'
+        );
 
         $this->redirect('/caracterizacion?doc=' . urlencode($num_doc) . '&nuevo=1');
     }
