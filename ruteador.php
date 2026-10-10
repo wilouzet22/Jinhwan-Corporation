@@ -51,6 +51,7 @@ $router->get('/miembros', [WebMiembrosController::class, 'index']);
 $router->get('/galeria', [WebGaleriaController::class, 'index']);
 $router->get('/caracterizacion', [WebCaracterizacionController::class, 'index']);
 $router->post('/caracterizacion/update', [WebCaracterizacionController::class, 'update']);
+$router->post('/caracterizacion/registrar-nuevo', [WebCaracterizacionController::class, 'registrarNuevo']);
 
 // Rutas Estudiante
 $router->get('/estudiante/dashboard', [EstudianteDashboardController::class, 'index']);

@@ -24,12 +24,15 @@ class WebCaracterizacionController extends Controller {
             }
         }
 
+        $nuevo    = $_GET['nuevo'] ?? null;
+
         $this->view('web/caracterizacion', [
             'usuario' => $usuario,
             'rol'     => $rol,
             'num_doc' => $num_doc,
             'error'   => $error,
             'success' => $success,
+            'nuevo'   => $nuevo,
         ]);
     }
 
@@ -152,4 +155,82 @@ class WebCaracterizacionController extends Controller {
 
         $this->redirect('/caracterizacion?doc=' . urlencode($num_doc) . '&ok=1');
     }
+
+    /**
+     * Registra un estudiante nuevo desde la página de caracterización.
+     * Queda con activo = 0 (pendiente de revisión/aprobación por el Administrador).
+     */
+    public function registrarNuevo() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/caracterizacion');
+            return;
+        }
+
+        $num_doc  = trim($_POST['num_doc'] ?? '');
+        $tipo_doc = trim($_POST['tipo_documento'] ?? 'TI');
+        $nombre   = trim($_POST['nombre'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+
+        if ($num_doc === '' || $nombre === '' || $apellido === '') {
+            $this->redirect('/caracterizacion?doc=' . urlencode($num_doc) . '&error=datos_incompletos');
+            return;
+        }
+
+        $db = Database::getInstance()->getConnection();
+
+        // Evitar duplicados si ya existe
+        $check = $db->prepare("SELECT id_estudiante FROM estudiante WHERE TRIM(num_doc) = ? LIMIT 1");
+        $check->bind_param("s", $num_doc);
+        $check->execute();
+        $resCheck = $check->get_result();
+        if ($resCheck && $resCheck->num_rows > 0) {
+            $check->close();
+            $this->redirect('/caracterizacion?doc=' . urlencode($num_doc));
+            return;
+        }
+        $check->close();
+
+        // Obtener maestro del grupo 1 si está configurado
+        $id_grupo   = 1;
+        $id_maestro = null;
+        $checkM = $db->query("SELECT id_maestro FROM grupos WHERE id_grupo = $id_grupo LIMIT 1");
+        if ($checkM && $rM = $checkM->fetch_assoc()) {
+            $id_maestro = !empty($rM['id_maestro']) ? (int)$rM['id_maestro'] : null;
+        }
+
+        $correo       = strtolower(trim($_POST['correo'] ?? ''));
+        $telefono     = trim($_POST['telefono'] ?? '');
+        $fecha_nac    = !empty($_POST['fecha_nacimiento']) ? $_POST['fecha_nacimiento'] : null;
+        $eps          = trim($_POST['eps'] ?? '');
+        $rh           = trim($_POST['rh'] ?? '');
+        $peso         = !empty($_POST['peso']) ? (float)$_POST['peso'] : null;
+        $division     = trim($_POST['division'] ?? '');
+
+        $correo_val   = $correo !== '' ? $correo : null;
+        $telefono_val = $telefono !== '' ? $telefono : null;
+        $eps_val      = $eps !== '' ? $eps : null;
+        $rh_val       = $rh !== '' ? $rh : null;
+        $division_val = $division !== '' ? $division : null;
+        $id_grado     = 1; // Blanco por defecto
+        $id_categoria = 1; // Inicial por defecto
+        $activo       = 0; // Pendiente de revisión por administración
+
+        $stmt = $db->prepare(
+            "INSERT INTO estudiante 
+             (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, eps, rh, peso, division, correo, clave, activo)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)"
+        );
+        $stmt->bind_param(
+            "iiiissssssssdsi",
+            $id_grado, $id_categoria, $id_grupo, $id_maestro,
+            $nombre, $apellido, $tipo_doc, $num_doc,
+            $telefono_val, $fecha_nac, $eps_val, $rh_val,
+            $peso, $division_val, $correo_val, $activo
+        );
+        $stmt->execute();
+        $stmt->close();
+
+        $this->redirect('/caracterizacion?doc=' . urlencode($num_doc) . '&nuevo=1');
+    }
 }
+

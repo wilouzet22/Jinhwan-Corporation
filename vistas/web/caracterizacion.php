@@ -44,27 +44,175 @@
             </form>
         </div>
 
-        <!-- ── ERROR: no encontrado ── -->
-        <?php if ($error === 'no_encontrado'): ?>
-        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 rounded-2xl p-6 text-center mb-8">
-            <div class="text-4xl mb-3">🔎</div>
-            <p class="text-amber-800 dark:text-amber-200 font-semibold text-lg mb-1">No encontrado</p>
-            <p class="text-amber-700 dark:text-amber-300 text-sm">
-                El documento <strong><?= htmlspecialchars($num_doc) ?></strong> no está registrado en el sistema.
-                Si crees que es un error, comunícate con la academia.
-            </p>
+        <!-- ── ÉXITO: NUEVO ESTUDIANTE REGISTRADO ── -->
+        <?php if (!empty($nuevo)): ?>
+        <div id="alert-nuevo" class="bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-300 dark:border-emerald-700 rounded-2xl p-5 flex items-start gap-4 mb-6 shadow-sm">
+            <span class="text-3xl">🎉</span>
+            <div>
+                <p class="text-emerald-800 dark:text-emerald-200 font-bold text-base">¡Ficha registrada con éxito!</p>
+                <p class="text-emerald-700 dark:text-emerald-300 text-sm mt-0.5">
+                    Bienvenido/a a <strong>Jinhwan Corporation</strong>. Tu registro ha sido recibido y pasará a revisión de la administración de la academia. A continuación puedes verificar o corregir tus datos si lo necesitas.
+                </p>
+            </div>
+            <button onclick="document.getElementById('alert-nuevo').remove()" class="ml-auto text-emerald-500 hover:text-emerald-700 text-xl leading-none">&times;</button>
         </div>
         <?php endif; ?>
 
         <!-- ── ÉXITO: datos guardados ── -->
         <?php if ($success): ?>
-        <div id="alert-success" class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-300 dark:border-emerald-700 rounded-2xl p-5 flex items-start gap-4 mb-6">
+        <div id="alert-success" class="bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-300 dark:border-emerald-700 rounded-2xl p-5 flex items-start gap-4 mb-6 shadow-sm">
             <span class="text-3xl">✅</span>
             <div>
-                <p class="text-emerald-800 dark:text-emerald-200 font-semibold">¡Datos actualizados correctamente!</p>
+                <p class="text-emerald-800 dark:text-emerald-200 font-bold">¡Datos actualizados correctamente!</p>
                 <p class="text-emerald-700 dark:text-emerald-300 text-sm">Tu información ha sido guardada en el sistema.</p>
             </div>
             <button onclick="document.getElementById('alert-success').remove()" class="ml-auto text-emerald-500 hover:text-emerald-700 text-xl leading-none">&times;</button>
+        </div>
+        <?php endif; ?>
+
+        <!-- ── NO ENCONTRADO: invitar a registrarse como nuevo alumno ── -->
+        <?php if ($error === 'no_encontrado' || $error === 'datos_incompletos'): ?>
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/10 border-2 border-amber-300 dark:border-amber-700/60 rounded-2xl p-6 mb-8 shadow-sm">
+            <div class="flex items-start gap-4">
+                <span class="text-3xl mt-0.5">👋</span>
+                <div>
+                    <h3 class="text-amber-900 dark:text-amber-200 font-bold text-lg mb-1">Documento no registrado</h3>
+                    <p class="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
+                        El número <strong><?= htmlspecialchars($num_doc) ?></strong> no figura en la base de datos de la academia.
+                        <strong>¿Eres un nuevo alumno?</strong> Diligencia la ficha a continuación para registrarte en Jinhwan Corporation.
+                    </p>
+                    <?php if ($error === 'datos_incompletos'): ?>
+                    <p class="mt-2 text-xs font-bold text-red-600 dark:text-red-400">
+                        ⚠️ Por favor ingresa al menos tu Nombre y Apellido para registrar la ficha.
+                    </p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── FORMULARIO: REGISTRO NUEVO ESTUDIANTE ── -->
+        <div class="mb-12">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
+                    ✨ Nuevo Alumno
+                </span>
+                <span class="text-slate-400 dark:text-slate-500 text-sm">Ficha de Caracterización Inicial</span>
+            </div>
+
+            <form method="POST" action="/caracterizacion/registrar-nuevo"
+                  class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg p-8">
+
+                <!-- Tipo y Número de Documento -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tipo de documento</label>
+                        <select name="tipo_documento"
+                                class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                            <option value="TI" selected>Tarjeta de Identidad</option>
+                            <option value="CC">Cédula de Ciudadanía</option>
+                            <option value="CE">Cédula de Extranjería</option>
+                            <option value="PA">Pasaporte</option>
+                            <option value="RC">Registro Civil</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Número de documento <span class="text-red-500">*</span></label>
+                        <input type="text" name="num_doc"
+                               value="<?= htmlspecialchars($num_doc) ?>"
+                               required
+                               placeholder="Número de documento"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors font-semibold">
+                    </div>
+                </div>
+
+                <!-- Nombre y Apellido -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nombre <span class="text-red-500">*</span></label>
+                        <input type="text" name="nombre"
+                               required
+                               placeholder="Tu nombre"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Apellido <span class="text-red-500">*</span></label>
+                        <input type="text" name="apellido"
+                               required
+                               placeholder="Tu apellido"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Correo y Teléfono -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Correo electrónico (Opcional)</label>
+                        <input type="email" name="correo"
+                               placeholder="correo@ejemplo.com"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Teléfono / Celular (Opcional)</label>
+                        <input type="tel" name="telefono"
+                               placeholder="300 000 0000"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Nota para menores de edad -->
+                <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl px-4 py-3 mb-5">
+                    <span class="text-amber-500 text-base mt-0.5 flex-shrink-0">👦</span>
+                    <p class="text-amber-800 dark:text-amber-200 text-xs leading-relaxed">
+                        <strong>¿Eres menor de edad?</strong> Si aún no tienes correo ni celular propio, puedes ingresar
+                        el de tu acudiente (mamá, papá o tutor).
+                        Recuerda que el menor de edad debe estar <strong>acompañado de un adulto</strong> al momento de realizar este proceso.
+                    </p>
+                </div>
+
+                <!-- Datos médicos y deportivos (Opcionales) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Fecha de nacimiento</label>
+                        <input type="date" name="fecha_nacimiento"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">EPS</label>
+                        <input type="text" name="eps"
+                               placeholder="Ej: Sura, Sanitas"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Grupo Sanguíneo (RH)</label>
+                        <input type="text" name="rh"
+                               placeholder="Ej: O+, A+"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-7">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Peso (kg)</label>
+                        <input type="number" step="0.1" name="peso"
+                               placeholder="Ej: 55.5"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">División / Categoría</label>
+                        <input type="text" name="division"
+                               placeholder="Ej: Cadete, Junior"
+                               class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <p class="text-xs text-slate-400">Los datos que no conozcas ahora podrás completarlos más adelante con la academia.</p>
+                    <button type="submit"
+                            class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-xl transition shadow hover:shadow-lg flex items-center justify-center gap-2">
+                        <span>🥋</span> Registrar mi Ficha de Alumno
+                    </button>
+                </div>
+            </form>
         </div>
         <?php endif; ?>
 
@@ -133,7 +281,7 @@
             </div>
 
             <!-- Correo y Teléfono -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-2">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Correo electrónico</label>
                     <input type="email" name="correo"
@@ -148,6 +296,15 @@
                            placeholder="300 000 0000"
                            class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
+            </div>
+            <!-- Nota para menores de edad -->
+            <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-xl px-4 py-3 mb-5">
+                <span class="text-amber-500 text-base mt-0.5 flex-shrink-0">👦</span>
+                <p class="text-amber-800 dark:text-amber-200 text-xs leading-relaxed">
+                    <strong>¿Eres menor de edad?</strong> Si aún no tienes correo ni celular propio, puedes ingresar
+                    el de tu acudiente (mamá, papá o tutor).
+                    Recuerda que el menor de edad debe estar <strong>acompañado de un adulto</strong> al momento de realizar este proceso.
+                </p>
             </div>
 
             <?php if ($rol === 'estudiante'): ?>
