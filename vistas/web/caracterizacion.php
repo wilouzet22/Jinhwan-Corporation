@@ -92,32 +92,35 @@
 
         <!-- Formulario de datos -->
         <form method="POST" action="/caracterizacion/update"
-              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg p-8 space-y-6">
+              class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-lg p-8">
 
             <input type="hidden" name="id"      value="<?= (int)$usuario['id'] ?>">
             <input type="hidden" name="rol"     value="<?= htmlspecialchars($rol) ?>">
             <input type="hidden" name="num_doc" value="<?= htmlspecialchars($usuario['num_doc']) ?>">
 
             <!-- Nombre y Apellido -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                 <div>
-                    <label class="form-label">Nombre</label>
-                    <input type="text" name="nombre" id="f-nombre"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nombre</label>
+                    <input type="text" name="nombre"
                            value="<?= htmlspecialchars($usuario['nombre'] ?? '') ?>"
-                           class="form-input" placeholder="Tu nombre">
+                           placeholder="Tu nombre"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
                 <div>
-                    <label class="form-label">Apellido</label>
-                    <input type="text" name="apellido" id="f-apellido"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Apellido</label>
+                    <input type="text" name="apellido"
                            value="<?= htmlspecialchars($usuario['apellido'] ?? '') ?>"
-                           class="form-input" placeholder="Tu apellido">
+                           placeholder="Tu apellido"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
             </div>
 
             <!-- Tipo documento -->
-            <div>
-                <label class="form-label">Tipo de documento</label>
-                <select name="tipo_documento" id="f-tipo-doc" class="form-input">
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tipo de documento</label>
+                <select name="tipo_documento"
+                        class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                     <?php
                     $tipos = ['TI' => 'Tarjeta de Identidad', 'CC' => 'Cédula de Ciudadanía',
                               'CE' => 'Cédula de Extranjería', 'PA' => 'Pasaporte', 'RC' => 'Registro Civil'];
@@ -130,42 +133,46 @@
             </div>
 
             <!-- Correo y Teléfono -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                 <div>
-                    <label class="form-label">Correo electrónico</label>
-                    <input type="email" name="correo" id="f-correo"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Correo electrónico</label>
+                    <input type="email" name="correo"
                            value="<?= htmlspecialchars($usuario['correo'] ?? '') ?>"
-                           class="form-input" placeholder="correo@ejemplo.com">
+                           placeholder="correo@ejemplo.com"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
                 <div>
-                    <label class="form-label">Teléfono / Celular</label>
-                    <input type="tel" name="telefono" id="f-telefono"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Teléfono / Celular</label>
+                    <input type="tel" name="telefono"
                            value="<?= htmlspecialchars($usuario['telefono'] ?? '') ?>"
-                           class="form-input" placeholder="300 000 0000">
+                           placeholder="300 000 0000"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
             </div>
 
             <?php if ($rol === 'estudiante'): ?>
 
             <!-- Fecha de nacimiento -->
-            <div>
-                <label class="form-label">Fecha de nacimiento</label>
-                <input type="date" name="fecha_nacimiento" id="f-fecha-nac"
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Fecha de nacimiento</label>
+                <input type="date" name="fecha_nacimiento"
                        value="<?= htmlspecialchars($usuario['fecha_nacimiento'] ?? '') ?>"
-                       class="form-input">
+                       class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
             </div>
 
             <!-- EPS y RH -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                 <div>
-                    <label class="form-label">EPS</label>
-                    <input type="text" name="eps" id="f-eps"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">EPS</label>
+                    <input type="text" name="eps"
                            value="<?= htmlspecialchars($usuario['eps'] ?? '') ?>"
-                           class="form-input" placeholder="Nombre de tu EPS">
+                           placeholder="Nombre de tu EPS"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
                 <div>
-                    <label class="form-label">Tipo de sangre (RH)</label>
-                    <select name="rh" id="f-rh" class="form-input">
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Tipo de sangre (RH)</label>
+                    <select name="rh"
+                            class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                         <option value="">— No sé —</option>
                         <?php foreach (['O+','O-','A+','A-','B+','B-','AB+','AB-'] as $rh):
                             $sel = ($usuario['rh'] ?? '') === $rh ? 'selected' : '';
@@ -177,33 +184,36 @@
             </div>
 
             <!-- Peso y División -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                 <div>
-                    <label class="form-label">Peso (kg)</label>
-                    <input type="number" name="peso" id="f-peso" step="0.1" min="10" max="200"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Peso (kg)</label>
+                    <input type="number" name="peso" step="0.1" min="10" max="200"
                            value="<?= htmlspecialchars($usuario['peso'] ?? '') ?>"
-                           class="form-input" placeholder="Ej: 65.5">
+                           placeholder="Ej: 65.5"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
                 <div>
-                    <label class="form-label">División / Categoría de peso</label>
-                    <input type="text" name="division" id="f-division"
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">División / Categoría de peso</label>
+                    <input type="text" name="division"
                            value="<?= htmlspecialchars($usuario['division'] ?? '') ?>"
-                           class="form-input" placeholder="Ej: -68kg">
+                           placeholder="Ej: -68kg"
+                           class="w-full border-2 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 focus:outline-none focus:border-tkd-blue dark:focus:border-blue-500 transition-colors">
                 </div>
             </div>
 
             <?php endif; ?>
 
+            <!-- Divisor -->
+            <div class="border-t border-slate-100 dark:border-slate-800 my-6"></div>
+
             <!-- Botón guardar -->
-            <div class="pt-2">
-                <button type="submit" id="btn-guardar"
-                    class="w-full bg-gradient-to-r from-tkd-red to-rose-600 hover:from-rose-600 hover:to-tkd-red text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg text-base tracking-wide">
-                    💾 Guardar mis datos
-                </button>
-                <p class="text-center text-xs text-slate-400 dark:text-slate-500 mt-3">
-                    Solo actualizamos tus datos. No cambiamos tu contraseña ni tu documento.
-                </p>
-            </div>
+            <button type="submit" id="btn-guardar"
+                class="w-full bg-gradient-to-r from-tkd-red to-rose-600 hover:from-rose-600 hover:to-tkd-red text-white font-bold py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg text-base tracking-wide">
+                💾 Guardar mis datos
+            </button>
+            <p class="text-center text-xs text-slate-400 dark:text-slate-500 mt-3">
+                Solo actualizamos tus datos. No cambiamos tu contraseña ni tu documento.
+            </p>
 
         </form>
 
@@ -212,23 +222,12 @@
     </div>
 </section>
 
-<style>
-.form-label {
-    @apply block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5;
-}
-.form-input {
-    @apply w-full border border-slate-300 dark:border-slate-600 rounded-xl px-4 py-2.5
-           text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800
-           focus:outline-none focus:ring-2 focus:ring-tkd-blue transition text-sm;
-}
-</style>
-
 <script>
-// Auto-scroll al formulario si ya se buscó un documento
+// Auto-scroll al formulario si ya se buscó
 <?php if ($usuario || $error === 'no_encontrado'): ?>
 document.addEventListener('DOMContentLoaded', () => {
-    const target = document.querySelector('<?= $usuario ? "form[action='/caracterizacion/update']" : "#alert-success, .bg-amber-50" ?>');
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const target = document.querySelector('.bg-white.dark\\:bg-slate-900.border');
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
 });
 <?php endif; ?>
 
