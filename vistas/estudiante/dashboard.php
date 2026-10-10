@@ -29,16 +29,6 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
         </div>
     </div>
 
-    <!-- React Interactive Belt Tracker -->
-    <div 
-        data-react-component="BeltProgressVisualizer"
-        data-props='<?= json_encode([
-            'currentGrade' => $estudiante['nombre_nivel'] ?? 'Blanco',
-            'nextGrade' => 'Siguiente Grado Evaluativo',
-            'timeInGrade' => 'Tiempo activo en sede'
-        ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>'
-    ></div>
-
     <!-- Main Grid: Profile & Learning Actions -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
