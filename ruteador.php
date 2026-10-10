@@ -6,6 +6,7 @@ include_once __DIR__ . '/controladores/Web/GruposController.php';
 include_once __DIR__ . '/controladores/Web/PaginaController.php';
 include_once __DIR__ . '/controladores/Web/MiembrosController.php';
 include_once __DIR__ . '/controladores/Web/GaleriaController.php';
+include_once __DIR__ . '/controladores/Web/CaracterizacionController.php';
             
 include_once __DIR__ . '/controladores/Administracion/AscensosController.php';
 include_once __DIR__ . '/controladores/Administracion/TeoriaController.php';
@@ -48,6 +49,8 @@ $router->get('/sedes', [WebSedesController::class, 'index']);
 $router->get('/grupos', [WebGruposController::class, 'index']);
 $router->get('/miembros', [WebMiembrosController::class, 'index']);
 $router->get('/galeria', [WebGaleriaController::class, 'index']);
+$router->get('/caracterizacion', [WebCaracterizacionController::class, 'index']);
+$router->post('/caracterizacion/update', [WebCaracterizacionController::class, 'update']);
 
 // Rutas Estudiante
 $router->get('/estudiante/dashboard', [EstudianteDashboardController::class, 'index']);
