@@ -56,8 +56,7 @@ class AdminNotificacionesController extends Controller {
                 $this->notificacionModel->marcarLeida($id);
             }
         }
-        $referer = $_SERVER['HTTP_REFERER'] ?? base_url('/admin/notificaciones');
-        $this->redirect($referer);
+        $this->redirect('/admin/notificaciones');
     }
 
     public function marcarTodas() {
@@ -74,7 +73,6 @@ class AdminNotificacionesController extends Controller {
                 $this->notificacionModel->eliminar($id);
             }
         }
-        $referer = $_SERVER['HTTP_REFERER'] ?? base_url('/admin/notificaciones');
-        $this->redirect($referer);
+        $this->redirect('/admin/notificaciones');
     }
 }

@@ -17,7 +17,11 @@ class Controller {
     }
 
     protected function redirect($url) {
-        header("Location: " . base_url($url));
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            header("Location: " . $url);
+        } else {
+            header("Location: " . base_url($url));
+        }
         exit;
     }
 }
