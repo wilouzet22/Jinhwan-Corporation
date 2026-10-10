@@ -139,6 +139,10 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
                 <span class="material-icons-outlined text-xl group-hover:text-rose-600 transition-colors">collections</span>
                 <span class="font-display tracking-wide uppercase">Galería</span>
             </a>
+            <a href="<?= base_url('/caracterizacion') ?>" class="flex items-center gap-4 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all group nav-link font-semibold">
+                <span class="material-icons-outlined text-xl text-emerald-600 group-hover:scale-110 transition-transform">assignment_ind</span>
+                <span class="font-display tracking-wide uppercase">Caracterización</span>
+            </a>
         </nav>
 
         <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 transition-colors">
