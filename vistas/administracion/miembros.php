@@ -169,10 +169,10 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
             </div>
         </div>
 
-        <!-- Tabla de Miembros (Compacta y sin scroll horizontal) -->
+        <!-- Tabla de Miembros -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="w-full">
-                <table class="w-full text-sm text-left border-collapse" id="members-table">
+            <div class="w-full overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left border-collapse min-w-[720px]" id="members-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
                             <th scope="col" class="px-3 py-3 w-10 text-center">

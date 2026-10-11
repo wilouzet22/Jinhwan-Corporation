@@ -45,8 +45,8 @@
 
         <!-- Tabla Cronogramas -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="w-full overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse">
+            <div class="w-full overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left border-collapse min-w-[680px]">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
                             <th scope="col" class="px-4 py-3">Fecha & Día</th>

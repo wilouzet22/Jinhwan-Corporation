@@ -87,10 +87,10 @@ $total_inactivos = $total_estudiantes - $total_activos;
         </div>
 
         <!-- Filtros y Búsqueda -->
-        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 transition-colors">
-            <div class="flex flex-wrap items-center gap-3 w-full">
+        <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+            <div class="flex flex-wrap items-center gap-3 w-full overflow-x-auto custom-scrollbar pb-1">
                 <!-- Buscador -->
-                <div class="relative w-full sm:w-64">
+                <div class="relative w-full sm:w-64 shrink-0">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <span class="material-icons-outlined text-sm">search</span>
                     </div>
@@ -99,7 +99,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </div>
 
                 <!-- Filtro Grupo (Destacado) -->
-                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors font-medium">
+                <select id="filter-grupo" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors font-medium shrink-0">
                     <option value="all">👥 Todos los Grupos</option>
                     <?php foreach($grupos_list as $grp): ?>
                         <option value="<?= htmlspecialchars($grp['nombre']) ?>"><?= htmlspecialchars($grp['nombre']) ?></option>
@@ -107,7 +107,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </select>
 
                 <!-- Filtro Sede -->
-                <select id="filter-sede" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
+                <select id="filter-sede" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors shrink-0">
                     <option value="all">Todas las Sedes</option>
                     <?php foreach($sedes_list as $sede): ?>
                         <option value="<?= htmlspecialchars($sede['nombre']) ?>"><?= htmlspecialchars($sede['nombre']) ?></option>
@@ -115,7 +115,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </select>
 
                 <!-- Filtro Grado / Cinturón -->
-                <select id="filter-nivel" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
+                <select id="filter-nivel" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors shrink-0">
                     <option value="all">Todos los Grados</option>
                     <?php foreach($niveles_list as $nivel): ?>
                         <option value="<?= htmlspecialchars($nivel['nombre']) ?>"><?= htmlspecialchars($nivel['nombre']) ?></option>
@@ -123,13 +123,13 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </select>
 
                 <!-- Filtro Estado -->
-                <select id="filter-estado" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors">
+                <select id="filter-estado" class="text-xs rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-300 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-tkd-blue transition-colors shrink-0">
                     <option value="all">Todos los Estados</option>
                     <option value="Activo">🟢 Activo</option>
                     <option value="Inactivo">🔴 Inactivo</option>
                 </select>
 
-                <button id="btn-reset-filters" class="hidden text-xs text-rose-500 hover:text-rose-700 font-bold px-2 py-1 transition-colors focus:outline-none cursor-pointer">
+                <button id="btn-reset-filters" class="hidden text-xs text-rose-500 hover:text-rose-700 font-bold px-2 py-1 transition-colors focus:outline-none cursor-pointer shrink-0">
                     ✕ Limpiar Filtros
                 </button>
             </div>
@@ -153,8 +153,8 @@ $total_inactivos = $total_estudiantes - $total_activos;
 
         <!-- Tabla de Estudiantes -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="w-full">
-                <table class="w-full text-sm text-left border-collapse table-fixed" id="students-table">
+            <div class="w-full overflow-x-auto custom-scrollbar">
+                <table class="w-full text-sm text-left border-collapse table-fixed min-w-[780px]" id="students-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
                             <th scope="col" class="w-8 px-1 py-3 text-center">

@@ -123,8 +123,8 @@
                 </h3>
                 <a href="<?= base_url('/maestro/alumnos') ?>" class="text-tkd-purple hover:text-purple-700 dark:hover:text-purple-400 text-xs font-bold uppercase tracking-wider transition-colors">Ver todos →</a>
             </div>
-            <div class="overflow-x-auto flex-grow">
-                <table class="w-full text-left border-collapse">
+            <div class="overflow-x-auto flex-grow custom-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[450px]">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-950/50">
                             <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Deportista</th>
