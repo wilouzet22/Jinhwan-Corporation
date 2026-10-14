@@ -33,6 +33,12 @@ Sistema integral de gestión académica, deportiva y administrativa diseñado a 
 
 ---
 
+## 📋 Metodología de Trabajo
+
+En este proyecto utilizamos la metodología **Scrum** para organizar el desarrollo en equipo. Nos permite dividir el trabajo en sprints cortos, repartir tareas entre los integrantes, entregar funcionalidades de forma incremental y adaptarnos con facilidad a cambios en los requisitos, manteniendo una comunicación constante y un seguimiento claro del avance del sistema.
+
+---
+
 ## 📂 Estructura del Proyecto
 
 ```text
