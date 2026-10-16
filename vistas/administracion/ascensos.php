@@ -40,7 +40,8 @@
             <?php
             $err = $_GET['error'];
             if ($err === 'datos_invalidos') echo 'Error: Debes seleccionar al menos un alumno y un grado de destino válido.';
-            else echo 'Ocurrió un error al procesar el ascenso. Inténtalo nuevamente.';
+            elseif ($err === 'fallo') echo 'Ocurrió un error al procesar el ascenso en el sistema. Inténtalo nuevamente.';
+            else echo 'Error al procesar ascenso: ' . htmlspecialchars($err);
             ?>
         </div>
         <?php endif; ?>

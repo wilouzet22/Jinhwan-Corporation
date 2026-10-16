@@ -73,92 +73,36 @@ class AdminAscensosController extends Controller {
             return;
         }
 
-        $id_alumno          = (int)($_POST['id_alumno'] ?? 0);
-        $id_grado_nuevo     = (int)($_POST['id_grado_nuevo'] ?? 0);
-        $grado_anterior     = trim($_POST['grado_anterior'] ?? '');
-        $fecha_examen       = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
-        $id_maestro         = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
-        $observaciones      = trim($_POST['observaciones'] ?? '');
+        try {
+            $id_alumno          = (int)($_POST['id_alumno'] ?? 0);
+            $id_grado_nuevo     = (int)($_POST['id_grado_nuevo'] ?? 0);
+            $grado_anterior     = trim($_POST['grado_anterior'] ?? '');
+            $fecha_examen       = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
+            $id_maestro         = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
+            $observaciones      = trim($_POST['observaciones'] ?? '');
 
-        if ($id_alumno <= 0 || $id_grado_nuevo <= 0) {
-            $this->redirect('/admin/ascensos?error=datos_invalidos');
-            return;
-        }
-
-        // Obtener nombre del nuevo grado
-        $grados = $this->nivelModel->getAll();
-        $gradosMap = [];
-        foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
-        $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
-
-        // Si grado_anterior no viene, consultar el grado actual del alumno desde la BD
-        if (empty($grado_anterior)) {
-            $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
-            if ($stmt) {
-                $stmt->bind_param("i", $id_alumno);
-                $stmt->execute();
-                $r = $stmt->get_result()->fetch_assoc();
-                $stmt->close();
-                $grado_anterior = $r['nombre'] ?? 'Blanco';
+            if ($id_alumno <= 0 || $id_grado_nuevo <= 0) {
+                $this->redirect('/admin/ascensos?error=datos_invalidos');
+                return;
             }
-        }
 
-        $ok = $this->certModel->create([
-            'id_estudiante'  => $id_alumno,
-            'id_maestro'     => $id_maestro,
-            'grado_anterior' => $grado_anterior,
-            'grado_nuevo'    => $grado_nuevo,
-            'id_grado_nuevo' => $id_grado_nuevo,
-            'fecha_examen'   => $fecha_examen,
-            'observaciones'  => $observaciones,
-            'folio'          => Certificado::generarFolio(),
-        ]);
+            // Obtener nombre del nuevo grado
+            $grados = $this->nivelModel->getAll();
+            $gradosMap = [];
+            foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
+            $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
 
-        if ($ok) {
-            $this->redirect('/admin/ascensos?success=1');
-        } else {
-            $this->redirect('/admin/ascensos?error=fallo');
-        }
-    }
-
-    /** Ascenso masivo: varios alumnos al mismo nuevo grado */
-    public function storeBulk() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/admin/ascensos');
-            return;
-        }
-
-        $ids_alumnos    = array_filter(array_map('intval', $_POST['ids_alumnos'] ?? []), fn($i) => $i > 0);
-        $id_grado_nuevo = (int)($_POST['id_grado_nuevo'] ?? 0);
-        $fecha_examen   = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
-        $id_maestro     = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
-        $observaciones  = trim($_POST['observaciones'] ?? '');
-
-        if (empty($ids_alumnos) || $id_grado_nuevo <= 0) {
-            $this->redirect('/admin/ascensos?error=datos_invalidos');
-            return;
-        }
-
-        // Obtener nombre del nuevo grado
-        $grados = $this->nivelModel->getAll();
-        $gradosMap = [];
-        foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
-        $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
-
-        $db = Database::getInstance()->getConnection();
-        $exitosos = 0;
-
-        foreach ($ids_alumnos as $id_alumno) {
-            // Obtener grado actual del alumno
-            $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
-            $grado_anterior = 'Blanco';
-            if ($stmt) {
-                $stmt->bind_param("i", $id_alumno);
-                $stmt->execute();
-                $r = $stmt->get_result()->fetch_assoc();
-                $stmt->close();
-                $grado_anterior = $r['nombre'] ?? 'Blanco';
+            // Si grado_anterior no viene, consultar el grado actual del alumno desde la BD
+            if (empty($grado_anterior)) {
+                $db = Database::getInstance()->getConnection();
+                $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
+                if ($stmt) {
+                    $stmt->bind_param("i", $id_alumno);
+                    $stmt->execute();
+                    $r = $stmt->get_result()->fetch_assoc();
+                    $stmt->close();
+                    $grado_anterior = $r['nombre'] ?? 'Blanco';
+                }
             }
 
             $ok = $this->certModel->create([
@@ -171,13 +115,79 @@ class AdminAscensosController extends Controller {
                 'observaciones'  => $observaciones,
                 'folio'          => Certificado::generarFolio(),
             ]);
-            if ($ok) $exitosos++;
+
+            if ($ok) {
+                $this->redirect('/admin/ascensos?success=1');
+            } else {
+                $this->redirect('/admin/ascensos?error=fallo');
+            }
+        } catch (Throwable $e) {
+            error_log("Error en AdminAscensosController::store: " . $e->getMessage());
+            $this->redirect('/admin/ascensos?error=' . urlencode($e->getMessage()));
+        }
+    }
+
+    /** Ascenso masivo: varios alumnos al mismo nuevo grado */
+    public function storeBulk() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/admin/ascensos');
+            return;
         }
 
-        if ($exitosos > 0) {
-            $this->redirect('/admin/ascensos?success=' . $exitosos . '&bulk=1');
-        } else {
-            $this->redirect('/admin/ascensos?error=fallo');
+        try {
+            $ids_alumnos    = array_filter(array_map('intval', $_POST['ids_alumnos'] ?? []), fn($i) => $i > 0);
+            $id_grado_nuevo = (int)($_POST['id_grado_nuevo'] ?? 0);
+            $fecha_examen   = !empty($_POST['fecha_examen']) ? $_POST['fecha_examen'] : date('Y-m-d');
+            $id_maestro     = !empty($_POST['id_maestro']) ? (int)$_POST['id_maestro'] : null;
+            $observaciones  = trim($_POST['observaciones'] ?? '');
+
+            if (empty($ids_alumnos) || $id_grado_nuevo <= 0) {
+                $this->redirect('/admin/ascensos?error=datos_invalidos');
+                return;
+            }
+
+            // Obtener nombre del nuevo grado
+            $grados = $this->nivelModel->getAll();
+            $gradosMap = [];
+            foreach ($grados as $g) { $gradosMap[(int)$g['id']] = $g['nombre']; }
+            $grado_nuevo = $gradosMap[$id_grado_nuevo] ?? 'Desconocido';
+
+            $db = Database::getInstance()->getConnection();
+            $exitosos = 0;
+
+            foreach ($ids_alumnos as $id_alumno) {
+                // Obtener grado actual del alumno
+                $stmt = $db->prepare("SELECT g.nombre FROM estudiante e LEFT JOIN grados g ON e.id_grado = g.id_grado WHERE e.id_estudiante = ? LIMIT 1");
+                $grado_anterior = 'Blanco';
+                if ($stmt) {
+                    $stmt->bind_param("i", $id_alumno);
+                    $stmt->execute();
+                    $r = $stmt->get_result()->fetch_assoc();
+                    $stmt->close();
+                    $grado_anterior = $r['nombre'] ?? 'Blanco';
+                }
+
+                $ok = $this->certModel->create([
+                    'id_estudiante'  => $id_alumno,
+                    'id_maestro'     => $id_maestro,
+                    'grado_anterior' => $grado_anterior,
+                    'grado_nuevo'    => $grado_nuevo,
+                    'id_grado_nuevo' => $id_grado_nuevo,
+                    'fecha_examen'   => $fecha_examen,
+                    'observaciones'  => $observaciones,
+                    'folio'          => Certificado::generarFolio(),
+                ]);
+                if ($ok) $exitosos++;
+            }
+
+            if ($exitosos > 0) {
+                $this->redirect('/admin/ascensos?success=' . $exitosos . '&bulk=1');
+            } else {
+                $this->redirect('/admin/ascensos?error=fallo');
+            }
+        } catch (Throwable $e) {
+            error_log("Error en AdminAscensosController::storeBulk: " . $e->getMessage());
+            $this->redirect('/admin/ascensos?error=' . urlencode($e->getMessage()));
         }
     }
 

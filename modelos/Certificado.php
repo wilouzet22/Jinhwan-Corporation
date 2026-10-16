@@ -11,12 +11,20 @@ class Certificado {
     /** Crear un nuevo certificado de ascenso e insertarlo en historial_grados */
     public function create(array $data): bool {
         $id_estudiante = (int)($data["id_estudiante"] ?? ($data["id_persona"] ?? 0));
-        $id_maestro    = (int)($data["id_maestro"] ?? 0);
+        $id_maestro    = !empty($data["id_maestro"]) ? (int)$data["id_maestro"] : 0;
         $grado_anterior = $data["grado_anterior"] ?? '';
         $grado_nuevo    = $data["grado_nuevo"] ?? '';
         $fecha_examen   = $data["fecha_examen"] ?? date('Y-m-d');
         $observaciones  = $data["observaciones"] ?? null;
         $folio          = $data["folio"] ?? self::generarFolio();
+
+        // Si id_maestro no fue proporcionado, usar el primer maestro activo para satisfacer la FK en BD
+        if ($id_maestro <= 0) {
+            $resM = $this->db->query("SELECT id_maestro FROM maestro WHERE activo = 1 ORDER BY id_maestro ASC LIMIT 1");
+            if ($resM && $rowM = $resM->fetch_assoc()) {
+                $id_maestro = (int)$rowM['id_maestro'];
+            }
+        }
 
         $sql = "INSERT INTO certificados_ascenso (id_estudiante, id_maestro, grado_anterior, grado_nuevo, fecha_examen, observaciones, folio)
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -117,8 +125,8 @@ class Certificado {
     public static function generarFolio(): string {
         $year = date("Y");
         $db   = Database::getInstance()->getConnection();
-        $res  = $db->query("SELECT COUNT(*) AS total FROM certificados_ascenso WHERE YEAR(creado_en) = $year");
-        $total = $res ? (int)$res->fetch_assoc()["total"] : 0;
-        return sprintf("JH-%s-%04d", $year, $total + 1);
+        $res  = $db->query("SELECT COALESCE(MAX(id_certificado), 0) AS max_id FROM certificados_ascenso");
+        $next = $res ? ((int)$res->fetch_assoc()["max_id"] + 1) : 1;
+        return sprintf("JH-%s-%04d", $year, $next);
     }
 }
