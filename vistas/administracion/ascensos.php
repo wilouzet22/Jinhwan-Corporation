@@ -441,8 +441,8 @@
 <!-- Modal Diploma Viewer -->
 <div id="modal-cert-admin" class="fixed inset-0 z-50 hidden items-center justify-center p-0">
     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeAdminCert()"></div>
-    <div class="relative bg-white dark:bg-slate-900 w-screen h-screen max-w-none max-h-screen overflow-hidden">
-        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+    <div class="relative bg-white dark:bg-slate-900 w-screen h-screen max-w-none max-h-screen overflow-hidden flex flex-col">
+        <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shrink-0">
             <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="material-icons-outlined text-blue-600">workspace_premium</span>
                 Certificado / Diploma de Ascenso de Grado
@@ -456,20 +456,21 @@
                     <span class="material-icons-outlined text-sm">picture_as_pdf</span>
                     Descargar PDF
                 </button>
-                <button onclick="printAdminCert()" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-sm cursor-pointer">
-                    <span class="material-icons-outlined text-sm">print</span>
-                    Imprimir
-                </button>
                 <button onclick="closeAdminCert()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors cursor-pointer">
                     <span class="material-icons-outlined text-sm">close</span>
                 </button>
             </div>
         </div>
-        <div id="admin-cert-wrapper" class="flex items-start justify-center h-[calc(100vh-80px)] overflow-y-auto overflow-x-hidden bg-slate-100 dark:bg-slate-950/60 p-4 md:p-8" style="scrollbar-width: thin; overscroll-behavior: contain;">
-            <div class="flex items-center justify-center py-12 text-slate-400">
-                <span class="material-icons-outlined text-4xl">hourglass_top</span>
-            </div>
+        <!-- Iframe que carga el diploma en página completa -->
+        <div id="admin-cert-loading" class="flex items-center justify-center py-12 text-slate-400 absolute inset-0 top-16 z-0 bg-slate-100 dark:bg-slate-950/60 pointer-events-none">
+            <span class="material-icons-outlined text-4xl animate-spin">hourglass_top</span>
         </div>
+        <iframe id="admin-cert-iframe"
+                src="about:blank"
+                class="flex-1 w-full border-0 bg-slate-100 dark:bg-slate-950/60"
+                style="height: calc(100vh - 73px);"
+                onload="document.getElementById('admin-cert-loading').style.display='none'">
+        </iframe>
     </div>
 </div>
 
@@ -893,34 +894,36 @@ let currentAdminCertId = null;
 
 function openAdminCert(idCert) {
     currentAdminCertId = idCert;
-    const modal = document.getElementById('modal-cert-admin');
-    const wrapper = document.getElementById('admin-cert-wrapper');
-    wrapper.innerHTML = '<div class="flex items-center justify-center py-12 text-slate-400"><span class="material-icons-outlined text-4xl">hourglass_top</span></div>';
+    const modal    = document.getElementById('modal-cert-admin');
+    const iframe   = document.getElementById('admin-cert-iframe');
+    const loading  = document.getElementById('admin-cert-loading');
+
+    // Mostrar spinner de carga
+    if (loading) loading.style.display = 'flex';
+
+    // Cargar el diploma en el iframe (evita problemas de Base64 pesado e innerHTML)
+    iframe.src = '<?= base_url('/admin/ascensos/certificado-page') ?>?id=' + idCert;
+
     modal.classList.remove('hidden');
     modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
-    fetch('<?= base_url('/admin/ascensos/certificado') ?>?id=' + idCert)
-        .then(r => r.text())
-        .then(html => { wrapper.innerHTML = html; })
-        .catch(() => { wrapper.innerHTML = '<p class="text-center text-rose-500 py-8">Error al cargar el diploma.</p>'; });
 }
 
 function closeAdminCert() {
-    const modal = document.getElementById('modal-cert-admin');
+    const modal  = document.getElementById('modal-cert-admin');
+    const iframe = document.getElementById('admin-cert-iframe');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     document.body.style.overflow = '';
+    // Limpiar iframe para liberar memoria
+    iframe.src = 'about:blank';
+    const loading = document.getElementById('admin-cert-loading');
+    if (loading) loading.style.display = 'flex';
 }
 
 function downloadAdminPDF() {
     if (!currentAdminCertId) return;
     window.location.href = '<?= base_url('/admin/ascensos/descargar') ?>?id=' + currentAdminCertId;
-}
-
-function printAdminCert() {
-    const element = document.getElementById('certificado-contenido');
-    if (!element) { alert('El certificado aún se está cargando.'); return; }
-    window.print();
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModal(); closeAdminCert(); } });

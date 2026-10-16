@@ -87,6 +87,7 @@ $router->get('/admin/ascensos', [AdminAscensosController::class, 'index']);
 $router->post('/admin/ascensos/store', [AdminAscensosController::class, 'store']);
 $router->post('/admin/ascensos/store-bulk', [AdminAscensosController::class, 'storeBulk']);
 $router->get('/admin/ascensos/certificado', [AdminAscensosController::class, 'certificado']);
+$router->get('/admin/ascensos/certificado-page', [AdminAscensosController::class, 'certificadoPage']);
 $router->get('/admin/ascensos/descargar', [AdminAscensosController::class, 'descargar']);
 
 $router->get('/admin/teoria', [AdminTeoriaController::class, 'index']);

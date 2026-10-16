@@ -203,6 +203,40 @@ class AdminAscensosController extends Controller {
         include __DIR__ . '/../../vistas/administracion/certificado_preview.php';
     }
 
+    /** Endpoint de página completa: diploma renderizado en HTML para iframe */
+    public function certificadoPage() {
+        Security::verifySession();
+        Security::verifyPermission('ascensos');
+
+        $id = intval($_GET['id'] ?? 0);
+        if ($id <= 0) {
+            http_response_code(400);
+            echo '<!DOCTYPE html><html><body><p style="color:red;font-family:sans-serif;text-align:center;padding:2rem">Solicitud inválida.</p></body></html>';
+            return;
+        }
+
+        $cert = $this->certModel->getById($id);
+        if (!$cert) {
+            http_response_code(404);
+            echo '<!DOCTYPE html><html><body><p style="color:#888;font-family:sans-serif;text-align:center;padding:2rem">Certificado no encontrado.</p></body></html>';
+            return;
+        }
+
+        // Página HTML completa para el iframe
+        echo '<!DOCTYPE html>';
+        echo '<html lang="es">';
+        echo '<head>';
+        echo '<meta charset="UTF-8">';
+        echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+        echo '<title>Diploma – ' . htmlspecialchars($cert['alumno_nombre'] ?? 'Diploma') . '</title>';
+        echo '<style>html,body{margin:0;padding:0;background:#e2e8f0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem;box-sizing:border-box;}</style>';
+        echo '</head>';
+        echo '<body>';
+        include __DIR__ . '/../../vistas/administracion/certificado_preview.php';
+        echo '</body>';
+        echo '</html>';
+    }
+
     public function descargar() {
         Security::verifyPermission('ascensos');
 

@@ -24,8 +24,8 @@ class AdminTeoriaController extends Controller {
             'teorias'      => $teorias,
             'niveles'      => $niveles,
             'tipos'        => $tipos,
-            'page_title'   => 'Administración de Teoría y Ascensos',
-            'current_page' => 'ascensos'
+            'page_title'   => 'Administración de Temarios (Teoría)',
+            'current_page' => 'teoria'
         ]);
     }
 

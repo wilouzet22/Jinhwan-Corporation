@@ -4,6 +4,21 @@ class Security {
 
     public static function initSession() {
         if (session_status() === PHP_SESSION_NONE) {
+            // Asegurar parámetros de cookie persistentes en todo el sitio
+            ini_set('session.cookie_httponly', '1');
+            ini_set('session.use_only_cookies', '1');
+            ini_set('session.cookie_lifetime', '604800'); // 7 días
+            ini_set('session.gc_maxlifetime', '604800');
+
+            session_set_cookie_params([
+                'lifetime' => 604800,
+                'path'     => '/',
+                'domain'   => '',
+                'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+
             session_start();
         }
     }
@@ -15,7 +30,8 @@ class Security {
             self::redirectLogin('no_session');
         }
 
-        $timeout = 1800;
+        // Timeout generoso de 8 horas de inactividad
+        $timeout = 28800;
         if (isset($_SESSION['last_activity'])) {
             $inactivo = time() - $_SESSION['last_activity'];
             if ($inactivo > $timeout) {
@@ -23,32 +39,15 @@ class Security {
                 self::redirectLogin('timeout');
             }
         }
-
         $_SESSION['last_activity'] = time();
 
-        if (isset($_SESSION['user_agent'])) {
-            if ($_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
-                self::logout();
-                self::redirectLogin('security');
-            }
-        }
-
-        if (!isset($_SESSION['last_regeneration'])) {
-            $_SESSION['last_regeneration'] = time();
-        } else {
-            $tiempo_desde_regeneracion = time() - $_SESSION['last_regeneration'];
-            if ($tiempo_desde_regeneracion > 1800) {
-                session_regenerate_id(true);
-                $_SESSION['last_regeneration'] = time();
-            }
-        }
-
+        // Si login_time no fue inicializado, fijarlo ahora sin invalidar la sesión
         if (!isset($_SESSION['login_time'])) {
-            self::logout();
-            self::redirectLogin('invalid');
+            $_SESSION['login_time'] = time();
         }
 
-        $max_session_time = 28800;
+        // Tiempo máximo de validez de la sesión (7 días)
+        $max_session_time = 604800;
         if ((time() - $_SESSION['login_time']) > $max_session_time) {
             self::logout();
             self::redirectLogin('expired');
@@ -119,7 +118,8 @@ class Security {
     public static function startSecureSession($usuario) {
         self::initSession();
 
-        session_regenerate_id(true);
+        // Regenerar ID de sesión de forma segura sin borrar la anterior inmediatamente
+        session_regenerate_id(false);
 
         if (is_array($usuario)) {
             foreach ($usuario as $key => $value) {
@@ -132,7 +132,6 @@ class Security {
         $_SESSION['login_time']        = time();
         $_SESSION['last_activity']     = time();
         $_SESSION['last_regeneration'] = time();
-        $_SESSION['user_agent']        = $_SERVER['HTTP_USER_AGENT'];
     }
 
     public static function logout() {
