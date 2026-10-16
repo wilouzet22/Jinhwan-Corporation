@@ -120,8 +120,8 @@ include __DIR__ . '/../layout/administracion_cabecera.php';
                 </h3>
                 <span id="table-count" class="text-xs font-semibold text-slate-400"></span>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-sm text-left border-collapse" style="min-width: 650px;">
                     <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                     <tr>
                         <th scope="col" class="px-6 py-4">Nombre</th>

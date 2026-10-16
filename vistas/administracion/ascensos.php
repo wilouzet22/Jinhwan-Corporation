@@ -77,8 +77,8 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left" id="tabla-alumnos">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-sm text-left" style="min-width: 650px;" id="tabla-alumnos">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                         <tr>
                             <th class="px-4 py-3 w-10">
@@ -215,8 +215,8 @@
             </div>
 
             <?php if (!empty($historial)): ?>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left" id="tabla-diplomas">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-sm text-left" style="min-width: 650px;" id="tabla-diplomas">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                         <tr>
                             <th class="px-4 py-3.5">Alumno</th>

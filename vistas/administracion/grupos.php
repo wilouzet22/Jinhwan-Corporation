@@ -97,13 +97,13 @@ $total_alumnos_grupos = array_sum(array_column($grupos, 'total_estudiantes'));
                 <table class="w-full text-sm text-left border-collapse table-fixed" style="min-width: 620px;" id="groups-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="w-[24%] px-2 py-3">Grupo</th>
-                            <th scope="col" class="w-[20%] px-2 py-3">Sede</th>
-                            <th scope="col" class="w-[18%] px-2 py-3">Maestro</th>
-                            <th scope="col" class="w-[20%] px-2 py-3">Horario</th>
-                            <th scope="col" class="w-[5%] min-w-[45px] px-1 py-3 text-center">Alumnos</th>
-                            <th scope="col" class="w-[6%] min-w-[65px] px-1 py-3 text-center">Estado</th>
-                            <th scope="col" class="w-[7%] min-w-[60px] px-2 py-3 text-right">Acciones</th>
+                            <th scope="col" class="px-2 py-3" style="width: 24%; min-width: 140px;">Grupo</th>
+                            <th scope="col" class="px-2 py-3" style="width: 20%; min-width: 120px;">Sede</th>
+                            <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 110px;">Maestro</th>
+                            <th scope="col" class="px-2 py-3" style="width: 20%; min-width: 120px;">Horario</th>
+                            <th scope="col" class="px-1 py-3 text-center" style="width: 6%; min-width: 45px;">Alumnos</th>
+                            <th scope="col" class="px-1 py-3 text-center" style="width: 6%; min-width: 65px;">Estado</th>
+                            <th scope="col" class="px-2 py-3 text-right" style="width: 6%; min-width: 60px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="groups-tbody">

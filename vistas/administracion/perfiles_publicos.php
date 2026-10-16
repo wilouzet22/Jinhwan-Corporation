@@ -98,8 +98,8 @@
 
         <!-- Tabla de Control de Perfiles -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse" id="profiles-table">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left border-collapse" style="min-width: 680px;" id="profiles-table">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-950/60 text-[11px] uppercase tracking-widest text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 transition-colors">
                             <th class="p-4 w-10 text-center">

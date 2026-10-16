@@ -42,8 +42,8 @@
             </div>
 
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden relative z-10 shadow-sm transition-colors duration-300">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
+                <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                    <table class="w-full text-left border-collapse" style="min-width: 600px;">
                         <thead>
                             <tr class="bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 transition-colors">
                                 <th class="px-8 py-5 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] transition-colors">Nombre Completo</th>

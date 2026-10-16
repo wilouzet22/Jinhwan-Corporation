@@ -97,13 +97,13 @@ $total_inactivos = $total_maestros - $total_activos;
                 <table class="w-full text-sm text-left border-collapse table-fixed" style="min-width: 700px;" id="teachers-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="w-[28%] px-2 py-3">Maestro / Instructor</th>
-                            <th scope="col" class="w-[18%] px-2 py-3">Sede Principal</th>
-                            <th scope="col" class="w-[18%] px-2 py-3">Contacto</th>
-                            <th scope="col" class="w-[15%] px-2 py-3">Permisos</th>
-                            <th scope="col" class="w-[6%] min-w-[45px] px-1 py-3 text-center">Web</th>
-                            <th scope="col" class="w-[7%] min-w-[65px] px-1 py-3 text-center">Estado</th>
-                            <th scope="col" class="w-[8%] min-w-[82px] px-2 py-3 text-right">Acciones</th>
+                            <th scope="col" class="px-2 py-3" style="width: 28%; min-width: 180px;">Maestro / Instructor</th>
+                            <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Sede Principal</th>
+                            <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Contacto</th>
+                            <th scope="col" class="px-2 py-3" style="width: 15%; min-width: 100px;">Permisos</th>
+                            <th scope="col" class="px-1 py-3 text-center" style="width: 6%; min-width: 45px;">Web</th>
+                            <th scope="col" class="px-1 py-3 text-center" style="width: 7%; min-width: 65px;">Estado</th>
+                            <th scope="col" class="px-2 py-3 text-right" style="width: 8%; min-width: 82px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="teachers-tbody">

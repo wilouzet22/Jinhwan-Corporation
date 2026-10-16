@@ -28,8 +28,8 @@
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left text-sm text-slate-600 dark:text-slate-400" style="min-width: 550px;">
                     <thead class="bg-slate-50 dark:bg-slate-950/50 text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
                         <tr>
                             <th class="px-6 py-4">ID</th>

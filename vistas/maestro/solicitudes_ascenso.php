@@ -65,8 +65,8 @@
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
-            <div class="overflow-x-auto overflow-y-auto max-h-[420px]">
-                <table class="w-full text-sm text-left border-collapse" id="alumnos-main-table">
+            <div class="overflow-x-auto overflow-y-auto max-h-[420px]" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-sm text-left border-collapse" style="min-width: 650px;" id="alumnos-main-table">
                     <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
                             <th scope="col" class="px-6 py-3.5">Deportista</th>
@@ -163,8 +163,8 @@
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm relative z-10 transition-colors duration-300">
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-collapse" id="tabla-diplomas-maestro">
+            <div class="overflow-x-auto" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-sm text-left border-collapse" style="min-width: 650px;" id="tabla-diplomas-maestro">
                     <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-colors">
                         <tr>
                             <th scope="col" class="px-6 py-4">Deportista</th>
@@ -409,8 +409,8 @@ document.getElementById('filtro-diplomas-maestro')?.addEventListener('input', ap
                         <input type="text" id="modal-search-alumno" placeholder="Filtrar alumnos en la lista..." class="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors">
                     </div>
 
-                    <div class="max-h-80 overflow-y-auto border border-slate-200 dark:border-slate-800 rounded-xl">
-                        <table class="w-full text-sm text-left border-collapse" id="promo-table">
+                    <div class="max-h-80 overflow-y-auto overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl" style="-webkit-overflow-scrolling: touch;">
+                        <table class="w-full text-sm text-left border-collapse" style="min-width: 500px;" id="promo-table">
                             <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 sticky top-0 z-10">
                                 <tr>
                                     <th class="px-4 py-3 w-10 text-center">
