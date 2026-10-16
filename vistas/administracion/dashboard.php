@@ -180,8 +180,8 @@
                 </h3>
                 <a href="<?= base_url('/admin/miembros') ?>" class="text-tkd-blue hover:text-blue-700 text-xs font-bold uppercase tracking-wider transition-colors">Ver todos →</a>
             </div>
-            <div class="overflow-x-auto flex-grow custom-scrollbar">
-                <table class="w-full text-left border-collapse min-w-[500px]">
+            <div class="overflow-x-auto flex-grow custom-scrollbar" style="-webkit-overflow-scrolling: touch;">
+                <table class="w-full text-left border-collapse" style="min-width: 500px;">
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-950/50">
                             <th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Miembro</th>

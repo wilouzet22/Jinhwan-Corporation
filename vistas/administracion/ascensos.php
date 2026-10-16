@@ -144,7 +144,7 @@
                             </td>
                             <td class="px-4 py-3 text-center">
                                 <button type="button"
-                                        onclick="abrirModalIndividual(<?= (int)$a['id'] ?>, '<?= htmlspecialchars($a['nombre'] . ' ' . $a['apellido'], ENT_QUOTES) ?>', '<?= htmlspecialchars($a['nombre_nivel'] ?? 'Sin grado', ENT_QUOTES) ?>')"
+                                        onclick="abrirModalIndividual(<?= (int)$a['id'] ?>, '<?= htmlspecialchars($a['nombre'] . ' ' . $a['apellido'], ENT_QUOTES) ?>', '<?= htmlspecialchars($a['nombre_nivel'] ?? 'Sin grado', ENT_QUOTES) ?>', <?= (int)($a['nivel_id'] ?? 0) ?>)"
                                         class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-600 hover:text-white border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer">
                                     <span class="material-icons-outlined text-sm">workspace_premium</span>
                                     <span>Ascender</span>
@@ -378,11 +378,11 @@
                         <label class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                             Nuevo Cinturón / Grado *
                         </label>
-                        <select name="id_grado_nuevo" required
+                        <select name="id_grado_nuevo" id="select-grado-nuevo" required
                                 class="w-full rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-3 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors focus:outline-none">
                             <option value="">— Selecciona el nuevo grado —</option>
                             <?php foreach($grados_list as $g): ?>
-                                <option value="<?= $g['id'] ?>"><?= htmlspecialchars($g['nombre']) ?></option>
+                                <option value="<?= $g['id'] ?>" data-grado-id="<?= (int)$g['id'] ?>"><?= htmlspecialchars($g['nombre']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -738,7 +738,8 @@ function abrirModalMasivo() {
     modal.classList.add('flex');
 }
 
-function abrirModalIndividual(idAlumno, nombre, gradoActual) {
+function abrirModalIndividual(idAlumno, nombre, gradoActual, idGradoActual) {
+    idGradoActual = idGradoActual || 0;
     const form = document.getElementById('form-ascenso');
     form.action = '<?= base_url('/admin/ascensos/store') ?>';
     document.getElementById('input-id-alumno').value = idAlumno;
@@ -755,6 +756,21 @@ function abrirModalIndividual(idAlumno, nombre, gradoActual) {
     const chips = document.getElementById('chips-alumnos');
     chips.innerHTML = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
         <span class="material-icons-outlined text-xs">person</span>${nombre} <span class="text-blue-400 text-[10px]">(${gradoActual})</span></span>`;
+
+    // Deshabilitar grados menores o iguales al actual (solo para ascenso individual)
+    const selectGrado = document.getElementById('select-grado-nuevo');
+    if (selectGrado && idGradoActual > 0) {
+        Array.from(selectGrado.options).forEach(opt => {
+            if (!opt.value) { opt.disabled = false; return; }
+            const optId = parseInt(opt.getAttribute('data-grado-id') || opt.value, 10);
+            opt.disabled = optId <= idGradoActual;
+        });
+    } else if (selectGrado) {
+        // Si no hay grado actual (0), habilitar todos
+        Array.from(selectGrado.options).forEach(opt => { opt.disabled = false; });
+    }
+    // Resetear selección
+    if (selectGrado) selectGrado.value = '';
 
     const modal = document.getElementById('modal-ascenso');
     modal.classList.remove('hidden');
