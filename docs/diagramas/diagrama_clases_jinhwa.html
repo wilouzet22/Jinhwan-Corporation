@@ -526,8 +526,8 @@
                 name: "Estudiante",
                 stereotype: "Entity / User Role (estudiante)",
                 type: "base",
-                x: 1200,
-                y: 650,
+                x: 1440,
+                y: 560,
                 attributes: [
                     "- id_estudiante: int [PK]",
                     "- id_grado: int [FK]",
@@ -563,8 +563,8 @@
                 name: "Maestro",
                 stereotype: "Entity / Instructor (maestro)",
                 type: "base",
-                x: 2300,
-                y: 650,
+                x: 2880,
+                y: 560,
                 attributes: [
                     "- id_maestro: int [PK]",
                     "- id_grado: int [FK]",
@@ -596,8 +596,8 @@
                 name: "Administrador",
                 stereotype: "Entity / Management (administrador)",
                 type: "sub",
-                x: 2850,
-                y: 250,
+                x: 3600,
+                y: 80,
                 attributes: [
                     "- id_administrador: int [PK]",
                     "- nombre: string",
@@ -622,8 +622,8 @@
                 name: "Sede",
                 stereotype: "Entity / Facility (sedes)",
                 type: "normal",
-                x: 1750,
-                y: 250,
+                x: 2160,
+                y: 80,
                 attributes: [
                     "- id_sede: int [PK]",
                     "- nombre: string",
@@ -644,8 +644,8 @@
                 name: "Grupo",
                 stereotype: "Entity / Class Group (grupos)",
                 type: "normal",
-                x: 1750,
-                y: 700,
+                x: 2160,
+                y: 560,
                 attributes: [
                     "- id_grupo: int [PK]",
                     "- id_sede: int [FK]",
@@ -666,8 +666,8 @@
                 name: "Grado",
                 stereotype: "Catalog / Belt (grados)",
                 type: "normal",
-                x: 700,
-                y: 750,
+                x: 720,
+                y: 560,
                 attributes: [
                     "- id_grado: int [PK]",
                     "- nombre: string",
@@ -685,8 +685,8 @@
                 name: "Categoria",
                 stereotype: "Catalog / Division (categorias)",
                 type: "normal",
-                x: 700,
-                y: 350,
+                x: 720,
+                y: 80,
                 attributes: [
                     "- id_categoria: int [PK]",
                     "- nombre: string",
@@ -703,8 +703,8 @@
                 name: "CertificadoAscenso",
                 stereotype: "Entity / Diploma (certificados_ascenso)",
                 type: "normal",
-                x: 1200,
-                y: 1250,
+                x: 1440,
+                y: 1120,
                 attributes: [
                     "- id_certificado: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -727,8 +727,8 @@
                 name: "HistorialGrados",
                 stereotype: "Entity / Ledger (historial_grados)",
                 type: "normal",
-                x: 700,
-                y: 1250,
+                x: 720,
+                y: 1120,
                 attributes: [
                     "- id_historial: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -746,8 +746,8 @@
                 name: "CronogramaClase",
                 stereotype: "Entity / Session (cronogramas_clase)",
                 type: "normal",
-                x: 1750,
-                y: 1200,
+                x: 2160,
+                y: 1120,
                 attributes: [
                     "- id_cronograma: int [PK]",
                     "- id_grupo: int [FK]",
@@ -768,8 +768,8 @@
                 name: "ClaseEjercicio",
                 stereotype: "Pivot / Detail (clase_ejercicios)",
                 type: "normal",
-                x: 2300,
-                y: 1200,
+                x: 2880,
+                y: 1120,
                 attributes: [
                     "- id_clase_ejercicio: int [PK]",
                     "- id_cronograma: int [FK]",
@@ -789,8 +789,8 @@
                 name: "Ejercicio",
                 stereotype: "Entity / Workout (ejercicios)",
                 type: "normal",
-                x: 2850,
-                y: 1200,
+                x: 3600,
+                y: 1120,
                 attributes: [
                     "- id_ejercicio: int [PK]",
                     "- nombre: string",
@@ -809,8 +809,8 @@
                 name: "Evento",
                 stereotype: "Entity / Agenda (eventos)",
                 type: "normal",
-                x: 2850,
-                y: 650,
+                x: 3600,
+                y: 560,
                 attributes: [
                     "- id_evento: int [PK]",
                     "- id_maestro: int [FK]",
@@ -832,8 +832,8 @@
                 name: "GaleriaMultimedia",
                 stereotype: "Entity / Content (galeria_multimedia)",
                 type: "normal",
-                x: 2300,
-                y: 250,
+                x: 2880,
+                y: 80,
                 attributes: [
                     "- id_multimedia: int [PK]",
                     "- id_maestro: int [FK]",
@@ -852,8 +852,8 @@
                 name: "Teoria",
                 stereotype: "Entity / Learning (teorias)",
                 type: "normal",
-                x: 250,
-                y: 750,
+                x: 0,
+                y: 560,
                 attributes: [
                     "- id_teoria: int [PK]",
                     "- id_tipo_teoria: int [FK]",
@@ -874,8 +874,8 @@
                 name: "TipoTeoria",
                 stereotype: "Catalog / Category (tipos_teoria)",
                 type: "normal",
-                x: 250,
-                y: 350,
+                x: 0,
+                y: 80,
                 attributes: [
                     "- id_tipo_teoria: int [PK]",
                     "- nombre: string",
@@ -891,8 +891,8 @@
                 name: "TeoriaFavoritos",
                 stereotype: "Pivot / Bookmark (teoria_favoritos)",
                 type: "normal",
-                x: 250,
-                y: 1250,
+                x: 0,
+                y: 1120,
                 attributes: [
                     "- id: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -948,9 +948,9 @@
         ];
 
         // State
-        let scale = 0.65;
-        let panX = 100;
-        let panY = 50;
+        let scale = 0.40;
+        let panX = 60;
+        let panY = 40;
         let isDraggingViewport = false;
         let startX = 0, startY = 0;
         let showMethods = true;
@@ -1072,10 +1072,19 @@
 
                 path.setAttribute('class', pathClass);
                 
-                // Straight path or orthagonal curve
-                const dx = p2.x - p1.x;
-                const dy = p2.y - p1.y;
-                let d = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
+                // Bezier S-curve routing — avoids crossing lines
+                const midX = (p1.x + p2.x) / 2;
+                const midY = (p1.y + p2.y) / 2;
+                const adx = Math.abs(p2.x - p1.x);
+                const ady = Math.abs(p2.y - p1.y);
+                let d;
+                if (adx >= ady) {
+                    // Horizontally dominant → anchor control points at midX
+                    d = `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
+                } else {
+                    // Vertically dominant → anchor control points at midY
+                    d = `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`;
+                }
 
                 path.setAttribute('d', d);
                 if (markerEnd) path.setAttribute('marker-end', markerEnd);
@@ -1083,13 +1092,14 @@
 
                 group.appendChild(path);
 
-                // Add Labels & Multiplicity
+                // Label at bezier midpoint (parametric t=0.5)
                 if (rel.label) {
-                    const midX = (p1.x + p2.x) / 2;
-                    const midY = (p1.y + p2.y) / 2 - 8;
+                    // For cubic bezier B(0.5): average of all control points weighted
+                    const bMidX = 0.125*p1.x + 0.375*(midX) + 0.375*(adx>=ady ? midX : p2.x) + 0.125*p2.x;
+                    const bMidY = 0.125*p1.y + 0.375*(adx>=ady ? p1.y : midY) + 0.375*(adx>=ady ? p2.y : midY) + 0.125*p2.y;
                     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    text.setAttribute('x', midX);
-                    text.setAttribute('y', midY);
+                    text.setAttribute('x', bMidX);
+                    text.setAttribute('y', bMidY - 8);
                     text.setAttribute('class', 'relationship-label');
                     text.textContent = rel.label;
                     group.appendChild(text);
@@ -1196,7 +1206,7 @@
         // Controls
         document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
         document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
-        document.getElementById('btnZoomReset').onclick = () => { scale = 0.65; panX = 100; panY = 50; updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { scale = 0.40; panX = 60; panY = 40; updateTransform(); };
         
         document.getElementById('btnToggleMethods').onclick = () => {
             showMethods = !showMethods;
@@ -1205,10 +1215,22 @@
         };
 
         document.getElementById('btnAutoLayout').onclick = () => {
-            // Auto layout grid reset
-            scale = 0.65;
-            panX = 100;
-            panY = 50;
+            // Reset to default grid positions
+            classesData.forEach(c => {
+                const defaults = {
+                    estudiante: {x:1440,y:560}, maestro: {x:2880,y:560},
+                    administrador: {x:3600,y:80}, sede: {x:2160,y:80},
+                    grupo: {x:2160,y:560}, grado: {x:720,y:560},
+                    categoria: {x:720,y:80}, certificado_ascenso: {x:1440,y:1120},
+                    historial_grados: {x:720,y:1120}, cronograma_clase: {x:2160,y:1120},
+                    clase_ejercicio: {x:2880,y:1120}, ejercicio: {x:3600,y:1120},
+                    evento: {x:3600,y:560}, galeria_multimedia: {x:2880,y:80},
+                    teoria: {x:0,y:560}, tipo_teoria: {x:0,y:80},
+                    teoria_favorito: {x:0,y:1120}
+                };
+                if (defaults[c.id]) { c.x = defaults[c.id].x; c.y = defaults[c.id].y; }
+            });
+            scale = 0.40; panX = 60; panY = 40;
             updateTransform();
             renderClasses();
             setTimeout(renderConnectors, 50);

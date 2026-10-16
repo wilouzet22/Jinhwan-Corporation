@@ -353,7 +353,7 @@
     <div id="viewport">
         <div id="canvas">
             <!-- System Boundary -->
-            <div class="system-boundary" id="systemBoundary" style="left: 620px; top: 380px; width: 1520px; height: 1850px;">
+            <div class="system-boundary" id="systemBoundary" style="left: 600px; top: 360px; width: 1600px; height: 1920px;">
                 <div class="system-title">Sistema de Gestión Jinhwa Corporation</div>
             </div>
 
@@ -470,7 +470,7 @@
             { id: "visitante", name: "Visitante Web", x: 280, y: 530, stroke: "#38bdf8" },
             { id: "estudiante", name: "Estudiante", x: 280, y: 1020, stroke: "#6366f1" },
             { id: "maestro", name: "Maestro / Instructor", x: 280, y: 1530, stroke: "#10b981" },
-            { id: "administrador", name: "Administrador", x: 2350, y: 1500, stroke: "#c084fc" }
+            { id: "administrador", name: "Administrador", x: 2350, y: 2030, stroke: "#c084fc" }
         ];
 
         const useCasesData = [
@@ -538,13 +538,7 @@
             { from: "administrador", to: "uc21", type: "assoc", label: "" },
             { from: "administrador", to: "uc22", type: "assoc", label: "" },
             { from: "administrador", to: "uc23", type: "assoc", label: "" },
-            { from: "administrador", to: "uc24", type: "assoc", label: "" },
-
-            // Includes / Extends between Use Cases
-            { from: "uc07", to: "uc06", type: "include", label: "<<include>>" },
-            { from: "uc13", to: "uc15", type: "include", label: "<<include>>" },
-            { from: "uc16", to: "uc23", type: "extend", label: "<<extend>>" },
-            { from: "uc05", to: "uc22", type: "extend", label: "<<extend>>" }
+            { from: "administrador", to: "uc24", type: "assoc", label: "" }
         ];
 
         // State
