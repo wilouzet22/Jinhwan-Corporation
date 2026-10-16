@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Clases UML - Jinhwa Corporation</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: #161e2e;
+            --border-color: #273549;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            
+            --class-header-bg: #1e293b;
+            --class-header-border: #3b82f6;
+            --class-header-text: #60a5fa;
+            
+            --base-header-bg: #311b92;
+            --base-header-border: #a855f7;
+            --base-header-text: #f0abfc;
+            
+            --sub-header-bg: #064e3b;
+            --sub-header-border: #10b981;
+            --sub-header-text: #6ee7b7;
+            
+            --attr-text: #cbd5e1;
+            --method-text: #38bdf8;
+            --line-color: #64748b;
+            --line-highlight: #a855f7;
+            --mult-color: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .title-container h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-container h1 span {
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            border-color: #6366f1;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+
+        #viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        #viewport:active {
+            cursor: grabbing;
+        }
+
+        #canvas {
+            position: absolute;
+            transform-origin: 0 0;
+            top: 0;
+            left: 0;
+            width: 4000px;
+            height: 3000px;
+        }
+
+        svg#connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* UML Class Box Component */
+        .uml-class {
+            position: absolute;
+            background-color: #1e293b;
+            border: 2px solid var(--class-header-border);
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            z-index: 2;
+            cursor: move;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: box-shadow 0.2s, border-color 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .uml-class:hover {
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+            border-color: #818cf8;
+        }
+
+        .uml-class.selected {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.4);
+        }
+
+        .uml-class.base-class {
+            border-color: var(--base-header-border);
+        }
+        .uml-class.sub-class {
+            border-color: var(--sub-header-border);
+        }
+
+        .class-header {
+            background-color: var(--class-header-bg);
+            padding: 10px 14px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .base-class .class-header {
+            background-color: var(--base-header-bg);
+        }
+        .sub-class .class-header {
+            background-color: var(--sub-header-bg);
+        }
+
+        .class-stereotype {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 2px;
+        }
+
+        .class-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .class-compartment {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .class-compartment:last-child {
+            border-bottom: none;
+            background-color: #0b1329;
+        }
+
+        .compartment-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .attr-item {
+            color: var(--attr-text);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        .method-item {
+            color: var(--method-text);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.78rem;
+            white-space: nowrap;
+        }
+
+        /* SVG Connectors */
+        .uml-path {
+            fill: none;
+            stroke: var(--line-color);
+            stroke-width: 2;
+            transition: stroke 0.2s;
+        }
+
+        .uml-path.dashed {
+            stroke-dasharray: 6 4;
+        }
+
+        .uml-path:hover {
+            stroke: var(--line-highlight);
+            stroke-width: 3;
+        }
+
+        .relationship-label {
+            fill: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+            text-anchor: middle;
+            background: #0f172a;
+        }
+
+        .multiplicity-label {
+            fill: var(--mult-color);
+            font-size: 11px;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        /* Legend Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 600px;
+            max-width: 90vw;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0f172a;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-symbol {
+            width: 80px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .legend-info h4 {
+            font-size: 0.85rem;
+            color: #ffffff;
+        }
+        .legend-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="title-container">
+            <h1>Diagrama de Clases UML <span>Jinhwa Corporation</span></h1>
+            <div class="subtitle">Arquitectura de Software y Modelo de Dominio de Base de Datos</div>
+        </div>
+        <div class="controls">
+            <button class="btn" id="btnZoomOut">🔍 -</button>
+            <button class="btn" id="btnZoomReset">100%</button>
+            <button class="btn" id="btnZoomIn">🔍 +</button>
+            <button class="btn" id="btnAutoLayout">⚡ Organizar</button>
+            <button class="btn" id="btnToggleMethods">⚙️ Métodos</button>
+            <button class="btn btn-primary" id="btnLegend">📖 Leyenda UML</button>
+        </div>
+    </header>
+
+    <div id="viewport">
+        <div id="canvas">
+            <svg id="connections">
+                <defs>
+                    <!-- Association Arrow -->
+                    <marker id="marker-association" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#64748b" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Inheritance Hollow Triangle -->
+                    <marker id="marker-inheritance" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+                        <path d="M 0 0 L 12 6 L 0 12 Z" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Realization Hollow Triangle -->
+                    <marker id="marker-realization" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+                        <path d="M 0 0 L 12 6 L 0 12 Z" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Dependency Open Arrow -->
+                    <marker id="marker-dependency" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+                    </marker>
+
+                    <!-- Aggregation Hollow Diamond -->
+                    <marker id="marker-aggregation" viewBox="0 0 16 10" refX="0" refY="5" markerWidth="12" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 5 L 8 0 L 16 5 L 8 10 Z" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+                    </marker>
+
+                    <!-- Composition Solid Diamond -->
+                    <marker id="marker-composition" viewBox="0 0 16 10" refX="0" refY="5" markerWidth="12" markerHeight="8" orient="auto-start-reverse">
+                        <path d="M 0 5 L 8 0 L 16 5 L 8 10 Z" fill="#a855f7" stroke="#a855f7" stroke-width="1.5"/>
+                    </marker>
+                </defs>
+            </svg>
+            <div id="classes-container"></div>
+        </div>
+    </div>
+
+    <!-- Modal Leyenda UML -->
+    <div class="modal" id="legendModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tipos de Relaciones UML</h3>
+                <button class="close-btn" id="closeLegend">&times;</button>
+            </div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#64748b" stroke-width="2" marker-end="url(#marker-association)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Asociación (Association)</h4>
+                        <p>Relación structural entre clases.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#10b981" stroke-width="2" marker-end="url(#marker-inheritance)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Herencia (Inheritance)</h4>
+                        <p>Subclase hereda atributos y métodos.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#marker-realization)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Realización (Realization)</h4>
+                        <p>Implementación de interfaz o contrato.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="0" y1="10" x2="50" y2="10" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#marker-dependency)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Dependencia (Dependency)</h4>
+                        <p>Uso temporal entre objetos.</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="10" y1="10" x2="55" y2="10" stroke="#f59e0b" stroke-width="2" marker-start="url(#marker-aggregation)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Agregación (Aggregation)</h4>
+                        <p>Relación todo-parte débil (independiente).</p>
+                    </div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="legend-symbol">
+                        <svg width="60" height="20">
+                            <line x1="10" y1="10" x2="55" y2="10" stroke="#a855f7" stroke-width="2" marker-start="url(#marker-composition)"/>
+                        </svg>
+                    </div>
+                    <div class="legend-info">
+                        <h4>Composición (Composition)</h4>
+                        <p>Relación todo-parte fuerte (vida ligada).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const classesData = [
+            {
+                id: "estudiante",
+                name: "Estudiante",
+                stereotype: "Entity / User Role (estudiante)",
+                type: "base",
+                x: 1200,
+                y: 650,
+                attributes: [
+                    "- id_estudiante: int [PK]",
+                    "- id_grado: int [FK]",
+                    "- id_categoria: int [FK]",
+                    "- id_grupo: int [FK]",
+                    "- id_maestro: int [FK]",
+                    "- nombre: string",
+                    "- apellido: string",
+                    "- tipo_documento: string",
+                    "- num_doc: string",
+                    "- telefono: string",
+                    "- correo: string",
+                    "- clave: string",
+                    "- foto_perfil: string",
+                    "- fecha_nacimiento: date",
+                    "- peso: decimal(5,2)",
+                    "- division: string",
+                    "- eps: string",
+                    "- rh: string",
+                    "- activo: boolean",
+                    "- created_at: timestamp"
+                ],
+                methods: [
+                    "+ autenticar(correo, clave): boolean",
+                    "+ consultarHistorialAscensos(): List<CertificadoAscenso>",
+                    "+ listarTeoriasFavoritas(): List<Teoria>",
+                    "+ marcarTeoriaFavorita(id_teoria: int): boolean",
+                    "+ actualizarPerfil(): boolean"
+                ]
+            },
+            {
+                id: "maestro",
+                name: "Maestro",
+                stereotype: "Entity / Instructor (maestro)",
+                type: "base",
+                x: 2300,
+                y: 650,
+                attributes: [
+                    "- id_maestro: int [PK]",
+                    "- id_grado: int [FK]",
+                    "- id_sede: int [FK]",
+                    "- nombre: string",
+                    "- apellido: string",
+                    "- tipo_documento: string",
+                    "- num_doc: string",
+                    "- telefono: string",
+                    "- foto_perfil: string",
+                    "- descripcion_perfil: text",
+                    "- logros: text",
+                    "- mostrar_en_web: boolean",
+                    "- correo: string",
+                    "- clave: string",
+                    "- permisos_extra: json",
+                    "- activo: boolean"
+                ],
+                methods: [
+                    "+ autenticar(correo, clave): boolean",
+                    "+ evaluarAscenso(id_estudiante, id_grado): CertificadoAscenso",
+                    "+ planificarClase(id_grupo, fecha, ejercicios): CronogramaClase",
+                    "+ listarAlumnosAsignados(): List<Estudiante>",
+                    "+ publicarEnGaleria(url, descripcion): boolean"
+                ]
+            },
+            {
+                id: "administrador",
+                name: "Administrador",
+                stereotype: "Entity / Management (administrador)",
+                type: "sub",
+                x: 2850,
+                y: 250,
+                attributes: [
+                    "- id_administrador: int [PK]",
+                    "- nombre: string",
+                    "- apellido: string",
+                    "- correo: string",
+                    "- clave: string",
+                    "- foto_perfil: string",
+                    "- permisos_extra: json",
+                    "- activo: boolean"
+                ],
+                methods: [
+                    "+ gestionarSedes(): boolean",
+                    "+ gestionarGrupos(): boolean",
+                    "+ gestionarMaestros(): boolean",
+                    "+ emitirDiplomasAscenso(): boolean",
+                    "+ aprobarPreRegistros(): boolean",
+                    "+ generarReportesGenerales(): Reporte"
+                ]
+            },
+            {
+                id: "sede",
+                name: "Sede",
+                stereotype: "Entity / Facility (sedes)",
+                type: "normal",
+                x: 1750,
+                y: 250,
+                attributes: [
+                    "- id_sede: int [PK]",
+                    "- nombre: string",
+                    "- direccion: string",
+                    "- telefono: string",
+                    "- ciudad: string",
+                    "- horario: string",
+                    "- activa: boolean"
+                ],
+                methods: [
+                    "+ crearSede(): boolean",
+                    "+ editarSede(): boolean",
+                    "+ listarSedes(): List<Sede>"
+                ]
+            },
+            {
+                id: "grupo",
+                name: "Grupo",
+                stereotype: "Entity / Class Group (grupos)",
+                type: "normal",
+                x: 1750,
+                y: 700,
+                attributes: [
+                    "- id_grupo: int [PK]",
+                    "- id_sede: int [FK]",
+                    "- id_maestro: int [FK]",
+                    "- nombre: string",
+                    "- horario: string",
+                    "- dias: string",
+                    "- activo: boolean"
+                ],
+                methods: [
+                    "+ asignarMaestro(id_maestro): boolean",
+                    "+ inscribirAlumno(id_estudiante): boolean",
+                    "+ listarAlumnos(): List<Estudiante>"
+                ]
+            },
+            {
+                id: "grado",
+                name: "Grado",
+                stereotype: "Catalog / Belt (grados)",
+                type: "normal",
+                x: 700,
+                y: 750,
+                attributes: [
+                    "- id_grado: int [PK]",
+                    "- nombre: string",
+                    "- color: string",
+                    "- orden: int",
+                    "- tipo: string"
+                ],
+                methods: [
+                    "+ obtenerPorOrden(orden: int): Grado",
+                    "+ listarGrados(): List<Grado>"
+                ]
+            },
+            {
+                id: "categoria",
+                name: "Categoria",
+                stereotype: "Catalog / Division (categorias)",
+                type: "normal",
+                x: 700,
+                y: 350,
+                attributes: [
+                    "- id_categoria: int [PK]",
+                    "- nombre: string",
+                    "- edad_min: int",
+                    "- edad_max: int"
+                ],
+                methods: [
+                    "+ clasificarPorEdad(edad: int): Categoria",
+                    "+ listarCategorias(): List<Categoria>"
+                ]
+            },
+            {
+                id: "certificado_ascenso",
+                name: "CertificadoAscenso",
+                stereotype: "Entity / Diploma (certificados_ascenso)",
+                type: "normal",
+                x: 1200,
+                y: 1250,
+                attributes: [
+                    "- id_certificado: int [PK]",
+                    "- id_estudiante: int [FK]",
+                    "- id_maestro: int [FK]",
+                    "- grado_anterior: string",
+                    "- grado_nuevo: string",
+                    "- fecha_examen: date",
+                    "- observaciones: text",
+                    "- folio: string",
+                    "- creado_en: timestamp"
+                ],
+                methods: [
+                    "+ generarFolio(): string",
+                    "+ generarDiplomaHTML(): string",
+                    "+ registrarCertificado(): boolean"
+                ]
+            },
+            {
+                id: "historial_grados",
+                name: "HistorialGrados",
+                stereotype: "Entity / Ledger (historial_grados)",
+                type: "normal",
+                x: 700,
+                y: 1250,
+                attributes: [
+                    "- id_historial: int [PK]",
+                    "- id_estudiante: int [FK]",
+                    "- id_grado: int [FK]",
+                    "- id_certificado: int [FK]",
+                    "- fecha_obtencion: date"
+                ],
+                methods: [
+                    "+ registrarAscenso(): boolean",
+                    "+ consultarHistorial(id_estudiante): List<HistorialGrados>"
+                ]
+            },
+            {
+                id: "cronograma_clase",
+                name: "CronogramaClase",
+                stereotype: "Entity / Session (cronogramas_clase)",
+                type: "normal",
+                x: 1750,
+                y: 1200,
+                attributes: [
+                    "- id_cronograma: int [PK]",
+                    "- id_grupo: int [FK]",
+                    "- id_maestro: int [FK]",
+                    "- fecha: date",
+                    "- objetivo: string",
+                    "- observaciones: text",
+                    "- created_at: timestamp"
+                ],
+                methods: [
+                    "+ programarClase(): boolean",
+                    "+ agregarEjercicio(id_ejercicio, series, reps): boolean",
+                    "+ consultarPorFecha(fecha): List<CronogramaClase>"
+                ]
+            },
+            {
+                id: "clase_ejercicio",
+                name: "ClaseEjercicio",
+                stereotype: "Pivot / Detail (clase_ejercicios)",
+                type: "normal",
+                x: 2300,
+                y: 1200,
+                attributes: [
+                    "- id_clase_ejercicio: int [PK]",
+                    "- id_cronograma: int [FK]",
+                    "- id_ejercicio: int [FK]",
+                    "- series: int",
+                    "- repeticiones: int",
+                    "- duracion_minutos: int",
+                    "- orden: int",
+                    "- observaciones: text"
+                ],
+                methods: [
+                    "+ actualizarSeriesReps(): boolean"
+                ]
+            },
+            {
+                id: "ejercicio",
+                name: "Ejercicio",
+                stereotype: "Entity / Workout (ejercicios)",
+                type: "normal",
+                x: 2850,
+                y: 1200,
+                attributes: [
+                    "- id_ejercicio: int [PK]",
+                    "- nombre: string",
+                    "- descripcion: text",
+                    "- tipo: string",
+                    "- categoria_capacidad: string",
+                    "- video_url: string"
+                ],
+                methods: [
+                    "+ crearEjercicio(): boolean",
+                    "+ listarPorCapacidad(capacidad: string): List<Ejercicio>"
+                ]
+            },
+            {
+                id: "evento",
+                name: "Evento",
+                stereotype: "Entity / Agenda (eventos)",
+                type: "normal",
+                x: 2850,
+                y: 650,
+                attributes: [
+                    "- id_evento: int [PK]",
+                    "- id_maestro: int [FK]",
+                    "- id_sede: int [FK]",
+                    "- titulo: string",
+                    "- descripcion: text",
+                    "- fecha_inicio: datetime",
+                    "- fecha_fin: datetime",
+                    "- lugar: string",
+                    "- tipo: string"
+                ],
+                methods: [
+                    "+ crearEvento(): boolean",
+                    "+ listarEventos(): List<Evento>"
+                ]
+            },
+            {
+                id: "galeria_multimedia",
+                name: "GaleriaMultimedia",
+                stereotype: "Entity / Content (galeria_multimedia)",
+                type: "normal",
+                x: 2300,
+                y: 250,
+                attributes: [
+                    "- id_multimedia: int [PK]",
+                    "- id_maestro: int [FK]",
+                    "- url: string",
+                    "- tipo: string",
+                    "- descripcion: text",
+                    "- created_at: timestamp"
+                ],
+                methods: [
+                    "+ subirMedia(): boolean",
+                    "+ listarPublicacionesWeb(): List<GaleriaMultimedia>"
+                ]
+            },
+            {
+                id: "teoria",
+                name: "Teoria",
+                stereotype: "Entity / Learning (teorias)",
+                type: "normal",
+                x: 250,
+                y: 750,
+                attributes: [
+                    "- id_teoria: int [PK]",
+                    "- id_tipo_teoria: int [FK]",
+                    "- id_grado: int [FK]",
+                    "- titulo: string",
+                    "- contenido: text",
+                    "- resumen: text",
+                    "- imagen: string",
+                    "- orden: int"
+                ],
+                methods: [
+                    "+ obtenerPorGrado(id_grado: int): List<Teoria>",
+                    "+ agregarTeoria(): boolean"
+                ]
+            },
+            {
+                id: "tipo_teoria",
+                name: "TipoTeoria",
+                stereotype: "Catalog / Category (tipos_teoria)",
+                type: "normal",
+                x: 250,
+                y: 350,
+                attributes: [
+                    "- id_tipo_teoria: int [PK]",
+                    "- nombre: string",
+                    "- descripcion: text",
+                    "- icono: string"
+                ],
+                methods: [
+                    "+ listarTipos(): List<TipoTeoria>"
+                ]
+            },
+            {
+                id: "teoria_favorito",
+                name: "TeoriaFavoritos",
+                stereotype: "Pivot / Bookmark (teoria_favoritos)",
+                type: "normal",
+                x: 250,
+                y: 1250,
+                attributes: [
+                    "- id: int [PK]",
+                    "- id_estudiante: int [FK]",
+                    "- id_teoria: int [FK]",
+                    "- fecha_guardado: timestamp"
+                ],
+                methods: [
+                    "+ guardarFavorito(): boolean",
+                    "+ eliminarFavorito(): boolean"
+                ]
+            }
+        ];
+
+        const relationshipsData = [
+            // Sedes y Grupos
+            { from: "sede", to: "grupo", type: "aggregation", label: "Alberga", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "grupo", type: "association", label: "Imparte", multFrom: "1", multTo: "0..*" },
+            { from: "sede", to: "maestro", type: "association", label: "Sede Principal", multFrom: "1", multTo: "0..*" },
+            { from: "grupo", to: "estudiante", type: "aggregation", label: "Inscribe", multFrom: "1", multTo: "0..*" },
+
+            // Grados y Categorias
+            { from: "grado", to: "estudiante", type: "association", label: "Cinturón Actual", multFrom: "1", multTo: "0..*" },
+            { from: "grado", to: "maestro", type: "association", label: "Dan / Rango", multFrom: "1", multTo: "0..*" },
+            { from: "categoria", to: "estudiante", type: "association", label: "Clasificado en", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "estudiante", type: "association", label: "Tutor / Instructor", multFrom: "1", multTo: "0..*" },
+
+            // Certificados y Ascensos
+            { from: "estudiante", to: "certificado_ascenso", type: "composition", label: "Recibe Diploma", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "certificado_ascenso", type: "association", label: "Evalúa y Firma", multFrom: "1", multTo: "0..*" },
+            { from: "certificado_ascenso", to: "historial_grados", type: "association", label: "Respalda (1:1)", multFrom: "1", multTo: "1" },
+            { from: "estudiante", to: "historial_grados", type: "composition", label: "Historial", multFrom: "1", multTo: "0..*" },
+            { from: "grado", to: "historial_grados", type: "association", label: "Grado Otorgado", multFrom: "1", multTo: "0..*" },
+
+            // Cronogramas y Ejercicios
+            { from: "grupo", to: "cronograma_clase", type: "composition", label: "Agenda Clase", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "cronograma_clase", type: "association", label: "Instructor", multFrom: "1", multTo: "0..*" },
+            { from: "cronograma_clase", to: "clase_ejercicio", type: "composition", label: "Contiene", multFrom: "1", multTo: "1..*" },
+            { from: "ejercicio", to: "clase_ejercicio", type: "association", label: "Detalla", multFrom: "1", multTo: "0..*" },
+
+            // Contenidos Web
+            { from: "maestro", to: "evento", type: "association", label: "Organiza", multFrom: "1", multTo: "0..*" },
+            { from: "sede", to: "evento", type: "association", label: "Lugar", multFrom: "1", multTo: "0..*" },
+            { from: "maestro", to: "galeria_multimedia", type: "association", label: "Publica", multFrom: "1", multTo: "0..*" },
+
+            // Teoria y Favoritos
+            { from: "tipo_teoria", to: "teoria", type: "aggregation", label: "Clasifica", multFrom: "1", multTo: "0..*" },
+            { from: "grado", to: "teoria", type: "association", label: "Requisito de", multFrom: "1", multTo: "0..*" },
+            { from: "estudiante", to: "teoria_favorito", type: "association", label: "Marca", multFrom: "1", multTo: "0..*" },
+            { from: "teoria", to: "teoria_favorito", type: "association", label: "Guardada en", multFrom: "1", multTo: "0..*" }
+        ];
+
+        // State
+        let scale = 0.65;
+        let panX = 100;
+        let panY = 50;
+        let isDraggingViewport = false;
+        let startX = 0, startY = 0;
+        let showMethods = true;
+        let activeDraggedNode = null;
+        let dragOffsetX = 0, dragOffsetY = 0;
+
+        const viewport = document.getElementById('viewport');
+        const canvas = document.getElementById('canvas');
+        const svg = document.getElementById('connections');
+        const container = document.getElementById('classes-container');
+
+        // Render Classes
+        function renderClasses() {
+            container.innerHTML = '';
+            classesData.forEach(c => {
+                const el = document.createElement('div');
+                el.className = `uml-class ${c.type === 'base' ? 'base-class' : (c.type === 'sub' ? 'sub-class' : '')}`;
+                el.id = `class-${c.id}`;
+                el.style.left = `${c.x}px`;
+                el.style.top = `${c.y}px`;
+
+                let attrsHtml = c.attributes.map(a => `<div class="attr-item">${escapeHtml(a)}</div>`).join('');
+                let methodsHtml = c.methods.map(m => `<div class="method-item">${escapeHtml(m)}</div>`).join('');
+
+                el.innerHTML = `
+                    <div class="class-header">
+                        <div class="class-stereotype">&lt;&lt;${c.stereotype}&gt;&gt;</div>
+                        <div class="class-name">${c.name}</div>
+                    </div>
+                    <div class="class-compartment">
+                        <div class="compartment-title">Atributos</div>
+                        ${attrsHtml}
+                    </div>
+                    ${showMethods ? `
+                    <div class="class-compartment methods-compartment">
+                        <div class="compartment-title">Métodos</div>
+                        ${methodsHtml}
+                    </div>` : ''}
+                `;
+
+                // Dragging Node Logic
+                el.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    activeDraggedNode = c;
+                    dragOffsetX = e.clientX / scale - c.x;
+                    dragOffsetY = e.clientY / scale - c.y;
+                    document.querySelectorAll('.uml-class').forEach(nc => nc.classList.remove('selected'));
+                    el.classList.add('selected');
+                });
+
+                container.appendChild(el);
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Render Connectors
+        function renderConnectors() {
+            // Remove existing paths & text
+            const existing = svg.querySelectorAll('.connector-group');
+            existing.forEach(e => e.remove());
+
+            relationshipsData.forEach((rel, idx) => {
+                const fromNode = classesData.find(c => c.id === rel.from);
+                const toNode = classesData.find(c => c.id === rel.to);
+                if (!fromNode || !toNode) return;
+
+                const fromEl = document.getElementById(`class-${rel.from}`);
+                const toEl = document.getElementById(`class-${rel.to}`);
+                if (!fromEl || !toEl) return;
+
+                const fromRect = { x: fromNode.x, y: fromNode.y, w: fromEl.offsetWidth, h: fromEl.offsetHeight };
+                const toRect = { x: toNode.x, y: toNode.y, w: toEl.offsetWidth, h: toEl.offsetHeight };
+
+                // Calculate center to center
+                const c1 = { x: fromRect.x + fromRect.w / 2, y: fromRect.y + fromRect.h / 2 };
+                const c2 = { x: toRect.x + toRect.w / 2, y: toRect.y + toRect.h / 2 };
+
+                // Intersections
+                const p1 = getIntersectionPoint(c1, c2, fromRect);
+                const p2 = getIntersectionPoint(c2, c1, toRect);
+
+                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                group.setAttribute('class', 'connector-group');
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                let pathClass = 'uml-path';
+                let markerEnd = '';
+                let markerStart = '';
+
+                if (rel.type === 'inheritance') {
+                    pathClass += ' stroke-inheritance';
+                    markerEnd = 'url(#marker-inheritance)';
+                } else if (rel.type === 'realization') {
+                    pathClass += ' dashed';
+                    markerEnd = 'url(#marker-realization)';
+                } else if (rel.type === 'association') {
+                    markerEnd = 'url(#marker-association)';
+                } else if (rel.type === 'dependency') {
+                    pathClass += ' dashed';
+                    markerEnd = 'url(#marker-dependency)';
+                } else if (rel.type === 'aggregation') {
+                    markerStart = 'url(#marker-aggregation)';
+                } else if (rel.type === 'composition') {
+                    markerStart = 'url(#marker-composition)';
+                }
+
+                path.setAttribute('class', pathClass);
+                
+                // Straight path or orthagonal curve
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                let d = `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y}`;
+
+                path.setAttribute('d', d);
+                if (markerEnd) path.setAttribute('marker-end', markerEnd);
+                if (markerStart) path.setAttribute('marker-start', markerStart);
+
+                group.appendChild(path);
+
+                // Add Labels & Multiplicity
+                if (rel.label) {
+                    const midX = (p1.x + p2.x) / 2;
+                    const midY = (p1.y + p2.y) / 2 - 8;
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute('x', midX);
+                    text.setAttribute('y', midY);
+                    text.setAttribute('class', 'relationship-label');
+                    text.textContent = rel.label;
+                    group.appendChild(text);
+                }
+
+                if (rel.multFrom) {
+                    const m1 = getPointAlongLine(p1, p2, 24);
+                    const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text1.setAttribute('x', m1.x + 8);
+                    text1.setAttribute('y', m1.y - 6);
+                    text1.setAttribute('class', 'multiplicity-label');
+                    text1.textContent = rel.multFrom;
+                    group.appendChild(text1);
+                }
+
+                if (rel.multTo) {
+                    const m2 = getPointAlongLine(p2, p1, 24);
+                    const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text2.setAttribute('x', m2.x + 8);
+                    text2.setAttribute('y', m2.y - 6);
+                    text2.setAttribute('class', 'multiplicity-label');
+                    text2.textContent = rel.multTo;
+                    group.appendChild(text2);
+                }
+
+                svg.appendChild(group);
+            });
+        }
+
+        function getIntersectionPoint(cFrom, cTo, rect) {
+            const dx = cTo.x - cFrom.x;
+            const dy = cTo.y - cFrom.y;
+            
+            if (dx === 0 && dy === 0) return { x: cFrom.x, y: cFrom.y };
+
+            const halfW = rect.w / 2;
+            const halfH = rect.h / 2;
+
+            const scaleX = Math.abs(dx) > 0 ? halfW / Math.abs(dx) : Infinity;
+            const scaleY = Math.abs(dy) > 0 ? halfH / Math.abs(dy) : Infinity;
+
+            const scale = Math.min(scaleX, scaleY);
+
+            return {
+                x: cFrom.x + dx * scale,
+                y: cFrom.y + dy * scale
+            };
+        }
+
+        function getPointAlongLine(p1, p2, dist) {
+            const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+            if (len === 0) return p1;
+            const t = dist / len;
+            return {
+                x: p1.x + (p2.x - p1.x) * t,
+                y: p1.y + (p2.y - p1.y) * t
+            };
+        }
+
+        function updateTransform() {
+            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+        }
+
+        // Viewport Drag & Zoom
+        viewport.addEventListener('mousedown', (e) => {
+            isDraggingViewport = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (activeDraggedNode) {
+                activeDraggedNode.x = e.clientX / scale - dragOffsetX;
+                activeDraggedNode.y = e.clientY / scale - dragOffsetY;
+                const el = document.getElementById(`class-${activeDraggedNode.id}`);
+                if (el) {
+                    el.style.left = `${activeDraggedNode.x}px`;
+                    el.style.top = `${activeDraggedNode.y}px`;
+                }
+                renderConnectors();
+            } else if (isDraggingViewport) {
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTransform();
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingViewport = false;
+            activeDraggedNode = null;
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 1.1;
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * zoomFactor, 2.5);
+            } else {
+                scale = Math.max(scale / zoomFactor, 0.2);
+            }
+            updateTransform();
+        });
+
+        // Controls
+        document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
+        document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { scale = 0.65; panX = 100; panY = 50; updateTransform(); };
+        
+        document.getElementById('btnToggleMethods').onclick = () => {
+            showMethods = !showMethods;
+            renderClasses();
+            setTimeout(renderConnectors, 50);
+        };
+
+        document.getElementById('btnAutoLayout').onclick = () => {
+            // Auto layout grid reset
+            scale = 0.65;
+            panX = 100;
+            panY = 50;
+            updateTransform();
+            renderClasses();
+            setTimeout(renderConnectors, 50);
+        };
+
+        // Modal
+        const legendModal = document.getElementById('legendModal');
+        document.getElementById('btnLegend').onclick = () => legendModal.style.display = 'flex';
+        document.getElementById('closeLegend').onclick = () => legendModal.style.display = 'none';
+        legendModal.onclick = (e) => { if (e.target === legendModal) legendModal.style.display = 'none'; };
+
+        // Init
+        renderClasses();
+        updateTransform();
+        setTimeout(renderConnectors, 100);
+    </script>
+</body>
+</html>
