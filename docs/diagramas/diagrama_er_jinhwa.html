@@ -385,53 +385,59 @@
         const modelData = {
             entities: [
                 {
-                    id: "estudiante", label: "ESTUDIANTE", isCentral: true, x: 1300, y: 1300, w: 180, h: 65,
+                    id: "estudiante", label: "ESTUDIANTE", isCentral: true, x: 1700, y: 1550, w: 190, h: 65,
                     attributes: [
-                        { name: "id_estudiante", pk: true, angle: -125, dist: 160 },
-                        { name: "id_grado", fk: true, angle: -155, dist: 170 },
-                        { name: "id_categoria", fk: true, angle: 180, dist: 160 },
-                        { name: "id_grupo", fk: true, angle: -95, dist: 160 },
-                        { name: "id_maestro", fk: true, angle: -65, dist: 160 },
-                        { name: "nombre", angle: -140, dist: 240 },
-                        { name: "apellido", angle: -110, dist: 240 },
-                        { name: "tipo_documento", angle: -80, dist: 240 },
-                        { name: "num_doc", angle: -50, dist: 240 },
-                        { name: "telefono", angle: 150, dist: 220 },
-                        { name: "correo", angle: 120, dist: 210 },
-                        { name: "clave", angle: 90, dist: 190 },
-                        { name: "foto_perfil", angle: 60, dist: 210 },
-                        { name: "fecha_nacimiento", angle: 30, dist: 220 },
-                        { name: "peso", angle: 0, dist: 180 },
-                        { name: "division", angle: -20, dist: 170 },
-                        { name: "eps", angle: 45, dist: 160 },
-                        { name: "rh", angle: 75, dist: 150 },
-                        { name: "activo", angle: 105, dist: 150 },
-                        { name: "created_at", angle: 135, dist: 150 }
+                        // Capa 1 (dist: 175) - abanico hacia la izquierda (100° a 260°)
+                        { name: "id_estudiante", pk: true, angle: 180, dist: 175 },
+                        { name: "id_grado", fk: true, angle: 162, dist: 175 },
+                        { name: "id_categoria", fk: true, angle: 198, dist: 175 },
+                        { name: "id_grupo", fk: true, angle: 144, dist: 175 },
+                        { name: "id_maestro", fk: true, angle: 216, dist: 175 },
+                        { name: "nombre", angle: 126, dist: 175 },
+                        { name: "apellido", angle: 234, dist: 175 },
+                        { name: "tipo_documento", angle: 108, dist: 175 },
+                        { name: "num_doc", angle: 252, dist: 175 },
+                        { name: "telefono", angle: -95, dist: 180 },
+
+                        // Capa 2 (dist: 295) - alternados con 120px+ de espacio libre
+                        { name: "correo", angle: 171, dist: 295 },
+                        { name: "clave", angle: 189, dist: 295 },
+                        { name: "foto_perfil", angle: 153, dist: 295 },
+                        { name: "fecha_nacimiento", angle: 207, dist: 295 },
+                        { name: "peso", angle: 135, dist: 295 },
+                        { name: "division", angle: 225, dist: 295 },
+                        { name: "eps", angle: 117, dist: 295 },
+                        { name: "rh", angle: 243, dist: 295 },
+                        { name: "activo", angle: 99, dist: 295 },
+                        { name: "created_at", angle: 261, dist: 295 }
                     ]
                 },
                 {
-                    id: "maestro", label: "MAESTRO", isCentral: true, x: 2150, y: 1300, w: 180, h: 65,
+                    id: "maestro", label: "MAESTRO", isCentral: true, x: 3800, y: 1550, w: 190, h: 65,
                     attributes: [
-                        { name: "id_maestro", pk: true, angle: -60, dist: 160 },
-                        { name: "id_grado", fk: true, angle: -120, dist: 160 },
-                        { name: "id_sede", fk: true, angle: -90, dist: 160 },
-                        { name: "nombre", angle: -45, dist: 230 },
-                        { name: "apellido", angle: -25, dist: 230 },
-                        { name: "tipo_documento", angle: -5, dist: 230 },
-                        { name: "num_doc", angle: 15, dist: 230 },
-                        { name: "telefono", angle: 35, dist: 230 },
-                        { name: "foto_perfil", angle: 55, dist: 230 },
-                        { name: "descripcion_perfil", angle: 75, dist: 230 },
-                        { name: "logros", angle: 95, dist: 230 },
-                        { name: "mostrar_en_web", angle: 115, dist: 210 },
-                        { name: "correo", angle: 135, dist: 190 },
-                        { name: "clave", angle: 155, dist: 170 },
-                        { name: "permisos_extra", angle: 175, dist: 170 },
-                        { name: "activo", angle: -150, dist: 160 }
+                        // Capa 1 (dist: 175) - abanico hacia la derecha (-75° a 75°)
+                        { name: "id_maestro", pk: true, angle: 0, dist: 175 },
+                        { name: "id_grado", fk: true, angle: -20, dist: 175 },
+                        { name: "id_sede", fk: true, angle: 20, dist: 175 },
+                        { name: "nombre", angle: -40, dist: 175 },
+                        { name: "apellido", angle: 40, dist: 175 },
+                        { name: "tipo_documento", angle: -60, dist: 175 },
+                        { name: "num_doc", angle: 60, dist: 175 },
+                        { name: "telefono", angle: -78, dist: 180 },
+
+                        // Capa 2 (dist: 295) - alternados con 120px+ de espacio libre
+                        { name: "foto_perfil", angle: -10, dist: 295 },
+                        { name: "descripcion_perfil", angle: 10, dist: 295 },
+                        { name: "logros", angle: -30, dist: 295 },
+                        { name: "mostrar_en_web", angle: 30, dist: 295 },
+                        { name: "correo", angle: -50, dist: 295 },
+                        { name: "clave", angle: 50, dist: 295 },
+                        { name: "permisos_extra", angle: -70, dist: 295 },
+                        { name: "activo", angle: 75, dist: 295 }
                     ]
                 },
                 {
-                    id: "administrador", label: "ADMINISTRADOR", x: 2750, y: 650, w: 180, h: 60,
+                    id: "administrador", label: "ADMINISTRADOR", x: 4600, y: 350, w: 180, h: 60,
                     attributes: [
                         { name: "id_administrador", pk: true, angle: -135, dist: 130 },
                         { name: "nombre", angle: -90, dist: 130 },
@@ -444,186 +450,186 @@
                     ]
                 },
                 {
-                    id: "sedes", label: "SEDES", x: 2150, y: 650, w: 150, h: 55,
+                    id: "sedes", label: "SEDES", x: 2750, y: 350, w: 150, h: 55,
                     attributes: [
-                        { name: "id_sede", pk: true, angle: -135, dist: 125 },
-                        { name: "nombre", angle: -90, dist: 125 },
-                        { name: "direccion", angle: -45, dist: 125 },
-                        { name: "telefono", angle: 0, dist: 125 },
-                        { name: "ciudad", angle: 45, dist: 125 },
-                        { name: "horario", angle: 135, dist: 125 },
-                        { name: "activa", angle: 180, dist: 125 }
+                        { name: "id_sede", pk: true, angle: -155, dist: 135 },
+                        { name: "nombre", angle: -125, dist: 135 },
+                        { name: "direccion", angle: -95, dist: 135 },
+                        { name: "telefono", angle: -65, dist: 135 },
+                        { name: "ciudad", angle: -35, dist: 135 },
+                        { name: "horario", angle: 155, dist: 140 },
+                        { name: "activa", angle: 25, dist: 140 }
                     ]
                 },
                 {
-                    id: "grupos", label: "GRUPOS", x: 1720, y: 920, w: 150, h: 55,
+                    id: "grupos", label: "GRUPOS", x: 2750, y: 950, w: 150, h: 55,
                     attributes: [
-                        { name: "id_grupo", pk: true, angle: -135, dist: 120 },
-                        { name: "id_sede", fk: true, angle: -90, dist: 120 },
-                        { name: "id_maestro", fk: true, angle: -45, dist: 120 },
-                        { name: "nombre", angle: 135, dist: 120 },
-                        { name: "horario", angle: 90, dist: 120 },
-                        { name: "dias", angle: 45, dist: 120 },
-                        { name: "activo", angle: 180, dist: 120 }
+                        { name: "id_grupo", pk: true, angle: -140, dist: 130 },
+                        { name: "id_sede", fk: true, angle: -90, dist: 130 },
+                        { name: "id_maestro", fk: true, angle: -40, dist: 130 },
+                        { name: "nombre", angle: 180, dist: 135 },
+                        { name: "horario", angle: 0, dist: 135 },
+                        { name: "dias", angle: 145, dist: 140 },
+                        { name: "activo", angle: 35, dist: 140 }
                     ]
                 },
                 {
-                    id: "grados", label: "GRADOS", x: 750, y: 1300, w: 140, h: 55,
+                    id: "grados", label: "GRADOS", x: 450, y: 1550, w: 140, h: 55,
                     attributes: [
-                        { name: "id_grado", pk: true, angle: -90, dist: 120 },
-                        { name: "nombre", angle: -45, dist: 120 },
-                        { name: "color", angle: 45, dist: 120 },
-                        { name: "orden", angle: 90, dist: 120 },
-                        { name: "tipo", angle: 180, dist: 120 }
+                        { name: "id_grado", pk: true, angle: -140, dist: 130 },
+                        { name: "nombre", angle: -90, dist: 130 },
+                        { name: "color", angle: 180, dist: 130 },
+                        { name: "orden", angle: 140, dist: 130 },
+                        { name: "tipo", angle: 90, dist: 130 }
                     ]
                 },
                 {
-                    id: "categorias", label: "CATEGORIAS", x: 750, y: 1750, w: 150, h: 55,
+                    id: "categorias", label: "CATEGORIAS", x: 450, y: 2200, w: 150, h: 55,
                     attributes: [
-                        { name: "id_categoria", pk: true, angle: 180, dist: 120 },
-                        { name: "nombre", angle: 135, dist: 120 },
-                        { name: "edad_min", angle: -135, dist: 120 },
-                        { name: "edad_max", angle: 90, dist: 120 }
+                        { name: "id_categoria", pk: true, angle: 180, dist: 130 },
+                        { name: "nombre", angle: 135, dist: 130 },
+                        { name: "edad_min", angle: -135, dist: 130 },
+                        { name: "edad_max", angle: 90, dist: 130 }
                     ]
                 },
                 {
-                    id: "certificados_ascenso", label: "CERTIFICADOS_ASCENSO", x: 1720, y: 1650, w: 220, h: 60,
+                    id: "certificados_ascenso", label: "CERTIFICADOS_ASCENSO", x: 2750, y: 2200, w: 220, h: 60,
                     attributes: [
-                        { name: "id_certificado", pk: true, angle: 90, dist: 130 },
-                        { name: "id_estudiante", fk: true, angle: 135, dist: 130 },
-                        { name: "id_maestro", fk: true, angle: 45, dist: 130 },
-                        { name: "grado_anterior", angle: 160, dist: 140 },
-                        { name: "grado_nuevo", angle: 20, dist: 140 },
-                        { name: "fecha_examen", angle: 110, dist: 145 },
-                        { name: "observaciones", angle: 70, dist: 145 },
+                        { name: "id_certificado", pk: true, angle: 90, dist: 135 },
+                        { name: "id_estudiante", fk: true, angle: 130, dist: 140 },
+                        { name: "id_maestro", fk: true, angle: 50, dist: 140 },
+                        { name: "grado_anterior", angle: 160, dist: 185 },
+                        { name: "grado_nuevo", angle: 20, dist: 185 },
+                        { name: "fecha_examen", angle: 110, dist: 195 },
+                        { name: "observaciones", angle: 70, dist: 195 },
                         { name: "folio", angle: -90, dist: 130 }
                     ]
                 },
                 {
-                    id: "historial_grados", label: "HISTORIAL_GRADOS", x: 1200, y: 2050, w: 190, h: 55,
+                    id: "historial_grados", label: "HISTORIAL_GRADOS", x: 1700, y: 2450, w: 190, h: 55,
                     attributes: [
-                        { name: "id_historial", pk: true, angle: 180, dist: 120 },
-                        { name: "id_estudiante", fk: true, angle: 135, dist: 120 },
-                        { name: "id_grado", fk: true, angle: -135, dist: 120 },
-                        { name: "id_certificado", fk: true, angle: 0, dist: 130 },
-                        { name: "fecha_obtencion", angle: 90, dist: 120 }
+                        { name: "id_historial", pk: true, angle: 90, dist: 130 },
+                        { name: "id_estudiante", fk: true, angle: -90, dist: 130 },
+                        { name: "id_grado", fk: true, angle: 160, dist: 135 },
+                        { name: "id_certificado", fk: true, angle: 20, dist: 135 },
+                        { name: "fecha_obtencion", angle: 120, dist: 180 }
                     ]
                 },
                 {
-                    id: "cronogramas_clase", label: "CRONOGRAMAS_CLASE", x: 2150, y: 2000, w: 200, h: 55,
+                    id: "cronogramas_clase", label: "CRONOGRAMAS_CLASE", x: 3800, y: 2450, w: 200, h: 55,
                     attributes: [
-                        { name: "id_cronograma", pk: true, angle: 135, dist: 125 },
-                        { name: "id_grupo", fk: true, angle: 180, dist: 125 },
-                        { name: "id_maestro", fk: true, angle: -90, dist: 125 },
-                        { name: "fecha", angle: 90, dist: 125 },
-                        { name: "objetivo", angle: 45, dist: 125 },
-                        { name: "observaciones", angle: 0, dist: 135 }
+                        { name: "id_cronograma", pk: true, angle: 90, dist: 130 },
+                        { name: "id_grupo", fk: true, angle: 160, dist: 140 },
+                        { name: "id_maestro", fk: true, angle: -90, dist: 130 },
+                        { name: "fecha", angle: 125, dist: 190 },
+                        { name: "objetivo", angle: 60, dist: 140 },
+                        { name: "observaciones", angle: 20, dist: 180 }
                     ]
                 },
                 {
-                    id: "ejercicios", label: "EJERCICIOS", x: 3200, y: 2000, w: 150, h: 55,
+                    id: "ejercicios", label: "EJERCICIOS", x: 5400, y: 2450, w: 150, h: 55,
                     attributes: [
-                        { name: "id_ejercicio", pk: true, angle: -90, dist: 120 },
-                        { name: "nombre", angle: -45, dist: 120 },
-                        { name: "descripcion", angle: 0, dist: 120 },
-                        { name: "tipo", angle: 45, dist: 120 },
-                        { name: "categoria_capacidad", angle: 90, dist: 130 },
-                        { name: "video_url", angle: 180, dist: 120 }
+                        { name: "id_ejercicio", pk: true, angle: -90, dist: 130 },
+                        { name: "nombre", angle: -45, dist: 130 },
+                        { name: "descripcion", angle: 0, dist: 130 },
+                        { name: "tipo", angle: 45, dist: 130 },
+                        { name: "categoria_capacidad", angle: 90, dist: 135 },
+                        { name: "video_url", angle: 135, dist: 130 }
                     ]
                 },
                 {
-                    id: "clase_ejercicios", label: "CLASE_EJERCICIOS", x: 2680, y: 2000, w: 180, h: 55,
+                    id: "clase_ejercicios", label: "CLASE_EJERCICIOS", x: 4600, y: 2450, w: 180, h: 55,
                     attributes: [
-                        { name: "id_clase_ejercicio", pk: true, angle: -90, dist: 120 },
-                        { name: "id_cronograma", fk: true, angle: 180, dist: 120 },
-                        { name: "id_ejercicio", fk: true, angle: 0, dist: 120 },
-                        { name: "series", angle: 45, dist: 120 },
-                        { name: "repeticiones", angle: 90, dist: 120 },
-                        { name: "duracion_minutos", angle: 135, dist: 130 },
-                        { name: "orden", angle: -135, dist: 120 },
-                        { name: "observaciones", angle: -45, dist: 120 }
+                        { name: "id_clase_ejercicio", pk: true, angle: -90, dist: 130 },
+                        { name: "id_cronograma", fk: true, angle: 180, dist: 130 },
+                        { name: "id_ejercicio", fk: true, angle: 0, dist: 130 },
+                        { name: "series", angle: 50, dist: 135 },
+                        { name: "repeticiones", angle: 75, dist: 180 },
+                        { name: "duracion_minutos", angle: 105, dist: 180 },
+                        { name: "orden", angle: 130, dist: 135 },
+                        { name: "observaciones", angle: -45, dist: 130 }
                     ]
                 },
                 {
-                    id: "eventos", label: "EVENTOS", x: 2750, y: 1100, w: 140, h: 55,
+                    id: "eventos", label: "EVENTOS", x: 4600, y: 950, w: 140, h: 55,
                     attributes: [
-                        { name: "id_evento", pk: true, angle: -45, dist: 120 },
-                        { name: "id_maestro", fk: true, angle: 180, dist: 120 },
-                        { name: "id_sede", fk: true, angle: -135, dist: 120 },
-                        { name: "titulo", angle: -90, dist: 120 },
-                        { name: "descripcion", angle: 0, dist: 120 },
-                        { name: "fecha_inicio", angle: 45, dist: 120 },
-                        { name: "fecha_fin", angle: 90, dist: 120 },
-                        { name: "lugar", angle: 135, dist: 120 },
-                        { name: "tipo", angle: 30, dist: 130 }
+                        { name: "id_evento", pk: true, angle: -45, dist: 130 },
+                        { name: "id_maestro", fk: true, angle: 180, dist: 130 },
+                        { name: "id_sede", fk: true, angle: -135, dist: 130 },
+                        { name: "titulo", angle: -90, dist: 130 },
+                        { name: "descripcion", angle: 0, dist: 130 },
+                        { name: "fecha_inicio", angle: 30, dist: 135 },
+                        { name: "fecha_fin", angle: 60, dist: 180 },
+                        { name: "lugar", angle: 90, dist: 135 },
+                        { name: "tipo", angle: 125, dist: 180 }
                     ]
                 },
                 {
-                    id: "galeria_multimedia", label: "GALERIA_MULTIMEDIA", x: 2750, y: 1550, w: 200, h: 55,
+                    id: "galeria_multimedia", label: "GALERIA_MULTIMEDIA", x: 4600, y: 1550, w: 200, h: 55,
                     attributes: [
-                        { name: "id_multimedia", pk: true, angle: -45, dist: 120 },
-                        { name: "id_maestro", fk: true, angle: 180, dist: 120 },
-                        { name: "url", angle: 0, dist: 120 },
-                        { name: "tipo", angle: 45, dist: 120 },
-                        { name: "descripcion", angle: 90, dist: 120 }
+                        { name: "id_multimedia", pk: true, angle: -40, dist: 130 },
+                        { name: "id_maestro", fk: true, angle: 180, dist: 130 },
+                        { name: "url", angle: 0, dist: 130 },
+                        { name: "tipo", angle: 45, dist: 130 },
+                        { name: "descripcion", angle: 90, dist: 130 }
                     ]
                 },
                 {
-                    id: "teorias", label: "TEORIAS", x: 300, y: 1000, w: 140, h: 55,
+                    id: "teorias", label: "TEORIAS", x: 450, y: 850, w: 140, h: 55,
                     attributes: [
-                        { name: "id_teoria", pk: true, angle: 180, dist: 120 },
-                        { name: "id_tipo_teoria", fk: true, angle: -90, dist: 120 },
-                        { name: "id_grado", fk: true, angle: 0, dist: 120 },
-                        { name: "titulo", angle: 90, dist: 120 },
-                        { name: "contenido", angle: 135, dist: 120 },
-                        { name: "resumen", angle: -135, dist: 120 },
-                        { name: "imagen", angle: -45, dist: 120 },
-                        { name: "orden", angle: 45, dist: 120 }
+                        { name: "id_teoria", pk: true, angle: 180, dist: 130 },
+                        { name: "id_tipo_teoria", fk: true, angle: -90, dist: 130 },
+                        { name: "id_grado", fk: true, angle: 90, dist: 130 },
+                        { name: "titulo", angle: -135, dist: 135 },
+                        { name: "contenido", angle: 135, dist: 135 },
+                        { name: "resumen", angle: -160, dist: 190 },
+                        { name: "imagen", angle: 160, dist: 190 },
+                        { name: "orden", angle: 45, dist: 130 }
                     ]
                 },
                 {
-                    id: "tipos_teoria", label: "TIPOS_TEORIA", x: 300, y: 550, w: 160, h: 55,
+                    id: "tipos_teoria", label: "TIPOS_TEORIA", x: 450, y: 350, w: 160, h: 55,
                     attributes: [
-                        { name: "id_tipo_teoria", pk: true, angle: 180, dist: 120 },
-                        { name: "nombre", angle: -90, dist: 120 },
-                        { name: "descripcion", angle: 0, dist: 120 },
-                        { name: "icono", angle: 90, dist: 120 }
+                        { name: "id_tipo_teoria", pk: true, angle: 180, dist: 130 },
+                        { name: "nombre", angle: -90, dist: 130 },
+                        { name: "descripcion", angle: 0, dist: 130 },
+                        { name: "icono", angle: -140, dist: 130 }
                     ]
                 },
                 {
-                    id: "teoria_favoritos", label: "TEORIA_FAVORITOS", x: 800, y: 800, w: 180, h: 55,
+                    id: "teoria_favoritos", label: "TEORIA_FAVORITOS", x: 1050, y: 850, w: 180, h: 55,
                     attributes: [
-                        { name: "id", pk: true, angle: -90, dist: 115 },
-                        { name: "id_estudiante", fk: true, angle: 45, dist: 120 },
-                        { name: "id_teoria", fk: true, angle: -135, dist: 120 },
-                        { name: "fecha_guardado", angle: 135, dist: 120 }
+                        { name: "id", pk: true, angle: -90, dist: 125 },
+                        { name: "id_estudiante", fk: true, angle: 45, dist: 130 },
+                        { name: "id_teoria", fk: true, angle: 180, dist: 130 },
+                        { name: "fecha_guardado", angle: -45, dist: 130 }
                     ]
                 }
             ],
             relationships: [
-                { id: "rel_sede_grupo", name: "Alberga", e1: "sedes", e2: "grupos", card1: "1", card2: "N", rx: 1935, ry: 785 },
-                { id: "rel_maestro_grupo", name: "Asignado a", e1: "maestro", e2: "grupos", card1: "1", card2: "N", rx: 1935, ry: 1110 },
-                { id: "rel_grupo_estudiante", name: "Inscribe", e1: "grupos", e2: "estudiante", card1: "1", card2: "N", rx: 1510, ry: 1110 },
-                { id: "rel_sede_maestro", name: "Sede Principal", e1: "sedes", e2: "maestro", card1: "1", card2: "N", rx: 2150, ry: 975 },
-                { id: "rel_grado_maestro", name: "Posee Grado", e1: "grados", e2: "maestro", card1: "1", card2: "N", rx: 1450, ry: 1450 },
-                { id: "rel_grado_estudiante", name: "Grado Actual", e1: "grados", e2: "estudiante", card1: "1", card2: "N", rx: 1025, ry: 1300 },
-                { id: "rel_categoria_estudiante", name: "Clasifica", e1: "categorias", e2: "estudiante", card1: "1", card2: "N", rx: 1025, ry: 1525 },
-                { id: "rel_estudiante_cert", name: "Recibe", e1: "estudiante", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 1510, ry: 1475 },
-                { id: "rel_maestro_cert", name: "Evalúa/Emite", e1: "maestro", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 1935, ry: 1475 },
-                { id: "rel_cert_hist", name: "Genera (1:1)", e1: "certificados_ascenso", e2: "historial_grados", card1: "1", card2: "1", rx: 1460, ry: 1850 },
-                { id: "rel_estudiante_hist", name: "Registra", e1: "estudiante", e2: "historial_grados", card1: "1", card2: "N", rx: 1250, ry: 1675 },
-                { id: "rel_grado_hist", name: "Alcanzado", e1: "grados", e2: "historial_grados", card1: "1", card2: "N", rx: 975, ry: 1675 },
-                { id: "rel_grupo_cronograma", name: "Programa", e1: "grupos", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 1935, ry: 1460 },
-                { id: "rel_maestro_cronograma", name: "Imparte", e1: "maestro", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 2150, ry: 1650 },
-                { id: "rel_crono_clase_ej", name: "Contiene", e1: "cronogramas_clase", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 2415, ry: 2000 },
-                { id: "rel_ej_clase_ej", name: "Detallado en", e1: "ejercicios", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 2940, ry: 2000 },
-                { id: "rel_maestro_evento", name: "Organiza", e1: "maestro", e2: "eventos", card1: "1", card2: "N", rx: 2450, ry: 1200 },
-                { id: "rel_sede_evento", name: "Lugar de Evento", e1: "sedes", e2: "eventos", card1: "1", card2: "N", rx: 2450, ry: 875 },
-                { id: "rel_maestro_galeria", name: "Publica", e1: "maestro", e2: "galeria_multimedia", card1: "1", card2: "N", rx: 2450, ry: 1425 },
-                { id: "rel_tipo_teoria", name: "Clasifica", e1: "tipos_teoria", e2: "teorias", card1: "1", card2: "N", rx: 300, ry: 775 },
-                { id: "rel_grado_teoria", name: "Corresponde", e1: "grados", e2: "teorias", card1: "1", card2: "N", rx: 525, ry: 1150 },
-                { id: "rel_estudiante_fav", name: "Guarda", e1: "estudiante", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 1050, ry: 1050 },
-                { id: "rel_teoria_fav", name: "Favorita", e1: "teorias", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 550, ry: 900 }
+                { id: "rel_sede_grupo", name: "Alberga", e1: "sedes", e2: "grupos", card1: "1", card2: "N", rx: 2750, ry: 650 },
+                { id: "rel_maestro_grupo", name: "Asignado a", e1: "maestro", e2: "grupos", card1: "1", card2: "N", rx: 3275, ry: 1250 },
+                { id: "rel_grupo_estudiante", name: "Inscribe", e1: "grupos", e2: "estudiante", card1: "1", card2: "N", rx: 2225, ry: 1250 },
+                { id: "rel_sede_maestro", name: "Sede Principal", e1: "sedes", e2: "maestro", card1: "1", card2: "N", rx: 3275, ry: 950 },
+                { id: "rel_grado_maestro", name: "Posee Grado", e1: "grados", e2: "maestro", card1: "1", card2: "N", rx: 2750, ry: 1550 },
+                { id: "rel_grado_estudiante", name: "Grado Actual", e1: "grados", e2: "estudiante", card1: "1", card2: "N", rx: 1075, ry: 1550 },
+                { id: "rel_categoria_estudiante", name: "Clasifica", e1: "categorias", e2: "estudiante", card1: "1", card2: "N", rx: 1075, ry: 1875 },
+                { id: "rel_estudiante_cert", name: "Recibe", e1: "estudiante", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 2225, ry: 1875 },
+                { id: "rel_maestro_cert", name: "Evalúa/Emite", e1: "maestro", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 3275, ry: 1875 },
+                { id: "rel_cert_hist", name: "Genera (1:1)", e1: "certificados_ascenso", e2: "historial_grados", card1: "1", card2: "1", rx: 2225, ry: 2325 },
+                { id: "rel_estudiante_hist", name: "Registra", e1: "estudiante", e2: "historial_grados", card1: "1", card2: "N", rx: 1700, ry: 2000 },
+                { id: "rel_grado_hist", name: "Alcanzado", e1: "grados", e2: "historial_grados", card1: "1", card2: "N", rx: 1075, ry: 2000 },
+                { id: "rel_grupo_cronograma", name: "Programa", e1: "grupos", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 3275, ry: 1700 },
+                { id: "rel_maestro_cronograma", name: "Imparte", e1: "maestro", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 3800, ry: 2000 },
+                { id: "rel_crono_clase_ej", name: "Contiene", e1: "cronogramas_clase", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 4200, ry: 2450 },
+                { id: "rel_ej_clase_ej", name: "Detallado en", e1: "ejercicios", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 5000, ry: 2450 },
+                { id: "rel_maestro_evento", name: "Organiza", e1: "maestro", e2: "eventos", card1: "1", card2: "N", rx: 4200, ry: 1250 },
+                { id: "rel_sede_evento", name: "Lugar de Evento", e1: "sedes", e2: "eventos", card1: "1", card2: "N", rx: 3675, ry: 650 },
+                { id: "rel_maestro_galeria", name: "Publica", e1: "maestro", e2: "galeria_multimedia", card1: "1", card2: "N", rx: 4200, ry: 1550 },
+                { id: "rel_tipo_teoria", name: "Clasifica", e1: "tipos_teoria", e2: "teorias", card1: "1", card2: "N", rx: 450, ry: 600 },
+                { id: "rel_grado_teoria", name: "Corresponde", e1: "grados", e2: "teorias", card1: "1", card2: "N", rx: 450, ry: 1200 },
+                { id: "rel_estudiante_fav", name: "Guarda", e1: "estudiante", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 1375, ry: 1200 },
+                { id: "rel_teoria_fav", name: "Favorita", e1: "teorias", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 750, ry: 850 }
             ]
         };
 
@@ -675,13 +681,21 @@
 
         function init() {
             buildNodes();
-            centerViewportOnEntity("estudiante");
+            centerViewportGlobal();
             render();
             setupEvents();
         }
 
+        function centerViewportGlobal() {
+            const vRect = viewport.getBoundingClientRect();
+            scale = 0.38;
+            panX = (vRect.width / 2) - (2750 * scale);
+            panY = (vRect.height / 2) - (1400 * scale);
+            updateViewportTransform();
+        }
+
         function centerViewportOnEntity(entityId) {
-            const target = nodes[entityId] || { x: 1600, y: 1200 };
+            const target = nodes[entityId] || { x: 2750, y: 1400 };
             const vRect = viewport.getBoundingClientRect();
             scale = 0.55;
             panX = (vRect.width / 2) - (target.x * scale);
@@ -1037,7 +1051,7 @@
 
             viewport.addEventListener("dblclick", (e) => {
                 if (!e.target.closest(".node-group")) {
-                    centerViewportOnEntity("estudiante");
+                    centerViewportGlobal();
                 }
             });
         }
@@ -1048,12 +1062,12 @@
         }
 
         function resetZoom() {
-            centerViewportOnEntity("estudiante");
+            centerViewportGlobal();
         }
 
         function resetLayout() {
             buildNodes();
-            centerViewportOnEntity("estudiante");
+            centerViewportGlobal();
             render();
             clearHighlight();
         }
