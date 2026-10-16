@@ -154,12 +154,22 @@ $total_inactivos = $total_estudiantes - $total_activos;
         <!-- Tabla de Estudiantes -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
             
-            <!-- Indicador para dispositivos móviles -->
-            <div class="md:hidden px-4 py-2 bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
-                <span class="flex items-center gap-1.5 font-medium">
-                    <span class="material-icons-outlined text-sm text-tkd-blue">swipe</span>
-                    <span>Desliza horizontalmente para ver todos los datos</span>
+            <!-- Indicador y Controles Rápidos para Móviles (iOS / Android) -->
+            <div class="md:hidden px-4 py-2.5 bg-slate-50 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-xs">
+                <span class="flex items-center gap-1.5 font-medium text-slate-600 dark:text-slate-300">
+                    <span class="material-icons-outlined text-sm text-tkd-blue animate-pulse">swipe</span>
+                    <span>Desliza la tabla</span>
                 </span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" onclick="scrollTableTo('left')" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold shadow-xs active:scale-95 flex items-center gap-1 cursor-pointer">
+                        <span class="material-icons-outlined text-xs">arrow_back</span>
+                        <span>Inicio</span>
+                    </button>
+                    <button type="button" onclick="scrollTableTo('right')" class="px-2.5 py-1 rounded-lg bg-tkd-blue text-white text-[11px] font-bold shadow-xs active:scale-95 flex items-center gap-1 cursor-pointer">
+                        <span>Acciones</span>
+                        <span class="material-icons-outlined text-xs">arrow_forward</span>
+                    </button>
+                </div>
             </div>
 
             <div class="w-full overflow-x-auto custom-scrollbar admin-table-container">
@@ -1306,6 +1316,13 @@ $total_inactivos = $total_estudiantes - $total_activos;
         }
 
         closeExportModal();
+    }
+
+    function scrollTableTo(direction) {
+        const container = document.querySelector('.admin-table-container');
+        if (!container) return;
+        const scrollAmount = direction === 'right' ? 320 : -320;
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
 </script>
 
