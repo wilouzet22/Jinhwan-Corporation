@@ -351,3 +351,25 @@ html, body { max-width: 100%; overflow-x: hidden; }
   }
 }
 
+/* ── Tablas Administrativas Responsivas ── */
+.admin-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-table-responsive {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+@media (max-width: 640px) {
+  .admin-table-responsive th,
+  .admin-table-responsive td {
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+}
+
+
