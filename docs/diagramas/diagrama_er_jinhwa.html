@@ -336,6 +336,64 @@
             pointer-events: none;
             backdrop-filter: blur(4px);
         }
+        .focus-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #38bdf8;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.7), 0 0 20px rgba(56, 189, 248, 0.2);
+            border-radius: 40px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 50;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .focus-bar.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .focus-badge {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .focus-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #f8fafc;
+            max-width: 420px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .presentation-hint {
+            font-size: 0.78rem;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
     </style>
 </head>
 <body>
@@ -366,12 +424,22 @@
         </div>
 
         <div class="controls">
+            <div class="presentation-hint">🎯 Clic en tabla o rombo para ampliar</div>
             <input type="text" class="search-box" placeholder="Buscar entidad o campo..." oninput="onSearch(this.value)">
             <button class="btn" onclick="toggleAttributes()" id="btnAttr">Ocultar Atributos</button>
             <button class="btn" onclick="resetLayout()">Restablecer Posiciones</button>
             <button class="btn" onclick="resetZoom()">Centrar Diagrama</button>
         </div>
     </header>
+
+    <!-- Floating Focus Bar -->
+    <div id="focusBar" class="focus-bar">
+        <span class="focus-badge">Elemento Enfocado</span>
+        <span id="focusTitle" class="focus-title">Nombre del Elemento</span>
+        <button class="btn btn-primary" id="btnExitFocus" style="padding: 5px 12px; font-size: 0.78rem; border-radius: 20px;">
+            ↺ Vista General (Esc)
+        </button>
+    </div>
 
     <div id="viewport">
         <svg id="canvas">
@@ -686,21 +754,63 @@
             setupEvents();
         }
 
-        function centerViewportGlobal() {
-            const vRect = viewport.getBoundingClientRect();
-            scale = 0.38;
-            panX = (vRect.width / 2) - (2750 * scale);
-            panY = (vRect.height / 2) - (1400 * scale);
-            updateViewportTransform();
+        function animateViewportTo(targetPanX, targetPanY, targetScale, duration = 450) {
+            const startPanX = panX;
+            const startPanY = panY;
+            const startScale = scale;
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function step(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = easeOutCubic(progress);
+
+                panX = startPanX + (targetPanX - startPanX) * ease;
+                panY = startPanY + (targetPanY - startPanY) * ease;
+                scale = startScale + (targetScale - startScale) * ease;
+                updateViewportTransform();
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                }
+            }
+            requestAnimationFrame(step);
         }
 
-        function centerViewportOnEntity(entityId) {
+        function centerViewportGlobal(smooth = true) {
+            const vRect = viewport.getBoundingClientRect();
+            const targetScale = 0.38;
+            const targetPanX = (vRect.width / 2) - (2750 * targetScale);
+            const targetPanY = (vRect.height / 2) - (1400 * targetScale);
+            if (smooth) {
+                animateViewportTo(targetPanX, targetPanY, targetScale);
+            } else {
+                scale = targetScale;
+                panX = targetPanX;
+                panY = targetPanY;
+                updateViewportTransform();
+            }
+            const focusBar = document.getElementById("focusBar");
+            if (focusBar) focusBar.classList.remove("active");
+        }
+
+        function centerViewportOnEntity(entityId, targetScale = 1.25) {
             const target = nodes[entityId] || { x: 2750, y: 1400 };
             const vRect = viewport.getBoundingClientRect();
-            scale = 0.55;
-            panX = (vRect.width / 2) - (target.x * scale);
-            panY = (vRect.height / 2) - (target.y * scale);
-            updateViewportTransform();
+            const targetPanX = (vRect.width / 2) - (target.x * targetScale);
+            const targetPanY = (vRect.height / 2) - (target.y * targetScale);
+            animateViewportTo(targetPanX, targetPanY, targetScale);
+        }
+
+        function centerViewportOnPoint(cx, cy, targetScale = 1.25) {
+            const vRect = viewport.getBoundingClientRect();
+            const targetPanX = (vRect.width / 2) - (cx * targetScale);
+            const targetPanY = (vRect.height / 2) - (cy * targetScale);
+            animateViewportTo(targetPanX, targetPanY, targetScale);
         }
 
         function buildNodes() {
@@ -814,6 +924,11 @@
                 linesGroup.appendChild(tCard2);
 
                 updateCardinalityPositions(rel);
+
+                gRel.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    highlightRelationshipNetwork(rel.id);
+                });
 
                 makeDraggable(gRel, (nx, ny) => {
                     rel.x = nx;
@@ -995,13 +1110,37 @@
         }
 
         function setupEvents() {
+            let vpMouseDownPos = { x: 0, y: 0 };
             viewport.addEventListener("mousedown", (e) => {
-                const isNode = e.target.closest(".node-group");
+                const isNode = e.target.closest(".node-group, .focus-bar");
                 if (!isNode) {
                     isViewportDragging = true;
+                    vpMouseDownPos = { x: e.clientX, y: e.clientY };
                     startPanX = e.clientX - panX;
                     startPanY = e.clientY - panY;
+                }
+            });
+
+            viewport.addEventListener("click", (e) => {
+                const dist = Math.hypot(e.clientX - vpMouseDownPos.x, e.clientY - vpMouseDownPos.y);
+                if (dist < 6 && !e.target.closest(".node-group, .focus-bar, header")) {
                     clearHighlight();
+                    centerViewportGlobal(true);
+                }
+            });
+
+            const btnExitFocus = document.getElementById("btnExitFocus");
+            if (btnExitFocus) {
+                btnExitFocus.onclick = () => {
+                    clearHighlight();
+                    centerViewportGlobal(true);
+                };
+            }
+
+            window.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    clearHighlight();
+                    centerViewportGlobal(true);
                 }
             });
 
@@ -1051,7 +1190,8 @@
 
             viewport.addEventListener("dblclick", (e) => {
                 if (!e.target.closest(".node-group")) {
-                    centerViewportGlobal();
+                    clearHighlight();
+                    centerViewportGlobal(true);
                 }
             });
         }
@@ -1062,12 +1202,13 @@
         }
 
         function resetZoom() {
-            centerViewportGlobal();
+            clearHighlight();
+            centerViewportGlobal(true);
         }
 
         function resetLayout() {
             buildNodes();
-            centerViewportGlobal();
+            centerViewportGlobal(true);
             render();
             clearHighlight();
         }
@@ -1079,8 +1220,12 @@
         }
 
         function highlightEntityNetwork(entityId) {
+            const focusBar = document.getElementById("focusBar");
+            const focusTitle = document.getElementById("focusTitle");
+
             if (activeSelectedEntity === entityId) {
                 clearHighlight();
+                centerViewportGlobal(true);
                 return;
             }
 
@@ -1111,11 +1256,60 @@
                     el.classList.add("dimmed");
                 }
             });
+
+            centerViewportOnEntity(entityId, 1.25);
+            if (focusBar && focusTitle) {
+                focusTitle.textContent = `${targetEnt ? targetEnt.label : entityId} (Tabla / Entidad)`;
+                focusBar.classList.add("active");
+            }
+        }
+
+        function highlightRelationshipNetwork(relId) {
+            const focusBar = document.getElementById("focusBar");
+            const focusTitle = document.getElementById("focusTitle");
+
+            if (activeSelectedEntity === relId) {
+                clearHighlight();
+                centerViewportGlobal(true);
+                return;
+            }
+
+            activeSelectedEntity = relId;
+            const rel = relationships[relId];
+            if (!rel) return;
+
+            const connectedEntities = new Set([rel.e1, rel.e2]);
+            const connectedRels = new Set([rel.id]);
+            const connectedAttrs = new Set();
+
+            [rel.e1, rel.e2].forEach(entId => {
+                const ent = nodes[entId];
+                if (ent && ent.attributes) {
+                    ent.attributes.forEach(attr => connectedAttrs.add(attr.id));
+                }
+            });
+
+            document.querySelectorAll(".node-group").forEach(el => {
+                const id = el.id.replace("node_", "");
+                if (connectedEntities.has(id) || connectedRels.has(id) || connectedAttrs.has(id)) {
+                    el.classList.remove("dimmed");
+                } else {
+                    el.classList.add("dimmed");
+                }
+            });
+
+            centerViewportOnPoint(rel.x, rel.y, 1.25);
+            if (focusBar && focusTitle) {
+                focusTitle.textContent = `Relación: ${rel.name} (${rel.card1} : ${rel.card2})`;
+                focusBar.classList.add("active");
+            }
         }
 
         function clearHighlight() {
             activeSelectedEntity = null;
             document.querySelectorAll(".node-group").forEach(el => el.classList.remove("dimmed"));
+            const focusBar = document.getElementById("focusBar");
+            if (focusBar) focusBar.classList.remove("active");
         }
 
         function onSearch(query) {

@@ -332,6 +332,87 @@
             font-size: 0.75rem;
             color: var(--text-muted);
         }
+        /* Focus & Zoom Presentation Mode */
+        .use-case.is-focused, .uml-actor.is-focused {
+            box-shadow: 0 0 0 4px #38bdf8, 0 16px 40px rgba(56, 189, 248, 0.55) !important;
+            transform: scale(1.08) !important;
+            z-index: 20 !important;
+        }
+
+        .use-case.is-dimmed, .uml-actor.is-dimmed {
+            opacity: 0.22 !important;
+            filter: grayscale(60%) !important;
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .connector-group.is-dimmed {
+            opacity: 0.1 !important;
+            transition: opacity 0.3s ease;
+        }
+
+        .connector-group.is-highlighted path {
+            stroke-width: 3.5px !important;
+            filter: drop-shadow(0 0 6px #38bdf8);
+        }
+
+        .focus-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #38bdf8;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.7), 0 0 20px rgba(56, 189, 248, 0.2);
+            border-radius: 40px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 50;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .focus-bar.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .focus-badge {
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #ffffff;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 20px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .focus-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #f8fafc;
+            max-width: 420px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .presentation-hint {
+            font-size: 0.78rem;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
     </style>
 </head>
 <body>
@@ -342,6 +423,7 @@
             <div class="subtitle">Casos de Uso del Sistema de Gestión de Taekwondo</div>
         </div>
         <div class="controls">
+            <div class="presentation-hint">🎯 Clic en un elemento para ampliar</div>
             <button class="btn" id="btnZoomOut">🔍 -</button>
             <button class="btn" id="btnZoomReset">100%</button>
             <button class="btn" id="btnZoomIn">🔍 +</button>
@@ -349,6 +431,15 @@
             <button class="btn btn-primary" id="btnLegend">📖 Leyenda Casos de Uso</button>
         </div>
     </header>
+
+    <!-- Floating Focus Bar -->
+    <div id="focusBar" class="focus-bar">
+        <span class="focus-badge">Enfocado</span>
+        <span id="focusTitle" class="focus-title">Nombre del Caso de Uso</span>
+        <button class="btn btn-primary" id="btnExitFocus" style="padding: 5px 12px; font-size: 0.78rem; border-radius: 20px;">
+            ↺ Vista General (Esc)
+        </button>
+    </div>
 
     <div id="viewport">
         <div id="canvas">
@@ -549,11 +640,16 @@
         let startX = 0, startY = 0;
         let activeDraggedItem = null;
         let dragOffsetX = 0, dragOffsetY = 0;
+        let clickStartPos = { x: 0, y: 0 };
+        let activeFocusedId = null;
 
         const viewport = document.getElementById('viewport');
         const canvas = document.getElementById('canvas');
         const svg = document.getElementById('connections');
         const container = document.getElementById('elements-container');
+        const focusBar = document.getElementById('focusBar');
+        const focusTitle = document.getElementById('focusTitle');
+        const btnExitFocus = document.getElementById('btnExitFocus');
 
         // Render Actors & Use Cases
         function renderElements() {
@@ -581,8 +677,21 @@
                 el.addEventListener('mousedown', (e) => {
                     e.stopPropagation();
                     activeDraggedItem = actor;
+                    clickStartPos = { x: e.clientX, y: e.clientY };
                     dragOffsetX = e.clientX / scale - actor.x;
                     dragOffsetY = e.clientY / scale - actor.y;
+                });
+
+                el.addEventListener('mouseup', (e) => {
+                    const dist = Math.hypot(e.clientX - clickStartPos.x, e.clientY - clickStartPos.y);
+                    if (dist < 6) {
+                        e.stopPropagation();
+                        if (activeFocusedId === actor.id) {
+                            resetFocus();
+                        } else {
+                            focusElement(actor, el);
+                        }
+                    }
                 });
 
                 container.appendChild(el);
@@ -601,13 +710,102 @@
                 el.addEventListener('mousedown', (e) => {
                     e.stopPropagation();
                     activeDraggedItem = uc;
+                    clickStartPos = { x: e.clientX, y: e.clientY };
                     dragOffsetX = e.clientX / scale - uc.x;
                     dragOffsetY = e.clientY / scale - uc.y;
+                });
+
+                el.addEventListener('mouseup', (e) => {
+                    const dist = Math.hypot(e.clientX - clickStartPos.x, e.clientY - clickStartPos.y);
+                    if (dist < 6) {
+                        e.stopPropagation();
+                        if (activeFocusedId === uc.id) {
+                            resetFocus();
+                        } else {
+                            focusElement(uc, el);
+                        }
+                    }
                 });
 
                 container.appendChild(el);
             });
         }
+
+        // Focus & Zoom to Element
+        function focusElement(item, el) {
+            activeFocusedId = item.id;
+            const vw = viewport.clientWidth;
+            const vh = viewport.clientHeight;
+            const targetScale = 1.35; // Ideal size for projection readability
+            const elW = el.offsetWidth || 220;
+            const elH = el.offsetHeight || 90;
+            const cx = item.x + elW / 2;
+            const cy = item.y + elH / 2;
+
+            panX = (vw / 2) - (cx * targetScale);
+            panY = (vh / 2) - (cy * targetScale);
+            scale = targetScale;
+
+            canvas.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+            updateTransform();
+            setTimeout(() => { canvas.style.transition = ''; }, 460);
+
+            // Highlight node and dim others
+            document.querySelectorAll('.use-case, .uml-actor').forEach(node => {
+                if (node.id === el.id) {
+                    node.classList.add('is-focused');
+                    node.classList.remove('is-dimmed');
+                } else {
+                    node.classList.remove('is-focused');
+                    node.classList.add('is-dimmed');
+                }
+            });
+
+            // Highlight connected relationships
+            document.querySelectorAll('.connector-group').forEach(cg => {
+                if (cg.dataset.from === item.id || cg.dataset.to === item.id) {
+                    cg.classList.add('is-highlighted');
+                    cg.classList.remove('is-dimmed');
+                    // Un-dim connected target/source elements
+                    const otherId = cg.dataset.from === item.id ? cg.dataset.to : cg.dataset.from;
+                    const otherEl = document.getElementById(`actor-${otherId}`) || document.getElementById(`uc-${otherId}`);
+                    if (otherEl) otherEl.classList.remove('is-dimmed');
+                } else {
+                    cg.classList.add('is-dimmed');
+                    cg.classList.remove('is-highlighted');
+                }
+            });
+
+            focusTitle.textContent = item.name || item.text || 'Elemento';
+            focusBar.classList.add('active');
+        }
+
+        function resetFocus(smooth = true) {
+            activeFocusedId = null;
+            focusBar.classList.remove('active');
+
+            document.querySelectorAll('.use-case, .uml-actor').forEach(node => {
+                node.classList.remove('is-focused', 'is-dimmed');
+            });
+            document.querySelectorAll('.connector-group').forEach(cg => {
+                cg.classList.remove('is-focused', 'is-highlighted', 'is-dimmed');
+            });
+
+            if (smooth) {
+                canvas.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+                scale = 0.55;
+                panX = 150;
+                panY = 20;
+                updateTransform();
+                setTimeout(() => { canvas.style.transition = ''; }, 460);
+            }
+        }
+
+        btnExitFocus.onclick = () => resetFocus(true);
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') resetFocus(true);
+        });
 
         // Render Connectors
         function renderConnectors() {
@@ -636,6 +834,8 @@
 
                 const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 group.setAttribute('class', 'connector-group');
+                group.dataset.from = rel.from;
+                group.dataset.to = rel.to;
 
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 let pathClass = 'uml-path';
@@ -706,10 +906,21 @@
             canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
         }
 
+        let vpMouseDownPos = { x: 0, y: 0 };
         viewport.addEventListener('mousedown', (e) => {
-            isDraggingViewport = true;
-            startX = e.clientX - panX;
-            startY = e.clientY - panY;
+            if (!e.target.closest('.use-case, .uml-actor, .focus-bar')) {
+                isDraggingViewport = true;
+                vpMouseDownPos = { x: e.clientX, y: e.clientY };
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
+            }
+        });
+
+        viewport.addEventListener('click', (e) => {
+            const dist = Math.hypot(e.clientX - vpMouseDownPos.x, e.clientY - vpMouseDownPos.y);
+            if (dist < 6 && !e.target.closest('.use-case, .uml-actor, .focus-bar, header, .modal')) {
+                if (activeFocusedId) resetFocus(true);
+            }
         });
 
         window.addEventListener('mousemove', (e) => {
@@ -747,9 +958,10 @@
 
         document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
         document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
-        document.getElementById('btnZoomReset').onclick = () => { scale = 0.55; panX = 150; panY = 20; updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { resetFocus(false); scale = 0.55; panX = 150; panY = 20; updateTransform(); };
         
         document.getElementById('btnResetLayout').onclick = () => {
+            resetFocus(false);
             scale = 0.55; panX = 150; panY = 20;
             updateTransform();
             renderElements();
