@@ -74,27 +74,27 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
                     <span class="px-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2 block">Menú Principal</span>
                 </li>
                 <li>
-                    <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'dashboard' ? 'bg-blue-50 dark:bg-blue-500/10 border-l-2 border-l-blue-500 text-tkd-blue' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'dashboard' ? 'text-tkd-blue' : '' ?>">dashboard</span>
+                    <a href="<?= base_url('/estudiante/dashboard') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'dashboard' ? 'tkd-active-link' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform">dashboard</span>
                         <span class="font-medium tracking-wide text-sm">Mi Resumen</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/estudiante/historial') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'historial' ? 'bg-tkd-gold/10 border-l-2 border-l-tkd-gold text-yellow-600 dark:text-yellow-500' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'historial' ? 'text-yellow-600 dark:text-yellow-500' : '' ?>">history</span>
+                    <a href="<?= base_url('/estudiante/historial') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'historial' ? 'tkd-active-link' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform">history</span>
                         <span class="font-medium tracking-wide text-sm">Mi Historial</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('/estudiante/estudio') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'estudio' ? 'bg-red-50 dark:bg-red-500/10 border-l-2 border-l-red-500 text-tkd-red' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'estudio' ? 'text-tkd-red' : '' ?>">menu_book</span>
+                    <a href="<?= base_url('/estudiante/estudio') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'estudio' ? 'tkd-active-link' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform">menu_book</span>
                         <span class="font-medium tracking-wide text-sm">Material Teórico</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'calendario' ? 'bg-teal-50 dark:bg-teal-500/10 border-l-2 border-l-teal-500 text-teal-600 dark:text-teal-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
-                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform <?= ($current_page ?? '') === 'calendario' ? 'text-teal-600 dark:text-teal-400' : '' ?>">event</span>
+                    <a href="<?= base_url('/usuario/calendario') ?>" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all group <?= ($current_page ?? '') === 'calendario' ? 'tkd-active-link' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' ?>">
+                        <span class="material-icons-outlined text-xl group-hover:scale-110 transition-transform">event</span>
                         <span class="font-medium tracking-wide text-sm">Calendario</span>
                     </a>
                 </li>
@@ -106,12 +106,12 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
                 <?php if (!empty($_SESSION['foto_perfil'])): ?>
                     <img src="<?= base_url('/public/uploads/perfiles/' . $_SESSION['foto_perfil']) ?>" class="w-8 h-8 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700">
                 <?php else: ?>
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-tkd-blue to-blue-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs" style="background: var(--tkd-gradient, linear-gradient(135deg, var(--tkd-primary, #2563EB), var(--tkd-accent, #06b6d4)))">
                         <?= strtoupper(substr($nombre_usuario, 0, 1)) ?>
                     </div>
                 <?php endif; ?>
                 <div class="min-w-0 flex-1">
-                    <p class="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-tkd-blue transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>">
+                    <p class="font-bold text-xs text-slate-900 dark:text-white truncate transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>" style="transition: color 0.2s;" onmouseenter="this.style.color='var(--tkd-primary)'" onmouseleave="this.style.color=''">
                         <?= htmlspecialchars($nombre_usuario) ?>
                     </p>
                     <p class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider leading-none mt-0.5">Alumno</p>

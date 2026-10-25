@@ -10,10 +10,33 @@ $tema = function_exists('obtener_tema_marcial')
         'hangul'          => '태권도',
         'filosofia'       => 'Disciplina, perseverancia y superación marcial diaria',
         'color_hex'       => '#2563EB',
+        'color_rgb'       => '37, 99, 235',
         'glow_rgba'       => 'rgba(37, 99, 235, 0.28)',
         'belt_gradient'   => 'linear-gradient(135deg, #2563EB, #06b6d4)',
         'banner_gradient' => 'linear-gradient(135deg, #0f172a, #1e293b)'
     ];
+
+// Mapa de progreso de cinturones (orden jerárquico, 10° Gup = blanco = 0%)
+$orden_cinturones = [
+    'blanco'      => ['label' => 'Cinturón Blanco',           'gup' => '10° Gup', 'paso' => 0,  'siguiente' => 'Blanco Punta Amarilla'],
+    'punta_amarillo' => ['label' => 'Blanco P. Amarilla',    'gup' => '9° Gup',  'paso' => 10, 'siguiente' => 'Cinturón Amarillo'],
+    'amarillo'    => ['label' => 'Cinturón Amarillo',         'gup' => '8° Gup',  'paso' => 22, 'siguiente' => 'Amarillo Punta Verde'],
+    'punta_verde' => ['label' => 'Amarillo P. Verde',         'gup' => '7° Gup',  'paso' => 34, 'siguiente' => 'Cinturón Verde'],
+    'verde'       => ['label' => 'Cinturón Verde',            'gup' => '6° Gup',  'paso' => 46, 'siguiente' => 'Verde Punta Azul'],
+    'punta_azul'  => ['label' => 'Verde P. Azul',             'gup' => '5° Gup',  'paso' => 58, 'siguiente' => 'Cinturón Azul'],
+    'azul'        => ['label' => 'Cinturón Azul',             'gup' => '4° Gup',  'paso' => 67, 'siguiente' => 'Azul Punta Roja'],
+    'punta_rojo'  => ['label' => 'Azul P. Roja',              'gup' => '3° Gup',  'paso' => 76, 'siguiente' => 'Cinturón Rojo'],
+    'rojo'        => ['label' => 'Cinturón Rojo',             'gup' => '2° Gup',  'paso' => 85, 'siguiente' => 'Rojo Punta Negra'],
+    'punta_negro' => ['label' => 'Rojo P. Negra',             'gup' => '1° Gup',  'paso' => 93, 'siguiente' => 'Cinturón Negro'],
+    'negro'       => ['label' => 'Cinturón Negro / Poom',     'gup' => '1° Dan',  'paso' => 100, 'siguiente' => 'Maestría Completa'],
+];
+
+$codigo_actual  = $tema['codigo'] ?? 'blanco';
+$info_progreso  = $orden_cinturones[$codigo_actual] ?? $orden_cinturones['blanco'];
+$porcentaje     = $info_progreso['paso'];
+$gup_actual     = $info_progreso['gup'];
+$siguiente_grado = $info_progreso['siguiente'];
+$es_maestria    = ($codigo_actual === 'negro');
 ?>
 
 <main class="flex-grow container mx-auto p-6 lg:p-10 space-y-8 animate-fade-in-up">
@@ -66,7 +89,7 @@ $tema = function_exists('obtener_tema_marcial')
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         <!-- Student Profile Card Estilizada como Credencial Marcial -->
-        <div class="lg:col-span-1">
+        <div class="lg:col-span-1 flex flex-col gap-6">
             <div class="tkd-martial-card p-6 flex flex-col items-center text-center relative overflow-hidden"
                  style="--tkd-border: <?= $tema['color_hex'] ?>; --tkd-gradient: <?= $tema['belt_gradient'] ?>;">
                 
@@ -96,6 +119,26 @@ $tema = function_exists('obtener_tema_marcial')
                     <span><?= htmlspecialchars($estudiante['nombre_nivel'] ?? 'Cinturón Blanco') ?></span>
                 </div>
 
+                <!-- Barra de Progreso hacia el próximo cinturón -->
+                <div class="w-full mb-4">
+                    <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                        <span class="text-slate-500 dark:text-slate-400">Ruta Marcial</span>
+                        <span style="color: <?= $tema['color_hex'] ?>"><?= $gup_actual ?></span>
+                    </div>
+                    <div class="tkd-belt-progress-track">
+                        <div class="tkd-belt-progress-bar" id="beltProgressBar" style="width: 0%;"></div>
+                    </div>
+                    <?php if (!$es_maestria): ?>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1.5 text-right font-medium">
+                        Próximo: <span class="font-bold" style="color: <?= $tema['color_hex'] ?>"><?= $siguiente_grado ?></span>
+                    </p>
+                    <?php else: ?>
+                    <p class="text-[10px] mt-1.5 text-right font-bold" style="color: <?= $tema['color_hex'] ?>">
+                        🏆 Maestría Alcanzada
+                    </p>
+                    <?php endif; ?>
+                </div>
+
                 <div class="w-full space-y-2.5 text-xs text-left">
                     <div class="bg-slate-50 dark:bg-slate-800/60 rounded-xl p-3 border border-slate-200 dark:border-slate-800 flex justify-between items-center">
                         <span class="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">Sede Dojang</span>
@@ -108,7 +151,8 @@ $tema = function_exists('obtener_tema_marcial')
                         </div>
                     <?php endif; ?>
                     <a href="<?= base_url('/usuario/perfil') ?>" 
-                       class="mt-2 w-full py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 font-bold text-center block text-xs transition-colors flex items-center justify-center gap-1.5">
+                       class="mt-2 w-full py-2.5 px-4 rounded-xl font-bold text-center block text-xs transition-all flex items-center justify-center gap-1.5 text-white shadow-md hover:shadow-lg"
+                       style="background: <?= $tema['belt_gradient'] ?>; box-shadow: 0 4px 12px <?= $tema['glow_rgba'] ?>;">
                         <span class="material-icons-outlined text-sm">badge</span>
                         Ver Carnet Marcial Completo
                     </a>
@@ -119,22 +163,24 @@ $tema = function_exists('obtener_tema_marcial')
         <!-- Learning & Activity Modules -->
         <div class="lg:col-span-2 flex flex-col gap-6">
             
-            <a href="<?= base_url('/estudiante/estudio') ?>" class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-6 hover-lift hover:border-red-500 transition-all group">
-                <div class="w-16 h-16 rounded-2xl bg-red-50 dark:bg-red-500/10 text-tkd-red flex items-center justify-center shrink-0 border border-red-100 dark:border-red-500/20 group-hover:scale-110 transition-transform shadow-inner">
-                    <span class="material-icons-outlined text-3xl">menu_book</span>
+            <!-- Módulo de Estudio Teórico -->
+            <a href="<?= base_url('/estudiante/estudio') ?>" class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-6 tkd-card-action tkd-shimmer-hover group">
+                <div class="w-16 h-16 shrink-0 tkd-icon-box" style="width:4rem;height:4rem;">
+                    <span class="material-icons-outlined text-3xl" style="color: var(--tkd-primary, <?= $tema['color_hex'] ?>)">menu_book</span>
                 </div>
                 <div class="flex-grow">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 group-hover:text-tkd-red transition-colors flex items-center gap-2">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                         Estudio Teórico
-                        <span class="px-2 py-0.5 rounded-full text-[10px] bg-red-500/10 text-tkd-red font-bold uppercase tracking-wider">Material Interactivo</span>
+                        <span class="tkd-chart-badge">Material Interactivo</span>
                     </h3>
                     <p class="text-slate-500 dark:text-slate-400 text-xs">Accede a módulos teóricos, formas, técnicas y glosario para preparar tu próximo examen de grado.</p>
                 </div>
-                <div class="hidden sm:block ml-auto text-slate-400 dark:text-slate-500 group-hover:text-tkd-red group-hover:translate-x-1 transition-all">
+                <div class="hidden sm:block ml-auto text-slate-400 dark:text-slate-500 group-hover:translate-x-1 transition-all" style="color: var(--tkd-primary, <?= $tema['color_hex'] ?>) !important;">
                     <span class="material-icons-outlined text-xl">arrow_forward</span>
                 </div>
             </a>
 
+            <!-- Historial de Ascensos -->
             <a href="<?= base_url('/estudiante/historial') ?>" class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center gap-6 hover-lift hover:border-amber-400 transition-all group">
                 <div class="w-16 h-16 rounded-2xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-500/20 group-hover:scale-110 transition-transform shadow-inner">
                     <span class="material-icons-outlined text-3xl">history</span>
@@ -152,16 +198,19 @@ $tema = function_exists('obtener_tema_marcial')
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
                 <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span class="material-icons-outlined text-tkd-blue text-xl">event</span>
+                        <span class="material-icons-outlined text-xl" style="color: var(--tkd-primary, <?= $tema['color_hex'] ?>)">event</span>
                         Próximos Eventos de la Academia
                     </h3>
-                    <a href="<?= base_url('/usuario/calendario') ?>" class="text-tkd-blue hover:text-blue-700 text-xs font-bold uppercase tracking-wider transition-colors">Ver calendario →</a>
+                    <a href="<?= base_url('/usuario/calendario') ?>" 
+                       class="text-xs font-bold uppercase tracking-wider transition-colors"
+                       style="color: var(--tkd-primary, <?= $tema['color_hex'] ?>)">Ver calendario →</a>
                 </div>
                 <div class="p-6 divide-y divide-slate-100 dark:divide-slate-800/80">
                     <?php if (!empty($proximos_eventos)): ?>
                         <?php foreach($proximos_eventos as $evento): ?>
                             <div class="py-3.5 first:pt-0 last:pb-0 flex items-center gap-4">
-                                <div class="bg-blue-50 dark:bg-blue-500/10 text-tkd-blue dark:text-blue-400 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 border border-blue-200 dark:border-blue-500/20 shadow-sm">
+                                <div class="w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 border shadow-sm text-white"
+                                     style="background: var(--tkd-gradient, <?= $tema['belt_gradient'] ?>); border-color: <?= $tema['color_hex'] ?>40;">
                                     <span class="text-[10px] font-extrabold uppercase tracking-wider"><?= date('M', strtotime($evento['start'])) ?></span>
                                     <span class="text-lg font-black leading-none"><?= date('d', strtotime($evento['start'])) ?></span>
                                 </div>
@@ -184,6 +233,19 @@ $tema = function_exists('obtener_tema_marcial')
     </div>
 
 </main>
+
+<script>
+// Animación de la barra de progreso del cinturón al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    const bar = document.getElementById('beltProgressBar');
+    if (bar) {
+        // Pequeño delay para que la animación CSS sea visible
+        setTimeout(() => {
+            bar.style.width = '<?= $porcentaje ?>%';
+        }, 300);
+    }
+});
+</script>
 
 <?php include __DIR__ . '/../layout/estudiante_pie.php'; ?>
 

@@ -82,10 +82,10 @@
         <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="material-icons-outlined text-tkd-purple text-xl">pie_chart</span>
+                    <span class="material-icons-outlined text-xl" style="color: var(--tkd-accent, #DC2626)">pie_chart</span>
                     Distribución de Cinturones
                 </h3>
-                <span class="text-xs font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-500/20">
+                <span class="text-xs font-bold px-3 py-1 rounded-full border" style="color: var(--tkd-accent, #DC2626); background: rgba(220,38,38,0.10); border-color: rgba(220,38,38,0.25)">
                     <?= array_sum(array_column($distribucion_grados, 'cantidad')) ?> Deportistas
                 </span>
             </div>
@@ -106,16 +106,16 @@
         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
             <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4">Acciones del Instructor</h3>
             <div class="space-y-4 flex-1 flex flex-col justify-center">
-                <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-purple-50 dark:hover:bg-purple-950/30 hover:border-purple-300 dark:hover:border-purple-800 transition-all hover-lift group">
-                    <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-tkd-purple group-hover:scale-110 transition-transform shrink-0 border border-purple-100 dark:border-purple-500/20">
-                        <span class="material-icons-outlined text-2xl">people</span>
+                <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 tkd-card-action tkd-shimmer-hover transition-all group bg-white dark:bg-slate-900">
+                    <div class="w-12 h-12 rounded-xl tkd-icon-box shrink-0" style="width:3rem;height:3rem;">
+                        <span class="material-icons-outlined text-2xl group-hover:scale-110 transition-transform">people</span>
                     </div>
                     <div class="text-left">
-                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-tkd-purple transition-colors">Ver Alumnos de Jinhwan</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white transition-colors">Ver Alumnos de Jinhwan</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Consulta deportistas y propone ascensos de grado</p>
                     </div>
                 </a>
-                <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-purple-50 dark:hover:bg-purple-950/30 hover:border-purple-300 dark:hover:border-purple-800 transition-all hover-lift group">
+                <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-300 dark:hover:border-amber-800 transition-all hover-lift group">
                     <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform shrink-0 border border-amber-100 dark:border-amber-500/20">
                         <span class="material-icons-outlined text-2xl">timeline</span>
                     </div>
@@ -134,10 +134,10 @@
         <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="material-icons-outlined text-tkd-purple text-xl">sports_martial_arts</span>
+                    <span class="material-icons-outlined text-xl" style="color:var(--tkd-accent,#DC2626)">sports_martial_arts</span>
                     Deportistas Registrados Recientemente
                 </h3>
-                <a href="<?= base_url('/maestro/alumnos') ?>" class="text-tkd-purple hover:text-purple-700 dark:hover:text-purple-400 text-xs font-bold uppercase tracking-wider transition-colors">Ver todos →</a>
+                <a href="<?= base_url('/maestro/alumnos') ?>" class="text-xs font-bold uppercase tracking-wider transition-colors" style="color:var(--tkd-accent,#DC2626)">Ver todos →</a>
             </div>
             <div class="overflow-x-auto flex-grow custom-scrollbar" style="-webkit-overflow-scrolling: touch;">
                 <table class="w-full text-left border-collapse" style="min-width: 450px;">
@@ -153,7 +153,7 @@
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-tkd-purple to-purple-800 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm">
+                                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-sm" style="background: linear-gradient(135deg, #18181b, #DC2626)">
                                             <?= strtoupper(substr($miembro['nombre'], 0, 1)) ?>
                                         </div>
                                         <span class="font-bold text-slate-900 dark:text-white text-sm"><?= htmlspecialchars($miembro['nombre'] . ' ' . $miembro['apellido']) ?></span>
@@ -183,16 +183,17 @@
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <span class="material-icons-outlined text-purple-500 text-xl">event</span>
+                    <span class="material-icons-outlined text-xl" style="color:var(--tkd-accent,#DC2626)">event</span>
                     Próximos Eventos
                 </h3>
-                <a href="<?= base_url('/usuario/calendario') ?>" class="text-tkd-purple hover:text-purple-700 text-xs font-bold uppercase tracking-wider transition-colors">Ver calendario →</a>
+                <a href="<?= base_url('/usuario/calendario') ?>" class="text-xs font-bold uppercase tracking-wider transition-colors" style="color:var(--tkd-accent,#DC2626)">Ver calendario →</a>
             </div>
             <div class="p-6 divide-y divide-slate-100 dark:divide-slate-800/80 flex-grow">
                 <?php if (!empty($proximos_eventos)): ?>
                     <?php foreach($proximos_eventos as $evento): ?>
                         <div class="py-3.5 first:pt-0 last:pb-0 flex items-center gap-4">
-                            <div class="bg-purple-50 dark:bg-purple-500/10 text-tkd-purple dark:text-purple-400 w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 border border-purple-200 dark:border-purple-500/20 shadow-sm">
+                            <div class="w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0 border shadow-sm text-white"
+                                 style="background: var(--tkd-gradient, linear-gradient(135deg,#18181b,#DC2626)); border-color: rgba(220,38,38,0.3)">
                                 <span class="text-[10px] font-extrabold uppercase tracking-wider"><?= date('M', strtotime($evento['start'])) ?></span>
                                 <span class="text-lg font-black leading-none"><?= date('d', strtotime($evento['start'])) ?></span>
                             </div>

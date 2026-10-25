@@ -87,3 +87,30 @@ Este archivo documenta las decisiones clave de arquitectura, cambios estructural
    - Entregar respuestas cortas y concisas al finalizar.
    - Generar el comando Git de una sola línea listo para copiar:
      `git add . ; git commit -m "..." ; git push`
+
+---
+
+## 5. Personalización Cromática del Dashboard por Rol/Cinturón
+
+- **Variables CSS Reactivas** (`public/styles/custom.css`):
+  - `--tkd-primary`, `--tkd-accent`, `--tkd-gradient`, `--tkd-rgb`, `--tkd-glow`: variables inyectadas por `renderizar_variables_tema_marcial()`.
+  - Clases utilitarias: `.tkd-btn-primary`, `.tkd-icon-box`, `.tkd-active-link`, `.tkd-card-action`, `.tkd-belt-progress-bar`, `.tkd-shimmer-hover`, `.tkd-chart-badge`.
+
+- **Dashboard Estudiante** (`vistas/estudiante/dashboard.php`):
+  - Barra de progreso animada del cinturón (0% Blanco → 100% Negro).
+  - Botón "Ver Carnet" usa `.tkd-btn-primary` (color = cinturón actual).
+  - Módulos de estudio con `.tkd-card-action` + `.tkd-shimmer-hover`.
+  - Calendario de eventos con gradiente del cinturón.
+
+- **Dashboard Maestro** (`vistas/maestro/dashboard.php`):
+  - Eliminados colores `purple` hardcoded → ahora usan `var(--tkd-accent, #DC2626)`.
+  - Botón "Ver Alumnos" usa `.tkd-card-action` + `.tkd-shimmer-hover`.
+  - Avatares de alumnos usan gradiente negro/carmesí marcial.
+
+- **Sidebar Estudiante** (`vistas/layout/estudiante_cabecera.php`):
+  - Enlaces activos usan `.tkd-active-link` reactivo al `--tkd-primary` del cinturón.
+  - Avatar del footer usa `var(--tkd-gradient)` en vez de azul fijo.
+
+- **Helper de Temas** (`helpers/theme_helper.php`):
+  - `obtener_tema_marcial()`: mapeo de 11 niveles de cinturón con colores, hangul y filosofía.
+  - `renderizar_variables_tema_marcial()`: genera `<style>` con variables CSS inyectadas en cada vista.
