@@ -2,59 +2,75 @@
 
 <main class="flex-grow container mx-auto p-6 lg:p-10 space-y-8 animate-fade-in-up">
 
-    <!-- Instructor Hero Banner -->
-    <div class="bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 p-6 md:p-8 rounded-3xl text-white shadow-xl relative overflow-hidden border border-purple-900/40">
-        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute right-1/3 -top-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Instructor Hero Banner: Dojang Central del Sabomnim -->
+    <div class="relative overflow-hidden rounded-3xl p-6 md:p-8 text-white shadow-2xl border border-red-600/30 transition-all"
+         style="background: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%); border-top: 5px solid #DC2626;">
+        
+        <!-- Marca de agua caligráfica oriental 사범 (Sabomnim / Maestro) -->
+        <div class="absolute right-4 -bottom-10 text-9xl font-serif font-black select-none pointer-events-none opacity-5 dark:opacity-10 text-red-500 tracking-tighter">
+            사범
+        </div>
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold tracking-wider uppercase border border-purple-500/30">
-                    <span class="pulse-dot bg-purple-400"></span>
-                    <span>Panel de Instructor / Maestro</span>
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-600/20 text-red-400 text-xs font-black tracking-widest uppercase border border-red-500/40">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    <span>Cuerpo de Maestros • Sabomnim Dan</span>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-display font-bold tracking-tight text-white">¡Hola, Sabonim!</h1>
-                <p class="text-slate-300 text-sm max-w-xl">Supervisa el avance de tus alumnos, propone grados de ascenso y revisa el calendario.</p>
+                <h1 class="text-3xl md:text-4xl font-display font-black tracking-tight text-white uppercase flex items-center gap-3">
+                    Dojang del Maestro
+                </h1>
+                <p class="text-slate-300 text-sm max-w-xl font-serif italic">
+                    "Guía con el ejemplo, forja el carácter de los alumnos y custodia el honor tradicional del Taekwondo."
+                </p>
             </div>
 
             <div class="flex items-center gap-3 shrink-0">
-                <div class="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-200 flex items-center gap-2 border border-white/15 shadow-inner">
-                    <span class="material-icons-outlined text-purple-400 text-lg">calendar_today</span>
-                    <?= date('d M, Y') ?>
+                <!-- Sello Tradicional de Dojang (Cera Oriental) -->
+                <div class="hidden sm:flex items-center gap-3 bg-black/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-red-600/40 shadow-lg">
+                    <div class="tkd-seal-stamp">
+                        <span>사범</span>
+                        <small>DAN</small>
+                    </div>
+                    <div class="text-left text-xs leading-tight">
+                        <span class="font-extrabold text-white block uppercase tracking-wider">Sabomnim</span>
+                        <span class="text-red-400 text-[10px] font-mono"><?= date('d M, Y') ?></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Metric Cards Grid -->
+    <!-- Metric Cards Grid: Ficha de Rendimiento del Dojang -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover-glow-purple transition-all shadow-sm">
-            <div class="w-14 h-14 rounded-2xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-tkd-purple shrink-0 border border-purple-100 dark:border-purple-500/20 shadow-inner">
-                <span class="material-icons-outlined text-3xl">people</span>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-red-500/50 transition-all shadow-sm relative overflow-hidden">
+            <div class="w-14 h-14 rounded-2xl bg-zinc-900 text-red-500 flex items-center justify-center shrink-0 border border-red-500/30 shadow-inner">
+                <span class="material-icons-outlined text-3xl">sports_martial_arts</span>
             </div>
             <div>
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Total Deportistas</p>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Alumnos en Instrucción</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['total_alumnos'] ?></h3>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-amber-400 transition-all shadow-sm">
-            <div class="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-500 shrink-0 border border-amber-100 dark:border-amber-500/20 shadow-inner">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-amber-500/50 transition-all shadow-sm relative overflow-hidden">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/30 shadow-inner">
                 <span class="material-icons-outlined text-3xl">pending_actions</span>
             </div>
             <div>
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Ascensos Pendientes</p>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Ascensos Propuestos</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['solicitudes_pendientes'] ?></h3>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover-glow-emerald transition-all shadow-sm">
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-500 shrink-0 border border-emerald-100 dark:border-emerald-500/20 shadow-inner">
-                <span class="material-icons-outlined text-3xl">task_alt</span>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-emerald-500/50 transition-all shadow-sm relative overflow-hidden">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 border border-emerald-500/30 shadow-inner">
+                <span class="material-icons-outlined text-3xl">verified</span>
             </div>
             <div>
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Ascensos Aprobados</p>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Exámenes Aprobados</p>
                 <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['solicitudes_aprobadas'] ?></h3>
             </div>
         </div>

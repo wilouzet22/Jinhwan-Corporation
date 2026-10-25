@@ -515,6 +515,72 @@ html.dark .tkd-watermark-hangul {
   box-shadow: 0 0 24px var(--tkd-glow, rgba(37, 99, 235, 0.25));
 }
 
+/* ==========================================================================
+   TEMATIZACIÓN CROMÁTICA DE SIDEBARS Y PANELES SEGÚN ROL / CINTURÓN
+   ========================================================================== */
+
+/* A. PANEL DE ADMINISTRACIÓN -> DORADO IMPERIAL (#D4AF37) */
+#admin-sidebar a.text-tkd-blue,
+#admin-sidebar button.text-tkd-blue,
+#admin-sidebar span.text-tkd-blue {
+  color: var(--tkd-primary, #D4AF37) !important;
+}
+
+#admin-sidebar a.bg-blue-50,
+#admin-sidebar a.dark\:bg-tkd-blue\/10,
+#admin-sidebar button.bg-blue-50,
+#admin-sidebar button.dark\:bg-tkd-blue\/10 {
+  background-color: rgba(var(--tkd-rgb, 212, 175, 55), 0.12) !important;
+  color: var(--tkd-primary, #D4AF37) !important;
+  border-left: 3px solid var(--tkd-primary, #D4AF37) !important;
+}
+
+#admin-sidebar a:hover:not(.bg-blue-50) {
+  border-left: 3px solid rgba(var(--tkd-rgb, 212, 175, 55), 0.4);
+}
+
+/* B. PANEL DE MAESTRO -> NEGRO MARCIAL & CARMESÍ DAN (#18181B / #DC2626) */
+#maestro-sidebar a.text-purple-600,
+#maestro-sidebar button.text-purple-600,
+#maestro-sidebar span.text-purple-600,
+#maestro-sidebar span.text-tkd-purple {
+  color: #DC2626 !important;
+}
+
+#maestro-sidebar a.bg-purple-50,
+#maestro-sidebar a.dark\:bg-purple-500\/10,
+#maestro-sidebar button.bg-purple-50,
+#maestro-sidebar button.dark\:bg-purple-500\/10 {
+  background-color: rgba(220, 38, 38, 0.12) !important;
+  color: #DC2626 !important;
+  border-left: 3px solid #DC2626 !important;
+}
+
+#maestro-sidebar a:hover:not(.bg-purple-50) {
+  border-left: 3px solid rgba(220, 38, 38, 0.4);
+}
+
+/* C. PANEL DEL ESTUDIANTE -> REACTIVO AL CINTURÓN EXACTO */
+#estudiante-sidebar a.text-tkd-blue,
+#estudiante-sidebar button.text-tkd-blue,
+#estudiante-sidebar span.text-tkd-blue,
+#estudiante-sidebar a.text-cyan-600 {
+  color: var(--tkd-primary, #06B6D4) !important;
+}
+
+#estudiante-sidebar a.bg-blue-50,
+#estudiante-sidebar a.dark\:bg-blue-500\/10,
+#estudiante-sidebar a.bg-cyan-50 {
+  background-color: rgba(var(--tkd-rgb, 37, 99, 235), 0.14) !important;
+  color: var(--tkd-primary, #06B6D4) !important;
+  border-left: 3px solid var(--tkd-primary, #06B6D4) !important;
+}
+
+#estudiante-sidebar a:hover:not(.bg-blue-50) {
+  border-left: 3px solid rgba(var(--tkd-rgb, 37, 99, 235), 0.4);
+}
+
+
 
 
 
