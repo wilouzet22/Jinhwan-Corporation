@@ -407,12 +407,28 @@ html.dark .admin-table-container::-webkit-scrollbar-track {
    IDENTIDAD VISUAL Y TEXTURAS DE TAEKWONDO (JINHWAN DO_JANG)
    ========================================================================== */
 
-/* 1. Micro-textura de tejido Dobok (Uniforme tradicional de Taekwondo) */
+/* 1. Fondo de Dojang Tradicional & Micro-textura de tejido Dobok */
 .tkd-dobok-texture {
+  position: relative;
   background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
                     radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px);
   background-size: 16px 16px;
   background-position: 0 0, 8px 8px;
+}
+
+.tkd-dobok-texture::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('../img/visual/dojang_bg.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.05;
+  filter: contrast(110%);
+  transition: opacity 0.3s ease;
 }
 
 html.dark .tkd-dobok-texture {
@@ -420,6 +436,11 @@ html.dark .tkd-dobok-texture {
                     radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   background-size: 16px 16px;
   background-position: 0 0, 8px 8px;
+}
+
+html.dark .tkd-dobok-texture::before {
+  opacity: 0.12;
+  filter: brightness(0.85) contrast(120%);
 }
 
 /* 2. Doble costura de cinturón marcial (Belt Stitching) */
