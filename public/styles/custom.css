@@ -403,5 +403,118 @@ html.dark .admin-table-container::-webkit-scrollbar-track {
   }
 }
 
+/* ==========================================================================
+   IDENTIDAD VISUAL Y TEXTURAS DE TAEKWONDO (JINHWAN DO_JANG)
+   ========================================================================== */
+
+/* 1. Micro-textura de tejido Dobok (Uniforme tradicional de Taekwondo) */
+.tkd-dobok-texture {
+  background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                    radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+
+html.dark .tkd-dobok-texture {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+
+/* 2. Doble costura de cinturón marcial (Belt Stitching) */
+.tkd-belt-stitch {
+  position: relative;
+  border-top: 2px dashed rgba(148, 163, 184, 0.35);
+  border-bottom: 2px dashed rgba(148, 163, 184, 0.35);
+  padding: 4px 0;
+}
+
+html.dark .tkd-belt-stitch {
+  border-top-color: rgba(255, 255, 255, 0.12);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+/* 3. Tarjeta de Credencial Marcial Digital */
+.tkd-martial-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 0 0 1px var(--tkd-border, rgba(226, 232, 240, 0.8));
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+html.dark .tkd-martial-card {
+  background: #090d16;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--tkd-border, rgba(51, 65, 85, 0.6));
+}
+
+.tkd-martial-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--tkd-gradient, linear-gradient(90deg, #2563eb, #dc2626));
+  z-index: 10;
+}
+
+/* 4. Sello Tradicional Rojo de Dojang (Cera Oriental) */
+.tkd-seal-stamp {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 2.5px solid #dc2626;
+  border-radius: 8px;
+  color: #dc2626;
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: inset 0 0 0 2px rgba(220, 38, 38, 0.2), 0 2px 8px rgba(220, 38, 38, 0.18);
+  transform: rotate(-4deg);
+  user-select: none;
+  background: rgba(220, 38, 38, 0.04);
+}
+
+.tkd-seal-stamp span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.tkd-seal-stamp small {
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  margin-top: 2px;
+}
+
+/* 5. Marca de Agua Caligráfica Coreana (Hangul Taekwondo) */
+.tkd-watermark-hangul {
+  position: absolute;
+  font-family: serif;
+  font-weight: 900;
+  color: currentColor;
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  z-index: 0;
+}
+
+html.dark .tkd-watermark-hangul {
+  opacity: 0.06;
+}
+
+/* 6. Acento Dinámico del Sistema */
+.tkd-dynamic-glow {
+  box-shadow: 0 0 24px var(--tkd-glow, rgba(37, 99, 235, 0.25));
+}
+
+
 
 

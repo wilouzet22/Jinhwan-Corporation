@@ -14,6 +14,7 @@ if (isset($_SESSION['id'])) {
         $foto_perfil = $logged_user['foto_perfil'];
     }
 }
+$tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('Maestros', $logged_user['nombre_nivel'] ?? null) : [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,22 +40,23 @@ if (isset($_SESSION['id'])) {
     <!-- React + TypeScript Bundle CSS only -->
     <link rel="stylesheet" href="<?= asset('dist/assets/main.css') ?>">
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
+    <?= function_exists('renderizar_variables_tema_marcial') ? renderizar_variables_tema_marcial($tema_marcial) : '' ?>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-red-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="h-1 w-full bg-gradient-to-r from-purple-700 via-purple-500 to-amber-500"></div>
+        <div class="h-1.5 w-full shadow-sm" style="background: var(--tkd-gradient, linear-gradient(135deg, #09090b, #18181b, #dc2626));"></div>
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppAdmin" class="h-10 w-auto object-contain transition-transform group-hover:scale-105 duration-300">
                 <div class="flex flex-col">
                     <h1 class="font-display font-bold text-xl text-slate-900 dark:text-white tracking-wider leading-none transition-colors">JINHWAN</h1>
-                    <span class="text-[10px] font-extrabold text-purple-600 dark:text-purple-400 tracking-widest uppercase mt-0.5 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                        Panel Instructor
+                    <span class="text-[10px] font-extrabold tracking-widest uppercase mt-0.5 flex items-center gap-1 text-red-600 dark:text-red-400">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
+                        Sabomnim • Dan
                     </span>
                 </div>
             </a>

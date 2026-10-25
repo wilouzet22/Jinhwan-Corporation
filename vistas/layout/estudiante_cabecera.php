@@ -14,6 +14,7 @@ if (isset($_SESSION['id'])) {
         $foto_perfil = $logged_user['foto_perfil'];
     }
 }
+$tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('Deportistas', $logged_user['nombre_nivel'] ?? null) : [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -39,22 +40,23 @@ if (isset($_SESSION['id'])) {
     <!-- React + TypeScript Bundle CSS only -->
     <link rel="stylesheet" href="<?= asset('dist/assets/main.css') ?>">
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
+    <?= function_exists('renderizar_variables_tema_marcial') ? renderizar_variables_tema_marcial($tema_marcial) : '' ?>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     <aside id="estudiante-sidebar" class="fixed inset-y-0 left-0 z-50 w-60 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
-        <div class="h-1 w-full bg-gradient-to-r from-tkd-blue via-cyan-500 to-emerald-500"></div>
+        <div class="h-1.5 w-full shadow-sm" style="background: var(--tkd-gradient, linear-gradient(135deg, #2563EB, #06b6d4, #10b981));"></div>
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex flex-col items-center group">
                 <img src="<?= asset('img/visual/logo.svg') ?>" alt="AppEstudiante" class="h-16 w-auto object-contain mb-2 transition-transform group-hover:scale-105 duration-300">
                 <div class="text-center">
                     <h1 class="font-bold text-lg text-slate-900 dark:text-white uppercase tracking-widest leading-none transition-colors">JINHWAN</h1>
-                    <span class="text-[10px] font-extrabold text-cyan-600 dark:text-cyan-400 tracking-widest uppercase mt-1 inline-flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
-                        Portal Alumno
+                    <span class="text-[10px] font-extrabold tracking-widest uppercase mt-1 inline-flex items-center gap-1" style="color: var(--tkd-primary, #06b6d4);">
+                        <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: var(--tkd-primary, #06b6d4);"></span>
+                        <?= htmlspecialchars($tema_marcial['nombre_visual'] ?? 'Portal Alumno') ?>
                     </span>
                 </div>
             </a>
