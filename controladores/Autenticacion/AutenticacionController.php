@@ -230,7 +230,7 @@ class AutenticacionController extends Controller {
             $nombre = trim($_POST['nombre'] ?? '');
             $apellido = trim($_POST['apellido'] ?? '');
             $fecha_nacimiento = !empty($_POST['fecha_nacimiento']) ? $_POST['fecha_nacimiento'] : null;
-            $telefono = trim($_POST['telefono'] ?? '');
+            $telefono = preg_replace('/[^0-9+\s-]/', '', trim($_POST['telefono'] ?? ''));
             $sede_id = !empty($_POST['sede_id']) ? (int)$_POST['sede_id'] : null;
             $id_grupo = !empty($_POST['id_grupo']) ? (int)$_POST['id_grupo'] : null;
             

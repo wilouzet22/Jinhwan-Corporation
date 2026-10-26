@@ -72,6 +72,10 @@ if (!isset($_SESSION['temp_registro'])) {
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Teléfono</label>
                     <input name="telefono" type="tel" placeholder="Ej: +57 300 123 4567" required 
+                        pattern="[\d\s+-]+"
+                        inputmode="tel"
+                        oninput="this.value = this.value.replace(/[^0-9+\s-]/g, '')"
+                        title="Ingrese un número de teléfono válido (solo números, espacios o +)"
                         class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300">
                 </div>
 
