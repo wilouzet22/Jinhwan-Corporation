@@ -4,6 +4,15 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Si el usuario no es Admin (ej: Maestro o Profesor accediendo a un permiso extra), usar su propia cabecera
+$rol_actual = $_SESSION['rol_id'] ?? '';
+if (!class_exists('Roles') || !Roles::esAdmin($rol_actual)) {
+    if (in_array($rol_actual, ['Maestros', 'Profesores', 'Monitores']) || (class_exists('Roles') && Roles::esMaestro($rol_actual))) {
+        include __DIR__ . '/maestro_cabecera.php';
+        return;
+    }
+}
+
 $nombre_usuario = $_SESSION['nombre'] ?? $_SESSION['usuario']['nombre'] ?? 'Admin';
 $foto_perfil = null;
 

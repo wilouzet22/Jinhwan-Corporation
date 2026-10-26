@@ -144,6 +144,12 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
                         <span class="text-sm font-medium">Ascensos</span>
                     </a>
                 </li>
+                <li>
+                    <a href="<?= base_url('/admin/teoria') ?>" class="flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors group <?= ($current_page ?? '') === 'teoria' ? 'bg-purple-100 dark:bg-purple-900/60 text-purple-800 dark:text-purple-200 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' ?>">
+                        <span class="material-icons-outlined text-xl transition-transform group-hover:scale-110 <?= ($current_page ?? '') === 'teoria' ? 'text-purple-500 dark:text-purple-300' : '' ?>">auto_stories</span>
+                        <span class="text-sm font-medium">Temarios (Teoría)</span>
+                    </a>
+                </li>
                 <?php endif; ?>
                 <?php if($hasCalendarioAdmin): ?>
                 <li>
@@ -187,7 +193,13 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
                     <p class="font-bold text-xs text-slate-900 dark:text-white truncate group-hover:text-purple-700 transition-colors leading-tight" title="<?= htmlspecialchars($nombre_usuario) ?>">
                         <?= htmlspecialchars($nombre_usuario) ?>
                     </p>
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider leading-none mt-0.5">Instructor</p>
+                    <?php
+                    $subrol = $_SESSION['rol_id'] ?? 'Instructor';
+                    if ($subrol === 'Profesores') $subrol = 'Profesor';
+                    elseif ($subrol === 'Monitores') $subrol = 'Monitor';
+                    elseif ($subrol === 'Maestros') $subrol = 'Maestro';
+                    ?>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider leading-none mt-0.5"><?= htmlspecialchars($subrol) ?></p>
                 </div>
             </a>
 
