@@ -369,6 +369,9 @@ $total_inactivos = $total_estudiantes - $total_activos;
 
             <form id="student-form" action="<?= base_url('/admin/estudiantes/create') ?>" method="POST" enctype="multipart/form-data" autocomplete="off" class="p-6 space-y-6">
                 <input type="hidden" name="id" id="modal-id">
+                <!-- Campos trampa para absorber el autocompletado agresivo del navegador -->
+                <input type="text" name="fake_user" style="display:none" aria-hidden="true" autocomplete="username" tabindex="-1">
+                <input type="password" name="fake_pass" style="display:none" aria-hidden="true" autocomplete="current-password" tabindex="-1">
                 
                 <!-- Sección 1: Datos Personales -->
                 <div>
@@ -397,7 +400,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                         </div>
                         <div>
                             <label for="modal-num-doc" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Número Documento *</label>
-                            <input type="text" name="numero_documento" id="modal-num-doc" required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="text" name="numero_documento" id="modal-num-doc" required inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                         <div class="sm:col-span-2">
                             <label for="modal-fnac" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Fecha de Nacimiento</label>
@@ -415,7 +418,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="modal-telefono" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Teléfono Móvil</label>
-                            <input type="tel" name="telefono" id="modal-telefono" placeholder="Ej. 3001234567" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="tel" name="telefono" id="modal-telefono" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números (ej: 3001234567)" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                         <div>
                             <label for="modal-correo" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Correo Electrónico *</label>
@@ -726,6 +729,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
             document.getElementById('modal-id').value = '';
             document.getElementById('modal-tipo-doc').value = 'TI';
             document.getElementById('modal-activo').checked = true;
+            document.getElementById('modal-telefono').value = '';
             document.getElementById('modal-eps').value = '';
             document.getElementById('modal-clave').value = '';
             claveHint.classList.add('hidden');
@@ -738,6 +742,9 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 if (document.getElementById('student-modal') && !document.getElementById('student-modal').classList.contains('hidden') && !document.getElementById('modal-id').value) {
                     if (document.getElementById('modal-eps').value.includes('@')) {
                         document.getElementById('modal-eps').value = '';
+                    }
+                    if (document.getElementById('modal-telefono').value.includes('@') || !/^\d*$/.test(document.getElementById('modal-telefono').value)) {
+                        document.getElementById('modal-telefono').value = '';
                     }
                     document.getElementById('modal-clave').value = '';
                 }

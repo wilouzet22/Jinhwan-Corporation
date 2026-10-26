@@ -380,7 +380,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                         </div>
                         <div>
                             <label for="numero_documento" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Número Documento *</label>
-                            <input type="text" name="numero_documento" id="numero_documento" required class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="text" name="numero_documento" id="numero_documento" required inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                         <div>
                             <label for="fecha_nacimiento" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Fecha de Nacimiento *</label>
@@ -398,7 +398,7 @@ $total_admins = count(array_filter($miembros, fn($m) => $m['rol_id'] === Roles::
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="telefono" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Teléfono / Celular</label>
-                            <input type="tel" name="telefono" id="telefono" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="tel" name="telefono" id="telefono" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números (ej: 3001234567)" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                         <div>
                             <label for="correo" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Correo Electrónico</label>

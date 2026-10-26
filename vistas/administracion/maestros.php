@@ -242,6 +242,9 @@ $total_inactivos = $total_maestros - $total_activos;
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden transition-all my-8">
         <form id="teacher-form" method="POST" enctype="multipart/form-data" autocomplete="off" class="flex flex-col">
             <input type="hidden" name="id" id="modal-id">
+            <!-- Campos trampa para absorber el autocompletado agresivo del navegador -->
+            <input type="text" name="fake_user" style="display:none" aria-hidden="true" autocomplete="username" tabindex="-1">
+            <input type="password" name="fake_pass" style="display:none" aria-hidden="true" autocomplete="current-password" tabindex="-1">
             
             <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <h3 id="modal-title" class="text-lg font-bold text-slate-900 dark:text-white">Nuevo Maestro</h3>
@@ -273,18 +276,18 @@ $total_inactivos = $total_maestros - $total_activos;
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">N° Documento *</label>
-                        <input type="text" name="numero_documento" id="modal-num-doc" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
+                        <input type="text" name="numero_documento" id="modal-num-doc" required inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Correo *</label>
-                        <input type="email" name="correo" id="modal-correo" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
+                        <input type="email" name="correo" id="modal-correo" required autocomplete="off" placeholder="maestro@ejemplo.com" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Teléfono</label>
-                        <input type="text" name="telefono" id="modal-telefono" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
+                        <input type="tel" name="telefono" id="modal-telefono" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" autocomplete="off" placeholder="Solo números (ej: 3001234567)" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tkd-blue">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Sede Principal</label>
@@ -455,9 +458,34 @@ function openModal(mode, data = null) {
         title.textContent = 'Nuevo Maestro';
         form.action = '<?= base_url('/admin/maestros/create') ?>';
         document.getElementById('modal-id').value = '';
+        document.getElementById('modal-nombre').value = '';
+        document.getElementById('modal-apellido').value = '';
+        document.getElementById('modal-num-doc').value = '';
+        document.getElementById('modal-correo').value = '';
+        document.getElementById('modal-telefono').value = '';
+        document.getElementById('modal-clave').value = '';
         document.getElementById('modal-activo').checked = true;
         document.getElementById('modal-web').checked = false;
         claveHint.classList.add('hidden');
+
+        // Limpieza diferida para neutralizar el autocompletado agresivo del navegador
+        setTimeout(() => {
+            if (!document.getElementById('modal-id').value) {
+                document.getElementById('modal-clave').value = '';
+                document.getElementById('modal-telefono').value = '';
+                if (document.getElementById('modal-correo').value === 'admin@admin.com') {
+                    document.getElementById('modal-correo').value = '';
+                }
+            }
+        }, 50);
+        setTimeout(() => {
+            if (!document.getElementById('modal-id').value) {
+                document.getElementById('modal-clave').value = '';
+                if (document.getElementById('modal-telefono').value.includes('@') || !/^\d*$/.test(document.getElementById('modal-telefono').value)) {
+                    document.getElementById('modal-telefono').value = '';
+                }
+            }
+        }, 200);
     }
 
     modal.classList.remove('hidden');
