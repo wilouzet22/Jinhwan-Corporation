@@ -240,7 +240,7 @@ $total_inactivos = $total_maestros - $total_activos;
 <!-- MODAL CREAR / EDITAR MAESTRO -->
 <div id="teacher-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden transition-all my-8">
-        <form id="teacher-form" method="POST" enctype="multipart/form-data" class="flex flex-col">
+        <form id="teacher-form" method="POST" enctype="multipart/form-data" autocomplete="off" class="flex flex-col">
             <input type="hidden" name="id" id="modal-id">
             
             <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
@@ -304,7 +304,7 @@ $total_inactivos = $total_maestros - $total_activos;
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Contraseña</label>
-                        <input type="password" name="clave" id="modal-clave" placeholder="Por defecto: jinhwa2024" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none">
+                        <input type="password" name="clave" id="modal-clave" autocomplete="new-password" placeholder="Por defecto: jinhwa2024" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none">
                         <span id="clave-hint" class="hidden text-[10px] text-slate-400">Dejar en blanco para no modificar.</span>
                     </div>
                 </div>

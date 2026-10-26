@@ -367,7 +367,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                 </button>
             </div>
 
-            <form id="student-form" action="<?= base_url('/admin/estudiantes/create') ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+            <form id="student-form" action="<?= base_url('/admin/estudiantes/create') ?>" method="POST" enctype="multipart/form-data" autocomplete="off" class="p-6 space-y-6">
                 <input type="hidden" name="id" id="modal-id">
                 
                 <!-- Sección 1: Datos Personales -->
@@ -419,7 +419,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                         </div>
                         <div>
                             <label for="modal-correo" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Correo Electrónico *</label>
-                            <input type="email" name="correo" id="modal-correo" required placeholder="alumno@jinhwan.com" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="email" name="correo" id="modal-correo" required autocomplete="off" placeholder="alumno@jinhwan.com" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                     </div>
                 </div>
@@ -475,7 +475,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                         </div>
                         <div>
                             <label for="modal-eps" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">EPS</label>
-                            <input type="text" name="eps" id="modal-eps" placeholder="Ej. Sura, Sanitas" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                            <input type="text" name="eps" id="modal-eps" autocomplete="off" placeholder="Ej. Sura, Sanitas" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                         </div>
                         <div>
                             <label for="modal-rh" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Grupo Sanguíneo (RH)</label>
@@ -524,7 +524,7 @@ $total_inactivos = $total_estudiantes - $total_activos;
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="modal-clave" class="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Contraseña</label>
-                                <input type="password" name="clave" id="modal-clave" placeholder="Por defecto: jinhwa2024" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
+                                <input type="password" name="clave" id="modal-clave" autocomplete="new-password" placeholder="Por defecto: jinhwa2024" class="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white p-2.5 text-sm focus:ring-2 focus:ring-tkd-blue focus:outline-none">
                                 <span id="clave-hint" class="hidden text-[10px] text-slate-400 mt-1 block">Dejar en blanco para mantener la contraseña actual.</span>
                             </div>
                             <div class="flex items-center pt-5">
@@ -726,10 +726,22 @@ $total_inactivos = $total_estudiantes - $total_activos;
             document.getElementById('modal-id').value = '';
             document.getElementById('modal-tipo-doc').value = 'TI';
             document.getElementById('modal-activo').checked = true;
+            document.getElementById('modal-eps').value = '';
+            document.getElementById('modal-clave').value = '';
             claveHint.classList.add('hidden');
             document.getElementById('foto-preview-img').classList.add('hidden');
             document.getElementById('foto-preview-placeholder').classList.remove('hidden');
             document.getElementById('delete-foto-container').classList.add('hidden');
+            
+            // Prevenir autocompletado erróneo del gestor de contraseñas del navegador
+            setTimeout(() => {
+                if (document.getElementById('student-modal') && !document.getElementById('student-modal').classList.contains('hidden') && !document.getElementById('modal-id').value) {
+                    if (document.getElementById('modal-eps').value.includes('@')) {
+                        document.getElementById('modal-eps').value = '';
+                    }
+                    document.getElementById('modal-clave').value = '';
+                }
+            }, 50);
         } else if (action === 'edit' && data) {
             title.textContent = 'Editar Estudiante: ' + (data.nombre || '') + ' ' + (data.apellido || '');
             form.action = '<?= base_url('/admin/estudiantes/update') ?>';
