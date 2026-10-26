@@ -97,7 +97,7 @@ if (isset($_GET['msg'])) {
                             <span class="material-icons-outlined ml-3">alternate_email</span>
                         </span>
                         <input id="email" name="email" type="text" autocomplete="username" required 
-                            class="pl-12 block w-full py-3 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300"
+                            class="pl-12 block w-full py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300"
                             placeholder="ejemplo@jinhwa.com o número de documento">
                     </div>
                 </div>
@@ -109,7 +109,7 @@ if (isset($_GET['msg'])) {
                             <span class="material-icons-outlined ml-3">lock_open</span>
                         </span>
                         <input id="password" name="password" type="password" autocomplete="current-password" required 
-                            class="pl-12 pr-12 block w-full py-3 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 transition-all duration-300"
+                            class="pl-12 pr-12 block w-full py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300"
                             placeholder="••••••••">
                         <button type="button" onclick="togglePassword('password', 'toggleIcon')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-tkd-blue transition-colors focus:outline-none">
                             <span id="toggleIcon" class="material-icons-outlined">visibility</span>
