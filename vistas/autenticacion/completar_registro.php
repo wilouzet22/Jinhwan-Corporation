@@ -53,34 +53,34 @@ if (!isset($_SESSION['temp_registro'])) {
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Nombre(s)</label>
-                    <input name="nombre" type="text" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50">
+                    <input name="nombre" type="text" placeholder="Ej: Juan" required 
+                        class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Apellido(s)</label>
-                    <input name="apellido" type="text" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50">
+                    <input name="apellido" type="text" placeholder="Ej: Pérez" required 
+                        class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Fecha de Nacimiento</label>
                     <input name="fecha_nacimiento" type="date" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50">
+                        class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300 [color-scheme:light] dark:[color-scheme:dark]">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Teléfono</label>
                     <input name="telefono" type="tel" placeholder="Ej: +57 300 123 4567" required 
-                        class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50">
+                        class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300">
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">Sede de Entrenamiento</label>
-                    <select name="sede_id" required class="block w-full py-3 px-4 rounded-xl border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50">
-                        <option value="" disabled selected>Seleccione una sede...</option>
+                    <select name="sede_id" required class="block w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-tkd-blue/50 focus:border-tkd-blue/50 focus:outline-none transition-all duration-300 cursor-pointer">
+                        <option value="" disabled selected class="bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400">Seleccione una sede...</option>
                         <?php foreach($sedes as $sede): ?>
-                            <option value="<?= $sede['id'] ?>"><?= htmlspecialchars($sede['nombre']) ?> (<?= htmlspecialchars($sede['direccion']) ?>)</option>
+                            <option value="<?= $sede['id'] ?>" class="bg-white dark:bg-slate-800 text-slate-900 dark:text-white"><?= htmlspecialchars($sede['nombre']) ?> (<?= htmlspecialchars($sede['direccion']) ?>)</option>
                         <?php endforeach; ?>
                     </select>
                 </div>
