@@ -207,6 +207,7 @@ class AutenticacionController extends Controller {
     }
 
     public function completarRegistroForm() {
+        Security::initSession();
         if (!isset($_SESSION['temp_registro'])) {
             $this->redirect('/registro');
             return;
@@ -224,7 +225,13 @@ class AutenticacionController extends Controller {
     }
 
     public function processCompletarRegistro() {
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['temp_registro'])) {
+        Security::initSession();
+        if ($_SERVER["REQUEST_METHOD"] !== "POST" || !isset($_SESSION['temp_registro'])) {
+            $this->redirect('/registro');
+            return;
+        }
+
+        try {
             $temp = $_SESSION['temp_registro'];
             
             $nombre = trim($_POST['nombre'] ?? '');
@@ -251,32 +258,53 @@ class AutenticacionController extends Controller {
             if ($checkM && $rM = $checkM->fetch_assoc()) {
                 $id_maestro = !empty($rM['id_maestro']) ? (int)$rM['id_maestro'] : null;
             }
+            if (!$id_maestro) {
+                $checkFirstM = $db->query("SELECT id_maestro FROM maestro WHERE activo = 1 LIMIT 1");
+                if ($checkFirstM && $rFm = $checkFirstM->fetch_assoc()) {
+                    $id_maestro = (int)$rFm['id_maestro'];
+                }
+            }
 
             $clave_hash = password_hash($temp['password'], PASSWORD_DEFAULT);
             $tipo_doc = 'TI';
             $activo = 0; // Pendiente de aprobación por la administración
 
             $stmt = $db->prepare("INSERT INTO estudiante (id_grado, id_categoria, id_grupo, id_maestro, nombre, apellido, tipo_documento, num_doc, telefono, fecha_nacimiento, correo, clave, activo) VALUES (1, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("iisssssssssi", $id_grupo, $id_maestro, $nombre, $apellido, $tipo_doc, $temp['num_doc'], $telefono, $fecha_nacimiento, $temp['email'], $clave_hash, $activo);
+            if (!$stmt) {
+                $this->redirect('/registro?error=db_error');
+                return;
+            }
+
+            $stmt->bind_param("iissssssssi", $id_grupo, $id_maestro, $nombre, $apellido, $tipo_doc, $temp['num_doc'], $telefono, $fecha_nacimiento, $temp['email'], $clave_hash, $activo);
 
             if ($stmt->execute()) {
                 unset($_SESSION['temp_registro']);
                 $stmt->close();
 
-                // Notificar al administrador
-                $nomCompleto = trim($nombre . ' ' . $apellido);
-                Notificacion::registrar(
-                    'registro',
-                    'Nueva Solicitud de Registro',
-                    "El alumno {$nomCompleto} ({$temp['email']}) creó su cuenta y espera aprobación.",
-                    '/admin/registros'
-                );
+                // Notificar al administrador con bloque seguro
+                try {
+                    $nomCompleto = trim($nombre . ' ' . $apellido);
+                    Notificacion::registrar(
+                        'registro',
+                        'Nueva Solicitud de Registro',
+                        "El alumno {$nomCompleto} ({$temp['email']}) creó su cuenta y espera aprobación.",
+                        '/admin/registros'
+                    );
+                } catch (Throwable $e) {
+                    error_log("Notificación error: " . $e->getMessage());
+                }
 
                 $this->redirect('/login?msg=sent');
+                return;
             } else {
                 $stmt->close();
                 $this->redirect('/registro?error=db_error');
+                return;
             }
+        } catch (Throwable $e) {
+            error_log("Error processCompletarRegistro: " . $e->getMessage());
+            $this->redirect('/registro?error=db_error');
+            return;
         }
     }
 
