@@ -1,5 +1,14 @@
-    
-    <footer class="site-footer bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800/80 relative overflow-hidden mt-auto transition-colors duration-300">
+    <style>
+        .jinhwan-site-footer {
+            background-color: #ffffff;
+        }
+        html.dark .jinhwan-site-footer,
+        .dark .jinhwan-site-footer {
+            background-color: #0b0f19 !important;
+        }
+    </style>
+
+    <footer class="jinhwan-site-footer text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800/80 relative overflow-hidden mt-auto transition-colors duration-300">
         <!-- Barra de acento con gradiente marcial -->
         <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-tkd-red via-tkd-blue to-transparent opacity-90"></div>
         
@@ -15,14 +24,14 @@
                             <span class="text-[10px] font-bold uppercase tracking-widest text-tkd-red dark:text-rose-500 font-mono">Corporation</span>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         Academia de formación integral en Taekwondo Olímpico WT. Disciplina marcial, superación deportiva y educación en valores fundamentales.
                     </p>
                     <div class="flex items-center gap-2 pt-0.5">
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Afiliados WT
                         </span>
-                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                             Medellín, Col
                         </span>
                     </div>
@@ -32,19 +41,19 @@
                 <div class="space-y-3">
                     <h3 class="font-display font-bold text-base text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-red pl-3 transition-colors">Contacto</h3>
                     <div class="space-y-2.5">
-                        <a class="flex items-center gap-2.5 group text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-tkd-red dark:hover:text-rose-400 transition-colors" href="tel:+573246336836">
+                        <a class="flex items-center gap-2.5 group text-xs font-medium text-slate-700 dark:text-slate-200 hover:text-tkd-red dark:hover:text-rose-400 transition-colors" href="tel:+573246336836">
                             <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-red group-hover:bg-tkd-red group-hover:text-white transition-all duration-300 shrink-0 shadow-xs">
                                 <span class="material-icons-outlined text-base">phone</span>
                             </div>
                             <span>+57 324 633 68 36</span>
                         </a>
-                        <a class="flex items-center gap-2.5 group text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-tkd-blue dark:hover:text-blue-400 transition-colors" href="mailto:jinhwancorporation@gmail.com">
+                        <a class="flex items-center gap-2.5 group text-xs font-medium text-slate-700 dark:text-slate-200 hover:text-tkd-blue dark:hover:text-blue-400 transition-colors" href="mailto:jinhwancorporation@gmail.com">
                             <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white transition-all duration-300 shrink-0 shadow-xs">
                                 <span class="material-icons-outlined text-base">email</span>
                             </div>
                             <span class="break-all sm:break-normal">jinhwancorporation@gmail.com</span>
                         </a>
-                        <div class="flex items-center gap-2.5 text-xs font-medium text-slate-600 dark:text-slate-300">
+                        <div class="flex items-center gap-2.5 text-xs font-medium text-slate-700 dark:text-slate-200">
                             <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-gold shrink-0 shadow-xs">
                                 <span class="material-icons-outlined text-base">schedule</span>
                             </div>
@@ -77,7 +86,7 @@
                 <!-- Columna 4: Síguenos -->
                 <div class="space-y-3">
                     <h3 class="font-display font-bold text-base text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-gold pl-3 transition-colors">Síguenos</h3>
-                    <p class="text-xs text-slate-600 dark:text-slate-400">Conéctate en redes para transmisiones y noticias oficiales.</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-300">Conéctate en redes para transmisiones y noticias oficiales.</p>
                     <div class="flex gap-2 flex-wrap">
                         <!-- Facebook -->
                         <a class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] hover:shadow-md hover:shadow-blue-500/30 transition-all duration-300 transform hover:-translate-y-0.5" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook">
@@ -103,7 +112,7 @@
             <!-- Pie inferior y Derechos de autor -->
             <div class="mt-8 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left transition-colors">
                 <p class="text-xs text-slate-600 dark:text-slate-400 font-medium">
-                    &copy; <?= date('Y') ?> <strong class="text-slate-800 dark:text-slate-200">Jinhwan Corporation</strong>. Todos los derechos reservados.
+                    &copy; <?= date('Y') ?> <strong class="text-slate-800 dark:text-white">Jinhwan Corporation</strong>. Todos los derechos reservados.
                 </p>
                 <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                     Taekwondo Olímpico WT &bull; Disciplina, Pasión y Formación Deportiva.
