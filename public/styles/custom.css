@@ -765,3 +765,11 @@ html:not(.dark) select:-webkit-autofill {
 
 
 
+
+/* Footer del sitio público - Fondo sólido y nítido */
+.site-footer {
+  background-color: #ffffff;
+}
+html.dark .site-footer {
+  background-color: #060913 !important;
+}
