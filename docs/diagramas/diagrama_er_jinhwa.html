@@ -188,7 +188,7 @@
         .line-connection {
             stroke: #475569;
             stroke-width: 2.2;
-            transition: stroke 0.2s;
+            transition: stroke 0.25s, stroke-width 0.25s, opacity 0.25s;
             pointer-events: none;
         }
 
@@ -198,15 +198,36 @@
         }
 
         .line-connection.attr-line {
-            stroke: #334155;
+            stroke: #38bdf8;
             stroke-dasharray: 4,4;
-            stroke-width: 1.5;
+            stroke-width: 1.6;
         }
 
         .line-connection.pk-line {
             stroke: #f59e0b;
             stroke-dasharray: none;
-            stroke-width: 2;
+            stroke-width: 2.2;
+        }
+
+        .line-connection.dimmed {
+            opacity: 0.12 !important;
+        }
+
+        .line-connection.highlighted {
+            stroke: #38bdf8 !important;
+            stroke-width: 3.8px !important;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.95)) !important;
+        }
+
+        .cardinality-text.dimmed {
+            opacity: 0.12 !important;
+        }
+
+        .cardinality-text.highlighted {
+            fill: #38bdf8 !important;
+            font-size: 15px !important;
+            font-weight: 900 !important;
+            filter: drop-shadow(0 0 6px rgba(0,0,0,0.95)) !important;
         }
 
         .node-group {
@@ -218,6 +239,19 @@
             opacity: 0.15;
         }
 
+        @keyframes attrFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .attr-animated {
+            animation: attrFadeIn 0.25s ease forwards;
+        }
+
         .entity-rect {
             fill: var(--entity-bg);
             stroke: var(--entity-border);
@@ -225,7 +259,13 @@
             rx: 6px;
             ry: 6px;
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-            transition: stroke 0.2s, stroke-width 0.2s;
+            transition: stroke 0.25s, stroke-width 0.25s, filter 0.25s;
+        }
+
+        .entity-rect.is-selected {
+            stroke: #38bdf8 !important;
+            stroke-width: 4px !important;
+            filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.85)) !important;
         }
 
         .entity-rect.central {
@@ -424,9 +464,9 @@
         </div>
 
         <div class="controls">
-            <div class="presentation-hint">🎯 Clic en tabla o rombo para ampliar</div>
+            <div class="presentation-hint">🎯 Clic en un rectángulo para ver sus atributos y conexiones</div>
             <input type="text" class="search-box" placeholder="Buscar entidad o campo..." oninput="onSearch(this.value)">
-            <button class="btn" onclick="toggleAttributes()" id="btnAttr">Ocultar Atributos</button>
+            <button class="btn" onclick="toggleAttributes()" id="btnAttr">Mostrar Todos los Atributos</button>
             <button class="btn" onclick="resetLayout()">Restablecer Posiciones</button>
             <button class="btn" onclick="resetZoom()">Centrar Diagrama</button>
         </div>
@@ -446,264 +486,260 @@
             <g id="lines-group"></g>
             <g id="nodes-group"></g>
         </svg>
-        <div class="hint-bar">💡 Puedes arrastrar cualquier tabla, rombo o atributo • Las líneas permanecen 100% conectadas en los bordes</div>
+        <div class="hint-bar">💡 Clic en cualquier entidad (rectángulo) para desplegar sus atributos y su red de conexiones • Clic afuera o Esc para contraer</div>
     </div>
 
     <script>
         const modelData = {
             entities: [
                 {
-                    id: "estudiante", label: "ESTUDIANTE", isCentral: true, x: 1700, y: 1550, w: 190, h: 65,
+                    id: "estudiante", label: "ESTUDIANTE", isCentral: true, x: 1050, y: 750, w: 180, h: 60,
                     attributes: [
-                        // Capa 1 (dist: 175) - abanico hacia la izquierda (100° a 260°)
-                        { name: "id_estudiante", pk: true, angle: 180, dist: 175 },
-                        { name: "id_grado", fk: true, angle: 162, dist: 175 },
-                        { name: "id_categoria", fk: true, angle: 198, dist: 175 },
-                        { name: "id_grupo", fk: true, angle: 144, dist: 175 },
-                        { name: "id_maestro", fk: true, angle: 216, dist: 175 },
-                        { name: "nombre", angle: 126, dist: 175 },
-                        { name: "apellido", angle: 234, dist: 175 },
-                        { name: "tipo_documento", angle: 108, dist: 175 },
-                        { name: "num_doc", angle: 252, dist: 175 },
-                        { name: "telefono", angle: -95, dist: 180 },
+                        { name: "id_estudiante", pk: true, angle: 180, dist: 120 },
+                        { name: "id_grado", fk: true, angle: 160, dist: 120 },
+                        { name: "id_categoria", fk: true, angle: 200, dist: 120 },
+                        { name: "id_grupo", fk: true, angle: 140, dist: 120 },
+                        { name: "id_maestro", fk: true, angle: 220, dist: 120 },
+                        { name: "nombre", angle: 120, dist: 120 },
+                        { name: "apellido", angle: 240, dist: 120 },
+                        { name: "tipo_documento", angle: 100, dist: 120 },
+                        { name: "num_doc", angle: 260, dist: 120 },
+                        { name: "telefono", angle: -95, dist: 125 },
 
-                        // Capa 2 (dist: 295) - alternados con 120px+ de espacio libre
-                        { name: "correo", angle: 171, dist: 295 },
-                        { name: "clave", angle: 189, dist: 295 },
-                        { name: "foto_perfil", angle: 153, dist: 295 },
-                        { name: "fecha_nacimiento", angle: 207, dist: 295 },
-                        { name: "peso", angle: 135, dist: 295 },
-                        { name: "division", angle: 225, dist: 295 },
-                        { name: "eps", angle: 117, dist: 295 },
-                        { name: "rh", angle: 243, dist: 295 },
-                        { name: "activo", angle: 99, dist: 295 },
-                        { name: "created_at", angle: 261, dist: 295 }
+                        { name: "correo", angle: 170, dist: 185 },
+                        { name: "clave", angle: 190, dist: 185 },
+                        { name: "foto_perfil", angle: 150, dist: 185 },
+                        { name: "fecha_nacimiento", angle: 210, dist: 185 },
+                        { name: "peso", angle: 130, dist: 185 },
+                        { name: "division", angle: 230, dist: 185 },
+                        { name: "eps", angle: 110, dist: 185 },
+                        { name: "rh", angle: 250, dist: 185 },
+                        { name: "activo", angle: 90, dist: 185 },
+                        { name: "created_at", angle: 270, dist: 185 }
                     ]
                 },
                 {
-                    id: "maestro", label: "MAESTRO", isCentral: true, x: 3800, y: 1550, w: 190, h: 65,
+                    id: "maestro", label: "MAESTRO", isCentral: true, x: 1950, y: 750, w: 180, h: 60,
                     attributes: [
-                        // Capa 1 (dist: 175) - abanico hacia la derecha (-75° a 75°)
-                        { name: "id_maestro", pk: true, angle: 0, dist: 175 },
-                        { name: "id_grado", fk: true, angle: -20, dist: 175 },
-                        { name: "id_sede", fk: true, angle: 20, dist: 175 },
-                        { name: "nombre", angle: -40, dist: 175 },
-                        { name: "apellido", angle: 40, dist: 175 },
-                        { name: "tipo_documento", angle: -60, dist: 175 },
-                        { name: "num_doc", angle: 60, dist: 175 },
-                        { name: "telefono", angle: -78, dist: 180 },
+                        { name: "id_maestro", pk: true, angle: 0, dist: 120 },
+                        { name: "id_grado", fk: true, angle: -20, dist: 120 },
+                        { name: "id_sede", fk: true, angle: 20, dist: 120 },
+                        { name: "nombre", angle: -40, dist: 120 },
+                        { name: "apellido", angle: 40, dist: 120 },
+                        { name: "tipo_documento", angle: -60, dist: 120 },
+                        { name: "num_doc", angle: 60, dist: 120 },
+                        { name: "telefono", angle: -80, dist: 125 },
 
-                        // Capa 2 (dist: 295) - alternados con 120px+ de espacio libre
-                        { name: "foto_perfil", angle: -10, dist: 295 },
-                        { name: "descripcion_perfil", angle: 10, dist: 295 },
-                        { name: "logros", angle: -30, dist: 295 },
-                        { name: "mostrar_en_web", angle: 30, dist: 295 },
-                        { name: "correo", angle: -50, dist: 295 },
-                        { name: "clave", angle: 50, dist: 295 },
-                        { name: "permisos_extra", angle: -70, dist: 295 },
-                        { name: "activo", angle: 75, dist: 295 }
+                        { name: "foto_perfil", angle: -10, dist: 185 },
+                        { name: "descripcion_perfil", angle: 10, dist: 185 },
+                        { name: "logros", angle: -30, dist: 185 },
+                        { name: "mostrar_en_web", angle: 30, dist: 185 },
+                        { name: "correo", angle: -50, dist: 185 },
+                        { name: "clave", angle: 50, dist: 185 },
+                        { name: "permisos_extra", angle: -70, dist: 185 },
+                        { name: "activo", angle: 75, dist: 185 }
                     ]
                 },
                 {
-                    id: "administrador", label: "ADMINISTRADOR", x: 4600, y: 350, w: 180, h: 60,
+                    id: "administrador", label: "ADMINISTRADOR", x: 2350, y: 220, w: 170, h: 55,
                     attributes: [
-                        { name: "id_administrador", pk: true, angle: -135, dist: 130 },
-                        { name: "nombre", angle: -90, dist: 130 },
-                        { name: "apellido", angle: -45, dist: 130 },
-                        { name: "correo", angle: 0, dist: 130 },
-                        { name: "clave", angle: 45, dist: 130 },
-                        { name: "foto_perfil", angle: 90, dist: 130 },
-                        { name: "permisos_extra", angle: 135, dist: 130 },
-                        { name: "activo", angle: 180, dist: 130 }
+                        { name: "id_administrador", pk: true, angle: -135, dist: 105 },
+                        { name: "nombre", angle: -90, dist: 105 },
+                        { name: "apellido", angle: -45, dist: 105 },
+                        { name: "correo", angle: 0, dist: 105 },
+                        { name: "clave", angle: 45, dist: 105 },
+                        { name: "foto_perfil", angle: 90, dist: 105 },
+                        { name: "permisos_extra", angle: 135, dist: 105 },
+                        { name: "activo", angle: 180, dist: 105 }
                     ]
                 },
                 {
-                    id: "sedes", label: "SEDES", x: 2750, y: 350, w: 150, h: 55,
+                    id: "sedes", label: "SEDES", x: 1500, y: 220, w: 140, h: 50,
                     attributes: [
-                        { name: "id_sede", pk: true, angle: -155, dist: 135 },
-                        { name: "nombre", angle: -125, dist: 135 },
-                        { name: "direccion", angle: -95, dist: 135 },
-                        { name: "telefono", angle: -65, dist: 135 },
-                        { name: "ciudad", angle: -35, dist: 135 },
-                        { name: "horario", angle: 155, dist: 140 },
-                        { name: "activa", angle: 25, dist: 140 }
+                        { name: "id_sede", pk: true, angle: -155, dist: 105 },
+                        { name: "nombre", angle: -120, dist: 105 },
+                        { name: "direccion", angle: -90, dist: 105 },
+                        { name: "telefono", angle: -60, dist: 105 },
+                        { name: "ciudad", angle: -30, dist: 105 },
+                        { name: "horario", angle: 155, dist: 110 },
+                        { name: "activa", angle: 25, dist: 110 }
                     ]
                 },
                 {
-                    id: "grupos", label: "GRUPOS", x: 2750, y: 950, w: 150, h: 55,
+                    id: "grupos", label: "GRUPOS", x: 1500, y: 480, w: 140, h: 50,
                     attributes: [
-                        { name: "id_grupo", pk: true, angle: -140, dist: 130 },
-                        { name: "id_sede", fk: true, angle: -90, dist: 130 },
-                        { name: "id_maestro", fk: true, angle: -40, dist: 130 },
-                        { name: "nombre", angle: 180, dist: 135 },
-                        { name: "horario", angle: 0, dist: 135 },
-                        { name: "dias", angle: 145, dist: 140 },
-                        { name: "activo", angle: 35, dist: 140 }
+                        { name: "id_grupo", pk: true, angle: -140, dist: 105 },
+                        { name: "id_sede", fk: true, angle: -90, dist: 105 },
+                        { name: "id_maestro", fk: true, angle: -40, dist: 105 },
+                        { name: "nombre", angle: 180, dist: 110 },
+                        { name: "horario", angle: 0, dist: 110 },
+                        { name: "dias", angle: 145, dist: 115 },
+                        { name: "activo", angle: 35, dist: 115 }
                     ]
                 },
                 {
-                    id: "grados", label: "GRADOS", x: 450, y: 1550, w: 140, h: 55,
+                    id: "grados", label: "GRADOS", x: 400, y: 750, w: 130, h: 50,
                     attributes: [
-                        { name: "id_grado", pk: true, angle: -140, dist: 130 },
-                        { name: "nombre", angle: -90, dist: 130 },
-                        { name: "color", angle: 180, dist: 130 },
-                        { name: "orden", angle: 140, dist: 130 },
-                        { name: "tipo", angle: 90, dist: 130 }
+                        { name: "id_grado", pk: true, angle: -140, dist: 105 },
+                        { name: "nombre", angle: -90, dist: 105 },
+                        { name: "color", angle: 180, dist: 105 },
+                        { name: "orden", angle: 140, dist: 105 },
+                        { name: "tipo", angle: 90, dist: 105 }
                     ]
                 },
                 {
-                    id: "categorias", label: "CATEGORIAS", x: 450, y: 2200, w: 150, h: 55,
+                    id: "categorias", label: "CATEGORIAS", x: 400, y: 1050, w: 140, h: 50,
                     attributes: [
-                        { name: "id_categoria", pk: true, angle: 180, dist: 130 },
-                        { name: "nombre", angle: 135, dist: 130 },
-                        { name: "edad_min", angle: -135, dist: 130 },
-                        { name: "edad_max", angle: 90, dist: 130 }
+                        { name: "id_categoria", pk: true, angle: 180, dist: 105 },
+                        { name: "nombre", angle: 135, dist: 105 },
+                        { name: "edad_min", angle: -135, dist: 105 },
+                        { name: "edad_max", angle: 90, dist: 105 }
                     ]
                 },
                 {
-                    id: "certificados_ascenso", label: "CERTIFICADOS_ASCENSO", x: 2750, y: 2200, w: 220, h: 60,
+                    id: "certificados_ascenso", label: "CERTIFICADOS_ASCENSO", x: 1500, y: 1050, w: 200, h: 55,
                     attributes: [
-                        { name: "id_certificado", pk: true, angle: 90, dist: 135 },
-                        { name: "id_estudiante", fk: true, angle: 130, dist: 140 },
-                        { name: "id_maestro", fk: true, angle: 50, dist: 140 },
-                        { name: "grado_anterior", angle: 160, dist: 185 },
-                        { name: "grado_nuevo", angle: 20, dist: 185 },
-                        { name: "fecha_examen", angle: 110, dist: 195 },
-                        { name: "observaciones", angle: 70, dist: 195 },
-                        { name: "folio", angle: -90, dist: 130 }
+                        { name: "id_certificado", pk: true, angle: 90, dist: 110 },
+                        { name: "id_estudiante", fk: true, angle: 135, dist: 115 },
+                        { name: "id_maestro", fk: true, angle: 45, dist: 115 },
+                        { name: "grado_anterior", angle: 165, dist: 140 },
+                        { name: "grado_nuevo", angle: 15, dist: 140 },
+                        { name: "fecha_examen", angle: 115, dist: 145 },
+                        { name: "observaciones", angle: 65, dist: 145 },
+                        { name: "folio", angle: -90, dist: 105 }
                     ]
                 },
                 {
-                    id: "historial_grados", label: "HISTORIAL_GRADOS", x: 1700, y: 2450, w: 190, h: 55,
+                    id: "historial_grados", label: "HISTORIAL_GRADOS", x: 950, y: 1200, w: 170, h: 50,
                     attributes: [
-                        { name: "id_historial", pk: true, angle: 90, dist: 130 },
-                        { name: "id_estudiante", fk: true, angle: -90, dist: 130 },
-                        { name: "id_grado", fk: true, angle: 160, dist: 135 },
-                        { name: "id_certificado", fk: true, angle: 20, dist: 135 },
-                        { name: "fecha_obtencion", angle: 120, dist: 180 }
+                        { name: "id_historial", pk: true, angle: 90, dist: 105 },
+                        { name: "id_estudiante", fk: true, angle: -90, dist: 105 },
+                        { name: "id_grado", fk: true, angle: 160, dist: 110 },
+                        { name: "id_certificado", fk: true, angle: 20, dist: 110 },
+                        { name: "fecha_obtencion", angle: 120, dist: 140 }
                     ]
                 },
                 {
-                    id: "cronogramas_clase", label: "CRONOGRAMAS_CLASE", x: 3800, y: 2450, w: 200, h: 55,
+                    id: "cronogramas_clase", label: "CRONOGRAMAS_CLASE", x: 1950, y: 1150, w: 180, h: 50,
                     attributes: [
-                        { name: "id_cronograma", pk: true, angle: 90, dist: 130 },
-                        { name: "id_grupo", fk: true, angle: 160, dist: 140 },
-                        { name: "id_maestro", fk: true, angle: -90, dist: 130 },
-                        { name: "fecha", angle: 125, dist: 190 },
-                        { name: "objetivo", angle: 60, dist: 140 },
-                        { name: "observaciones", angle: 20, dist: 180 }
+                        { name: "id_cronograma", pk: true, angle: 90, dist: 105 },
+                        { name: "id_grupo", fk: true, angle: 160, dist: 110 },
+                        { name: "id_maestro", fk: true, angle: -90, dist: 105 },
+                        { name: "fecha", angle: 125, dist: 140 },
+                        { name: "objetivo", angle: 60, dist: 110 },
+                        { name: "observaciones", angle: 20, dist: 140 }
                     ]
                 },
                 {
-                    id: "ejercicios", label: "EJERCICIOS", x: 5400, y: 2450, w: 150, h: 55,
+                    id: "ejercicios", label: "EJERCICIOS", x: 2850, y: 1150, w: 140, h: 50,
                     attributes: [
-                        { name: "id_ejercicio", pk: true, angle: -90, dist: 130 },
-                        { name: "nombre", angle: -45, dist: 130 },
-                        { name: "descripcion", angle: 0, dist: 130 },
-                        { name: "tipo", angle: 45, dist: 130 },
-                        { name: "categoria_capacidad", angle: 90, dist: 135 },
-                        { name: "video_url", angle: 135, dist: 130 }
+                        { name: "id_ejercicio", pk: true, angle: -90, dist: 105 },
+                        { name: "nombre", angle: -45, dist: 105 },
+                        { name: "descripcion", angle: 0, dist: 105 },
+                        { name: "tipo", angle: 45, dist: 105 },
+                        { name: "categoria_capacidad", angle: 90, dist: 110 },
+                        { name: "video_url", angle: 135, dist: 105 }
                     ]
                 },
                 {
-                    id: "clase_ejercicios", label: "CLASE_EJERCICIOS", x: 4600, y: 2450, w: 180, h: 55,
+                    id: "clase_ejercicios", label: "CLASE_EJERCICIOS", x: 2400, y: 1150, w: 160, h: 50,
                     attributes: [
-                        { name: "id_clase_ejercicio", pk: true, angle: -90, dist: 130 },
-                        { name: "id_cronograma", fk: true, angle: 180, dist: 130 },
-                        { name: "id_ejercicio", fk: true, angle: 0, dist: 130 },
-                        { name: "series", angle: 50, dist: 135 },
-                        { name: "repeticiones", angle: 75, dist: 180 },
-                        { name: "duracion_minutos", angle: 105, dist: 180 },
-                        { name: "orden", angle: 130, dist: 135 },
-                        { name: "observaciones", angle: -45, dist: 130 }
+                        { name: "id_clase_ejercicio", pk: true, angle: -90, dist: 105 },
+                        { name: "id_cronograma", fk: true, angle: 180, dist: 105 },
+                        { name: "id_ejercicio", fk: true, angle: 0, dist: 105 },
+                        { name: "series", angle: 50, dist: 110 },
+                        { name: "repeticiones", angle: 75, dist: 135 },
+                        { name: "duracion_minutos", angle: 105, dist: 135 },
+                        { name: "orden", angle: 130, dist: 110 },
+                        { name: "observaciones", angle: -45, dist: 105 }
                     ]
                 },
                 {
-                    id: "eventos", label: "EVENTOS", x: 4600, y: 950, w: 140, h: 55,
+                    id: "eventos", label: "EVENTOS", x: 2400, y: 520, w: 130, h: 50,
                     attributes: [
-                        { name: "id_evento", pk: true, angle: -45, dist: 130 },
-                        { name: "id_maestro", fk: true, angle: 180, dist: 130 },
-                        { name: "id_sede", fk: true, angle: -135, dist: 130 },
-                        { name: "titulo", angle: -90, dist: 130 },
-                        { name: "descripcion", angle: 0, dist: 130 },
-                        { name: "fecha_inicio", angle: 30, dist: 135 },
-                        { name: "fecha_fin", angle: 60, dist: 180 },
-                        { name: "lugar", angle: 90, dist: 135 },
-                        { name: "tipo", angle: 125, dist: 180 }
+                        { name: "id_evento", pk: true, angle: -45, dist: 105 },
+                        { name: "id_maestro", fk: true, angle: 180, dist: 105 },
+                        { name: "id_sede", fk: true, angle: -135, dist: 105 },
+                        { name: "titulo", angle: -90, dist: 105 },
+                        { name: "descripcion", angle: 0, dist: 105 },
+                        { name: "fecha_inicio", angle: 30, dist: 110 },
+                        { name: "fecha_fin", angle: 60, dist: 135 },
+                        { name: "lugar", angle: 90, dist: 110 },
+                        { name: "tipo", angle: 125, dist: 135 }
                     ]
                 },
                 {
-                    id: "galeria_multimedia", label: "GALERIA_MULTIMEDIA", x: 4600, y: 1550, w: 200, h: 55,
+                    id: "galeria_multimedia", label: "GALERIA_MULTIMEDIA", x: 2450, y: 750, w: 180, h: 50,
                     attributes: [
-                        { name: "id_multimedia", pk: true, angle: -40, dist: 130 },
-                        { name: "id_maestro", fk: true, angle: 180, dist: 130 },
-                        { name: "url", angle: 0, dist: 130 },
-                        { name: "tipo", angle: 45, dist: 130 },
-                        { name: "descripcion", angle: 90, dist: 130 }
+                        { name: "id_multimedia", pk: true, angle: -40, dist: 105 },
+                        { name: "id_maestro", fk: true, angle: 180, dist: 105 },
+                        { name: "url", angle: 0, dist: 105 },
+                        { name: "tipo", angle: 45, dist: 105 },
+                        { name: "descripcion", angle: 90, dist: 105 }
                     ]
                 },
                 {
-                    id: "teorias", label: "TEORIAS", x: 450, y: 850, w: 140, h: 55,
+                    id: "teorias", label: "TEORIAS", x: 400, y: 480, w: 130, h: 50,
                     attributes: [
-                        { name: "id_teoria", pk: true, angle: 180, dist: 130 },
-                        { name: "id_tipo_teoria", fk: true, angle: -90, dist: 130 },
-                        { name: "id_grado", fk: true, angle: 90, dist: 130 },
-                        { name: "titulo", angle: -135, dist: 135 },
-                        { name: "contenido", angle: 135, dist: 135 },
-                        { name: "resumen", angle: -160, dist: 190 },
-                        { name: "imagen", angle: 160, dist: 190 },
-                        { name: "orden", angle: 45, dist: 130 }
+                        { name: "id_teoria", pk: true, angle: 180, dist: 105 },
+                        { name: "id_tipo_teoria", fk: true, angle: -90, dist: 105 },
+                        { name: "id_grado", fk: true, angle: 90, dist: 105 },
+                        { name: "titulo", angle: -135, dist: 110 },
+                        { name: "contenido", angle: 135, dist: 110 },
+                        { name: "resumen", angle: -160, dist: 140 },
+                        { name: "imagen", angle: 160, dist: 140 },
+                        { name: "orden", angle: 45, dist: 105 }
                     ]
                 },
                 {
-                    id: "tipos_teoria", label: "TIPOS_TEORIA", x: 450, y: 350, w: 160, h: 55,
+                    id: "tipos_teoria", label: "TIPOS_TEORIA", x: 400, y: 220, w: 150, h: 50,
                     attributes: [
-                        { name: "id_tipo_teoria", pk: true, angle: 180, dist: 130 },
-                        { name: "nombre", angle: -90, dist: 130 },
-                        { name: "descripcion", angle: 0, dist: 130 },
-                        { name: "icono", angle: -140, dist: 130 }
+                        { name: "id_tipo_teoria", pk: true, angle: 180, dist: 105 },
+                        { name: "nombre", angle: -90, dist: 105 },
+                        { name: "descripcion", angle: 0, dist: 105 },
+                        { name: "icono", angle: -140, dist: 105 }
                     ]
                 },
                 {
-                    id: "teoria_favoritos", label: "TEORIA_FAVORITOS", x: 1050, y: 850, w: 180, h: 55,
+                    id: "teoria_favoritos", label: "TEORIA_FAVORITOS", x: 720, y: 480, w: 160, h: 50,
                     attributes: [
-                        { name: "id", pk: true, angle: -90, dist: 125 },
-                        { name: "id_estudiante", fk: true, angle: 45, dist: 130 },
-                        { name: "id_teoria", fk: true, angle: 180, dist: 130 },
-                        { name: "fecha_guardado", angle: -45, dist: 130 }
+                        { name: "id", pk: true, angle: -90, dist: 105 },
+                        { name: "id_estudiante", fk: true, angle: 45, dist: 105 },
+                        { name: "id_teoria", fk: true, angle: 180, dist: 105 },
+                        { name: "fecha_guardado", angle: -45, dist: 105 }
                     ]
                 }
             ],
             relationships: [
-                { id: "rel_sede_grupo", name: "Alberga", e1: "sedes", e2: "grupos", card1: "1", card2: "N", rx: 2750, ry: 650 },
-                { id: "rel_maestro_grupo", name: "Asignado a", e1: "maestro", e2: "grupos", card1: "1", card2: "N", rx: 3275, ry: 1250 },
-                { id: "rel_grupo_estudiante", name: "Inscribe", e1: "grupos", e2: "estudiante", card1: "1", card2: "N", rx: 2225, ry: 1250 },
-                { id: "rel_sede_maestro", name: "Sede Principal", e1: "sedes", e2: "maestro", card1: "1", card2: "N", rx: 3275, ry: 950 },
-                { id: "rel_grado_maestro", name: "Posee Grado", e1: "grados", e2: "maestro", card1: "1", card2: "N", rx: 2750, ry: 1550 },
-                { id: "rel_grado_estudiante", name: "Grado Actual", e1: "grados", e2: "estudiante", card1: "1", card2: "N", rx: 1075, ry: 1550 },
-                { id: "rel_categoria_estudiante", name: "Clasifica", e1: "categorias", e2: "estudiante", card1: "1", card2: "N", rx: 1075, ry: 1875 },
-                { id: "rel_estudiante_cert", name: "Recibe", e1: "estudiante", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 2225, ry: 1875 },
-                { id: "rel_maestro_cert", name: "Evalúa/Emite", e1: "maestro", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 3275, ry: 1875 },
-                { id: "rel_cert_hist", name: "Genera (1:1)", e1: "certificados_ascenso", e2: "historial_grados", card1: "1", card2: "1", rx: 2225, ry: 2325 },
-                { id: "rel_estudiante_hist", name: "Registra", e1: "estudiante", e2: "historial_grados", card1: "1", card2: "N", rx: 1700, ry: 2000 },
-                { id: "rel_grado_hist", name: "Alcanzado", e1: "grados", e2: "historial_grados", card1: "1", card2: "N", rx: 1075, ry: 2000 },
-                { id: "rel_grupo_cronograma", name: "Programa", e1: "grupos", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 3275, ry: 1700 },
-                { id: "rel_maestro_cronograma", name: "Imparte", e1: "maestro", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 3800, ry: 2000 },
-                { id: "rel_crono_clase_ej", name: "Contiene", e1: "cronogramas_clase", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 4200, ry: 2450 },
-                { id: "rel_ej_clase_ej", name: "Detallado en", e1: "ejercicios", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 5000, ry: 2450 },
-                { id: "rel_maestro_evento", name: "Organiza", e1: "maestro", e2: "eventos", card1: "1", card2: "N", rx: 4200, ry: 1250 },
-                { id: "rel_sede_evento", name: "Lugar de Evento", e1: "sedes", e2: "eventos", card1: "1", card2: "N", rx: 3675, ry: 650 },
-                { id: "rel_maestro_galeria", name: "Publica", e1: "maestro", e2: "galeria_multimedia", card1: "1", card2: "N", rx: 4200, ry: 1550 },
-                { id: "rel_tipo_teoria", name: "Clasifica", e1: "tipos_teoria", e2: "teorias", card1: "1", card2: "N", rx: 450, ry: 600 },
-                { id: "rel_grado_teoria", name: "Corresponde", e1: "grados", e2: "teorias", card1: "1", card2: "N", rx: 450, ry: 1200 },
-                { id: "rel_estudiante_fav", name: "Guarda", e1: "estudiante", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 1375, ry: 1200 },
-                { id: "rel_teoria_fav", name: "Favorita", e1: "teorias", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 750, ry: 850 }
+                { id: "rel_sede_grupo", name: "Alberga", e1: "sedes", e2: "grupos", card1: "1", card2: "N", rx: 1500, ry: 350 },
+                { id: "rel_maestro_grupo", name: "Asignado a", e1: "maestro", e2: "grupos", card1: "1", card2: "N", rx: 1725, ry: 615 },
+                { id: "rel_grupo_estudiante", name: "Inscribe", e1: "grupos", e2: "estudiante", card1: "1", card2: "N", rx: 1275, ry: 615 },
+                { id: "rel_sede_maestro", name: "Sede Principal", e1: "sedes", e2: "maestro", card1: "1", card2: "N", rx: 1760, ry: 450 },
+                { id: "rel_grado_maestro", name: "Posee Grado", e1: "grados", e2: "maestro", card1: "1", card2: "N", rx: 1500, ry: 750 },
+                { id: "rel_grado_estudiante", name: "Grado Actual", e1: "grados", e2: "estudiante", card1: "1", card2: "N", rx: 725, ry: 750 },
+                { id: "rel_categoria_estudiante", name: "Clasifica", e1: "categorias", e2: "estudiante", card1: "1", card2: "N", rx: 725, ry: 900 },
+                { id: "rel_estudiante_cert", name: "Recibe", e1: "estudiante", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 1275, ry: 900 },
+                { id: "rel_maestro_cert", name: "Evalúa/Emite", e1: "maestro", e2: "certificados_ascenso", card1: "1", card2: "N", rx: 1725, ry: 900 },
+                { id: "rel_cert_hist", name: "Genera (1:1)", e1: "certificados_ascenso", e2: "historial_grados", card1: "1", card2: "1", rx: 1225, ry: 1125 },
+                { id: "rel_estudiante_hist", name: "Registra", e1: "estudiante", e2: "historial_grados", card1: "1", card2: "N", rx: 1000, ry: 975 },
+                { id: "rel_grado_hist", name: "Alcanzado", e1: "grados", e2: "historial_grados", card1: "1", card2: "N", rx: 675, ry: 975 },
+                { id: "rel_grupo_cronograma", name: "Programa", e1: "grupos", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 1680, ry: 800 },
+                { id: "rel_maestro_cronograma", name: "Imparte", e1: "maestro", e2: "cronogramas_clase", card1: "1", card2: "N", rx: 1950, ry: 950 },
+                { id: "rel_crono_clase_ej", name: "Contiene", e1: "cronogramas_clase", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 2175, ry: 1150 },
+                { id: "rel_ej_clase_ej", name: "Detallado en", e1: "ejercicios", e2: "clase_ejercicios", card1: "1", card2: "N", rx: 2625, ry: 1150 },
+                { id: "rel_maestro_evento", name: "Organiza", e1: "maestro", e2: "eventos", card1: "1", card2: "N", rx: 2175, ry: 635 },
+                { id: "rel_sede_evento", name: "Lugar de Evento", e1: "sedes", e2: "eventos", card1: "1", card2: "N", rx: 1950, ry: 370 },
+                { id: "rel_maestro_galeria", name: "Publica", e1: "maestro", e2: "galeria_multimedia", card1: "1", card2: "N", rx: 2200, ry: 750 },
+                { id: "rel_tipo_teoria", name: "Clasifica", e1: "tipos_teoria", e2: "teorias", card1: "1", card2: "N", rx: 400, ry: 350 },
+                { id: "rel_grado_teoria", name: "Corresponde", e1: "grados", e2: "teorias", card1: "1", card2: "N", rx: 400, ry: 615 },
+                { id: "rel_estudiante_fav", name: "Guarda", e1: "estudiante", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 885, ry: 615 },
+                { id: "rel_teoria_fav", name: "Favorita", e1: "teorias", e2: "teoria_favoritos", card1: "1", card2: "N", rx: 560, ry: 480 }
             ]
         };
 
         let nodes = {};
         let relationships = {};
-        let showAttributes = true;
+        let showAttributes = false;
         let scale = 0.55;
         let panX = 0;
         let panY = 0;
@@ -749,7 +785,7 @@
 
         function init() {
             buildNodes();
-            centerViewportGlobal();
+            centerViewportGlobal(true);
             render();
             setupEvents();
         }
@@ -783,9 +819,13 @@
 
         function centerViewportGlobal(smooth = true) {
             const vRect = viewport.getBoundingClientRect();
-            const targetScale = 0.38;
-            const targetPanX = (vRect.width / 2) - (2750 * targetScale);
-            const targetPanY = (vRect.height / 2) - (1400 * targetScale);
+            const scaleX = (vRect.width - 80) / 2600;
+            const scaleY = (vRect.height - 80) / 1100;
+            const targetScale = Math.min(Math.max(Math.min(scaleX, scaleY), 0.35), 0.70);
+            const centerX = 1625;
+            const centerY = 710;
+            const targetPanX = (vRect.width / 2) - (centerX * targetScale);
+            const targetPanY = (vRect.height / 2) - (centerY * targetScale);
             if (smooth) {
                 animateViewportTo(targetPanX, targetPanY, targetScale);
             } else {
@@ -798,15 +838,15 @@
             if (focusBar) focusBar.classList.remove("active");
         }
 
-        function centerViewportOnEntity(entityId, targetScale = 1.25) {
-            const target = nodes[entityId] || { x: 2750, y: 1400 };
+        function centerViewportOnEntity(entityId, targetScale = 1.05) {
+            const target = nodes[entityId] || { x: 1625, y: 710 };
             const vRect = viewport.getBoundingClientRect();
             const targetPanX = (vRect.width / 2) - (target.x * targetScale);
             const targetPanY = (vRect.height / 2) - (target.y * targetScale);
             animateViewportTo(targetPanX, targetPanY, targetScale);
         }
 
-        function centerViewportOnPoint(cx, cy, targetScale = 1.25) {
+        function centerViewportOnPoint(cx, cy, targetScale = 1.05) {
             const vRect = viewport.getBoundingClientRect();
             const targetPanX = (vRect.width / 2) - (cx * targetScale);
             const targetPanY = (vRect.height / 2) - (cy * targetScale);
@@ -858,6 +898,65 @@
                     w: 110,
                     h: 46
                 };
+            });
+        }
+
+        function renderAttributesForEntity(ent) {
+            if (!ent || !ent.attributes) return;
+            ent.attributes.forEach(attr => {
+                const prevLine = document.getElementById(`line_${attr.id}`);
+                if (prevLine) prevLine.remove();
+                const prevNode = document.getElementById(`node_${attr.id}`);
+                if (prevNode) prevNode.remove();
+
+                const pEntBorder = getRectIntersection(ent.x, ent.y, ent.w, ent.h, attr.x, attr.y);
+                const pAttrBorder = getEllipseIntersection(attr.x, attr.y, attr.w / 2, attr.h / 2, ent.x, ent.y);
+
+                const lineAttr = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                lineAttr.setAttribute("x1", pEntBorder.x);
+                lineAttr.setAttribute("y1", pEntBorder.y);
+                lineAttr.setAttribute("x2", pAttrBorder.x);
+                lineAttr.setAttribute("y2", pAttrBorder.y);
+                lineAttr.setAttribute("class", `line-connection ${attr.pk ? 'pk-line' : 'attr-line'}`);
+                lineAttr.setAttribute("id", `line_${attr.id}`);
+                linesGroup.appendChild(lineAttr);
+
+                const gAttr = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                gAttr.setAttribute("class", "node-group attr-animated");
+                gAttr.setAttribute("id", `node_${attr.id}`);
+                gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
+
+                const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                ellipse.setAttribute("cx", 0);
+                ellipse.setAttribute("cy", 0);
+                ellipse.setAttribute("rx", attr.w / 2);
+                ellipse.setAttribute("ry", attr.h / 2);
+                ellipse.setAttribute("class", `attr-oval ${attr.pk ? 'pk' : ''}`);
+                gAttr.appendChild(ellipse);
+
+                const tAttr = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                tAttr.setAttribute("class", `attr-text ${attr.pk ? 'pk' : ''}`);
+                tAttr.textContent = (attr.pk ? "🔑 " : "") + attr.name;
+                gAttr.appendChild(tAttr);
+
+                makeDraggable(gAttr, (ax, ay) => {
+                    attr.x = ax;
+                    attr.y = ay;
+                    updateAttributeLine(ent, attr);
+                });
+
+                nodesGroup.appendChild(gAttr);
+            });
+        }
+
+        function removeAttributesForEntity(entityId) {
+            const ent = nodes[entityId];
+            if (!ent || !ent.attributes) return;
+            ent.attributes.forEach(attr => {
+                const line = document.getElementById(`line_${attr.id}`);
+                if (line) line.remove();
+                const node = document.getElementById(`node_${attr.id}`);
+                if (node) node.remove();
             });
         }
 
@@ -969,13 +1068,15 @@
                     ent.x = nx;
                     ent.y = ny;
 
-                    ent.attributes.forEach(attr => {
-                        attr.x += dx;
-                        attr.y += dy;
-                        const gAttr = document.getElementById(`node_${attr.id}`);
-                        if (gAttr) gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
-                        updateAttributeLine(ent, attr);
-                    });
+                    if (ent.attributes) {
+                        ent.attributes.forEach(attr => {
+                            attr.x += dx;
+                            attr.y += dy;
+                            const gAttr = document.getElementById(`node_${attr.id}`);
+                            if (gAttr) gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
+                            updateAttributeLine(ent, attr);
+                        });
+                    }
 
                     Object.values(relationships).forEach(rel => {
                         if (rel.e1 === ent.id || rel.e2 === ent.id) {
@@ -986,48 +1087,16 @@
 
                 nodesGroup.appendChild(gEnt);
 
+                // Si showAttributes es globalmente true, renderizar todos
                 if (showAttributes && ent.attributes) {
-                    ent.attributes.forEach(attr => {
-                        const pEntBorder = getRectIntersection(ent.x, ent.y, ent.w, ent.h, attr.x, attr.y);
-                        const pAttrBorder = getEllipseIntersection(attr.x, attr.y, attr.w / 2, attr.h / 2, ent.x, ent.y);
-
-                        const lineAttr = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                        lineAttr.setAttribute("x1", pEntBorder.x);
-                        lineAttr.setAttribute("y1", pEntBorder.y);
-                        lineAttr.setAttribute("x2", pAttrBorder.x);
-                        lineAttr.setAttribute("y2", pAttrBorder.y);
-                        lineAttr.setAttribute("class", `line-connection ${attr.pk ? 'pk-line' : 'attr-line'}`);
-                        lineAttr.setAttribute("id", `line_${attr.id}`);
-                        linesGroup.appendChild(lineAttr);
-
-                        const gAttr = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                        gAttr.setAttribute("class", "node-group");
-                        gAttr.setAttribute("id", `node_${attr.id}`);
-                        gAttr.setAttribute("transform", `translate(${attr.x}, ${attr.y})`);
-
-                        const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
-                        ellipse.setAttribute("cx", 0);
-                        ellipse.setAttribute("cy", 0);
-                        ellipse.setAttribute("rx", attr.w / 2);
-                        ellipse.setAttribute("ry", attr.h / 2);
-                        ellipse.setAttribute("class", `attr-oval ${attr.pk ? 'pk' : ''}`);
-                        gAttr.appendChild(ellipse);
-
-                        const tAttr = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                        tAttr.setAttribute("class", `attr-text ${attr.pk ? 'pk' : ''}`);
-                        tAttr.textContent = (attr.pk ? "🔑 " : "") + attr.name;
-                        gAttr.appendChild(tAttr);
-
-                        makeDraggable(gAttr, (ax, ay) => {
-                            attr.x = ax;
-                            attr.y = ay;
-                            updateAttributeLine(ent, attr);
-                        });
-
-                        nodesGroup.appendChild(gAttr);
-                    });
+                    renderAttributesForEntity(ent);
                 }
             });
+
+            // Si hay una entidad activa seleccionada y no se muestran todos, mantener sus atributos
+            if (!showAttributes && activeSelectedEntity && nodes[activeSelectedEntity]) {
+                renderAttributesForEntity(nodes[activeSelectedEntity]);
+            }
         }
 
         function updateRelationshipLines(rel) {
@@ -1215,8 +1284,11 @@
 
         function toggleAttributes() {
             showAttributes = !showAttributes;
-            document.getElementById("btnAttr").innerText = showAttributes ? "Ocultar Atributos" : "Mostrar Atributos";
+            document.getElementById("btnAttr").innerText = showAttributes ? "Ocultar Todos los Atributos" : "Mostrar Todos los Atributos";
             render();
+            if (activeSelectedEntity) {
+                highlightEntityNetwork(activeSelectedEntity);
+            }
         }
 
         function highlightEntityNetwork(entityId) {
@@ -1229,7 +1301,16 @@
                 return;
             }
 
+            if (activeSelectedEntity && !showAttributes) {
+                removeAttributesForEntity(activeSelectedEntity);
+            }
+
             activeSelectedEntity = entityId;
+            const targetEnt = nodes[entityId];
+
+            if (!showAttributes && targetEnt) {
+                renderAttributesForEntity(targetEnt);
+            }
 
             const connectedEntities = new Set([entityId]);
             const connectedRels = new Set();
@@ -1243,7 +1324,6 @@
                 }
             });
 
-            const targetEnt = nodes[entityId];
             if (targetEnt && targetEnt.attributes) {
                 targetEnt.attributes.forEach(attr => connectedAttrs.add(attr.id));
             }
@@ -1257,9 +1337,48 @@
                 }
             });
 
-            centerViewportOnEntity(entityId, 1.25);
+            document.querySelectorAll(".entity-rect").forEach(r => r.classList.remove("is-selected"));
+            const selectedNodeEl = document.getElementById(`node_${entityId}`);
+            if (selectedNodeEl) {
+                const rectEl = selectedNodeEl.querySelector(".entity-rect");
+                if (rectEl) rectEl.classList.add("is-selected");
+            }
+
+            Object.values(relationships).forEach(rel => {
+                const line1 = document.getElementById(`line_${rel.e1}_${rel.id}`);
+                const line2 = document.getElementById(`line_${rel.id}_${rel.e2}`);
+                const card1 = document.getElementById(`card1_${rel.id}`);
+                const card2 = document.getElementById(`card2_${rel.id}`);
+                const isDirect = (rel.e1 === entityId || rel.e2 === entityId);
+
+                [line1, line2].forEach(l => {
+                    if (l) {
+                        if (isDirect) {
+                            l.classList.add("highlighted");
+                            l.classList.remove("dimmed");
+                        } else {
+                            l.classList.remove("highlighted");
+                            l.classList.add("dimmed");
+                        }
+                    }
+                });
+                [card1, card2].forEach(c => {
+                    if (c) {
+                        if (isDirect) {
+                            c.classList.add("highlighted");
+                            c.classList.remove("dimmed");
+                        } else {
+                            c.classList.remove("highlighted");
+                            c.classList.add("dimmed");
+                        }
+                    }
+                });
+            });
+
+            centerViewportOnEntity(entityId, 0.9);
             if (focusBar && focusTitle) {
-                focusTitle.textContent = `${targetEnt ? targetEnt.label : entityId} (Tabla / Entidad)`;
+                const attrCount = (targetEnt && targetEnt.attributes) ? targetEnt.attributes.length : 0;
+                focusTitle.textContent = `${targetEnt ? targetEnt.label : entityId} • ${attrCount} atributos desplegados`;
                 focusBar.classList.add("active");
             }
         }
@@ -1274,6 +1393,10 @@
                 return;
             }
 
+            if (activeSelectedEntity && !showAttributes) {
+                removeAttributesForEntity(activeSelectedEntity);
+            }
+
             activeSelectedEntity = relId;
             const rel = relationships[relId];
             if (!rel) return;
@@ -1284,7 +1407,7 @@
 
             [rel.e1, rel.e2].forEach(entId => {
                 const ent = nodes[entId];
-                if (ent && ent.attributes) {
+                if (ent && ent.attributes && showAttributes) {
                     ent.attributes.forEach(attr => connectedAttrs.add(attr.id));
                 }
             });
@@ -1298,6 +1421,37 @@
                 }
             });
 
+            Object.values(relationships).forEach(r => {
+                const line1 = document.getElementById(`line_${r.e1}_${r.id}`);
+                const line2 = document.getElementById(`line_${r.id}_${r.e2}`);
+                const card1 = document.getElementById(`card1_${r.id}`);
+                const card2 = document.getElementById(`card2_${r.id}`);
+                const isThis = (r.id === relId);
+
+                [line1, line2].forEach(l => {
+                    if (l) {
+                        if (isThis) {
+                            l.classList.add("highlighted");
+                            l.classList.remove("dimmed");
+                        } else {
+                            l.classList.remove("highlighted");
+                            l.classList.add("dimmed");
+                        }
+                    }
+                });
+                [card1, card2].forEach(c => {
+                    if (c) {
+                        if (isThis) {
+                            c.classList.add("highlighted");
+                            c.classList.remove("dimmed");
+                        } else {
+                            c.classList.remove("highlighted");
+                            c.classList.add("dimmed");
+                        }
+                    }
+                });
+            });
+
             centerViewportOnPoint(rel.x, rel.y, 1.25);
             if (focusBar && focusTitle) {
                 focusTitle.textContent = `Relación: ${rel.name} (${rel.card1} : ${rel.card2})`;
@@ -1306,8 +1460,16 @@
         }
 
         function clearHighlight() {
+            if (activeSelectedEntity && !showAttributes) {
+                removeAttributesForEntity(activeSelectedEntity);
+            }
             activeSelectedEntity = null;
+
             document.querySelectorAll(".node-group").forEach(el => el.classList.remove("dimmed"));
+            document.querySelectorAll(".entity-rect").forEach(r => r.classList.remove("is-selected"));
+            document.querySelectorAll(".line-connection").forEach(l => l.classList.remove("dimmed", "highlighted"));
+            document.querySelectorAll(".cardinality-text").forEach(c => c.classList.remove("dimmed", "highlighted"));
+
             const focusBar = document.getElementById("focusBar");
             if (focusBar) focusBar.classList.remove("active");
         }
@@ -1316,6 +1478,24 @@
             const q = query.trim().toLowerCase();
             if (!q) {
                 clearHighlight();
+                return;
+            }
+
+            let matchedEntity = null;
+            Object.values(nodes).forEach(ent => {
+                if (ent.label.toLowerCase().includes(q) || ent.id.toLowerCase().includes(q)) {
+                    matchedEntity = ent.id;
+                } else if (ent.attributes) {
+                    ent.attributes.forEach(attr => {
+                        if (attr.name.toLowerCase().includes(q)) {
+                            matchedEntity = ent.id;
+                        }
+                    });
+                }
+            });
+
+            if (matchedEntity && !showAttributes && activeSelectedEntity !== matchedEntity) {
+                highlightEntityNetwork(matchedEntity);
                 return;
             }
 

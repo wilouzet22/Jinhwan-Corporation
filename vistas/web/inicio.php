@@ -138,7 +138,7 @@
         </div>
 
         <!-- Martial Arts Highlights & Stats Grid -->
-        <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
                 <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-500 font-display mb-1">+15</div>
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Años de Tradición</div>
@@ -146,10 +146,6 @@
             <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
                 <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 font-display mb-1">3</div>
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Sedes Principales</div>
-            </div>
-            <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
-                <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-400 font-display mb-1">+200</div>
-                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Cinturones Negros</div>
             </div>
             <div class="bg-white dark:bg-slate-900/90 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center shadow-sm hover-lift">
                 <div class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-400 font-display mb-1">100%</div>

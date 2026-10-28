@@ -155,16 +155,22 @@
             border-radius: 8px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             z-index: 2;
-            cursor: move;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: box-shadow 0.2s, border-color 0.2s;
+            transition: box-shadow 0.25s, border-color 0.25s, width 0.25s;
             font-size: 0.8rem;
+            width: 250px;
+        }
+
+        .uml-class.is-expanded {
+            width: 330px;
+            z-index: 25;
         }
 
         .uml-class:hover {
-            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.35);
             border-color: #818cf8;
         }
 
@@ -184,7 +190,6 @@
             background-color: var(--class-header-bg);
             padding: 10px 14px;
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
         }
         .base-class .class-header {
             background-color: var(--base-header-bg);
@@ -207,17 +212,44 @@
             letter-spacing: 0.5px;
         }
 
+        .class-expand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            font-size: 0.68rem;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .uml-class.is-expanded .class-expand-badge {
+            display: none;
+        }
+
         .class-compartment {
+            display: none;
             padding: 8px 12px;
-            border-bottom: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
             background-color: #0f172a;
-            display: flex;
             flex-direction: column;
             gap: 3px;
         }
 
+        .uml-class.is-expanded .class-compartment {
+            display: flex;
+            animation: fadeInCompartment 0.25s ease forwards;
+        }
+
+        @keyframes fadeInCompartment {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .class-compartment:last-child {
-            border-bottom: none;
             background-color: #0b1329;
         }
 
@@ -448,10 +480,11 @@
             <div class="subtitle">Arquitectura de Software y Modelo de Dominio de Base de Datos</div>
         </div>
         <div class="controls">
-            <div class="presentation-hint">🎯 Clic en una clase para ampliar</div>
+            <div class="presentation-hint">🎯 Clic en una clase para ver sus atributos y conexiones</div>
             <button class="btn" id="btnZoomOut">🔍 -</button>
             <button class="btn" id="btnZoomReset">100%</button>
             <button class="btn" id="btnZoomIn">🔍 +</button>
+            <button class="btn" id="btnToggleAllClasses">📂 Expandir Todas</button>
             <button class="btn" id="btnAutoLayout">⚡ Organizar</button>
             <button class="btn" id="btnToggleMethods">⚙️ Métodos</button>
             <button class="btn btn-primary" id="btnLegend">📖 Leyenda UML</button>
@@ -1045,6 +1078,7 @@
         let isDraggingViewport = false;
         let startX = 0, startY = 0;
         let showMethods = true;
+        let expandAll = false;
         let activeDraggedNode = null;
         let dragOffsetX = 0, dragOffsetY = 0;
         let clickStartPos = { x: 0, y: 0 };
@@ -1063,7 +1097,8 @@
             container.innerHTML = '';
             classesData.forEach(c => {
                 const el = document.createElement('div');
-                el.className = `uml-class ${c.type === 'base' ? 'base-class' : (c.type === 'sub' ? 'sub-class' : '')}`;
+                const isExpanded = expandAll || activeFocusedId === c.id;
+                el.className = `uml-class ${c.type === 'base' ? 'base-class' : (c.type === 'sub' ? 'sub-class' : '')} ${isExpanded ? 'is-expanded' : ''}`;
                 el.id = `class-${c.id}`;
                 el.style.left = `${c.x}px`;
                 el.style.top = `${c.y}px`;
@@ -1075,14 +1110,15 @@
                     <div class="class-header">
                         <div class="class-stereotype">&lt;&lt;${c.stereotype}&gt;&gt;</div>
                         <div class="class-name">${c.name}</div>
+                        <div class="class-expand-badge">👁️ ${c.attributes.length} attrs • Clic para ver</div>
                     </div>
                     <div class="class-compartment">
-                        <div class="compartment-title">Atributos</div>
+                        <div class="compartment-title">Atributos (${c.attributes.length})</div>
                         ${attrsHtml}
                     </div>
                     ${showMethods ? `
                     <div class="class-compartment methods-compartment">
-                        <div class="compartment-title">Métodos</div>
+                        <div class="compartment-title">Métodos (${c.methods.length})</div>
                         ${methodsHtml}
                     </div>` : ''}
                 `;
@@ -1115,10 +1151,23 @@
         // Focus & Zoom to Class
         function focusClass(c, el) {
             activeFocusedId = c.id;
+
+            // Expandir la clase seleccionada y compactar las demás (si no está activo expandAll)
+            document.querySelectorAll('.uml-class').forEach(node => {
+                if (node.id === el.id || expandAll) {
+                    node.classList.add('is-expanded');
+                } else {
+                    node.classList.remove('is-expanded');
+                }
+            });
+
+            // Recalcular puntos de conexión con el nuevo tamaño
+            renderConnectors();
+
             const vw = viewport.clientWidth;
             const vh = viewport.clientHeight;
-            const targetScale = 1.15; // Enlarge ~3x for presentation readability
-            const elW = el.offsetWidth || 380;
+            const targetScale = 1.15;
+            const elW = el.offsetWidth || 330;
             const elH = el.offsetHeight || 280;
             const cx = c.x + elW / 2;
             const cy = c.y + elH / 2;
@@ -1156,13 +1205,23 @@
                 }
             });
 
-            focusTitle.textContent = `${c.name} (${c.stereotype})`;
+            focusTitle.textContent = `${c.name} • Atributos y conexiones desplegados`;
             focusBar.classList.add('active');
         }
 
         function resetFocus(smooth = true) {
             activeFocusedId = null;
             focusBar.classList.remove('active');
+
+            // Si no está en modo expandir todo, volver a compactar todas las clases
+            if (!expandAll) {
+                document.querySelectorAll('.uml-class').forEach(node => {
+                    node.classList.remove('is-expanded');
+                });
+            }
+
+            // Recalcular líneas a los tamaños compactos
+            renderConnectors();
 
             document.querySelectorAll('.uml-class').forEach(node => {
                 node.classList.remove('is-focused', 'is-dimmed');
@@ -1402,6 +1461,22 @@
         document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
         document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
         document.getElementById('btnZoomReset').onclick = () => { resetFocus(false); scale = 0.40; panX = 60; panY = 40; updateTransform(); };
+
+        const btnToggleAll = document.getElementById('btnToggleAllClasses');
+        if (btnToggleAll) {
+            btnToggleAll.onclick = () => {
+                expandAll = !expandAll;
+                btnToggleAll.innerText = expandAll ? '📁 Compactar Todo' : '📂 Expandir Todas';
+                document.querySelectorAll('.uml-class').forEach(el => {
+                    if (expandAll || el.id === `class-${activeFocusedId}`) {
+                        el.classList.add('is-expanded');
+                    } else {
+                        el.classList.remove('is-expanded');
+                    }
+                });
+                renderConnectors();
+            };
+        }
         
         document.getElementById('btnToggleMethods').onclick = () => {
             showMethods = !showMethods;

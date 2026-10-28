@@ -4,10 +4,10 @@
         <div class="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-tkd-red via-tkd-blue to-transparent opacity-90"></div>
         
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 items-start">
                 
                 <!-- Columna 1: Identidad Corporativa -->
-                <div class="space-y-4">
+                <div class="lg:col-span-3 space-y-4">
                     <div class="flex items-center gap-3">
                         <img src="<?= asset('img/visual/logo.svg') ?>" alt="Logo Jinhwan" class="h-11 w-auto object-contain">
                         <div>
@@ -29,7 +29,7 @@
                 </div>
 
                 <!-- Columna 2: Contacto -->
-                <div class="space-y-4">
+                <div class="lg:col-span-4 space-y-4">
                     <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-red pl-3 transition-colors">Contacto</h3>
                     <div class="space-y-3">
                         <a class="flex items-center gap-3 group text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-tkd-red dark:hover:text-rose-400 transition-colors" href="tel:+573246336836">
@@ -42,17 +42,19 @@
                             <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-blue group-hover:bg-tkd-blue group-hover:text-white transition-all duration-300 shrink-0 shadow-xs">
                                 <span class="material-icons-outlined text-lg">email</span>
                             </div>
-                            <span class="truncate">jinhwancorporation@gmail.com</span>
+                            <span class="break-all sm:break-normal">jinhwancorporation@gmail.com</span>
                         </a>
-                        <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 pt-1">
-                            <span class="material-icons-outlined text-sm text-amber-500">schedule</span>
+                        <div class="flex items-center gap-3 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300">
+                            <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-gold shrink-0 shadow-xs">
+                                <span class="material-icons-outlined text-lg">schedule</span>
+                            </div>
                             <span>Lunes a Sábado: 7:00 AM - 8:30 PM</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Columna 3: Ubicación -->
-                <div class="space-y-4">
+                <div class="lg:col-span-3 space-y-4">
                     <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-blue pl-3 transition-colors">Ubicación</h3>
                     <div class="flex items-start gap-3 group">
                         <div class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-tkd-gold group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 shrink-0 shadow-xs mt-0.5">
@@ -73,7 +75,7 @@
                 </div>
 
                 <!-- Columna 4: Síguenos -->
-                <div class="space-y-4">
+                <div class="lg:col-span-2 space-y-4">
                     <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white uppercase tracking-wider border-l-4 border-tkd-gold pl-3 transition-colors">Síguenos</h3>
                     <p class="text-xs text-slate-600 dark:text-slate-400">Conéctate en redes para transmisiones y noticias oficiales.</p>
                     <div class="flex gap-2.5 flex-wrap">
