@@ -27,9 +27,10 @@ if (isset($_SESSION['id'])) {
 $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('Administracion') : [];
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="notranslate" translate="no">
 <head>
 <meta charset="utf-8"/>
+<meta name="google" content="notranslate">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title><?= $page_title ?? 'Panel de Administración' ?></title>
     

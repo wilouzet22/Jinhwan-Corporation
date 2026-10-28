@@ -18,10 +18,16 @@ class Controller {
 
     protected function redirect($url) {
         if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
-            header("Location: " . $url);
+            $target = $url;
         } else {
-            header("Location: " . base_url($url));
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') 
+                       || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+                       || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+            $protocol = $isHttps ? 'https://' : 'http://';
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $target = $protocol . $host . base_url($url);
         }
+        header("Location: " . $target);
         exit;
     }
 }

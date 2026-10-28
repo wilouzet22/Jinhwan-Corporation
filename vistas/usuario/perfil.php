@@ -99,18 +99,18 @@ $tema = function_exists('obtener_tema_marcial')
                 </div>
 
                 <!-- Cuerpo de la Credencial -->
-                <div class="p-6 flex flex-col items-center text-center">
+                <div class="p-4 flex flex-col items-center text-center">
                     
                     <!-- Foto de Perfil con Halo del Rango -->
-                    <div class="relative group mb-4">
-                        <div class="w-28 h-28 rounded-full p-1 shadow-lg transition-transform duration-300 group-hover:scale-105"
+                    <div class="relative group mb-2">
+                        <div class="w-24 h-24 rounded-full p-1 shadow-lg transition-transform duration-300 group-hover:scale-105"
                              style="background: <?= $tema['belt_gradient'] ?>; box-shadow: 0 0 20px <?= $tema['glow_rgba'] ?>;">
                             <?php if (!empty($usuario['foto_perfil'])): ?>
                                 <img src="<?= base_url('/public/uploads/perfiles/' . $usuario['foto_perfil']) ?>" 
                                      alt="Foto" 
                                      class="w-full h-full rounded-full object-cover bg-white dark:bg-slate-900">
                             <?php else: ?>
-                                <div class="w-full h-full bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-4xl font-black text-slate-800 dark:text-white">
+                                <div class="w-full h-full bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-3xl font-black text-slate-800 dark:text-white">
                                     <?= strtoupper(substr($usuario['nombre'] ?? 'J', 0, 1)) ?>
                                 </div>
                             <?php endif; ?>
@@ -136,7 +136,7 @@ $tema = function_exists('obtener_tema_marcial')
                     </div>
 
                     <!-- Ficha Marcial Compacta -->
-                    <div class="w-full space-y-2 mt-5 text-left text-xs">
+                    <div class="w-full space-y-2 mt-3 text-left text-xs">
                         <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800/80">
                             <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Rol</span>
                             <span class="font-extrabold text-slate-800 dark:text-slate-200"><?= htmlspecialchars($usuario['rol_id'] ?? 'Deportista') ?></span>
@@ -166,15 +166,6 @@ $tema = function_exists('obtener_tema_marcial')
                         </div>
                     </div>
 
-                    <!-- Código de barras estilizado que simula el carnet oficial de deportista -->
-                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 w-full flex flex-col items-center">
-                        <div class="h-6 w-44 flex items-center justify-between opacity-35 dark:opacity-40">
-                            <?php for($i=0; $i<36; $i++): ?>
-                                <span class="h-full bg-slate-900 dark:bg-white inline-block" style="width: <?= ($i % 3 === 0) ? '3px' : (($i % 2 === 0) ? '1px' : '2px') ?>;"></span>
-                            <?php endfor; ?>
-                        </div>
-                        <span class="text-[9px] font-mono tracking-widest text-slate-400 mt-1 uppercase">JH-TKD-<?= str_pad($usuario['id'] ?? '1', 6, '0', STR_PAD_LEFT) ?></span>
-                    </div>
 
                 </div>
 

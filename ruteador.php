@@ -150,6 +150,7 @@ $router->post('/admin/galeria/delete', [AdminGaleriaController::class, 'delete']
 // Notificaciones del Sistema
 $router->get('/admin/notificaciones', [AdminNotificacionesController::class, 'index']);
 $router->post('/admin/notificaciones/marcar-leida', [AdminNotificacionesController::class, 'marcarLeida']);
+$router->get('/admin/notificaciones/marcar-todas', [AdminNotificacionesController::class, 'marcarTodas']);
 $router->post('/admin/notificaciones/marcar-todas', [AdminNotificacionesController::class, 'marcarTodas']);
 $router->post('/admin/notificaciones/eliminar', [AdminNotificacionesController::class, 'eliminar']);
 

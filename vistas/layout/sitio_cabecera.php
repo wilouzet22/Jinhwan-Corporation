@@ -10,9 +10,10 @@ $is_admin = $rol_id && Roles::esAdmin($rol_id);
 $is_student = $rol_id == Roles::ESTUDIANTE;
 ?>
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="scroll-smooth notranslate" translate="no">
 <head>
     <meta charset="utf-8"/>
+<meta name="google" content="notranslate">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title><?= $page_title ?? 'Jinhwan Corporation - Taekwondo' ?></title>
 
