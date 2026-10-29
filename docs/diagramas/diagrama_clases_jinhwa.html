@@ -1371,7 +1371,9 @@
                 });
 
                 el.addEventListener('mouseup', (e) => {
+                    el.classList.remove('is-dragging');
                     const dist = Math.hypot(e.clientX - clickStartPos.x, e.clientY - clickStartPos.y);
+                    activeDraggedNode = null;
                     if (dist < 6) {
                         e.stopPropagation();
                         if (activeFocusedId === c.id) {
@@ -1403,14 +1405,17 @@
 
             const vw = viewport.clientWidth;
             const vh = viewport.clientHeight;
-            const targetScale = 1.15;
-            const elW = el.offsetWidth || 260;
-            const elH = el.offsetHeight || 220;
-            const cx = c.x + elW / 2;
-            const cy = c.y + elH / 2;
+            const elW = el.offsetWidth || 325;
+            const elH = el.offsetHeight || 240;
 
-            panX = (vw / 2) - (cx * targetScale);
-            panY = (vh / 2) - (cy * targetScale);
+            // Fit card with at least 50px vertical clearance so title is never cut off
+            const fitScaleY = (vh - 120) / Math.max(elH, 100);
+            const fitScaleX = (vw - 80) / Math.max(elW, 100);
+            const targetScale = Math.max(0.65, Math.min(1.0, Math.min(fitScaleX, fitScaleY)));
+
+            // Center card in the visible viewport
+            panX = Math.round((vw - elW * targetScale) / 2 - c.x * targetScale);
+            panY = Math.max(20, Math.round((vh - elH * targetScale) / 2 - c.y * targetScale));
             scale = targetScale;
 
             canvas.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
@@ -1764,11 +1769,8 @@
 
         window.addEventListener('mouseup', () => {
             isDraggingViewport = false;
-            if (activeDraggedNode) {
-                const el = document.getElementById(`class-${activeDraggedNode.id}`);
-                if (el) el.classList.remove('is-dragging');
-            }
             activeDraggedNode = null;
+            document.querySelectorAll('.is-dragging').forEach(el => el.classList.remove('is-dragging'));
         });
 
         viewport.addEventListener('wheel', (e) => {
