@@ -54,10 +54,14 @@
         header {
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
+            padding: 8px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
             z-index: 10;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
@@ -92,15 +96,18 @@
             background: #1e293b;
             color: #f1f5f9;
             border: 1px solid var(--border-color);
-            padding: 7px 14px;
+            padding: 6px 11px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 600;
             transition: all 0.2s;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            white-space: nowrap !important;
+            flex-shrink: 0;
+            line-height: 1.2;
         }
 
         .btn:hover {

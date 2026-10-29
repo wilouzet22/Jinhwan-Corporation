@@ -51,10 +51,14 @@
         header {
             background-color: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
+            padding: 8px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
             z-index: 10;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
@@ -81,23 +85,28 @@
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
         }
 
         .btn {
             background: #1e293b;
             color: #f1f5f9;
             border: 1px solid var(--border-color);
-            padding: 7px 14px;
+            padding: 6px 11px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 600;
             transition: all 0.2s;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
+            white-space: nowrap !important;
+            flex-shrink: 0;
+            line-height: 1.2;
         }
 
         .btn:hover {
@@ -827,7 +836,7 @@
                 stereotype: "Entity / User Role (estudiante)",
                 type: "base",
                 x: 620,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_estudiante: int [PK]",
                     "- id_grado: int [FK]",
@@ -864,7 +873,7 @@
                 stereotype: "Entity / Instructor (maestro)",
                 type: "base",
                 x: 1220,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_maestro: int [PK]",
                     "- id_grado: int [FK]",
@@ -897,7 +906,7 @@
                 stereotype: "Entity / Management (administrador)",
                 type: "sub",
                 x: 1530,
-                y: 40,
+                y: 30,
                 attributes: [
                     "- id_administrador: int [PK]",
                     "- nombre: string",
@@ -923,7 +932,7 @@
                 stereotype: "Entity / Facility (sedes)",
                 type: "normal",
                 x: 910,
-                y: 40,
+                y: 30,
                 attributes: [
                     "- id_sede: int [PK]",
                     "- nombre: string",
@@ -945,7 +954,7 @@
                 stereotype: "Entity / Class Group (grupos)",
                 type: "normal",
                 x: 910,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_grupo: int [PK]",
                     "- id_sede: int [FK]",
@@ -967,7 +976,7 @@
                 stereotype: "Catalog / Belt (grados)",
                 type: "normal",
                 x: 330,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_grado: int [PK]",
                     "- nombre: string",
@@ -986,7 +995,7 @@
                 stereotype: "Catalog / Division (categorias)",
                 type: "normal",
                 x: 330,
-                y: 40,
+                y: 30,
                 attributes: [
                     "- id_categoria: int [PK]",
                     "- nombre: string",
@@ -1004,7 +1013,7 @@
                 stereotype: "Entity / Diploma (certificados_ascenso)",
                 type: "normal",
                 x: 620,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id_certificado: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -1028,7 +1037,7 @@
                 stereotype: "Entity / Ledger (historial_grados)",
                 type: "normal",
                 x: 330,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id_historial: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -1047,7 +1056,7 @@
                 stereotype: "Entity / Session (cronogramas_clase)",
                 type: "normal",
                 x: 910,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id_cronograma: int [PK]",
                     "- id_grupo: int [FK]",
@@ -1069,7 +1078,7 @@
                 stereotype: "Pivot / Detail (clase_ejercicios)",
                 type: "normal",
                 x: 1220,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id_clase_ejercicio: int [PK]",
                     "- id_cronograma: int [FK]",
@@ -1090,7 +1099,7 @@
                 stereotype: "Entity / Workout (ejercicios)",
                 type: "normal",
                 x: 1530,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id_ejercicio: int [PK]",
                     "- nombre: string",
@@ -1110,7 +1119,7 @@
                 stereotype: "Entity / Agenda (eventos)",
                 type: "normal",
                 x: 1530,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_evento: int [PK]",
                     "- id_maestro: int [FK]",
@@ -1133,7 +1142,7 @@
                 stereotype: "Entity / Content (galeria_multimedia)",
                 type: "normal",
                 x: 1220,
-                y: 40,
+                y: 30,
                 attributes: [
                     "- id_multimedia: int [PK]",
                     "- id_maestro: int [FK]",
@@ -1153,7 +1162,7 @@
                 stereotype: "Entity / Learning (teorias)",
                 type: "normal",
                 x: 40,
-                y: 290,
+                y: 230,
                 attributes: [
                     "- id_teoria: int [PK]",
                     "- id_tipo_teoria: int [FK]",
@@ -1175,7 +1184,7 @@
                 stereotype: "Catalog / Category (tipos_teoria)",
                 type: "normal",
                 x: 40,
-                y: 40,
+                y: 30,
                 attributes: [
                     "- id_tipo_teoria: int [PK]",
                     "- nombre: string",
@@ -1192,7 +1201,7 @@
                 stereotype: "Pivot / Bookmark (teoria_favoritos)",
                 type: "normal",
                 x: 40,
-                y: 540,
+                y: 430,
                 attributes: [
                     "- id: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -1249,25 +1258,25 @@
 
         // Layout coordinate maps (250px vertical row distance guarantees cards never collide even when expanded)
         const defaultPositionsCompact = {
-            tipo_teoria:        { x: 40,   y: 40 },
-            categoria:          { x: 330,  y: 40 },
-            sede:               { x: 910,  y: 40 },
-            galeria_multimedia: { x: 1220, y: 40 },
-            administrador:      { x: 1530, y: 40 },
+            tipo_teoria:        { x: 40,   y: 30 },
+            categoria:          { x: 330,  y: 30 },
+            sede:               { x: 910,  y: 30 },
+            galeria_multimedia: { x: 1220, y: 30 },
+            administrador:      { x: 1530, y: 30 },
 
-            teoria:             { x: 40,   y: 290 },
-            grado:              { x: 330,  y: 290 },
-            estudiante:         { x: 620,  y: 290 },
-            grupo:              { x: 910,  y: 290 },
-            maestro:            { x: 1220, y: 290 },
-            evento:             { x: 1530, y: 290 },
+            teoria:             { x: 40,   y: 230 },
+            grado:              { x: 330,  y: 230 },
+            estudiante:         { x: 620,  y: 230 },
+            grupo:              { x: 910,  y: 230 },
+            maestro:            { x: 1220, y: 230 },
+            evento:             { x: 1530, y: 230 },
 
-            teoria_favorito:    { x: 40,   y: 540 },
-            historial_grados:   { x: 330,  y: 540 },
-            certificado_ascenso:{ x: 620,  y: 540 },
-            cronograma_clase:   { x: 910,  y: 540 },
-            clase_ejercicio:    { x: 1220, y: 540 },
-            ejercicio:          { x: 1530, y: 540 }
+            teoria_favorito:    { x: 40,   y: 430 },
+            historial_grados:   { x: 330,  y: 430 },
+            certificado_ascenso:{ x: 620,  y: 430 },
+            cronograma_clase:   { x: 910,  y: 430 },
+            clase_ejercicio:    { x: 1220, y: 430 },
+            ejercicio:          { x: 1530, y: 430 }
         };
 
         const defaultPositionsExpanded = {
@@ -1432,7 +1441,7 @@
         }
 
         // Fit whole diagram to screen
-        function fitToScreen(padding = 40, smooth = true) {
+        function fitToScreen(padding = 30, smooth = true) {
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
             classesData.forEach(c => {
                 const el = document.getElementById(`class-${c.id}`);
@@ -1441,13 +1450,13 @@
                 minX = Math.min(minX, c.x);
                 minY = Math.min(minY, c.y);
                 maxX = Math.max(maxX, c.x + w);
-                maxY = Math.max(maxY, c.y + h);
+                maxY = Math.max(maxY, c.y + h + 20); // Extra room for bottom multiplicities
             });
 
             const diagW = Math.max(maxX - minX, 100);
             const diagH = Math.max(maxY - minY, 100);
             const vw = viewport.clientWidth || window.innerWidth;
-            const vh = viewport.clientHeight || (window.innerHeight - 70);
+            const vh = viewport.clientHeight || (window.innerHeight - 60);
 
             const scaleX = (vw - padding * 2) / diagW;
             const scaleY = (vh - padding * 2) / diagH;
@@ -1455,7 +1464,8 @@
             targetScale = Math.max(0.35, Math.min(targetScale, 1.20));
 
             panX = Math.round((vw - diagW * targetScale) / 2 - minX * targetScale);
-            panY = Math.round((vh - diagH * targetScale) / 2 - minY * targetScale);
+            // Center vertically with a minimum top pan so bottom row is always fully visible
+            panY = Math.max(12, Math.round((vh - diagH * targetScale) / 2 - minY * targetScale));
             scale = targetScale;
 
             if (smooth) {
