@@ -159,9 +159,15 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: box-shadow 0.2s, border-color 0.2s, width 0.2s, top 0.25s ease, left 0.25s ease;
+            transition: box-shadow 0.2s, border-color 0.2s, width 0.2s;
             font-size: 0.78rem;
             width: 210px;
+        }
+
+        .uml-class.is-dragging {
+            cursor: grabbing !important;
+            transition: none !important;
+            z-index: 100 !important;
         }
 
         .uml-class.is-expanded {
@@ -652,15 +658,15 @@
                     </marker>
 
                     <!-- Aggregation: solid line, hollow diamond ◇ at source -->
-                    <marker id="marker-aggregation" viewBox="0 0 20 12" refX="1" refY="6"
-                        markerWidth="14" markerHeight="10" orient="auto-start-reverse">
-                        <path d="M 1 6 L 10 1 L 19 6 L 10 11 Z" fill="#0b0f19" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+                    <marker id="marker-aggregation" viewBox="0 0 24 14" refX="1" refY="7"
+                        markerWidth="18" markerHeight="12" orient="auto">
+                        <path d="M 1 7 L 11 2 L 21 7 L 11 12 Z" fill="#0b1329" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round"/>
                     </marker>
 
                     <!-- Composition: solid line, filled diamond ◆ at source -->
-                    <marker id="marker-composition" viewBox="0 0 20 12" refX="1" refY="6"
-                        markerWidth="14" markerHeight="10" orient="auto-start-reverse">
-                        <path d="M 1 6 L 10 1 L 19 6 L 10 11 Z" fill="#a855f7" stroke="#a855f7" stroke-width="1.5" stroke-linejoin="round"/>
+                    <marker id="marker-composition" viewBox="0 0 24 14" refX="1" refY="7"
+                        markerWidth="18" markerHeight="12" orient="auto">
+                        <path d="M 1 7 L 11 2 L 21 7 L 11 12 Z" fill="#a855f7" stroke="#e9d5ff" stroke-width="2" stroke-linejoin="round"/>
                     </marker>
                 </defs>
             </svg>
@@ -1296,6 +1302,7 @@
                 el.addEventListener('mousedown', (e) => {
                     e.stopPropagation();
                     activeDraggedNode = c;
+                    el.classList.add('is-dragging');
                     clickStartPos = { x: e.clientX, y: e.clientY };
                     dragOffsetX = e.clientX / scale - c.x;
                     dragOffsetY = e.clientY / scale - c.y;
@@ -1694,6 +1701,10 @@
 
         window.addEventListener('mouseup', () => {
             isDraggingViewport = false;
+            if (activeDraggedNode) {
+                const el = document.getElementById(`class-${activeDraggedNode.id}`);
+                if (el) el.classList.remove('is-dragging');
+            }
             activeDraggedNode = null;
         });
 
