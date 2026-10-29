@@ -41,3 +41,4 @@ Esta carpeta contiene los diagramas arquitectónicos del sistema en **formato na
 
 > [!TIP]
 > **Calidad Vectorial:** El PDF generado por Obsidian es 100% vectorial. Puedes hacer zoom al 500% en cualquier visor de PDF (como Adobe Reader o Chrome) y todas las letras, líneas y símbolos conservarán una nitidez perfecta.
+

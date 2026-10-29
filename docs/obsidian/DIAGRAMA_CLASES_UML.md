@@ -310,3 +310,4 @@ classDiagram
 | `o--` | $\diamondsuit$ | **Agregación** | `Sede` alberga `Grupo`; `Grupo` inscribe `Estudiante`. |
 | `*--` | $\blacklozenge$ | **Composición** | `Estudiante` posee `Certificados` e `Historial`. `Grupo` posee clases. |
 | `-->` | $\rightarrow$ | **Asociación** | Vínculos estructurales directos (maestro imparte grupo, etc.). |
+

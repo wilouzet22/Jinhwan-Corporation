@@ -247,3 +247,4 @@ erDiagram
 | `\|\|--o{` | **Uno a Muchos (1:N opcional)** | Una `SEDE` alberga de 0 a muchos `GRUPOS`. |
 | `\|\|--\|{` | **Uno a Muchos (1:N obligatorio)** | Un `CRONOGRAMA` contiene al menos 1 `CLASE_EJERCICIO`. |
 | `\|\|--\|\|` | **Uno a Uno (1:1 obligatorio)** | Cada `CERTIFICADO_ASCENSO` respalda exactamente 1 `HISTORIAL_GRADOS`. |
+

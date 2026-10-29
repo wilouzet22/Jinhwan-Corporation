@@ -128,3 +128,4 @@ flowchart LR
 | **Estudiante** | Portal Alumno | UC07, UC08, UC09, UC10, UC11 |
 | **Maestro** | Gestión Dojang | UC12, UC13, UC14, UC15, UC16, UC17 |
 | **Administrador** | Dirección General | UC18, UC19, UC20, UC21, UC22, UC23, UC24 + capacidades de Maestro |
+
