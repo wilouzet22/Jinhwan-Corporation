@@ -1579,15 +1579,42 @@
 
         window.onload = init;
     
+        let prePrintShowAttrER = null;
+
         function exportToPDF() {
+            // Guardar estado previo
+            prePrintShowAttrER = showAttributes;
+
+            // Forzar que se muestren TODOS los atributos, PKs y campos de todas las tablas
+            showAttributes = true;
+            const btnAttr = document.getElementById("btnAttr");
+            if (btnAttr) btnAttr.innerText = "Ocultar Todos los Atributos";
+
+            if (typeof clearHighlight === 'function') clearHighlight();
+
+            render();
             centerViewportGlobal(false);
+
             setTimeout(() => {
                 window.print();
-            }, 200);
+            }, 250);
         }
 
+        window.addEventListener('afterprint', () => {
+            if (prePrintShowAttrER !== null) {
+                showAttributes = prePrintShowAttrER;
+                const btnAttr = document.getElementById("btnAttr");
+                if (btnAttr) btnAttr.innerText = showAttributes ? "Ocultar Todos los Atributos" : "Mostrar Todos los Atributos";
+                render();
+                centerViewportGlobal(false);
+                prePrintShowAttrER = null;
+            }
+        });
+
         window.addEventListener('beforeprint', () => {
-            centerViewportGlobal(false);
+            if (prePrintShowAttrER === null) {
+                exportToPDF();
+            }
         });
 
     </script>

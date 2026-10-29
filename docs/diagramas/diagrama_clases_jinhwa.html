@@ -621,6 +621,23 @@
             #canvas {
                 position: absolute !important;
             }
+            .uml-class {
+                width: 270px !important;
+                box-shadow: none !important;
+            }
+            .class-compartment {
+                display: flex !important;
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .class-expand-badge {
+                display: none !important;
+            }
+            .attr-item, .method-item {
+                white-space: normal !important;
+                font-size: 0.72rem !important;
+                line-height: 1.3 !important;
+            }
         }
     </style>
 </head>
@@ -1255,24 +1272,24 @@
 
         const defaultPositionsExpanded = {
             tipo_teoria:        { x: 40,   y: 40 },
-            categoria:          { x: 340,  y: 40 },
-            sede:               { x: 930,  y: 40 },
-            galeria_multimedia: { x: 1240, y: 40 },
-            administrador:      { x: 1550, y: 40 },
+            categoria:          { x: 360,  y: 40 },
+            sede:               { x: 1000, y: 40 },
+            galeria_multimedia: { x: 1320, y: 40 },
+            administrador:      { x: 1640, y: 40 },
 
-            teoria:             { x: 40,   y: 340 },
-            grado:              { x: 340,  y: 340 },
-            estudiante:         { x: 640,  y: 340 },
-            grupo:              { x: 930,  y: 340 },
-            maestro:            { x: 1240, y: 340 },
-            evento:             { x: 1550, y: 340 },
+            teoria:             { x: 40,   y: 490 },
+            grado:              { x: 360,  y: 490 },
+            estudiante:         { x: 680,  y: 490 },
+            grupo:              { x: 1000, y: 490 },
+            maestro:            { x: 1320, y: 490 },
+            evento:             { x: 1640, y: 490 },
 
-            teoria_favorito:    { x: 40,   y: 650 },
-            historial_grados:   { x: 340,  y: 650 },
-            certificado_ascenso:{ x: 640,  y: 650 },
-            cronograma_clase:   { x: 930,  y: 650 },
-            clase_ejercicio:    { x: 1240, y: 650 },
-            ejercicio:          { x: 1550, y: 650 }
+            teoria_favorito:    { x: 40,   y: 1020 },
+            historial_grados:   { x: 360,  y: 1020 },
+            certificado_ascenso:{ x: 680,  y: 1020 },
+            cronograma_clase:   { x: 1000, y: 1020 },
+            clase_ejercicio:    { x: 1320, y: 1020 },
+            ejercicio:          { x: 1640, y: 1020 }
         };
 
         // State
@@ -1759,21 +1776,76 @@
         };
 
         
-        // Export to Vector PDF
+        let prePrintStateClases = null;
+
         function exportToPDF() {
-            resetFocus(false);
-            fitToScreen(30, false);
+            // 1. Guardar estado interactivo previo
+            prePrintStateClases = {
+                expandAll: expandAll,
+                showMethods: showMethods,
+                activeFocusedId: activeFocusedId
+            };
+
+            // 2. Desplegar absolutamente TODO: todos los atributos y todos los métodos
+            expandAll = true;
+            showMethods = true;
+            activeFocusedId = null;
+
+            // Reubicar las clases con espacio suficiente para todos los campos sin superposición
+            classesData.forEach(c => {
+                if (defaultPositionsExpanded[c.id]) {
+                    c.x = defaultPositionsExpanded[c.id].x;
+                    c.y = defaultPositionsExpanded[c.id].y;
+                    const el = document.getElementById(`class-${c.id}`);
+                    if (el) {
+                        el.style.left = `${c.x}px`;
+                        el.style.top = `${c.y}px`;
+                    }
+                }
+            });
+
+            renderClasses();
+
+            document.querySelectorAll('.uml-class').forEach(el => {
+                el.classList.add('is-expanded');
+            });
+
             setTimeout(() => {
-                window.print();
-            }, 200);
+                renderConnectors();
+                fitToScreen(25, false);
+                setTimeout(() => {
+                    window.print();
+                }, 200);
+            }, 100);
         }
 
-        const btnExport = document.getElementById('btnExportPdf');
-        if (btnExport) btnExport.onclick = exportToPDF;
+        window.addEventListener('afterprint', () => {
+            if (prePrintStateClases) {
+                expandAll = prePrintStateClases.expandAll;
+                showMethods = prePrintStateClases.showMethods;
+                activeFocusedId = prePrintStateClases.activeFocusedId;
+
+                const posSource = expandAll ? defaultPositionsExpanded : defaultPositionsCompact;
+                classesData.forEach(c => {
+                    if (posSource[c.id]) {
+                        c.x = posSource[c.id].x;
+                        c.y = posSource[c.id].y;
+                    }
+                });
+
+                renderClasses();
+                setTimeout(() => {
+                    renderConnectors();
+                    fitToScreen(40, false);
+                }, 80);
+                prePrintStateClases = null;
+            }
+        });
 
         window.addEventListener('beforeprint', () => {
-            resetFocus(false);
-            fitToScreen(20, false);
+            if (!prePrintStateClases) {
+                exportToPDF();
+            }
         });
 
         const btnFitScreen = document.getElementById('btnFitScreen');
