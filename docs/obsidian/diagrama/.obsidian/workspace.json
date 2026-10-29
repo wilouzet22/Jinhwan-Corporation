@@ -11,26 +11,14 @@
             "id": "f75be2d9382473f3",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "DIAGRAMA_CLASES_UML.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nueva pestaña"
-            }
-          }
-        ]
-      },
-      {
-        "id": "7b7ad1c729d536e2",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "ce2acc2dca37df24",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Vista gráfica"
+              "title": "DIAGRAMA_CLASES_UML"
             }
           }
         ]
@@ -95,7 +83,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "d5a29788b11cfc7c",
@@ -111,6 +100,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "DIAGRAMA_CLASES_UML.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -129,6 +119,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "DIAGRAMA_CLASES_UML.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -171,7 +162,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Bienvenido.md",
+                "file": "DIAGRAMA_CLASES_UML.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -198,12 +189,12 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "746b556b4ecb0f4c",
+  "active": "f75be2d9382473f3",
   "lastOpenFiles": [
+    "Bienvenido.md",
     "README.md",
     "DIAGRAMA_ENTIDAD_RELACION.md",
     "DIAGRAMA_CLASES_UML.md",
-    "DIAGRAMA_CASOS_USO.md",
-    "Bienvenido.md"
+    "DIAGRAMA_CASOS_USO.md"
   ]
 }
