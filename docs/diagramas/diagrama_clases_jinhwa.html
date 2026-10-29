@@ -161,24 +161,24 @@
             overflow: hidden;
             transition: box-shadow 0.2s, border-color 0.2s, width 0.2s, top 0.25s ease, left 0.25s ease;
             font-size: 0.78rem;
-            width: 220px;
+            width: 210px;
         }
 
         .uml-class.is-expanded {
-            width: 295px;
+            width: 260px;
             z-index: 25;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.85), 0 0 0 2px var(--line-highlight);
         }
 
         .class-compartment {
-            max-height: 180px;
+            max-height: 110px;
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #475569 #0f172a;
         }
 
         .class-compartment::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
         .class-compartment::-webkit-scrollbar-track {
             background: #0f172a;
@@ -186,6 +186,60 @@
         .class-compartment::-webkit-scrollbar-thumb {
             background: #475569;
             border-radius: 4px;
+        }
+
+        /* Hide all labels and pills from dimmed connectors to prevent visual clutter */
+        .connector-group.is-dimmed {
+            opacity: 0.03 !important;
+        }
+        .connector-group.is-dimmed text,
+        .connector-group.is-dimmed rect {
+            display: none !important;
+        }
+
+        .rel-badge {
+            fill: #0b1329;
+            stroke: #334155;
+            stroke-width: 1px;
+            rx: 4px;
+            ry: 4px;
+        }
+        .connector-group.is-highlighted .rel-badge {
+            fill: #1e1b4b;
+            stroke: #818cf8;
+            stroke-width: 1.5px;
+        }
+
+        .relationship-label {
+            fill: #e2e8f0;
+            font-size: 10px;
+            font-weight: 600;
+            text-anchor: middle;
+            user-select: none;
+            pointer-events: none;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        .connector-group.is-highlighted .relationship-label {
+            fill: #ffffff;
+            font-weight: 700;
+        }
+
+        .mult-badge {
+            fill: #0b1329;
+            stroke: #451a03;
+            stroke-width: 0.8px;
+            rx: 3px;
+            ry: 3px;
+        }
+
+        .multiplicity-label {
+            fill: #fbbf24;
+            font-size: 9.5px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            text-anchor: middle;
+            user-select: none;
+            pointer-events: none;
         }
 
         .uml-class:hover {
@@ -554,6 +608,7 @@
             <button class="btn" id="btnZoomIn" title="Aumentar zoom">🔍 +</button>
             <button class="btn" id="btnToggleAllClasses">📂 Expandir Todas</button>
             <button class="btn" id="btnAutoLayout">⚡ Organizar</button>
+            <button class="btn" id="btnToggleMult" title="Mostrar/ocultar multiplicidades">🏷️ Multiplicidades</button>
             <button class="btn" id="btnToggleMethods">⚙️ Métodos</button>
             <button class="btn btn-primary" id="btnLegend">📖 Leyenda UML</button>
         </div>
@@ -719,7 +774,7 @@
                 stereotype: "Entity / User Role (estudiante)",
                 type: "base",
                 x: 620,
-                y: 230,
+                y: 290,
                 attributes: [
                     "- id_estudiante: int [PK]",
                     "- id_grado: int [FK]",
@@ -755,8 +810,8 @@
                 name: "Maestro",
                 stereotype: "Entity / Instructor (maestro)",
                 type: "base",
-                x: 1200,
-                y: 230,
+                x: 1220,
+                y: 290,
                 attributes: [
                     "- id_maestro: int [PK]",
                     "- id_grado: int [FK]",
@@ -788,8 +843,8 @@
                 name: "Administrador",
                 stereotype: "Entity / Management (administrador)",
                 type: "sub",
-                x: 1490,
-                y: 50,
+                x: 1530,
+                y: 40,
                 attributes: [
                     "- id_administrador: int [PK]",
                     "- nombre: string",
@@ -815,7 +870,7 @@
                 stereotype: "Entity / Facility (sedes)",
                 type: "normal",
                 x: 910,
-                y: 50,
+                y: 40,
                 attributes: [
                     "- id_sede: int [PK]",
                     "- nombre: string",
@@ -837,7 +892,7 @@
                 stereotype: "Entity / Class Group (grupos)",
                 type: "normal",
                 x: 910,
-                y: 230,
+                y: 290,
                 attributes: [
                     "- id_grupo: int [PK]",
                     "- id_sede: int [FK]",
@@ -859,7 +914,7 @@
                 stereotype: "Catalog / Belt (grados)",
                 type: "normal",
                 x: 330,
-                y: 230,
+                y: 290,
                 attributes: [
                     "- id_grado: int [PK]",
                     "- nombre: string",
@@ -878,7 +933,7 @@
                 stereotype: "Catalog / Division (categorias)",
                 type: "normal",
                 x: 330,
-                y: 50,
+                y: 40,
                 attributes: [
                     "- id_categoria: int [PK]",
                     "- nombre: string",
@@ -896,7 +951,7 @@
                 stereotype: "Entity / Diploma (certificados_ascenso)",
                 type: "normal",
                 x: 620,
-                y: 410,
+                y: 540,
                 attributes: [
                     "- id_certificado: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -920,7 +975,7 @@
                 stereotype: "Entity / Ledger (historial_grados)",
                 type: "normal",
                 x: 330,
-                y: 410,
+                y: 540,
                 attributes: [
                     "- id_historial: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -939,7 +994,7 @@
                 stereotype: "Entity / Session (cronogramas_clase)",
                 type: "normal",
                 x: 910,
-                y: 410,
+                y: 540,
                 attributes: [
                     "- id_cronograma: int [PK]",
                     "- id_grupo: int [FK]",
@@ -960,8 +1015,8 @@
                 name: "ClaseEjercicio",
                 stereotype: "Pivot / Detail (clase_ejercicios)",
                 type: "normal",
-                x: 1200,
-                y: 410,
+                x: 1220,
+                y: 540,
                 attributes: [
                     "- id_clase_ejercicio: int [PK]",
                     "- id_cronograma: int [FK]",
@@ -981,8 +1036,8 @@
                 name: "Ejercicio",
                 stereotype: "Entity / Workout (ejercicios)",
                 type: "normal",
-                x: 1490,
-                y: 410,
+                x: 1530,
+                y: 540,
                 attributes: [
                     "- id_ejercicio: int [PK]",
                     "- nombre: string",
@@ -1001,8 +1056,8 @@
                 name: "Evento",
                 stereotype: "Entity / Agenda (eventos)",
                 type: "normal",
-                x: 1490,
-                y: 230,
+                x: 1530,
+                y: 290,
                 attributes: [
                     "- id_evento: int [PK]",
                     "- id_maestro: int [FK]",
@@ -1024,8 +1079,8 @@
                 name: "GaleriaMultimedia",
                 stereotype: "Entity / Content (galeria_multimedia)",
                 type: "normal",
-                x: 1200,
-                y: 50,
+                x: 1220,
+                y: 40,
                 attributes: [
                     "- id_multimedia: int [PK]",
                     "- id_maestro: int [FK]",
@@ -1045,7 +1100,7 @@
                 stereotype: "Entity / Learning (teorias)",
                 type: "normal",
                 x: 40,
-                y: 230,
+                y: 290,
                 attributes: [
                     "- id_teoria: int [PK]",
                     "- id_tipo_teoria: int [FK]",
@@ -1067,7 +1122,7 @@
                 stereotype: "Catalog / Category (tipos_teoria)",
                 type: "normal",
                 x: 40,
-                y: 50,
+                y: 40,
                 attributes: [
                     "- id_tipo_teoria: int [PK]",
                     "- nombre: string",
@@ -1084,7 +1139,7 @@
                 stereotype: "Pivot / Bookmark (teoria_favoritos)",
                 type: "normal",
                 x: 40,
-                y: 410,
+                y: 540,
                 attributes: [
                     "- id: int [PK]",
                     "- id_estudiante: int [FK]",
@@ -1139,49 +1194,49 @@
             { from: "cronograma_clase", to: "clase_ejercicio", type: "composition", label: "Contiene",       multFrom: "1",   multTo: "1..*" }
         ];
 
-        // Layout coordinate maps
+        // Layout coordinate maps (250px vertical row distance guarantees cards never collide even when expanded)
         const defaultPositionsCompact = {
-            tipo_teoria:        { x: 40,   y: 50 },
-            categoria:          { x: 330,  y: 50 },
-            sede:               { x: 910,  y: 50 },
-            galeria_multimedia: { x: 1200, y: 50 },
-            administrador:      { x: 1490, y: 50 },
+            tipo_teoria:        { x: 40,   y: 40 },
+            categoria:          { x: 330,  y: 40 },
+            sede:               { x: 910,  y: 40 },
+            galeria_multimedia: { x: 1220, y: 40 },
+            administrador:      { x: 1530, y: 40 },
 
-            teoria:             { x: 40,   y: 230 },
-            grado:              { x: 330,  y: 230 },
-            estudiante:         { x: 620,  y: 230 },
-            grupo:              { x: 910,  y: 230 },
-            maestro:            { x: 1200, y: 230 },
-            evento:             { x: 1490, y: 230 },
+            teoria:             { x: 40,   y: 290 },
+            grado:              { x: 330,  y: 290 },
+            estudiante:         { x: 620,  y: 290 },
+            grupo:              { x: 910,  y: 290 },
+            maestro:            { x: 1220, y: 290 },
+            evento:             { x: 1530, y: 290 },
 
-            teoria_favorito:    { x: 40,   y: 410 },
-            historial_grados:   { x: 330,  y: 410 },
-            certificado_ascenso:{ x: 620,  y: 410 },
-            cronograma_clase:   { x: 910,  y: 410 },
-            clase_ejercicio:    { x: 1200, y: 410 },
-            ejercicio:          { x: 1490, y: 410 }
+            teoria_favorito:    { x: 40,   y: 540 },
+            historial_grados:   { x: 330,  y: 540 },
+            certificado_ascenso:{ x: 620,  y: 540 },
+            cronograma_clase:   { x: 910,  y: 540 },
+            clase_ejercicio:    { x: 1220, y: 540 },
+            ejercicio:          { x: 1530, y: 540 }
         };
 
         const defaultPositionsExpanded = {
-            tipo_teoria:        { x: 40,   y: 50 },
-            categoria:          { x: 350,  y: 50 },
-            sede:               { x: 970,  y: 50 },
-            galeria_multimedia: { x: 1280, y: 50 },
-            administrador:      { x: 1590, y: 50 },
+            tipo_teoria:        { x: 40,   y: 40 },
+            categoria:          { x: 340,  y: 40 },
+            sede:               { x: 930,  y: 40 },
+            galeria_multimedia: { x: 1240, y: 40 },
+            administrador:      { x: 1550, y: 40 },
 
-            teoria:             { x: 40,   y: 430 },
-            grado:              { x: 350,  y: 430 },
-            estudiante:         { x: 660,  y: 430 },
-            grupo:              { x: 970,  y: 430 },
-            maestro:            { x: 1280, y: 430 },
-            evento:             { x: 1590, y: 430 },
+            teoria:             { x: 40,   y: 340 },
+            grado:              { x: 340,  y: 340 },
+            estudiante:         { x: 640,  y: 340 },
+            grupo:              { x: 930,  y: 340 },
+            maestro:            { x: 1240, y: 340 },
+            evento:             { x: 1550, y: 340 },
 
-            teoria_favorito:    { x: 40,   y: 810 },
-            historial_grados:   { x: 350,  y: 810 },
-            certificado_ascenso:{ x: 660,  y: 810 },
-            cronograma_clase:   { x: 970,  y: 810 },
-            clase_ejercicio:    { x: 1280, y: 810 },
-            ejercicio:          { x: 1590, y: 810 }
+            teoria_favorito:    { x: 40,   y: 650 },
+            historial_grados:   { x: 340,  y: 650 },
+            certificado_ascenso:{ x: 640,  y: 650 },
+            cronograma_clase:   { x: 930,  y: 650 },
+            clase_ejercicio:    { x: 1240, y: 650 },
+            ejercicio:          { x: 1550, y: 650 }
         };
 
         // State
@@ -1191,6 +1246,7 @@
         let isDraggingViewport = false;
         let startX = 0, startY = 0;
         let showMethods = true;
+        let showMultiplicities = true;
         let expandAll = false;
         let activeDraggedNode = null;
         let dragOffsetX = 0, dragOffsetY = 0;
@@ -1265,7 +1321,6 @@
         function focusClass(c, el) {
             activeFocusedId = c.id;
 
-            // Expandir la clase seleccionada y compactar las demás (si no está activo expandAll)
             document.querySelectorAll('.uml-class').forEach(node => {
                 if (node.id === el.id || expandAll) {
                     node.classList.add('is-expanded');
@@ -1280,8 +1335,8 @@
             const vw = viewport.clientWidth;
             const vh = viewport.clientHeight;
             const targetScale = 1.15;
-            const elW = el.offsetWidth || 295;
-            const elH = el.offsetHeight || 260;
+            const elW = el.offsetWidth || 260;
+            const elH = el.offsetHeight || 220;
             const cx = c.x + elW / 2;
             const cy = c.y + elH / 2;
 
@@ -1318,7 +1373,7 @@
                 }
             });
 
-            focusTitle.textContent = `${c.name} • Atributos y conexiones desplegados`;
+            focusTitle.textContent = `${c.name} • Conexiones y atributos directos`;
             focusBar.classList.add('active');
         }
 
@@ -1327,8 +1382,8 @@
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
             classesData.forEach(c => {
                 const el = document.getElementById(`class-${c.id}`);
-                const w = el ? el.offsetWidth : (expandAll ? 295 : 220);
-                const h = el ? el.offsetHeight : (expandAll ? 340 : 70);
+                const w = el ? el.offsetWidth : (expandAll ? 260 : 210);
+                const h = el ? el.offsetHeight : (expandAll ? 260 : 68);
                 minX = Math.min(minX, c.x);
                 minY = Math.min(minY, c.y);
                 maxX = Math.max(maxX, c.x + w);
@@ -1343,7 +1398,7 @@
             const scaleX = (vw - padding * 2) / diagW;
             const scaleY = (vh - padding * 2) / diagH;
             let targetScale = Math.min(scaleX, scaleY);
-            targetScale = Math.max(0.35, Math.min(targetScale, 1.25));
+            targetScale = Math.max(0.35, Math.min(targetScale, 1.20));
 
             panX = Math.round((vw - diagW * targetScale) / 2 - minX * targetScale);
             panY = Math.round((vh - diagH * targetScale) / 2 - minY * targetScale);
@@ -1390,7 +1445,7 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
 
-        // Render Connectors
+        // Render Connectors with Anti-Collision Logic and Pill Badges
         function renderConnectors() {
             const existing = svg.querySelectorAll('.connector-group');
             existing.forEach(e => e.remove());
@@ -1452,15 +1507,32 @@
 
                 path.setAttribute('class', pathClass);
                 
+                // Smart Path Geometry
+                const lineLen = Math.hypot(p2.x - p1.x, p2.y - p1.y);
                 const midX = (p1.x + p2.x) / 2;
                 const midY = (p1.y + p2.y) / 2;
                 const adx = Math.abs(p2.x - p1.x);
                 const ady = Math.abs(p2.y - p1.y);
+
                 let d;
-                if (adx >= ady) {
+                let bMidX = midX;
+                let bMidY = midY;
+
+                // Special clean routing for diagonal long-distance dependency (Admin -> Certificado)
+                if (rel.from === 'administrador' && rel.to === 'certificado_ascenso') {
+                    // Route gracefully around bottom edge to avoid slicing across middle classes
+                    const routeY = 660;
+                    d = `M ${p1.x} ${p1.y} C ${p1.x} ${routeY}, ${p2.x} ${routeY}, ${p2.x} ${p2.y}`;
+                    bMidX = midX;
+                    bMidY = routeY;
+                } else if (adx >= ady) {
                     d = `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
+                    bMidX = 0.125*p1.x + 0.375*midX + 0.375*midX + 0.125*p2.x;
+                    bMidY = 0.125*p1.y + 0.375*p1.y + 0.375*p2.y + 0.125*p2.y;
                 } else {
                     d = `M ${p1.x} ${p1.y} C ${p1.x} ${midY}, ${p2.x} ${midY}, ${p2.x} ${p2.y}`;
+                    bMidX = 0.125*p1.x + 0.375*p1.x + 0.375*p2.x + 0.125*p2.x;
+                    bMidY = 0.125*p1.y + 0.375*midY + 0.375*midY + 0.125*p2.y;
                 }
 
                 path.setAttribute('d', d);
@@ -1469,35 +1541,88 @@
 
                 group.appendChild(path);
 
+                // Normal (perpendicular) vector for multiplicities to NEVER overlap with lines or midpoint
+                const dirX = (p2.x - p1.x) / (lineLen || 1);
+                const dirY = (p2.y - p1.y) / (lineLen || 1);
+                const normX = -dirY;
+                const normY = dirX;
+
+                // Relationship Label with Background Pill Badge
                 if (rel.label) {
-                    const bMidX = 0.125*p1.x + 0.375*(midX) + 0.375*(adx>=ady ? midX : p2.x) + 0.125*p2.x;
-                    const bMidY = 0.125*p1.y + 0.375*(adx>=ady ? p1.y : midY) + 0.375*(adx>=ady ? p2.y : midY) + 0.125*p2.y;
+                    const labelGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    labelGroup.setAttribute('class', 'label-group');
+
                     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                     text.setAttribute('x', bMidX);
-                    text.setAttribute('y', bMidY - 6);
+                    text.setAttribute('y', bMidY + 3.5);
                     text.setAttribute('class', 'relationship-label');
                     text.textContent = rel.label;
-                    group.appendChild(text);
+
+                    // Approximate pill dimensions
+                    const textLen = rel.label.length;
+                    const badgeW = Math.max(textLen * 6.5 + 14, 38);
+                    const badgeH = 17;
+
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    rect.setAttribute('x', bMidX - badgeW / 2);
+                    rect.setAttribute('y', bMidY - badgeH / 2);
+                    rect.setAttribute('width', badgeW);
+                    rect.setAttribute('height', badgeH);
+                    rect.setAttribute('class', 'rel-badge');
+
+                    labelGroup.appendChild(rect);
+                    labelGroup.appendChild(text);
+                    group.appendChild(labelGroup);
                 }
 
-                if (rel.multFrom) {
-                    const m1 = getPointAlongLine(p1, p2, 22);
-                    const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    text1.setAttribute('x', m1.x + 6);
-                    text1.setAttribute('y', m1.y - 5);
-                    text1.setAttribute('class', 'multiplicity-label');
-                    text1.textContent = rel.multFrom;
-                    group.appendChild(text1);
-                }
+                // Multiplicities: only show if connection is at least 95px long to prevent collisions
+                if (showMultiplicities && lineLen >= 95) {
+                    const normOffset = 13; // Distance perpendicular from line
+                    const lineOffset = 26; // Distance along line from start/end
 
-                if (rel.multTo) {
-                    const m2 = getPointAlongLine(p2, p1, 22);
-                    const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                    text2.setAttribute('x', m2.x + 6);
-                    text2.setAttribute('y', m2.y - 5);
-                    text2.setAttribute('class', 'multiplicity-label');
-                    text2.textContent = rel.multTo;
-                    group.appendChild(text2);
+                    if (rel.multFrom) {
+                        const m1X = p1.x + dirX * lineOffset + normX * normOffset;
+                        const m1Y = p1.y + dirY * lineOffset + normY * normOffset;
+
+                        const text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        text1.setAttribute('x', m1X);
+                        text1.setAttribute('y', m1Y + 3.5);
+                        text1.setAttribute('class', 'multiplicity-label');
+                        text1.textContent = rel.multFrom;
+
+                        const multW = rel.multFrom.length * 6 + 8;
+                        const rect1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        rect1.setAttribute('x', m1X - multW / 2);
+                        rect1.setAttribute('y', m1Y - 6.5);
+                        rect1.setAttribute('width', multW);
+                        rect1.setAttribute('height', 13);
+                        rect1.setAttribute('class', 'mult-badge');
+
+                        group.appendChild(rect1);
+                        group.appendChild(text1);
+                    }
+
+                    if (rel.multTo) {
+                        const m2X = p2.x - dirX * lineOffset + normX * normOffset;
+                        const m2Y = p2.y - dirY * lineOffset + normY * normOffset;
+
+                        const text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        text2.setAttribute('x', m2X);
+                        text2.setAttribute('y', m2Y + 3.5);
+                        text2.setAttribute('class', 'multiplicity-label');
+                        text2.textContent = rel.multTo;
+
+                        const multW = rel.multTo.length * 6 + 8;
+                        const rect2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        rect2.setAttribute('x', m2X - multW / 2);
+                        rect2.setAttribute('y', m2Y - 6.5);
+                        rect2.setAttribute('width', multW);
+                        rect2.setAttribute('height', 13);
+                        rect2.setAttribute('class', 'mult-badge');
+
+                        group.appendChild(rect2);
+                        group.appendChild(text2);
+                    }
                 }
 
                 svg.appendChild(group);
@@ -1521,16 +1646,6 @@
             return {
                 x: cFrom.x + dx * scale,
                 y: cFrom.y + dy * scale
-            };
-        }
-
-        function getPointAlongLine(p1, p2, dist) {
-            const len = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-            if (len === 0) return p1;
-            const t = dist / len;
-            return {
-                x: p1.x + (p2.x - p1.x) * t,
-                y: p1.y + (p2.y - p1.y) * t
             };
         }
 
@@ -1607,13 +1722,21 @@
             btnFitScreen.onclick = () => fitToScreen(40, true);
         }
 
+        const btnToggleMult = document.getElementById('btnToggleMult');
+        if (btnToggleMult) {
+            btnToggleMult.onclick = () => {
+                showMultiplicities = !showMultiplicities;
+                btnToggleMult.style.background = showMultiplicities ? '' : '#334155';
+                renderConnectors();
+            };
+        }
+
         const btnToggleAll = document.getElementById('btnToggleAllClasses');
         if (btnToggleAll) {
             btnToggleAll.onclick = () => {
                 expandAll = !expandAll;
                 btnToggleAll.innerText = expandAll ? '📁 Compactar Todo' : '📂 Expandir Todas';
                 
-                // Reposition classes smoothly to match compact vs expanded mode
                 const posSource = expandAll ? defaultPositionsExpanded : defaultPositionsCompact;
                 classesData.forEach(c => {
                     if (posSource[c.id]) {
