@@ -214,20 +214,67 @@
         /* UML Use Case Oval */
         .use-case {
             position: absolute;
-            width: 220px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--uc-bg), #2e1065);
+            width: 205px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--uc-bg), #1a1638);
             border: 2px solid var(--uc-border);
-            border-radius: 50%;
+            border-radius: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 20px;
+            padding: 6px 14px;
             text-align: center;
-            cursor: move;
+            cursor: grab;
             z-index: 2;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.55);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .use-case.is-dragging {
+            cursor: grabbing !important;
+            transition: none !important;
+            z-index: 100 !important;
+        }
+
+        .module-divider {
+            position: absolute;
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media print {
+            @page {
+                size: landscape;
+                margin: 4mm 6mm;
+            }
+            html, body {
+                background-color: #0b0f19 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
+            }
+            header, .controls, .diagram-nav, .presentation-hint, .focus-bar, .modal {
+                display: none !important;
+            }
+            #viewport {
+                width: 100% !important;
+                height: 98vh !important;
+                overflow: visible !important;
+                position: relative !important;
+                background: none !important;
+            }
+            #canvas {
+                position: absolute !important;
+            }
         }
 
         .use-case:hover {
@@ -461,6 +508,7 @@
                 <a href="diagrama_er_jinhwa.html">Entidad-Relación</a>
                 <a href="diagrama_casos_uso_jinhwa.html" class="active">Casos de Uso</a>
             </div>
+            <button class="btn" id="btnExportPdf" title="Exportar diagrama completo a PDF vectorial de alta calidad" style="background:#059669; border-color:#10b981;">📄 Exportar PDF</button>
             <button class="btn" id="btnFitScreen" title="Ajustar y centrar todo en la pantalla" style="background:#2563eb; border-color:#3b82f6;">🎯 Ajustar Todo</button>
             <button class="btn" id="btnZoomOut" title="Reducir zoom">🔍 -</button>
             <button class="btn" id="btnZoomReset" title="Restablecer zoom a 100%">100%</button>
@@ -482,7 +530,7 @@
     <div id="viewport">
         <div id="canvas">
             <!-- System Boundary -->
-            <div class="system-boundary" id="systemBoundary" style="left: 600px; top: 360px; width: 1600px; height: 1920px;">
+            <div class="system-boundary" id="systemBoundary" style="left: 190px; top: 35px; width: 1490px; height: 575px;">
                 <div class="system-title">Sistema de Gestión Jinhwa Corporation</div>
             </div>
 
@@ -596,44 +644,44 @@
 
     <script>
         const actorsData = [
-            { id: "visitante", name: "Visitante Web", x: 280, y: 530, stroke: "#38bdf8" },
-            { id: "estudiante", name: "Estudiante", x: 280, y: 1020, stroke: "#6366f1" },
-            { id: "maestro", name: "Maestro / Instructor", x: 280, y: 1530, stroke: "#10b981" },
-            { id: "administrador", name: "Administrador", x: 2350, y: 2030, stroke: "#c084fc" }
+            { id: "visitante", name: "Visitante Web", x: 50, y: 135, stroke: "#38bdf8" },
+            { id: "estudiante", name: "Estudiante", x: 50, y: 435, stroke: "#6366f1" },
+            { id: "maestro", name: "Maestro / Instructor", x: 1720, y: 135, stroke: "#10b981" },
+            { id: "administrador", name: "Administrador Central", x: 1720, y: 435, stroke: "#c084fc" }
         ];
 
         const useCasesData = [
-            // Módulo Público (Visitante)
-            { id: "uc01", text: "UC01: Consultar Portal e Inicio", category: "public", x: 720, y: 450 },
-            { id: "uc02", text: "UC02: Consultar Sedes y Horarios", category: "public", x: 1120, y: 450 },
-            { id: "uc03", text: "UC03: Consultar Galería Multimedia", category: "public", x: 1520, y: 450 },
-            { id: "uc04", text: "UC04: Consultar Perfiles de Instructores", category: "public", x: 720, y: 620 },
-            { id: "uc05", text: "UC05: Solicitar Inscripción / Pre-Registro", category: "public", x: 1120, y: 620 },
-            { id: "uc06", text: "UC06: Iniciar Sesión / Login", category: "public", x: 1520, y: 620 },
+            // Módulo Público (Visitante Web)
+            { id: "uc01", text: "UC01: Consultar Portal e Inicio", category: "public", x: 230, y: 80 },
+            { id: "uc02", text: "UC02: Consultar Sedes y Horarios", category: "public", x: 470, y: 80 },
+            { id: "uc03", text: "UC03: Consultar Galería Multimedia", category: "public", x: 710, y: 80 },
+            { id: "uc04", text: "UC04: Consultar Instructores", category: "public", x: 230, y: 195 },
+            { id: "uc05", text: "UC05: Solicitar Pre-Registro Web", category: "public", x: 470, y: 195 },
+            { id: "uc06", text: "UC06: Iniciar Sesión / Login", category: "public", x: 710, y: 195 },
 
             // Módulo Estudiante
-            { id: "uc07", text: "UC07: Ver Dashboard del Estudiante", category: "student", x: 720, y: 920 },
-            { id: "uc08", text: "UC08: Consultar Material Teórico por Grado", category: "student", x: 1120, y: 920 },
-            { id: "uc09", text: "UC09: Marcar y Listar Teorías Favoritas", category: "student", x: 1520, y: 920 },
-            { id: "uc10", text: "UC10: Consultar Historial de Diplomas y Ascensos", category: "student", x: 920, y: 1120 },
-            { id: "uc11", text: "UC11: Actualizar Perfil y Datos de Contacto", category: "student", x: 1320, y: 1120 },
+            { id: "uc07", text: "UC07: Ver Dashboard Estudiante", category: "student", x: 230, y: 380 },
+            { id: "uc08", text: "UC08: Consultar Material Teórico", category: "student", x: 470, y: 380 },
+            { id: "uc09", text: "UC09: Marcar Teorías Favoritas", category: "student", x: 710, y: 380 },
+            { id: "uc10", text: "UC10: Historial de Ascensos", category: "student", x: 350, y: 495 },
+            { id: "uc11", text: "UC11: Actualizar Perfil y Contacto", category: "student", x: 590, y: 495 },
 
             // Módulo Maestro
-            { id: "uc12", text: "UC12: Visualizar Alumnos por Sede y Grupo", category: "master", x: 720, y: 1420 },
-            { id: "uc13", text: "UC13: Planificar Cronogramas de Clase", category: "master", x: 1120, y: 1420 },
-            { id: "uc14", text: "UC14: Gestionar Banco de Ejercicios Físicos", category: "master", x: 1520, y: 1420 },
-            { id: "uc15", text: "UC15: Asignar Ejercicios a Clases (Series/Reps)", category: "master", x: 720, y: 1640 },
-            { id: "uc16", text: "UC16: Evaluar Alumnos y Emitir Certificados", category: "master", x: 1120, y: 1640 },
-            { id: "uc17", text: "UC17: Publicar Contenido en Galería y Eventos", category: "master", x: 1520, y: 1640 },
+            { id: "uc12", text: "UC12: Visualizar Alumnos por Grupo", category: "master", x: 960,  y: 80 },
+            { id: "uc13", text: "UC13: Planificar Cronogramas Clase", category: "master", x: 1200, y: 80 },
+            { id: "uc14", text: "UC14: Banco de Ejercicios Físicos", category: "master", x: 1440, y: 80 },
+            { id: "uc15", text: "UC15: Asignar Ejercicios a Clases", category: "master", x: 960,  y: 195 },
+            { id: "uc16", text: "UC16: Evaluar Alumnos y Certificar", category: "master", x: 1200, y: 195 },
+            { id: "uc17", text: "UC17: Publicar Galería y Eventos", category: "master", x: 1440, y: 195 },
 
             // Módulo Administrador
-            { id: "uc18", text: "UC18: Gestionar Sedes (CRUD)", category: "admin", x: 720, y: 1920 },
-            { id: "uc19", text: "UC19: Gestionar Grupos y Horarios (CRUD)", category: "admin", x: 1120, y: 1920 },
-            { id: "uc20", text: "UC20: Gestionar Maestros e Instructores", category: "admin", x: 1520, y: 1920 },
-            { id: "uc21", text: "UC21: Gestionar Estudiantes y Expedientes", category: "admin", x: 1920, y: 1920 },
-            { id: "uc22", text: "UC22: Aprobar/Rechazar Pre-Registros Web", category: "admin", x: 920, y: 2140 },
-            { id: "uc23", text: "UC23: Ascensos Masivos y Generación de Diplomas", category: "admin", x: 1320, y: 2140 },
-            { id: "uc24", text: "UC24: Generar Reportes y Estadísticas Generales", category: "admin", x: 1720, y: 2140 }
+            { id: "uc18", text: "UC18: Gestionar Sedes (CRUD)", category: "admin", x: 960,  y: 380 },
+            { id: "uc19", text: "UC19: Gestionar Grupos/Horarios", category: "admin", x: 1200, y: 380 },
+            { id: "uc20", text: "UC20: Gestionar Maestros", category: "admin", x: 1440, y: 380 },
+            { id: "uc21", text: "UC21: Gestionar Estudiantes", category: "admin", x: 960,  y: 495 },
+            { id: "uc22", text: "UC22: Aprobar Pre-Registros Web", category: "admin", x: 1120, y: 495 },
+            { id: "uc23", text: "UC23: Ascensos Masivos y Diplomas", category: "admin", x: 1280, y: 495 },
+            { id: "uc24", text: "UC24: Generar Reportes Generales", category: "admin", x: 1440, y: 495 }
         ];
 
         const relationshipsData = [
@@ -941,8 +989,8 @@
         }
 
         
-        function fitToScreen(padding = 50, smooth = true) {
-            let minX = 200, minY = 350, maxX = 2500, maxY = 2300;
+        function fitToScreen(padding = 40, smooth = true) {
+            let minX = 40, minY = 30, maxX = 1820, maxY = 630;
             const vw = viewport.clientWidth || window.innerWidth;
             const vh = viewport.clientHeight || (window.innerHeight - 70);
             const diagW = maxX - minX;
@@ -950,7 +998,7 @@
             const scaleX = (vw - padding * 2) / diagW;
             const scaleY = (vh - padding * 2) / diagH;
             let targetScale = Math.min(scaleX, scaleY);
-            targetScale = Math.max(0.30, Math.min(targetScale, 1.15));
+            targetScale = Math.max(0.35, Math.min(targetScale, 1.25));
 
             panX = Math.round((vw - diagW * targetScale) / 2 - minX * targetScale);
             panY = Math.round((vh - diagH * targetScale) / 2 - minY * targetScale);
@@ -965,85 +1013,22 @@
             }
         }
 
-        function updateTransform() {
-            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-            const resetBtn = document.getElementById('btnZoomReset');
-            if (resetBtn) resetBtn.textContent = `${Math.round(scale * 100)}%`;
+        // Export to Vector PDF
+        function exportToPDF() {
+            resetFocus(false);
+            fitToScreen(30, false);
+            setTimeout(() => {
+                window.print();
+            }, 200);
         }
 
-        let vpMouseDownPos = { x: 0, y: 0 };
-        viewport.addEventListener('mousedown', (e) => {
-            if (!e.target.closest('.use-case, .uml-actor, .focus-bar')) {
-                isDraggingViewport = true;
-                vpMouseDownPos = { x: e.clientX, y: e.clientY };
-                startX = e.clientX - panX;
-                startY = e.clientY - panY;
-            }
-        });
+        const btnExport = document.getElementById('btnExportPdf');
+        if (btnExport) btnExport.onclick = exportToPDF;
 
-        viewport.addEventListener('click', (e) => {
-            const dist = Math.hypot(e.clientX - vpMouseDownPos.x, e.clientY - vpMouseDownPos.y);
-            if (dist < 6 && !e.target.closest('.use-case, .uml-actor, .focus-bar, header, .modal')) {
-                if (activeFocusedId) resetFocus(true);
-            }
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (activeDraggedItem) {
-                activeDraggedItem.x = e.clientX / scale - dragOffsetX;
-                activeDraggedItem.y = e.clientY / scale - dragOffsetY;
-                const el = document.getElementById(`actor-${activeDraggedItem.id}`) || document.getElementById(`uc-${activeDraggedItem.id}`);
-                if (el) {
-                    el.style.left = `${activeDraggedItem.x}px`;
-                    el.style.top = `${activeDraggedItem.y}px`;
-                }
-                renderConnectors();
-            } else if (isDraggingViewport) {
-                panX = e.clientX - startX;
-                panY = e.clientY - startY;
-                updateTransform();
-            }
-        });
-
-        window.addEventListener('mouseup', () => {
-            isDraggingViewport = false;
-            activeDraggedItem = null;
-        });
-
-        viewport.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const zoomFactor = 1.1;
-            if (e.deltaY < 0) {
-                scale = Math.min(scale * zoomFactor, 2.5);
-            } else {
-                scale = Math.max(scale / zoomFactor, 0.2);
-            }
-            updateTransform();
-        });
-
-        document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
-        document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
-        document.getElementById('btnZoomReset').onclick = () => { resetFocus(false); fitToScreen(40, true); };
-        const btnFit = document.getElementById('btnFitScreen');
-        if (btnFit) btnFit.onclick = () => fitToScreen(40, true);
-        
-        document.getElementById('btnResetLayout').onclick = () => {
+        window.addEventListener('beforeprint', () => {
             resetFocus(false);
-            scale = 0.55; panX = 150; panY = 20;
-            updateTransform();
-            renderElements();
-            setTimeout(renderConnectors, 50);
-        };
-
-        const legendModal = document.getElementById('legendModal');
-        document.getElementById('btnLegend').onclick = () => legendModal.style.display = 'flex';
-        document.getElementById('closeLegend').onclick = () => legendModal.style.display = 'none';
-        legendModal.onclick = (e) => { if (e.target === legendModal) legendModal.style.display = 'none'; };
-
-        // Init
-        renderElements();
-        updateTransform();
-        setTimeout(() => { renderConnectors(); fitToScreen(40, false); }, 100);
+            fitToScreen(20, false);
+        });
         window.addEventListener('resize', () => { if (!activeFocusedId) fitToScreen(40, false); });
     </script>
 </body>

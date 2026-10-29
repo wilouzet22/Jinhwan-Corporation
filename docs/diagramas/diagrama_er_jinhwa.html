@@ -467,6 +467,35 @@
             background: rgba(56, 189, 248, 0.16);
             border-color: rgba(56, 189, 248, 0.45);
         }
+    
+        @media print {
+            @page {
+                size: landscape;
+                margin: 4mm 6mm;
+            }
+            html, body {
+                background-color: #0b0f19 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
+            }
+            header, .controls, .diagram-nav, .presentation-hint, .focus-bar, .modal, .search-box, .legend {
+                display: none !important;
+            }
+            #viewport {
+                width: 100% !important;
+                height: 98vh !important;
+                overflow: visible !important;
+                position: relative !important;
+                background: none !important;
+            }
+            #canvas, svg {
+                position: absolute !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -502,6 +531,7 @@
                 <a href="diagrama_er_jinhwa.html" class="active">Entidad-Relación</a>
                 <a href="diagrama_casos_uso_jinhwa.html">Casos de Uso</a>
             </div>
+            <button class="btn" id="btnExportPdf" onclick="exportToPDF()" title="Exportar diagrama completo a PDF vectorial de alta calidad" style="background:#059669; border-color:#10b981;">📄 Exportar PDF</button>
             <button class="btn" onclick="centerViewportGlobal(true)" style="background:#2563eb; border-color:#3b82f6;">🎯 Ajustar Todo</button>
             <input type="text" class="search-box" placeholder="Buscar entidad o campo..." oninput="onSearch(this.value)">
             <button class="btn" onclick="toggleAttributes()" id="btnAttr">Mostrar Todos los Atributos</button>
@@ -1548,6 +1578,18 @@
         }
 
         window.onload = init;
+    
+        function exportToPDF() {
+            centerViewportGlobal(false);
+            setTimeout(() => {
+                window.print();
+            }, 200);
+        }
+
+        window.addEventListener('beforeprint', () => {
+            centerViewportGlobal(false);
+        });
+
     </script>
 </body>
 </html>

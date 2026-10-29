@@ -593,6 +593,35 @@
             align-items: center;
             gap: 6px;
         }
+    
+        @media print {
+            @page {
+                size: landscape;
+                margin: 4mm 6mm;
+            }
+            html, body {
+                background-color: #0b0f19 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
+            }
+            header, .controls, .diagram-nav, .presentation-hint, .focus-bar, .modal {
+                display: none !important;
+            }
+            #viewport {
+                width: 100% !important;
+                height: 98vh !important;
+                overflow: visible !important;
+                position: relative !important;
+                background: none !important;
+            }
+            #canvas {
+                position: absolute !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -608,6 +637,7 @@
                 <a href="diagrama_er_jinhwa.html">Entidad-Relación</a>
                 <a href="diagrama_casos_uso_jinhwa.html">Casos de Uso</a>
             </div>
+            <button class="btn" id="btnExportPdf" title="Exportar diagrama completo a PDF vectorial de alta calidad" style="background:#059669; border-color:#10b981;">📄 Exportar PDF</button>
             <button class="btn" id="btnFitScreen" title="Ajustar y centrar todo en la pantalla" style="background:#2563eb; border-color:#3b82f6;">🎯 Ajustar Todo</button>
             <button class="btn" id="btnZoomOut" title="Reducir zoom">🔍 -</button>
             <button class="btn" id="btnZoomReset" title="Restablecer zoom a 100%">100%</button>
@@ -1727,6 +1757,24 @@
             scale = 1.0;
             fitToScreen(40, true);
         };
+
+        
+        // Export to Vector PDF
+        function exportToPDF() {
+            resetFocus(false);
+            fitToScreen(30, false);
+            setTimeout(() => {
+                window.print();
+            }, 200);
+        }
+
+        const btnExport = document.getElementById('btnExportPdf');
+        if (btnExport) btnExport.onclick = exportToPDF;
+
+        window.addEventListener('beforeprint', () => {
+            resetFocus(false);
+            fitToScreen(20, false);
+        });
 
         const btnFitScreen = document.getElementById('btnFitScreen');
         if (btnFitScreen) {
