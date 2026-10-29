@@ -20,6 +20,20 @@ class MaestroIAController extends Controller
     }
 
     /**
+     * Endpoint GET /maestro/ia/tokens
+     * Devuelve el estado de tokens del maestro autenticado
+     */
+    public function getTokensInfo()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        $db = Database::getInstance()->getConnection();
+        $id_maestro = (int)($_SESSION['usuario_id'] ?? 0);
+        $info = $this->obtenerEstadoTokens($db, $id_maestro);
+        echo json_encode(['success' => true] + $info);
+        exit;
+    }
+
+    /**
      * Endpoint POST /maestro/ia/chat
      * Procesa mensajes del profesor y consulta NVIDIA NIM
      */
@@ -41,6 +55,21 @@ class MaestroIAController extends Controller
 
         if (empty($mensaje)) {
             echo json_encode(['success' => false, 'error' => 'El mensaje no puede estar vacío']);
+            exit;
+        }
+
+        // --- Verificar cuota de tokens antes de consultar la IA ---
+        $db = Database::getInstance()->getConnection();
+        $id_maestro = (int)($_SESSION['usuario_id'] ?? 0);
+        $estadoTokens = $this->obtenerEstadoTokens($db, $id_maestro);
+
+        if ($estadoTokens['bloqueado']) {
+            echo json_encode([
+                'success'  => false,
+                'bloqueado' => true,
+                'error'    => 'Has agotado tu límite de tokens de IA disponibles. Contacta al administrador para recargar tu cuota.',
+                'tokens'   => $estadoTokens
+            ]);
             exit;
         }
 
@@ -103,6 +132,10 @@ class MaestroIAController extends Controller
             exit;
         }
 
+        // --- Registrar consumo de tokens ---
+        $tokensConsumidos = $resultado['tokens_usados'] ?? 0;
+        $estadoTokensActualizado = $this->registrarConsumoTokens($db, $id_maestro, $tokensConsumidos);
+
         // Parsear el JSON devuelto por la IA
         $parsed = $this->extraerJSON($resultado['content']);
 
@@ -110,6 +143,7 @@ class MaestroIAController extends Controller
             // Si la IA respondió texto sin formato JSON, lo devolvemos como respuesta de texto normal
             echo json_encode([
                 'success' => true,
+                'tokens'  => $estadoTokensActualizado,
                 'data' => [
                     'mensaje' => $resultado['content'],
                     'accion' => 'texto'
@@ -125,7 +159,8 @@ class MaestroIAController extends Controller
 
         echo json_encode([
             'success' => true,
-            'data' => $parsed
+            'tokens'  => $estadoTokensActualizado,
+            'data'    => $parsed
         ]);
         exit;
     }
@@ -337,7 +372,10 @@ Recuerda: Si falta el grupo o el día, pregúntaselos primero al maestro de form
             return ['success' => false, 'error' => 'La IA no devolvió contenido'];
         }
 
-        return ['success' => true, 'content' => $content];
+        // Leer tokens consumidos del bloque usage (compatibilidad OpenAI/NVIDIA NIM)
+        $tokensUsados = (int)($decoded['usage']['total_tokens'] ?? 0);
+
+        return ['success' => true, 'content' => $content, 'tokens_usados' => $tokensUsados];
     }
 
     /**
@@ -421,5 +459,63 @@ Recuerda: Si falta el grupo o el día, pregúntaselos primero al maestro de form
         }
 
         return $cronograma;
+    }
+
+    // =========================================================================
+    // MÉTODOS DE CONTROL DE TOKENS
+    // =========================================================================
+
+    /**
+     * Obtiene el estado de tokens del maestro.
+     * Si las columnas no existen, devuelve valores safe por defecto sin explotar.
+     */
+    private function obtenerEstadoTokens($db, $id_maestro)
+    {
+        $limite  = defined('IA_TOKENS_DEFAULT_LIMIT') ? IA_TOKENS_DEFAULT_LIMIT : 50000;
+        $usados  = 0;
+
+        if ($id_maestro > 0) {
+            $r = $db->query("SELECT tokens_limite, tokens_usados FROM maestro WHERE id_maestro = $id_maestro LIMIT 1");
+            if ($r && $row = $r->fetch_assoc()) {
+                $limite = isset($row['tokens_limite']) ? (int)$row['tokens_limite'] : $limite;
+                $usados = isset($row['tokens_usados']) ? (int)$row['tokens_usados'] : 0;
+            }
+        }
+
+        $restantes   = max(0, $limite - $usados);
+        $porcentaje  = $limite > 0 ? round(($restantes / $limite) * 100, 1) : 0;
+        $bloqueado   = $restantes <= 0;
+
+        return [
+            'tokens_limite'    => $limite,
+            'tokens_usados'    => $usados,
+            'tokens_restantes' => $restantes,
+            'porcentaje'       => $porcentaje,
+            'bloqueado'        => $bloqueado
+        ];
+    }
+
+    /**
+     * Suma tokens consumidos en la BD y retorna el nuevo estado.
+     * Estima 150 tokens si la API no devolvió usage.
+     */
+    private function registrarConsumoTokens($db, $id_maestro, $tokensConsumidos)
+    {
+        if ($tokensConsumidos <= 0) {
+            $tokensConsumidos = 150; // Estimación segura mínima
+        }
+
+        if ($id_maestro > 0) {
+            $stmt = $db->prepare(
+                "UPDATE maestro SET tokens_usados = LEAST(tokens_usados + ?, tokens_limite) WHERE id_maestro = ?"
+            );
+            if ($stmt) {
+                $stmt->bind_param('ii', $tokensConsumidos, $id_maestro);
+                $stmt->execute();
+                $stmt->close();
+            }
+        }
+
+        return $this->obtenerEstadoTokens($db, $id_maestro);
     }
 }

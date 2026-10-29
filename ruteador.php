@@ -178,6 +178,7 @@ $router->post('/maestro/cronogramas/ejercicio/add', [MaestroCronogramasControlle
 $router->post('/maestro/cronogramas/ejercicio/remove', [MaestroCronogramasController::class, 'removeEjercicio']);
 
 // Asistente IA Maestro (NVIDIA NIM)
+$router->get('/maestro/ia/tokens', [MaestroIAController::class, 'getTokensInfo']);
 $router->post('/maestro/ia/chat', [MaestroIAController::class, 'chat']);
 $router->post('/maestro/ia/ejercicio/guardar', [MaestroIAController::class, 'guardarEjercicioSugerido']);
 

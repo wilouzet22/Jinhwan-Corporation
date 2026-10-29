@@ -121,6 +121,31 @@ $contextoIA = $contextoIA ?? 'cronogramas';
         </div>
     </div>
 
+    <!-- Indicador de Tokens IA -->
+    <div id="ia-tokens-banner" class="px-4 py-2.5 bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 shrink-0">
+        <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-1.5">
+                <span class="material-icons-outlined text-sm text-amber-500">bolt</span>
+                <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-300">Tokens disponibles</span>
+            </div>
+            <span id="ia-tokens-contador" class="text-[11px] font-bold text-slate-600 dark:text-slate-400 tabular-nums">Cargando...</span>
+        </div>
+        <div class="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+            <div id="ia-tokens-barra" class="h-full rounded-full transition-all duration-500 bg-emerald-500" style="width: 100%"></div>
+        </div>
+    </div>
+
+    <!-- Banner de bloqueo por tokens agotados (oculto por defecto) -->
+    <div id="ia-tokens-bloqueado" class="hidden px-4 py-3 bg-red-50 dark:bg-red-950/40 border-b border-red-200 dark:border-red-900/50 shrink-0">
+        <div class="flex items-start gap-2">
+            <span class="material-icons-outlined text-red-500 text-lg shrink-0 mt-0.5">block</span>
+            <div>
+                <p class="text-xs font-bold text-red-700 dark:text-red-400">Cuota de tokens agotada</p>
+                <p class="text-[11px] text-red-600 dark:text-red-500 leading-snug">Has alcanzado el límite de uso de IA. Contacta al administrador para recargar tu cuota.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Sugerencias Rápidas (Chips de atajo) -->
     <div class="px-4 py-2.5 bg-slate-100/60 dark:bg-slate-950/40 border-b border-slate-200/80 dark:border-slate-800/80 overflow-x-auto flex items-center gap-1.5 shrink-0 no-scrollbar">
         <button type="button" 
@@ -204,6 +229,7 @@ $contextoIA = $contextoIA ?? 'cronogramas';
 const IA_CONTEXTO_ACTUAL = '<?php echo htmlspecialchars($contextoIA); ?>';
 const IA_ENDPOINT_CHAT = '<?php echo base_url("maestro/ia/chat"); ?>';
 const IA_ENDPOINT_GUARDAR = '<?php echo base_url("maestro/ia/ejercicio/guardar"); ?>';
+const IA_ENDPOINT_TOKENS = '<?php echo base_url("maestro/ia/tokens"); ?>';
 
 let iaHistorial = [];
 let iaProcesando = false;
@@ -235,6 +261,8 @@ function abrirPanelIA() {
         backdrop.style.visibility = 'visible';
         backdrop.style.pointerEvents = 'auto';
     }
+
+    cargarEstadoTokensIA();
 
     setTimeout(() => {
         const inp = document.getElementById('ia-input-mensaje');
@@ -372,11 +400,17 @@ async function enviarMensajeIA(e) {
 
         if (resData.success && resData.data) {
             renderizarRespuestaIA(resData.data);
+            // Actualizar tokens si el backend los devolvió
+            if (resData.tokens) actualizarUITokens(resData.tokens);
             iaHistorial.push({
                 role: 'assistant',
                 content: typeof resData.data === 'string' ? resData.data : JSON.stringify(resData.data)
             });
         } else {
+            // Puede ser bloqueo por tokens
+            if (resData.bloqueado) {
+                aplicarBloqueoIA();
+            }
             renderizarErrorIA(resData.error || 'Ocurrió un error al procesar tu solicitud');
         }
     } catch (err) {
@@ -736,5 +770,91 @@ function escaparHTML(texto) {
     const div = document.createElement('div');
     div.innerText = texto;
     return div.innerHTML;
+}
+
+// =========================================================
+// GESTIÓN DE TOKENS IA
+// =========================================================
+
+/**
+ * Carga el estado de tokens desde el servidor y actualiza la UI
+ */
+async function cargarEstadoTokensIA() {
+    try {
+        const resp = await fetch(IA_ENDPOINT_TOKENS);
+        const data = await resp.json();
+        if (data.success) {
+            actualizarUITokens(data);
+        }
+    } catch (e) {
+        console.warn('No se pudo cargar el estado de tokens IA', e);
+    }
+}
+
+/**
+ * Actualiza el badge y la barra de progreso de tokens
+ */
+function actualizarUITokens(tokens) {
+    const contador  = document.getElementById('ia-tokens-contador');
+    const barra     = document.getElementById('ia-tokens-barra');
+    const bloqBanner= document.getElementById('ia-tokens-bloqueado');
+
+    if (!contador || !barra) return;
+
+    const restantes = tokens.tokens_restantes ?? 0;
+    const limite    = tokens.tokens_limite    ?? 50000;
+    const pct       = tokens.porcentaje       ?? 0;
+    const bloqueado = tokens.bloqueado        ?? false;
+
+    // Texto del contador
+    const restantesK = restantes >= 1000 ? (restantes / 1000).toFixed(1) + 'k' : restantes;
+    const limiteK    = limite >= 1000    ? (limite    / 1000).toFixed(0) + 'k' : limite;
+    contador.textContent = `${restantesK} / ${limiteK}`;
+
+    // Color dinámico de la barra
+    barra.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    barra.className   = 'h-full rounded-full transition-all duration-500 ';
+    if (pct > 40) {
+        barra.className += 'bg-emerald-500';
+        contador.className = contador.className.replace(/text-(red|amber|emerald)-\d+/, '') + ' text-emerald-600 dark:text-emerald-400';
+    } else if (pct > 15) {
+        barra.className += 'bg-amber-400';
+        contador.className = contador.className.replace(/text-(red|amber|emerald)-\d+/, '') + ' text-amber-600 dark:text-amber-400';
+    } else {
+        barra.className += 'bg-red-500';
+        contador.className = contador.className.replace(/text-(red|amber|emerald)-\d+/, '') + ' text-red-600 dark:text-red-400';
+    }
+
+    // Mostrar/ocultar banner de bloqueo
+    if (bloqBanner) {
+        bloqBanner.classList.toggle('hidden', !bloqueado);
+    }
+
+    if (bloqueado) {
+        aplicarBloqueoIA();
+    }
+}
+
+/**
+ * Bloquea la interfaz del chat cuando los tokens se agotan
+ */
+function aplicarBloqueoIA() {
+    const inp = document.getElementById('ia-input-mensaje');
+    const btn = document.getElementById('ia-btn-enviar');
+    const chips = document.querySelectorAll('#ia-panel-lateral button[onclick^="enviarPromptRapido"]');
+
+    if (inp) {
+        inp.disabled = true;
+        inp.placeholder = 'Cuota agotada — contacta al administrador';
+        inp.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-40', 'cursor-not-allowed');
+    }
+    chips.forEach(c => {
+        c.disabled = true;
+        c.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+    });
 }
 </script>

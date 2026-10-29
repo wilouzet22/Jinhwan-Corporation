@@ -24,6 +24,8 @@ class AdminMaestrosController extends Controller {
                        m.num_doc, m.tipo_documento,
                        m.foto_perfil, m.activo, m.permisos_extra,
                        m.descripcion_perfil, m.logros, m.mostrar_en_web,
+                       COALESCE(m.tokens_limite, 50000) as tokens_limite,
+                       COALESCE(m.tokens_usados, 0)    as tokens_usados,
                        s.nombre as sede_nombre, s.id_sede,
                        GROUP_CONCAT(DISTINCT g.nombre SEPARATOR ', ') as grupos_asignados
                 FROM maestro m
@@ -159,6 +161,20 @@ class AdminMaestrosController extends Controller {
             if (!empty($_POST['clave'])) {
                 $hash = password_hash($_POST['clave'], PASSWORD_DEFAULT);
                 $db->query("UPDATE maestro SET clave='$hash' WHERE id_maestro=$id");
+            }
+
+            // --- Control de tokens IA ---
+            if (isset($_POST['tokens_limite'])) {
+                $tokens_limite = max(0, (int)$_POST['tokens_limite']);
+                $stmtTok = $db->prepare("UPDATE maestro SET tokens_limite = ? WHERE id_maestro = ?");
+                if ($stmtTok) {
+                    $stmtTok->bind_param('ii', $tokens_limite, $id);
+                    $stmtTok->execute();
+                    $stmtTok->close();
+                }
+            }
+            if (!empty($_POST['reset_tokens_usados'])) {
+                $db->query("UPDATE maestro SET tokens_usados = 0 WHERE id_maestro = $id");
             }
 
             $this->redirect('/admin/maestros');

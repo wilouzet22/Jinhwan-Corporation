@@ -12,3 +12,6 @@ define('NVIDIA_API_KEY',        'nvapi--2vyp3HReijSf9w9_LskAvbMbjvHYCNOpvliErnIn
 define('NVIDIA_BASE_URL',       'https://integrate.api.nvidia.com/v1/chat/completions');
 define('NVIDIA_MODEL',          'openai/gpt-oss-20b');
 define('NVIDIA_FALLBACK_MODEL', 'meta/llama-3.2-90b-vision-instruct');
+
+// --- Control de Tokens por Maestro ---
+define('IA_TOKENS_DEFAULT_LIMIT', 50000); // Cuota inicial por defecto

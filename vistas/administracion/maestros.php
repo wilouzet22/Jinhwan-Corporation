@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include __DIR__ . '/../layout/administracion_cabecera.php'; 
 
 $total_maestros = count($maestros);
@@ -101,6 +101,7 @@ $total_inactivos = $total_maestros - $total_activos;
                             <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Sede Principal</th>
                             <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Contacto</th>
                             <th scope="col" class="px-2 py-3" style="width: 15%; min-width: 100px;">Permisos</th>
+                            <th scope="col" class="px-2 py-3" style="width: 12%; min-width: 105px;">Tokens IA</th>
                             <th scope="col" class="px-1 py-3 text-center" style="width: 6%; min-width: 45px;">Web</th>
                             <th scope="col" class="px-1 py-3 text-center" style="width: 7%; min-width: 65px;">Estado</th>
                             <th scope="col" class="px-2 py-3 text-right" style="width: 8%; min-width: 82px;">Acciones</th>
@@ -178,7 +179,24 @@ $total_inactivos = $total_maestros - $total_activos;
                                         </div>
                                     </td>
 
+                                                                        <!-- Tokens IA -->
+                                    <td class="px-2 py-2 text-xs min-w-0">
+                                        <?php
+                                            $tok_lim  = (int)($m['tokens_limite'] ?? 50000);
+                                            $tok_uso  = (int)($m['tokens_usados']  ?? 0);
+                                            $tok_rest = max(0, $tok_lim - $tok_uso);
+                                            $tok_pct  = $tok_lim > 0 ? round(($tok_rest / $tok_lim) * 100) : 0;
+                                            $tok_color = $tok_pct > 40 ? 'bg-emerald-500' : ($tok_pct > 15 ? 'bg-amber-400' : 'bg-red-500');
+                                            $tok_text  = $tok_pct > 40 ? 'text-emerald-700 dark:text-emerald-400' : ($tok_pct > 15 ? 'text-amber-700 dark:text-amber-400' : 'text-red-700 dark:text-red-400');
+                                        ?>
+                                        <div class="text-[11px] font-semibold <?= $tok_text ?>"><?= number_format($tok_rest) ?> / <?= number_format($tok_lim) ?></div>
+                                        <div class="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 mt-1 overflow-hidden">
+                                            <div class="h-full rounded-full <?= $tok_color ?>" style="width: <?= $tok_pct ?>%"></div>
+                                        </div>
+                                    </td>
+
                                     <!-- Web -->
+
                                     <td class="px-1 py-2 text-center whitespace-nowrap">
                                         <?php if (($m['mostrar_en_web'] ?? 0) == 1): ?>
                                             <span class="inline-flex items-center gap-0.5 text-[10px] text-emerald-600 font-bold">
@@ -345,7 +363,33 @@ $total_inactivos = $total_maestros - $total_activos;
                     </div>
                 </div>
 
-                <!-- Opciones / Toggles -->
+                
+                <!-- Control de Tokens IA -->
+                <div class="p-3 bg-amber-50/60 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800/40 space-y-3">
+                    <p class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
+                        <span class="material-icons-outlined text-sm">bolt</span> Cuota de Tokens IA
+                    </p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Límite de tokens</label>
+                            <input type="number" name="tokens_limite" id="modal-tokens-limite"
+                                   min="0" max="9999999" step="1000"
+                                   class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                   placeholder="50000">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Tokens usados (actual)</label>
+                            <input type="text" id="modal-tokens-usados-display" readonly
+                                   class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 cursor-not-allowed"
+                                   placeholder="0">
+                        </div>
+                    </div>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="reset_tokens_usados" id="modal-reset-tokens" value="1" class="rounded text-amber-500">
+                        <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Reiniciar consumo a 0 (recargar cuota)</span>
+                    </label>
+                </div>
+<!-- Opciones / Toggles -->
                 <div class="flex items-center gap-6 pt-2">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="activo" id="modal-activo" value="1" checked class="w-4 h-4 rounded text-purple-600">
@@ -452,6 +496,14 @@ function openModal(mode, data = null) {
         document.getElementById('perm-ascensos').checked = !!permisos.ascensos;
         document.getElementById('perm-calendario').checked = !!permisos.calendario;
         document.getElementById('perm-galeria').checked = !!permisos.galeria;
+
+        // Tokens IA
+        const tokLimEl = document.getElementById('modal-tokens-limite');
+        const tokUsoEl = document.getElementById('modal-tokens-usados-display');
+        const tokReset  = document.getElementById('modal-reset-tokens');
+        if (tokLimEl) tokLimEl.value = data.tokens_limite ?? 50000;
+        if (tokUsoEl) tokUsoEl.value = Number(data.tokens_usados ?? 0).toLocaleString() + ' tokens usados';
+        if (tokReset) tokReset.checked = false;
 
         claveHint.classList.remove('hidden');
     } else {
