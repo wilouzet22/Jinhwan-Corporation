@@ -127,14 +127,13 @@
             flex: 1;
             position: relative;
             overflow: hidden;
-            cursor: grab;
+            cursor: default;
             background-image: 
                 radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
             background-size: 32px 32px;
         }
-
-        #viewport:active {
-            cursor: grabbing;
+        #viewport.is-panning {
+            cursor: grabbing !important;
         }
 
         #canvas {
@@ -1337,6 +1336,7 @@
                 const isExpanded = expandAll || activeFocusedId === c.id;
                 el.className = `uml-class ${c.type === 'base' ? 'base-class' : (c.type === 'sub' ? 'sub-class' : '')} ${isExpanded ? 'is-expanded' : ''}`;
                 el.id = `class-${c.id}`;
+                el.dataset.classId = c.id;
                 el.style.left = `${c.x}px`;
                 el.style.top = `${c.y}px`;
 
@@ -1370,19 +1370,7 @@
                     dragOffsetY = e.clientY / scale - c.y;
                 });
 
-                el.addEventListener('mouseup', (e) => {
-                    el.classList.remove('is-dragging');
-                    const dist = Math.hypot(e.clientX - clickStartPos.x, e.clientY - clickStartPos.y);
-                    activeDraggedNode = null;
-                    if (dist < 6) {
-                        e.stopPropagation();
-                        if (activeFocusedId === c.id) {
-                            resetFocus(true);
-                        } else {
-                            focusClass(c, el);
-                        }
-                    }
-                });
+
 
                 container.appendChild(el);
             });
@@ -1737,6 +1725,7 @@
         viewport.addEventListener('mousedown', (e) => {
             if (!e.target.closest('.uml-class, .focus-bar')) {
                 isDraggingViewport = true;
+                viewport.classList.add('is-panning');
                 vpMouseDownPos = { x: e.clientX, y: e.clientY };
                 startX = e.clientX - panX;
                 startY = e.clientY - panY;
@@ -1767,10 +1756,31 @@
             }
         });
 
-        window.addEventListener('mouseup', () => {
+        window.addEventListener('mouseup', (e) => {
             isDraggingViewport = false;
-            activeDraggedNode = null;
-            document.querySelectorAll('.is-dragging').forEach(el => el.classList.remove('is-dragging'));
+            viewport.classList.remove('is-panning');
+            if (activeDraggedNode) {
+                // Detectar clic (no drag) — si el mouse no se movió más de 6px
+                const dist = Math.hypot(e.clientX - clickStartPos.x, e.clientY - clickStartPos.y);
+                const nodeId = activeDraggedNode.id;
+                activeDraggedNode = null;
+                document.querySelectorAll('.is-dragging').forEach(el => el.classList.remove('is-dragging'));
+                if (dist < 6) {
+                    // Es un clic — toggle focus
+                    const classData = classesData.find(c => c.id === nodeId);
+                    const classEl = document.getElementById(`class-${nodeId}`);
+                    if (classData && classEl) {
+                        if (activeFocusedId === nodeId) {
+                            resetFocus(true);
+                        } else {
+                            focusClass(classData, classEl);
+                        }
+                    }
+                }
+            } else {
+                activeDraggedNode = null;
+                document.querySelectorAll('.is-dragging').forEach(el => el.classList.remove('is-dragging'));
+            }
         });
 
         viewport.addEventListener('wheel', (e) => {
