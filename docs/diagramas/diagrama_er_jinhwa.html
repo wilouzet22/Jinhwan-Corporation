@@ -434,6 +434,39 @@
             align-items: center;
             gap: 6px;
         }
+    
+        .diagram-nav {
+            display: inline-flex;
+            gap: 6px;
+            margin-right: 12px;
+        }
+
+        .diagram-nav a {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .diagram-nav a:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.14);
+            border-color: #64748b;
+        }
+
+        .diagram-nav a.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.16);
+            border-color: rgba(56, 189, 248, 0.45);
+        }
     </style>
 </head>
 <body>
@@ -464,11 +497,16 @@
         </div>
 
         <div class="controls">
-            <div class="presentation-hint">🎯 Clic en un rectángulo para ver sus atributos y conexiones</div>
+            <div class="diagram-nav">
+                <a href="diagrama_clases_jinhwa.html">Clases UML</a>
+                <a href="diagrama_er_jinhwa.html" class="active">Entidad-Relación</a>
+                <a href="diagrama_casos_uso_jinhwa.html">Casos de Uso</a>
+            </div>
+            <button class="btn" onclick="centerViewportGlobal(true)" style="background:#2563eb; border-color:#3b82f6;">🎯 Ajustar Todo</button>
             <input type="text" class="search-box" placeholder="Buscar entidad o campo..." oninput="onSearch(this.value)">
             <button class="btn" onclick="toggleAttributes()" id="btnAttr">Mostrar Todos los Atributos</button>
             <button class="btn" onclick="resetLayout()">Restablecer Posiciones</button>
-            <button class="btn" onclick="resetZoom()">Centrar Diagrama</button>
+            <button class="btn" onclick="resetZoom()">Centrar</button>
         </div>
     </header>
 

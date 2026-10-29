@@ -413,6 +413,39 @@
             align-items: center;
             gap: 6px;
         }
+    
+        .diagram-nav {
+            display: inline-flex;
+            gap: 6px;
+            margin-right: 12px;
+        }
+
+        .diagram-nav a {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: #94a3b8;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .diagram-nav a:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.14);
+            border-color: #64748b;
+        }
+
+        .diagram-nav a.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.16);
+            border-color: rgba(56, 189, 248, 0.45);
+        }
     </style>
 </head>
 <body>
@@ -423,10 +456,15 @@
             <div class="subtitle">Casos de Uso del Sistema de Gestión de Taekwondo</div>
         </div>
         <div class="controls">
-            <div class="presentation-hint">🎯 Clic en un elemento para ampliar</div>
-            <button class="btn" id="btnZoomOut">🔍 -</button>
-            <button class="btn" id="btnZoomReset">100%</button>
-            <button class="btn" id="btnZoomIn">🔍 +</button>
+            <div class="diagram-nav">
+                <a href="diagrama_clases_jinhwa.html">Clases UML</a>
+                <a href="diagrama_er_jinhwa.html">Entidad-Relación</a>
+                <a href="diagrama_casos_uso_jinhwa.html" class="active">Casos de Uso</a>
+            </div>
+            <button class="btn" id="btnFitScreen" title="Ajustar y centrar todo en la pantalla" style="background:#2563eb; border-color:#3b82f6;">🎯 Ajustar Todo</button>
+            <button class="btn" id="btnZoomOut" title="Reducir zoom">🔍 -</button>
+            <button class="btn" id="btnZoomReset" title="Restablecer zoom a 100%">100%</button>
+            <button class="btn" id="btnZoomIn" title="Aumentar zoom">🔍 +</button>
             <button class="btn" id="btnResetLayout">⚡ Organizar</button>
             <button class="btn btn-primary" id="btnLegend">📖 Leyenda Casos de Uso</button>
         </div>
@@ -902,8 +940,35 @@
             };
         }
 
+        
+        function fitToScreen(padding = 50, smooth = true) {
+            let minX = 200, minY = 350, maxX = 2500, maxY = 2300;
+            const vw = viewport.clientWidth || window.innerWidth;
+            const vh = viewport.clientHeight || (window.innerHeight - 70);
+            const diagW = maxX - minX;
+            const diagH = maxY - minY;
+            const scaleX = (vw - padding * 2) / diagW;
+            const scaleY = (vh - padding * 2) / diagH;
+            let targetScale = Math.min(scaleX, scaleY);
+            targetScale = Math.max(0.30, Math.min(targetScale, 1.15));
+
+            panX = Math.round((vw - diagW * targetScale) / 2 - minX * targetScale);
+            panY = Math.round((vh - diagH * targetScale) / 2 - minY * targetScale);
+            scale = targetScale;
+
+            if (smooth) {
+                canvas.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+                updateTransform();
+                setTimeout(() => { canvas.style.transition = ''; }, 420);
+            } else {
+                updateTransform();
+            }
+        }
+
         function updateTransform() {
             canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            const resetBtn = document.getElementById('btnZoomReset');
+            if (resetBtn) resetBtn.textContent = `${Math.round(scale * 100)}%`;
         }
 
         let vpMouseDownPos = { x: 0, y: 0 };
@@ -958,7 +1023,9 @@
 
         document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
         document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
-        document.getElementById('btnZoomReset').onclick = () => { resetFocus(false); scale = 0.55; panX = 150; panY = 20; updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { resetFocus(false); fitToScreen(40, true); };
+        const btnFit = document.getElementById('btnFitScreen');
+        if (btnFit) btnFit.onclick = () => fitToScreen(40, true);
         
         document.getElementById('btnResetLayout').onclick = () => {
             resetFocus(false);
@@ -976,7 +1043,8 @@
         // Init
         renderElements();
         updateTransform();
-        setTimeout(renderConnectors, 100);
+        setTimeout(() => { renderConnectors(); fitToScreen(40, false); }, 100);
+        window.addEventListener('resize', () => { if (!activeFocusedId) fitToScreen(40, false); });
     </script>
 </body>
 </html>
