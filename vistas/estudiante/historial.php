@@ -43,7 +43,7 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
         </div>
     </div>
 
-    <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 lg:p-10 transition-colors duration-300">
+    <div class="bg-white/35 dark:bg-slate-900/40 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800/60 p-6 lg:p-10 transition-all duration-300">
         <?php if (empty($ascensos)): ?>
             <div class="text-center py-16">
                 <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400 dark:text-slate-500">
@@ -71,11 +71,11 @@ include __DIR__ . '/../layout/estudiante_cabecera.php';
                 ?>
                 <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
                     
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-slate-900 <?= $ascenso['estado'] == 'aprobado' ? 'bg-tkd-blue text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300' ?> shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white/80 dark:border-slate-900/80 <?= $ascenso['estado'] == 'aprobado' ? 'bg-tkd-blue text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300' ?> shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
                         <span class="material-icons-outlined text-xl"><?= $estadoIcon ?></span>
                     </div>
 
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-slate-800 p-5 rounded-xl border <?= $borderColor ?> shadow-sm hover:shadow-md transition-all">
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white/90 dark:bg-slate-950/80 backdrop-blur-sm p-5 rounded-xl border <?= $borderColor ?> shadow-md hover:shadow-xl transition-all">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
                             <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100">
                                 <?= $ascenso['estado'] == 'aprobado' ? 'Ascendido a' : 'Solicitud para' ?> <?= htmlspecialchars($ascenso['grado_solicitado']) ?>

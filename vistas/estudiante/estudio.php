@@ -95,7 +95,7 @@ $iconos = [
             $tipo_id = $teoria['tipo_id'] ?? 1;
             $catIcon = $iconos[$teoria['tipo_nombre'] ?? ''] ?? 'menu_book';
         ?>
-            <div data-teoria-id="<?= $teoria['id'] ?>" data-tipo-id="<?= $tipo_id ?>" data-is-fav="<?= $is_personal ? '1' : '0' ?>" class="teoria-card bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer group">
+            <div data-teoria-id="<?= $teoria['id'] ?>" data-tipo-id="<?= $tipo_id ?>" data-is-fav="<?= $is_personal ? '1' : '0' ?>" class="teoria-card bg-white/85 dark:bg-slate-900/75 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer group">
                 
                 <div class="p-6 flex-grow flex flex-col relative">
                     
