@@ -134,7 +134,7 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300">
         
         <header class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">
