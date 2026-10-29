@@ -6,7 +6,7 @@ $totalPubs = !empty($publicaciones) ? count($publicaciones) : 0;
 
 <section class="py-16 md:py-24 relative min-h-screen overflow-hidden transition-colors duration-300" style="background:linear-gradient(180deg,#eff6ff 0%,#ffffff 40%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#eff6ff 0%,#ffffff 40%,#fff5f5 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
     
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Encabezado Principal -->

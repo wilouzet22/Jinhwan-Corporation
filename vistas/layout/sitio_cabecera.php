@@ -45,7 +45,7 @@ $is_student = $rol_id == Roles::ESTUDIANTE;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-Ne9/ZPNVK3w3pBBX6xE86bNG295dJl4CHttrCp3WiuD0VLkVU1xlXnL7V/NsT3VXBWNEjpP2Dl_631+gOYAZfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-slate-100 to-rose-50/30 dark:bg-[#080c16] font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300">
+<body class="bg-slate-50/85 dark:bg-[#080c16]/80 font-body text-slate-800 dark:text-slate-200 antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
     
     <div class="md:hidden fixed top-0 w-full z-50 bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 py-3 transition-colors duration-300">

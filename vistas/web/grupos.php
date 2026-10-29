@@ -2,7 +2,7 @@
 
 <section class="text-slate-900 dark:text-white py-20 relative overflow-hidden transition-colors duration-300" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
     <div class="absolute inset-0 bg-gradient-to-r from-tkd-blue/10 dark:from-tkd-blue/15 to-transparent"></div>
     <div class="container mx-auto px-4 relative z-10 text-center">
         <h1 class="text-5xl md:text-6xl font-display font-bold uppercase tracking-wider mb-4 animate-fade-in-up transition-colors">
@@ -17,7 +17,7 @@
 
 <section class="py-16 relative min-h-[60vh] overflow-hidden transition-colors duration-300" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <?php if (empty($grupos)): ?>
             <div class="text-center py-16">

@@ -49,7 +49,7 @@ if (isset($_GET['msg'])) {
 <body class="bg-slate-100 dark:bg-[#080c16] min-h-screen font-body flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto selection:bg-rose-600 selection:text-white transition-colors duration-300 py-12">
 
     <div class="fixed inset-0 z-0">
-        <img src="<?= asset('img/slider.png') ?>" class="w-full h-full object-cover filter blur-[4px] scale-105 opacity-50 dark:opacity-30" alt="Background">
+        <img src="<?= asset('img/visual/dojang_bg.jpg') ?>" class="w-full h-full object-cover filter brightness-125 contrast-110 scale-105 opacity-65 dark:opacity-45" alt="Background">
         <div class="absolute inset-0 bg-gradient-to-tr from-white/60 dark:from-[#0b0f19]/90 via-white/40 dark:via-[#0b0f19]/80 to-blue-100/50 dark:to-[#111827]/80"></div>
     </div>
 

@@ -426,8 +426,8 @@ html.dark .admin-table-container::-webkit-scrollbar-track {
   background-repeat: no-repeat;
   pointer-events: none;
   z-index: -1;
-  opacity: 0.05;
-  filter: contrast(110%);
+  opacity: 0.22;
+  filter: brightness(1.35) contrast(110%);
   transition: opacity 0.3s ease;
 }
 
@@ -439,8 +439,8 @@ html.dark .tkd-dobok-texture {
 }
 
 html.dark .tkd-dobok-texture::before {
-  opacity: 0.12;
-  filter: brightness(0.85) contrast(120%);
+  opacity: 0.34;
+  filter: brightness(1.55) contrast(115%);
 }
 
 /* 2. Doble costura de cinturón marcial (Belt Stitching) */

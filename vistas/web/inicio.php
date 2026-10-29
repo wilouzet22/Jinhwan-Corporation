@@ -95,7 +95,7 @@
 
 <section class="py-24 relative overflow-hidden transition-colors duration-300">
     <div class="dark:hidden absolute inset-0" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-20">
             <h2 class="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider transition-colors">

@@ -43,7 +43,7 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
     <link href="<?= asset('styles/custom.css') ?>" rel="stylesheet">
     <?= function_exists('renderizar_variables_tema_marcial') ? renderizar_variables_tema_marcial($tema_marcial) : '' ?>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
+<body class="bg-slate-50/85 dark:bg-slate-950/80 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-rose-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
 <div class="flex min-h-screen md:h-screen md:overflow-hidden">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/55 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
