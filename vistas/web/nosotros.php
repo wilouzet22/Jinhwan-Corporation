@@ -224,6 +224,7 @@
     </div>
 </section>
 
+
 <!-- ========================================== -->
 <!-- SECCIÓN EQUIPO DE DESARROLLO DEL SOFTWARE  -->
 <!-- ========================================== -->
@@ -261,10 +262,10 @@
                             <span class="material-icons-outlined text-xs">star</span>
                             Líder de Proyecto
                         </div>
-                        <div class="relative w-36 h-36 mx-auto mb-5 mt-2">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-tkd-red via-tkd-gold to-tkd-blue p-1 animate-pulse-glow">
+                        <div class="relative mx-auto mb-5 mt-2" style="width: 144px; height: 144px;">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-tkd-red via-tkd-gold to-tkd-blue p-1 animate-pulse-glow">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/samuel_gomez.jpeg') ?>" alt="Samuel Gómez Londoño" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                                    <img src="<?= asset('img/desarrolladores/samuel_gomez.jpeg') ?>" alt="Samuel Gómez Londoño" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -287,10 +288,10 @@
                 <!-- Estefanía Londoño Sánchez -->
                 <div class="group">
                     <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-tkd-blue/50 transition-all duration-500 text-center transform hover:-translate-y-1">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 p-0.5">
+                        <div class="relative mx-auto mb-4" style="width: 130px; height: 130px;">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 p-1">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/estefania_londono.jpeg') ?>" alt="Estefanía Londoño Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                    <img src="<?= asset('img/desarrolladores/estefania_londono.jpeg') ?>" alt="Estefanía Londoño Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -309,10 +310,10 @@
                 <!-- Mariana Mora Chavarría -->
                 <div class="group">
                     <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-tkd-gold/50 transition-all duration-500 text-center transform hover:-translate-y-1">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 p-0.5">
+                        <div class="relative mx-auto mb-4" style="width: 130px; height: 130px;">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 p-1">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/mariana_mora.jpeg') ?>" alt="Mariana Mora Chavarría" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                    <img src="<?= asset('img/desarrolladores/mariana_mora.jpeg') ?>" alt="Mariana Mora Chavarría" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -336,10 +337,10 @@
                 <!-- Stephany Montoya Sánchez -->
                 <div class="group">
                     <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-rose-500/50 transition-all duration-500 text-center transform hover:-translate-y-1">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 p-0.5">
+                        <div class="relative mx-auto mb-4" style="width: 130px; height: 130px;">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 p-1">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/estefani_montoya.jpeg') ?>" alt="Stephany Montoya Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                    <img src="<?= asset('img/desarrolladores/estefani_montoya.jpeg') ?>" alt="Stephany Montoya Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
@@ -358,10 +359,10 @@
                 <!-- Luciana Rodríguez Hernández -->
                 <div class="group">
                     <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-indigo-500/50 transition-all duration-500 text-center transform hover:-translate-y-1">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+                        <div class="relative mx-auto mb-4" style="width: 130px; height: 130px;">
+                            <div class="w-full h-full rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-1">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/luciana_rodriguez.jpeg') ?>" alt="Luciana Rodríguez Hernández" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                    <img src="<?= asset('img/desarrolladores/luciana_rodriguez.jpeg') ?>" alt="Luciana Rodríguez Hernández" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
