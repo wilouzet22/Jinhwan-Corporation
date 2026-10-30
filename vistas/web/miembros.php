@@ -2,7 +2,7 @@
 
 <section class="relative py-20 overflow-hidden transition-colors duration-300">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(135deg,#eff6ff 0%,#fafafa 50%,#fff5f5 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
     <div class="absolute inset-0">
         <div class="absolute inset-0 bg-gradient-to-r from-slate-100 dark:from-[#0b0f19] via-slate-100/90 dark:via-[#0b0f19]/90 to-blue-600/10"></div>
     </div>
@@ -19,7 +19,7 @@
 
 <section class="py-12 relative overflow-hidden min-h-screen transition-colors duration-300">
     <div class="dark:hidden absolute inset-0" style="background:linear-gradient(180deg,#ffffff 0%,#eff6ff 60%,#fff5f5 100%)"></div>
-    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]/80"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
