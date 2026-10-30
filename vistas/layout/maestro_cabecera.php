@@ -44,11 +44,11 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
     <?= function_exists('renderizar_variables_tema_marcial') ? renderizar_variables_tema_marcial($tema_marcial) : '' ?>
 </head>
 <body class="bg-slate-50/85 dark:bg-slate-900/80 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-red-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
-<div class="flex min-h-screen">
+<div class="flex h-screen overflow-hidden">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
-    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden shadow-xl md:shadow-none md:static">
+    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 md:h-screen shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden shadow-xl md:shadow-none md:static">
         <div class="h-1.5 w-full shadow-sm" style="background: var(--tkd-gradient, linear-gradient(135deg, #09090b, #18181b, #dc2626));"></div>
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
@@ -219,7 +219,7 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
         </div>
     </aside>
 
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto relative transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto relative transition-colors duration-300 custom-scrollbar">
         
         <header class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between z-30 transition-colors duration-300">
              <div class="flex items-center gap-3">

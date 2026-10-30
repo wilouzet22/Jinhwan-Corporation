@@ -25,7 +25,7 @@ $iconos = [
 ];
 ?>
 
-<main class="flex-grow p-6 lg:p-10 space-y-8 overflow-y-auto h-screen custom-scrollbar transition-colors duration-300">
+<main class="flex-grow p-6 lg:p-10 space-y-8 transition-colors duration-300">
 
     <!-- Encabezado -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
