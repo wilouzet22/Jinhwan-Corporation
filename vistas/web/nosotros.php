@@ -223,4 +223,165 @@
         </div>
     </div>
 </section>
+
+<!-- ========================================== -->
+<!-- SECCIÓN EQUIPO DE DESARROLLO DEL SOFTWARE  -->
+<!-- ========================================== -->
+<section class="py-24 relative overflow-hidden transition-colors duration-300 border-t border-slate-200/80 dark:border-slate-800/80">
+    <div class="dark:hidden absolute inset-0" style="background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 50%, #ffffff 100%)"></div>
+    <div class="hidden dark:block absolute inset-0 bg-[#0b0f19]"></div>
+
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-tkd-blue/5 via-tkd-red/5 to-tkd-gold/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Encabezado de Sección -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-tkd-blue/10 border border-tkd-blue/30 text-tkd-blue dark:text-blue-400 font-bold text-xs uppercase tracking-widest mb-4 rounded-full backdrop-blur-sm">
+                <span class="material-icons-outlined text-sm">code</span>
+                Innovación & Tecnología
+            </span>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4 transition-colors">
+                Equipo de <span class="text-transparent bg-clip-text bg-gradient-to-r from-tkd-red via-tkd-gold to-tkd-blue">Desarrollo</span>
+            </h2>
+            <div class="w-24 h-1.5 bg-gradient-to-r from-tkd-blue via-tkd-red to-tkd-gold mx-auto rounded-full mb-6"></div>
+            <p class="text-slate-600 dark:text-slate-300 text-lg font-light leading-relaxed transition-colors">
+                Talento joven y apasionado detrás de la concepción, diseño e ingeniería tecnológica que impulsa el ecosistema digital de Jinhwan Corporation.
+            </p>
+        </div>
+
+        <!-- Disposición Geométrica Pentagonal / Piramidal -->
+        <div class="max-w-5xl mx-auto space-y-10">
+
+            <!-- NIVEL 1 (Cúspide / Centro Superior): Scrum Master -->
+            <div class="flex justify-center">
+                <div class="w-full max-w-sm group">
+                    <div class="relative bg-white dark:bg-slate-900/90 rounded-3xl p-6 border-2 border-tkd-red/40 dark:border-tkd-red/50 shadow-xl hover:shadow-2xl hover:shadow-tkd-red/10 transition-all duration-500 text-center transform hover:-translate-y-1.5">
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-tkd-red to-rose-600 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1.5">
+                            <span class="material-icons-outlined text-xs">star</span>
+                            Líder de Proyecto
+                        </div>
+                        <div class="relative w-36 h-36 mx-auto mb-5 mt-2">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-tkd-red via-tkd-gold to-tkd-blue p-1 animate-pulse-glow">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/samuel_gomez.jpeg') ?>" alt="Samuel Gómez Londoño" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Samuel Gómez Londoño
+                        </h3>
+                        <div class="inline-block px-3 py-1 bg-tkd-red/10 dark:bg-tkd-red/20 text-tkd-red dark:text-rose-400 font-semibold text-sm rounded-lg mb-2">
+                            Scrum Master
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                            Dirección ágil del proyecto, arquitectura de solución y coordinación integral del ciclo de vida del software.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NIVEL 2 (Intermedio): Diseñadoras (Frontend & Base de Datos) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                
+                <!-- Estefanía Londoño Sánchez -->
+                <div class="group">
+                    <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-tkd-blue/50 transition-all duration-500 text-center transform hover:-translate-y-1">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-cyan-400 p-0.5">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/estefania_londono.jpeg') ?>" alt="Estefanía Londoño Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Estefanía Londoño
+                        </h4>
+                        <div class="inline-block px-3 py-1 bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 font-semibold text-xs rounded-lg mb-2">
+                            Diseñadora Frontend
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                            Diseño de interfaz de usuario, experiencia interactiva (UI/UX) y maquetación visual del ecosistema.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Mariana Mora Chavarría -->
+                <div class="group">
+                    <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-tkd-gold/50 transition-all duration-500 text-center transform hover:-translate-y-1">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 p-0.5">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/mariana_mora.jpeg') ?>" alt="Mariana Mora Chavarría" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Mariana Mora
+                        </h4>
+                        <div class="inline-block px-3 py-1 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-semibold text-xs rounded-lg mb-2">
+                            Diseñadora de Base de Datos
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                            Modelado relacional, arquitectura de datos y estructuración de entidades e integridad referencial.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- NIVEL 3 (Base): Programadoras -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                
+                <!-- Stephany Montoya Sánchez -->
+                <div class="group">
+                    <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-rose-500/50 transition-all duration-500 text-center transform hover:-translate-y-1">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 p-0.5">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/estefani_montoya.jpeg') ?>" alt="Stephany Montoya Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Stephany Montoya
+                        </h4>
+                        <div class="inline-block px-3 py-1 bg-rose-500/10 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400 font-semibold text-xs rounded-lg mb-2">
+                            Programadora
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                            Construcción de módulos lógicos, desarrollo de componentes y aseguramiento de funcionalidad.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Luciana Rodríguez Hernández -->
+                <div class="group">
+                    <div class="h-full bg-white dark:bg-slate-900/80 rounded-3xl p-6 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-indigo-500/50 transition-all duration-500 text-center transform hover:-translate-y-1">
+                        <div class="relative w-32 h-32 mx-auto mb-4">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/luciana_rodriguez.jpeg') ?>" alt="Luciana Rodríguez Hernández" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Luciana Rodríguez
+                        </h4>
+                        <div class="inline-block px-3 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-semibold text-xs rounded-lg mb-2">
+                            Programadora
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                            Implementación de lógica de negocio, integración frontend-backend y pruebas de calidad.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
 <?php include __DIR__ . '/../layout/sitio_pie.php'; ?>

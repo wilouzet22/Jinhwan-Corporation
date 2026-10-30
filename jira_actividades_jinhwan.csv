@@ -16,3 +16,4 @@ Story,Gestión de Solicitudes de Registro,"Módulo administrativo para revisar, 
 Story,Módulo de Ascensos y Emisión de Diplomas Oficiales PDF,"Generación y descarga de certificados de ascenso en alta resolución con plantilla oficial, ideograma de agua coreano y tipografía Script MT Bold.",Portal Admin,Highest,Done
 Bug,Depuración de Caracteres BOM UTF-8,"Eliminación de secuencias BOM residuales en vistas y layouts que provocaban franjas negras en la cabecera del navegador.",Frontend,High,Done
 Bug,Scrolls Independientes en Paneles de Navegación,"Separación del scroll del menú lateral respecto al contenedor de contenido en todos los portales (Admin, Maestro, Estudiante).",UI/UX,Medium,Done
+
