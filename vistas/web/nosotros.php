@@ -227,6 +227,7 @@
 
 
 
+
 <!-- ========================================== -->
 <!-- SECCIÓN EQUIPO DE DESARROLLO DEL SOFTWARE  -->
 <!-- ========================================== -->
@@ -253,29 +254,29 @@
             </p>
         </div>
 
-        <!-- Fila Horizontal de 5 Desarrolladores con Colores Personalizados -->
+        <!-- Fila Horizontal de 5 Desarrolladores Homogénea -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto items-stretch">
 
-            <!-- 1. Estefanía Londoño Sánchez (AMARILLO) -->
+            <!-- 1. Luciana Rodríguez Hernández (ROSA) -->
             <div class="group flex flex-col">
-                <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-yellow-400 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
+                <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-pink-500 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
                     <div>
                         <div class="relative mx-auto mb-4" style="width: 120px; height: 120px;">
-                            <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #eab308 0%, #fde047 100%); box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);">
+                            <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/estefania_londono.jpeg') ?>" alt="Estefanía Londoño Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="<?= asset('img/desarrolladores/luciana_rodriguez.jpeg') ?>" alt="Luciana Rodríguez Hernández" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
                         <h4 class="text-lg font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
-                            Estefanía Londoño
+                            Luciana Rodríguez
                         </h4>
-                        <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(234, 179, 8, 0.15); color: #ca8a04;">
-                            Diseñadora Frontend
+                        <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(236, 72, 153, 0.15); color: #db2777;">
+                            Programadora
                         </div>
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
-                        Diseño de interfaz de usuario, experiencia interactiva (UI/UX) y maquetación visual.
+                        Implementación de lógica de negocio, integración frontend-backend y pruebas.
                     </p>
                 </div>
             </div>
@@ -304,16 +305,12 @@
                 </div>
             </div>
 
-            <!-- 3. Samuel Gómez Londoño (ROJO - CENTRO DESTACADO) -->
-            <div class="group flex flex-col sm:col-span-2 lg:col-span-1">
-                <div class="flex-1 relative bg-white dark:bg-slate-900/95 rounded-3xl p-5 shadow-xl hover:shadow-2xl transition-all duration-300 text-center flex flex-col justify-between transform lg:-translate-y-3 hover:-translate-y-4" style="border: 2px solid rgba(220, 38, 38, 0.65); box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15);">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-red-600 to-rose-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-md flex items-center gap-1 whitespace-nowrap">
-                        <span class="material-icons-outlined text-[11px]">star</span>
-                        Líder de Proyecto
-                    </div>
+            <!-- 3. Samuel Gómez Londoño (ROJO - CENTRO) -->
+            <div class="group flex flex-col">
+                <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-red-500 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
                     <div>
-                        <div class="relative mx-auto mb-4 mt-2" style="width: 132px; height: 132px;">
-                            <div class="w-full h-full rounded-full p-1 shadow-lg animate-pulse-glow" style="background: linear-gradient(135deg, #dc2626 0%, #f43f5e 50%, #b91c1c 100%); box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);">
+                        <div class="relative mx-auto mb-4" style="width: 120px; height: 120px;">
+                            <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #dc2626 0%, #f43f5e 50%, #b91c1c 100%); box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                                     <img src="<?= asset('img/desarrolladores/samuel_gomez.jpeg') ?>" alt="Samuel Gómez Londoño" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
@@ -322,7 +319,7 @@
                         <h4 class="text-lg font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
                             Samuel Gómez
                         </h4>
-                        <div class="inline-block px-3 py-0.5 font-bold text-xs rounded-lg mb-3" style="background: rgba(220, 38, 38, 0.15); color: #dc2626;">
+                        <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(220, 38, 38, 0.15); color: #dc2626;">
                             Scrum Master
                         </div>
                     </div>
@@ -332,19 +329,43 @@
                 </div>
             </div>
 
-            <!-- 4. Stephany Montoya Sánchez (NARANJA) -->
+            <!-- 4. Estefanía Londoño Sánchez (AMARILLO) -->
+            <div class="group flex flex-col">
+                <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-yellow-400 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
+                    <div>
+                        <div class="relative mx-auto mb-4" style="width: 120px; height: 120px;">
+                            <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #eab308 0%, #fde047 100%); box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);">
+                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                                    <img src="<?= asset('img/desarrolladores/estefania_londono.jpeg') ?>" alt="Estefanía Londoño Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-lg font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
+                            Estefanía Londoño
+                        </h4>
+                        <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(234, 179, 8, 0.15); color: #ca8a04;">
+                            Diseñadora Frontend
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
+                        Diseño de interfaz de usuario, experiencia interactiva (UI/UX) y maquetación visual.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 5. Estefani Montoya Sánchez (NARANJA) -->
             <div class="group flex flex-col">
                 <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-orange-500 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
                     <div>
                         <div class="relative mx-auto mb-4" style="width: 120px; height: 120px;">
                             <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%); box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);">
                                 <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/estefani_montoya.jpeg') ?>" alt="Stephany Montoya Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="<?= asset('img/desarrolladores/estefani_montoya.jpeg') ?>" alt="Estefani Montoya Sánchez" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                             </div>
                         </div>
                         <h4 class="text-lg font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
-                            Stephany Montoya
+                            Estefani Montoya
                         </h4>
                         <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(234, 88, 12, 0.15); color: #ea580c;">
                             Programadora
@@ -352,30 +373,6 @@
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
                         Construcción de módulos lógicos, desarrollo de componentes y aseguramiento.
-                    </p>
-                </div>
-            </div>
-
-            <!-- 5. Luciana Rodríguez Hernández (ROSA) -->
-            <div class="group flex flex-col">
-                <div class="flex-1 bg-white dark:bg-slate-900/80 rounded-3xl p-5 border border-slate-200 dark:border-slate-800/90 shadow-md hover:shadow-xl hover:border-pink-500 transition-all duration-300 text-center flex flex-col justify-between transform hover:-translate-y-1">
-                    <div>
-                        <div class="relative mx-auto mb-4" style="width: 120px; height: 120px;">
-                            <div class="w-full h-full rounded-full p-1" style="background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">
-                                <div class="w-full h-full rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                                    <img src="<?= asset('img/desarrolladores/luciana_rodriguez.jpeg') ?>" alt="Luciana Rodríguez Hernández" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="text-lg font-display font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 transition-colors">
-                            Luciana Rodríguez
-                        </h4>
-                        <div class="inline-block px-2.5 py-0.5 font-semibold text-xs rounded-lg mb-3" style="background: rgba(236, 72, 153, 0.15); color: #db2777;">
-                            Programadora
-                        </div>
-                    </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 font-light leading-relaxed">
-                        Implementación de lógica de negocio, integración frontend-backend y pruebas.
                     </p>
                 </div>
             </div>
