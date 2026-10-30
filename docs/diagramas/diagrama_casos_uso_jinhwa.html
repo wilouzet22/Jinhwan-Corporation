@@ -1021,6 +1021,106 @@
             }
         }
 
+                function updateTransform() {
+            canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            const resetBtn = document.getElementById('btnZoomReset');
+            if (resetBtn) {
+                resetBtn.textContent = `${Math.round(scale * 100)}%`;
+            }
+        }
+
+        // Viewport Drag & Zoom
+        let vpMouseDownPos = { x: 0, y: 0 };
+        viewport.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('.use-case, .uml-actor, .focus-bar')) {
+                isDraggingViewport = true;
+                viewport.classList.add('is-panning');
+                vpMouseDownPos = { x: e.clientX, y: e.clientY };
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
+            }
+        });
+
+        viewport.addEventListener('click', (e) => {
+            const dist = Math.hypot(e.clientX - vpMouseDownPos.x, e.clientY - vpMouseDownPos.y);
+            if (dist < 6 && !e.target.closest('.use-case, .uml-actor, .focus-bar, header, .modal')) {
+                if (activeFocusedId) resetFocus(true);
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (activeDraggedItem) {
+                activeDraggedItem.x = e.clientX / scale - dragOffsetX;
+                activeDraggedItem.y = e.clientY / scale - dragOffsetY;
+                const el = document.getElementById(`actor-${activeDraggedItem.id}`) || document.getElementById(`uc-${activeDraggedItem.id}`);
+                if (el) {
+                    el.style.left = `${activeDraggedItem.x}px`;
+                    el.style.top = `${activeDraggedItem.y}px`;
+                }
+                renderConnectors();
+            } else if (isDraggingViewport) {
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTransform();
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            isDraggingViewport = false;
+            viewport.classList.remove('is-panning');
+            activeDraggedItem = null;
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 1.1;
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * zoomFactor, 2.5);
+            } else {
+                scale = Math.max(scale / zoomFactor, 0.2);
+            }
+            updateTransform();
+        });
+
+        // Controles de Botones
+        document.getElementById('btnZoomIn').onclick = () => { scale = Math.min(scale * 1.2, 2.5); updateTransform(); };
+        document.getElementById('btnZoomOut').onclick = () => { scale = Math.max(scale / 1.2, 0.2); updateTransform(); };
+        document.getElementById('btnZoomReset').onclick = () => { scale = 1; panX = 100; panY = 50; updateTransform(); };
+        document.getElementById('btnFitScreen').onclick = () => fitToScreen(40, true);
+
+        // Guardar posiciones originales para reset
+        const defaultPositions = {};
+        actorsData.forEach(a => defaultPositions[a.id] = { x: a.x, y: a.y });
+        useCasesData.forEach(u => defaultPositions[u.id] = { x: u.x, y: u.y });
+
+        document.getElementById('btnResetLayout').onclick = () => {
+            resetFocus(false);
+            actorsData.forEach(a => {
+                if (defaultPositions[a.id]) {
+                    a.x = defaultPositions[a.id].x;
+                    a.y = defaultPositions[a.id].y;
+                    const el = document.getElementById(`actor-${a.id}`);
+                    if (el) { el.style.left = `${a.x}px`; el.style.top = `${a.y}px`; }
+                }
+            });
+            useCasesData.forEach(u => {
+                if (defaultPositions[u.id]) {
+                    u.x = defaultPositions[u.id].x;
+                    u.y = defaultPositions[u.id].y;
+                    const el = document.getElementById(`uc-${u.id}`);
+                    if (el) { el.style.left = `${u.x}px`; el.style.top = `${u.y}px`; }
+                }
+            });
+            renderConnectors();
+            fitToScreen(40, true);
+        };
+
+        // Modal de Leyenda
+        const legendModal = document.getElementById('legendModal');
+        document.getElementById('btnLegend').onclick = () => legendModal.style.display = 'flex';
+        document.getElementById('closeLegend').onclick = () => legendModal.style.display = 'none';
+        legendModal.onclick = (e) => { if (e.target === legendModal) legendModal.style.display = 'none'; };
+
         // Export to Vector PDF
         function exportToPDF() {
             resetFocus(false);
@@ -1038,6 +1138,13 @@
             fitToScreen(20, false);
         });
         window.addEventListener('resize', () => { if (!activeFocusedId) fitToScreen(40, false); });
+
+        // INICIALIZACIÓN INMEDIATA DEL DIAGRAMA
+        renderElements();
+        setTimeout(() => {
+            renderConnectors();
+            fitToScreen(40, false);
+        }, 80);
     </script>
 </body>
 </html>
