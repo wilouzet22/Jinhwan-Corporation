@@ -19,16 +19,20 @@ class MaestroDashboardController extends Controller {
         $res = $db->query("SELECT COUNT(*) as total FROM estudiante WHERE activo = 1");
         $stats['total_alumnos'] = $res ? (int)$res->fetch_assoc()['total'] : 0;
 
-        // Certificados emitidos por este maestro
-        $stmt = $db->prepare("SELECT COUNT(*) as total FROM certificados_ascenso WHERE id_maestro = ?");
-        $stmt->bind_param("i", $id_maestro);
-        $stmt->execute();
-        $stats['solicitudes_aprobadas'] = (int)$stmt->get_result()->fetch_assoc()['total'];
-        $stmt->close();
+        // Total cronogramas creados por este maestro
+        $stmtCrono = $db->prepare("SELECT COUNT(*) as total FROM cronogramas_clase WHERE id_maestro = ?");
+        $totalCrono = 0;
+        if ($stmtCrono) {
+            $stmtCrono->bind_param("i", $id_maestro);
+            $stmtCrono->execute();
+            $totalCrono = (int)$stmtCrono->get_result()->fetch_assoc()['total'];
+            $stmtCrono->close();
+        }
+        $stats['total_cronogramas'] = $totalCrono;
 
-        // Solicitudes pendientes de activación en el sistema
-        $resPend = $db->query("SELECT COUNT(*) as total FROM estudiante WHERE activo = 0");
-        $stats['solicitudes_pendientes'] = $resPend ? (int)$resPend->fetch_assoc()['total'] : 0;
+        // Total ejercicios en la biblioteca
+        $resEj = $db->query("SELECT COUNT(*) as total FROM ejercicios");
+        $stats['total_ejercicios'] = $resEj ? (int)$resEj->fetch_assoc()['total'] : 0;
 
         // Distribución de grados de alumnos
         $sqlGrados = "SELECT g.nombre, COUNT(e.id_estudiante) as cantidad

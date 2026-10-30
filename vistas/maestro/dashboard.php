@@ -55,23 +55,23 @@
             </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-amber-500/50 transition-all shadow-sm relative overflow-hidden">
-            <div class="w-14 h-14 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0 border border-amber-500/30 shadow-inner">
-                <span class="material-icons-outlined text-3xl">pending_actions</span>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-purple-500/50 transition-all shadow-sm relative overflow-hidden">
+            <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0 border border-purple-500/30 shadow-inner">
+                <span class="material-icons-outlined text-3xl">event_note</span>
             </div>
             <div>
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Ascensos Propuestos</p>
-                <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['solicitudes_pendientes'] ?></h3>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Clases Planificadas</p>
+                <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['total_cronogramas'] ?></h3>
             </div>
         </div>
 
         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-5 hover-lift hover:border-emerald-500/50 transition-all shadow-sm relative overflow-hidden">
             <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0 border border-emerald-500/30 shadow-inner">
-                <span class="material-icons-outlined text-3xl">verified</span>
+                <span class="material-icons-outlined text-3xl">fitness_center</span>
             </div>
             <div>
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Exámenes Aprobados</p>
-                <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['solicitudes_aprobadas'] ?></h3>
+                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Ejercicios en Biblioteca</p>
+                <h3 class="text-3xl font-black text-slate-900 dark:text-white"><?= $stats['total_ejercicios'] ?></h3>
             </div>
         </div>
     </div>
@@ -105,23 +105,32 @@
 
         <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
             <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4">Acciones del Instructor</h3>
-            <div class="space-y-4 flex-1 flex flex-col justify-center">
-                <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 tkd-card-action tkd-shimmer-hover transition-all group bg-white dark:bg-slate-900">
-                    <div class="w-12 h-12 rounded-xl tkd-icon-box shrink-0" style="width:3rem;height:3rem;">
+            <div class="space-y-3 flex-1 flex flex-col justify-center">
+                <a href="<?= base_url('/maestro/alumnos') ?>" class="flex items-center gap-4 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 tkd-card-action tkd-shimmer-hover transition-all group bg-white dark:bg-slate-900">
+                    <div class="w-11 h-11 rounded-xl tkd-icon-box shrink-0" style="width:2.75rem;height:2.75rem;">
                         <span class="material-icons-outlined text-2xl group-hover:scale-110 transition-transform">people</span>
                     </div>
                     <div class="text-left">
-                        <p class="text-sm font-bold text-slate-900 dark:text-white transition-colors">Ver Alumnos de Jinhwan</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Consulta deportistas y propone ascensos de grado</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white transition-colors">Alumnos de Jinhwan</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Consulta listado y detalles de tus deportistas</p>
                     </div>
                 </a>
-                <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/20 hover:border-amber-300 dark:hover:border-amber-800 transition-all hover-lift group">
-                    <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform shrink-0 border border-amber-100 dark:border-amber-500/20">
-                        <span class="material-icons-outlined text-2xl">timeline</span>
+                <a href="<?= base_url('/maestro/cronogramas') ?>" class="flex items-center gap-4 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-purple-50 dark:hover:bg-purple-950/20 hover:border-purple-300 dark:hover:border-purple-800 transition-all hover-lift group">
+                    <div class="w-11 h-11 rounded-xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform shrink-0 border border-purple-100 dark:border-purple-500/20">
+                        <span class="material-icons-outlined text-2xl">event_note</span>
                     </div>
                     <div class="text-left">
-                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-amber-600 transition-colors">Historial de Solicitudes</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Estado de tus propuestas enviadas a administración</p>
+                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-purple-600 transition-colors">Cronogramas de Clase</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Planifica tus entrenamientos con Asistente IA</p>
+                    </div>
+                </a>
+                <a href="<?= base_url('/maestro/ejercicios') ?>" class="flex items-center gap-4 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 hover:border-emerald-300 dark:hover:border-emerald-800 transition-all hover-lift group">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform shrink-0 border border-emerald-100 dark:border-emerald-500/20">
+                        <span class="material-icons-outlined text-2xl">fitness_center</span>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">Biblioteca de Ejercicios</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Catálogo técnico y repertorio de ejercicios</p>
                     </div>
                 </a>
             </div>

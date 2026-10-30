@@ -11,15 +11,8 @@
                     Alumnos de Jinhwan
                 </h1>
                 <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                    Listado completo de deportistas de la academia. Puedes consultar sus detalles y proponer ascensos de grado.
+                    Listado completo de deportistas de la academia. Consulta sus datos, sedes y grados técnicos.
                 </p>
-            </div>
-            
-            <div class="flex items-center gap-3">
-                <a href="<?= base_url('/maestro/solicitudes-ascenso') ?>" class="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-sm transition-all">
-                    <span class="material-icons-outlined text-base">timeline</span>
-                    <span>Historial de Solicitudes</span>
-                </a>
             </div>
         </div>
 
