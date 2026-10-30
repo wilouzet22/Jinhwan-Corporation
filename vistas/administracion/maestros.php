@@ -94,23 +94,23 @@ $total_inactivos = $total_maestros - $total_activos;
         <!-- Tabla de Maestros -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
             <div class="w-full overflow-x-auto custom-scrollbar" style="-webkit-overflow-scrolling: touch;">
-                <table class="w-full text-sm text-left border-collapse table-fixed" style="min-width: 700px;" id="teachers-table">
+                <table class="w-full text-sm text-left border-collapse" style="min-width: 960px;" id="teachers-table">
                     <thead class="text-[11px] uppercase bg-slate-50 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 sticky top-0 z-10 transition-colors">
                         <tr>
-                            <th scope="col" class="px-2 py-3" style="width: 28%; min-width: 180px;">Maestro / Instructor</th>
-                            <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Sede Principal</th>
-                            <th scope="col" class="px-2 py-3" style="width: 18%; min-width: 120px;">Contacto</th>
-                            <th scope="col" class="px-2 py-3" style="width: 15%; min-width: 100px;">Permisos</th>
-                            <th scope="col" class="px-2 py-3" style="width: 12%; min-width: 105px;">Tokens IA</th>
-                            <th scope="col" class="px-1 py-3 text-center" style="width: 6%; min-width: 45px;">Web</th>
-                            <th scope="col" class="px-1 py-3 text-center" style="width: 7%; min-width: 65px;">Estado</th>
-                            <th scope="col" class="px-2 py-3 text-right" style="width: 8%; min-width: 82px;">Acciones</th>
+                            <th scope="col" class="px-3 py-3 whitespace-nowrap" style="min-width: 200px;">Maestro / Instructor</th>
+                            <th scope="col" class="px-3 py-3 whitespace-nowrap" style="min-width: 130px;">Sede Principal</th>
+                            <th scope="col" class="px-3 py-3 whitespace-nowrap" style="min-width: 130px;">Contacto</th>
+                            <th scope="col" class="px-3 py-3 whitespace-nowrap" style="min-width: 110px;">Permisos</th>
+                            <th scope="col" class="px-3 py-3 whitespace-nowrap" style="min-width: 120px;">Tokens IA</th>
+                            <th scope="col" class="px-2 py-3 text-center whitespace-nowrap" style="min-width: 65px;">Web</th>
+                            <th scope="col" class="px-2 py-3 text-center whitespace-nowrap" style="min-width: 90px;">Estado</th>
+                            <th scope="col" class="px-3 py-3 text-right whitespace-nowrap" style="min-width: 115px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 transition-colors" id="teachers-tbody">
                         <?php if (empty($maestros)): ?>
                             <tr>
-                                <td colspan="7" class="text-center py-8 text-slate-400">
+                                <td colspan="8" class="text-center py-8 text-slate-400">
                                     No hay maestros registrados.
                                 </td>
                             </tr>
@@ -196,8 +196,7 @@ $total_inactivos = $total_maestros - $total_activos;
                                     </td>
 
                                     <!-- Web -->
-
-                                    <td class="px-1 py-2 text-center whitespace-nowrap">
+                                    <td class="px-2 py-2 text-center whitespace-nowrap" style="min-width: 65px;">
                                         <?php if (($m['mostrar_en_web'] ?? 0) == 1): ?>
                                             <span class="inline-flex items-center gap-0.5 text-[10px] text-emerald-600 font-bold">
                                                 <span class="material-icons-outlined text-sm">visibility</span> Sí
@@ -210,7 +209,7 @@ $total_inactivos = $total_maestros - $total_activos;
                                     </td>
 
                                     <!-- Estado -->
-                                    <td class="px-1 py-2 text-center whitespace-nowrap">
+                                    <td class="px-2 py-2 text-center whitespace-nowrap" style="min-width: 90px;">
                                         <?php if (($m['activo'] ?? 0) == 1): ?>
                                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/30">
                                                 Activo
@@ -223,8 +222,8 @@ $total_inactivos = $total_maestros - $total_activos;
                                     </td>
 
                                     <!-- Acciones -->
-                                    <td class="px-2 py-2 text-right whitespace-nowrap">
-                                        <div class="flex items-center justify-end gap-0.5">
+                                    <td class="px-3 py-2 text-right whitespace-nowrap" style="min-width: 115px;">
+                                        <div class="inline-flex items-center justify-end gap-1">
                                             <!-- Ver Detalle -->
                                             <button type="button" onclick='openDetailModal(<?= json_encode($m) ?>)' class="text-slate-500 hover:text-tkd-blue dark:text-slate-400 dark:hover:text-blue-400 p-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all cursor-pointer" title="Ver Detalle">
                                                 <span class="material-icons-outlined text-base">visibility</span>
