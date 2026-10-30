@@ -72,7 +72,9 @@ class Teoria extends Model {
     }
 
     private function ensureFavoritosTable() {
-        $this->db->query("
+        // Intento silencioso: algunos hostings restringen CREATE TABLE desde PHP.
+        // En producción, ejecutar database/migrate_teoria_favoritos.sql en phpMyAdmin.
+        @$this->db->query("
             CREATE TABLE IF NOT EXISTS `teoria_favoritos` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
                 `id_estudiante` INT NOT NULL,

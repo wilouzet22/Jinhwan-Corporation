@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
 
 function getBeltColor($levelName) {
     $levelName = is_array($levelName) ? ($levelName['nombre'] ?? '') : $levelName;
@@ -198,6 +198,7 @@ $iconos = [
     let miTeoriaIds = <?= json_encode($mi_teoria_ids ?? []) ?>;
     let selectedCategory = 'all';
     let selectedFilter = 'all'; // 'all' o 'favorites'
+    const TOGGLE_URL = '<?= base_url("ascensos/toggle") ?>';
 
     function filterCards() {
         const cards = document.querySelectorAll('.teoria-card');
@@ -267,13 +268,20 @@ $iconos = [
         const btn = document.querySelector(`.teoria-card[data-teoria-id="${teoriaId}"] .mi-teoria-toggle`);
         const icon = btn ? btn.querySelector(".material-icons-outlined") : null;
 
-        fetch("/jinwha/ascensos/toggle", {
+        // Feedback visual inmediato mientras espera la respuesta
+        if (btn) btn.style.opacity = '0.5';
+
+        fetch(TOGGLE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ teoriaId: teoriaId }),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.json();
+        })
         .then(data => {
+            if (btn) btn.style.opacity = '';
             if (data.status === "success") {
                 if (data.action === "added") {
                     if (!miTeoriaIds.includes(teoriaId)) miTeoriaIds.push(teoriaId);
@@ -293,6 +301,10 @@ $iconos = [
                 }
                 filterCards();
             }
+        })
+        .catch(err => {
+            if (btn) btn.style.opacity = '';
+            console.error('Error al guardar favorito:', err);
         });
     }
 
