@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include __DIR__ . '/../layout/administracion_cabecera.php'; 
 
 $total_maestros = count($maestros);

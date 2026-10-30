@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/../layout/administracion_cabecera.php'; ?>
+<?php require_once __DIR__ . '/../layout/administracion_cabecera.php'; ?>
 
 <main class="flex-grow container mx-auto p-6 lg:p-8 relative transition-colors duration-300">
     <div class="space-y-6">

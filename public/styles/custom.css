@@ -296,7 +296,12 @@ html:not(.dark) .glass-card:hover { box-shadow: 0 12px 36px rgba(37,99,235,0.15)
 .stagger-3 { animation-delay: 0.15s; }
 .stagger-4 { animation-delay: 0.2s; }
 
-html, body { max-width: 100%; overflow-x: hidden; }
+html, body { 
+  margin: 0;
+  padding: 0;
+  max-width: 100%; 
+  overflow-x: hidden; 
+}
 
 @media (max-width: 767px) {
   

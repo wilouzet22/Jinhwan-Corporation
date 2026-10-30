@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 
 function getBeltColor($levelName) {
     $levelName = is_array($levelName) ? ($levelName['nombre'] ?? '') : $levelName;
