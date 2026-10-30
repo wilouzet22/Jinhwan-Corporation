@@ -471,23 +471,25 @@
         @media print {
             @page {
                 size: landscape;
-                margin: 4mm 6mm;
+                margin: 2mm 2mm;
             }
             html, body {
                 background-color: #0b0f19 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
                 color-adjust: exact !important;
-                width: 100% !important;
-                height: 100% !important;
-                overflow: visible !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             header, .controls, .diagram-nav, .presentation-hint, .focus-bar, .modal, .search-box, .legend {
                 display: none !important;
             }
             #viewport {
-                width: 100% !important;
-                height: 98vh !important;
+                width: 100vw !important;
+                height: 100vh !important;
                 overflow: visible !important;
                 position: relative !important;
                 background: none !important;
@@ -886,15 +888,70 @@
             requestAnimationFrame(step);
         }
 
+        function getDiagramBoundingBox() {
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            if (typeof nodes !== 'undefined') {
+                Object.values(nodes).forEach(ent => {
+                    const halfW = (ent.w || 140) / 2;
+                    const halfH = (ent.h || 50) / 2;
+                    minX = Math.min(minX, ent.x - halfW);
+                    maxX = Math.max(maxX, ent.x + halfW);
+                    minY = Math.min(minY, ent.y - halfH);
+                    maxY = Math.max(maxY, ent.y + halfH);
+
+                    if (typeof showAttributes !== 'undefined' && showAttributes && ent.attributes) {
+                        ent.attributes.forEach(attr => {
+                            const aw = (attr.w || 90) / 2;
+                            const ah = (attr.h || 26) / 2;
+                            minX = Math.min(minX, attr.x - aw);
+                            maxX = Math.max(maxX, attr.x + aw);
+                            minY = Math.min(minY, attr.y - ah);
+                            maxY = Math.max(maxY, attr.y + ah);
+                        });
+                    }
+                });
+            }
+
+            if (typeof relationships !== 'undefined') {
+                Object.values(relationships).forEach(rel => {
+                    const halfW = (rel.w || 110) / 2;
+                    const halfH = (rel.h || 46) / 2;
+                    minX = Math.min(minX, rel.x - halfW);
+                    maxX = Math.max(maxX, rel.x + halfW);
+                    minY = Math.min(minY, rel.y - halfH);
+                    maxY = Math.max(maxY, rel.y + halfH);
+                });
+            }
+
+            if (!isFinite(minX)) {
+                minX = 0; maxX = 3100; minY = 0; maxY = 1350;
+            }
+
+            const padding = 70;
+            return {
+                minX: minX - padding,
+                maxX: maxX + padding,
+                minY: minY - padding,
+                maxY: maxY + padding,
+                w: (maxX - minX) + (padding * 2),
+                h: (maxY - minY) + (padding * 2),
+                centerX: (minX + maxX) / 2,
+                centerY: (minY + maxY) / 2
+            };
+        }
+
         function centerViewportGlobal(smooth = true) {
             const vRect = viewport.getBoundingClientRect();
-            const scaleX = (vRect.width - 80) / 2600;
-            const scaleY = (vRect.height - 80) / 1100;
-            const targetScale = Math.min(Math.max(Math.min(scaleX, scaleY), 0.35), 0.70);
-            const centerX = 1625;
-            const centerY = 710;
-            const targetPanX = (vRect.width / 2) - (centerX * targetScale);
-            const targetPanY = (vRect.height / 2) - (centerY * targetScale);
+            const bbox = getDiagramBoundingBox();
+            const availW = Math.max(vRect.width - 40, 400);
+            const availH = Math.max(vRect.height - 40, 300);
+            const scaleX = availW / bbox.w;
+            const scaleY = availH / bbox.h;
+            const targetScale = Math.min(scaleX, scaleY);
+            const targetPanX = (vRect.width / 2) - (bbox.centerX * targetScale);
+            const targetPanY = (vRect.height / 2) - (bbox.centerY * targetScale);
+
             if (smooth) {
                 animateViewportTo(targetPanX, targetPanY, targetScale);
             } else {
