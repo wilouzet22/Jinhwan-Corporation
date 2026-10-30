@@ -15,3 +15,4 @@ CREATE TABLE IF NOT EXISTS `teoria_favoritos` (
     KEY `idx_teoria`     (`id_teoria`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Teorías marcadas como favoritas por cada estudiante';
+

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -44,11 +44,11 @@ $tema_marcial = function_exists('obtener_tema_marcial') ? obtener_tema_marcial('
     <?= function_exists('renderizar_variables_tema_marcial') ? renderizar_variables_tema_marcial($tema_marcial) : '' ?>
 </head>
 <body class="bg-slate-50/85 dark:bg-slate-900/80 text-slate-800 dark:text-slate-200 font-body antialiased selection:bg-red-600 selection:text-white transition-colors duration-300 tkd-dobok-texture">
-<div class="flex min-h-screen md:h-screen md:overflow-hidden">
+<div class="flex min-h-screen">
     
     <div id="sidebar-backdrop" class="fixed inset-0 bg-slate-900/50 dark:bg-black/60 z-40 hidden md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
-    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col shadow-xl md:shadow-none md:static">
+    <aside id="maestro-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden shadow-xl md:shadow-none md:static">
         <div class="h-1.5 w-full shadow-sm" style="background: var(--tkd-gradient, linear-gradient(135deg, #09090b, #18181b, #dc2626));"></div>
         <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center transition-colors">
             <a href="<?= base_url('/index.php') ?>" class="flex items-center gap-3 group">
