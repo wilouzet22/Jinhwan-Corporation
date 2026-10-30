@@ -648,9 +648,8 @@
             padding: 2px 0 !important;
         }
         .class-compartment {
-            max-height: 125px !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
+            max-height: none !important;
+            overflow: visible !important;
         }
         }
     </style>
@@ -1461,7 +1460,7 @@
             const scaleX = (vw - padding * 2) / diagW;
             const scaleY = (vh - padding * 2) / diagH;
             let targetScale = Math.min(scaleX, scaleY);
-            targetScale = Math.max(0.35, Math.min(targetScale, 1.20));
+            targetScale = Math.max(0.20, Math.min(targetScale, 1.20));
 
             panX = Math.round((vw - diagW * targetScale) / 2 - minX * targetScale);
             // Center vertically with a minimum top pan so bottom row is always fully visible
@@ -1876,6 +1875,11 @@
                 exportToPDF();
             }
         });
+
+                const btnExport = document.getElementById('btnExportPdf');
+        if (btnExport) {
+            btnExport.onclick = exportToPDF;
+        }
 
         const btnFitScreen = document.getElementById('btnFitScreen');
         if (btnFitScreen) {
