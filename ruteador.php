@@ -159,9 +159,14 @@ $router->get('/maestro/dashboard', [MaestroDashboardController::class, 'index'])
 $router->get('/maestro/alumnos', [MaestroAlumnosController::class, 'index']);
 $router->get('/maestro/alumnos/{id}', [MaestroAlumnosController::class, 'show']);
 $router->get('/maestro/solicitudes', [MaestroSolicitudesAscensoController::class, 'index']);
+$router->get('/maestro/solicitudes-ascenso', [MaestroSolicitudesAscensoController::class, 'index']);
 $router->post('/maestro/solicitudes/store', [MaestroSolicitudesAscensoController::class, 'store']);
+$router->post('/maestro/solicitudes-ascenso/store', [MaestroSolicitudesAscensoController::class, 'store']);
+$router->post('/maestro/solicitudes-ascenso/create', [MaestroSolicitudesAscensoController::class, 'store']);
 $router->get('/maestro/solicitudes/certificado', [MaestroSolicitudesAscensoController::class, 'certificado']);
 $router->get('/maestro/solicitudes/descargar', [MaestroSolicitudesAscensoController::class, 'descargar']);
+$router->get('/maestro/solicitudes-ascenso/certificado', [MaestroSolicitudesAscensoController::class, 'certificado']);
+$router->get('/maestro/solicitudes-ascenso/descargar', [MaestroSolicitudesAscensoController::class, 'descargar']);
 
 // Biblioteca de Ejercicios
 $router->get('/maestro/ejercicios', [MaestroEjerciciosController::class, 'index']);
